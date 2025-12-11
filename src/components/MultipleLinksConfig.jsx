@@ -1,0 +1,787 @@
+import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Plus, Facebook, Instagram, Twitter, Linkedin, Github, Youtube, Globe, Mail } from 'lucide-react';
+import { useState } from 'react';
+
+const MultipleLinksConfig = ({ config, onChange }) => {
+    const [isDesignOpen, setIsDesignOpen] = useState(true);
+    const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
+
+    const [isLinksOpen, setIsLinksOpen] = useState(false);
+    const [isSocialOpen, setIsSocialOpen] = useState(false);
+
+    const design = config.design || {};
+    const basicInfo = config.basicInfo || {};
+    const links = config.links || [
+        { id: '1', url: '', title: '' },
+        { id: '2', url: '', title: '' },
+        { id: '3', url: '', title: '' },
+        { id: '4', url: '', title: '' }
+    ];
+    const socialLinks = config.socialLinks || [];
+
+    const primaryColor = design.color?.header || '#52BDA3'; // Matching screenshot approx
+    const secondaryColor = design.color?.light || '#2B1E99'; // Matching screenshot approx
+
+    // Handler functions
+    const handleDesignUpdate = (key, value) => {
+        onChange(prev => ({
+            ...prev,
+            design: { ...prev.design, [key]: value }
+        }));
+    };
+
+    const handleBasicInfoUpdate = (key, value) => {
+        onChange(prev => ({
+            ...prev,
+            basicInfo: {
+                ...prev.basicInfo,
+                [key]: value
+            }
+        }));
+    };
+
+    const handleLinkUpdate = (id, field, value) => {
+        const newLinks = links.map(link =>
+            link.id === id ? { ...link, [field]: value } : link
+        );
+        onChange(prev => ({ ...prev, links: newLinks }));
+    };
+
+    const handleAddLink = () => {
+        const newLink = { id: Date.now().toString(), url: '', title: '' };
+        onChange(prev => ({ ...prev, links: [...links, newLink] }));
+    };
+
+    const handleRemoveLink = (id) => {
+        const newLinks = links.filter(link => link.id !== id);
+        onChange(prev => ({ ...prev, links: newLinks }));
+    };
+
+    const handleSocialLinkAdd = (platform) => {
+        // Avoid duplicates if desired, or allow multiple
+        const newLink = { id: Date.now().toString(), platform, url: '' };
+        onChange(prev => ({ ...prev, socialLinks: [...(prev.socialLinks || []), newLink] }));
+    };
+
+    const handleSocialLinkUpdate = (id, value) => {
+        const newLinks = socialLinks.map(link =>
+            link.id === id ? { ...link, url: value } : link
+        );
+        onChange(prev => ({ ...prev, socialLinks: newLinks }));
+    };
+
+    const handleSocialLinkRemove = (id) => {
+        const newLinks = socialLinks.filter(link => link.id !== id);
+        onChange(prev => ({ ...prev, socialLinks: newLinks }));
+    };
+
+    const socialPlatforms = [
+        { id: 'facebook', icon: Facebook, color: '#1877F2', name: 'Facebook' },
+        { id: 'instagram', icon: Instagram, color: '#E4405F', name: 'Instagram' },
+        { id: 'twitter', icon: Twitter, color: '#000000', name: 'X' },
+        { id: 'linkedin', icon: Linkedin, color: '#0A66C2', name: 'LinkedIn' },
+        { id: 'discord', icon: Globe, color: '#5865F2', name: 'Discord' }, // Lucide doesn't have Discord, using Globe as placeholder or similar
+        { id: 'youtube', icon: Youtube, color: '#FF0000', name: 'YouTube' },
+        { id: 'whatsapp', icon: Globe, color: '#25D366', name: 'WhatsApp' }, // Placeholder icon
+        { id: 'snapchat', icon: Globe, color: '#FFFC00', name: 'Snapchat' }, // Placeholder icon
+        { id: 'tiktok', icon: Globe, color: '#000000', name: 'TikTok' }, // Placeholder icon
+        { id: 'spotify', icon: Globe, color: '#1DB954', name: 'Spotify' }, // Placeholder icon
+        { id: 'website', icon: Globe, color: '#2B1E99', name: 'Website' }
+    ];
+
+    const handleColorUpdate = (colorKey, value) => {
+        onChange(prev => ({
+            ...prev,
+            design: {
+                ...prev.design,
+                color: { ...prev.design.color, [colorKey]: value }
+            }
+        }));
+    };
+
+    const handleColorPaletteClick = (primary, secondary) => {
+        onChange(prev => ({
+            ...prev,
+            design: {
+                ...prev.design,
+                color: { header: primary, dark: primary, light: secondary }
+            }
+        }));
+    };
+
+    const handleLogoUpdate = (url) => {
+        onChange(prev => ({
+            ...prev,
+            design: {
+                ...prev.design,
+                logo: { url }
+            }
+        }));
+    };
+
+    const palettes = [
+        { p: '#0B2D86', s: '#FFA800' }, // Dark Blue / Orange
+        { p: '#FFFF00', s: '#FFFFE0' }, // Yellow
+        { p: '#8B5CF6', s: '#C4B5FD' }, // Purple
+        { p: '#16A34A', s: '#86EFAC' }, // Green
+        { p: '#06B6D4', s: '#67E8F9' }  // Cyan
+    ];
+
+    const logoOptions = [
+        { id: 'logo1', url: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop' }, // Avatar placeholder
+        { id: 'logo2', url: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=150&h=150&fit=crop' }, // Food placeholder
+        { id: 'logo3', url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop' }, // Doctor/Professional placeholder
+        { id: 'logo4', url: 'https://images.unsplash.com/photo-1568213816046-0ee1c42bd559?w=150&h=150&fit=crop' }  // Box/Product placeholder (simulating the selected one)
+    ];
+
+    return (
+        <div>
+            {/* DESIGN ACCORDION */}
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+                <div
+                    onClick={() => setIsDesignOpen(!isDesignOpen)}
+                    style={{
+                        padding: '1.5rem',
+                        background: '#f8fafc',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        borderBottom: isDesignOpen ? '1px solid #e2e8f0' : 'none'
+                    }}
+                >
+                    <div>
+                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>DESIGN</div>
+                    </div>
+                    {isDesignOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
+                </div>
+
+                {isDesignOpen && (
+                    <div style={{ padding: '2rem', background: '#fff' }}>
+
+                        {/* COLORS SECTION */}
+                        <div style={{ marginBottom: '2rem' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '1rem', textTransform: 'uppercase' }}>
+                                COLORS
+                            </label>
+
+                            {/* Color Palettes */}
+                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+                                {palettes.map((palette, idx) => (
+                                    <div
+                                        key={idx}
+                                        onClick={() => handleColorPaletteClick(palette.p, palette.s)}
+                                        style={{
+                                            width: '64px',
+                                            height: '64px',
+                                            borderRadius: '50%',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer',
+                                            border: (primaryColor === palette.p && secondaryColor === palette.s) ? '3px solid #8b5cf6' : '2px solid #e2e8f0',
+                                            position: 'relative',
+                                            background: `linear-gradient(180deg, ${palette.p} 50%, ${palette.s} 50%)`
+                                        }}
+                                    >
+                                        {(primaryColor === palette.p && secondaryColor === palette.s) && (
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: '50%',
+                                                left: '50%',
+                                                transform: 'translate(-50%, -50%)',
+                                                width: '24px',
+                                                height: '24px',
+                                                background: '#8b5cf6',
+                                                borderRadius: '50%',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                border: '2px solid #fff'
+                                            }}>
+                                                <Check size={14} color="#fff" />
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Divider */}
+                            <div style={{
+                                position: 'relative',
+                                height: '1px',
+                                background: 'none',
+                                borderTop: '1px dashed #e2e8f0',
+                                margin: '2rem 0'
+                            }}></div>
+
+                            {/* Primary and Secondary Color Inputs */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', alignItems: 'center' }}>
+                                {/* Primary Color */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Primary Color
+                                    </label>
+                                    <div style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        border: '1px solid #1e293b',
+                                        borderRadius: '4px',
+                                        padding: '0.5rem',
+                                        height: '44px'
+                                    }}>
+                                        <input
+                                            type="text"
+                                            value={primaryColor}
+                                            onChange={(e) => handleColorUpdate('header', e.target.value)}
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.9rem',
+                                                color: '#000',
+                                                fontWeight: '500',
+                                                textTransform: 'uppercase'
+                                            }}
+                                        />
+                                        <div style={{
+                                            width: '28px',
+                                            height: '28px',
+                                            background: primaryColor,
+                                            borderRadius: '2px',
+                                            flexShrink: 0
+                                        }}></div>
+                                    </div>
+                                </div>
+
+                                {/* Swap Icon */}
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    marginTop: '1.5rem'
+                                }}>
+                                    <div
+                                        onClick={() => handleColorPaletteClick(secondaryColor, primaryColor)}
+                                        style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            borderRadius: '4px',
+                                            border: '1px solid #e2e8f0',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                            background: '#fff'
+                                        }}
+                                    >
+                                        <RefreshCw size={18} color="#64748b" />
+                                    </div>
+                                </div>
+
+                                {/* Secondary Color */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Secondary Color
+                                    </label>
+                                    <div style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        border: '1px solid #1e293b',
+                                        borderRadius: '4px',
+                                        padding: '0.5rem',
+                                        height: '44px'
+                                    }}>
+                                        <input
+                                            type="text"
+                                            value={secondaryColor}
+                                            onChange={(e) => handleColorUpdate('light', e.target.value)}
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.9rem',
+                                                color: '#000',
+                                                fontWeight: '500',
+                                                textTransform: 'uppercase'
+                                            }}
+                                        />
+                                        <div style={{
+                                            width: '28px',
+                                            height: '28px',
+                                            background: secondaryColor,
+                                            borderRadius: '2px',
+                                            flexShrink: 0
+                                        }}></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* LOGO SECTION */}
+                        <div style={{ marginBottom: '0' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
+                                <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
+                                    LOGO
+                                </span>
+                                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                                    128x128px, 1:1 Ratio
+                                </span>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                {/* Remove/Clear Option */}
+                                <div
+                                    onClick={() => handleLogoUpdate('')}
+                                    style={{
+                                        width: '64px',
+                                        height: '64px',
+                                        borderRadius: '50%',
+                                        border: '1px solid #e2e8f0',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        background: '#fff'
+                                    }}
+                                >
+                                    <X size={24} color="#cbd5e1" />
+                                </div>
+
+                                {/* Logo Options */}
+                                {logoOptions.map(img => (
+                                    <div
+                                        key={img.id}
+                                        onClick={() => handleLogoUpdate(img.url)}
+                                        style={{
+                                            width: '64px',
+                                            height: '64px',
+                                            borderRadius: '50%',
+                                            overflow: 'hidden',
+                                            border: design.logo?.url === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                            cursor: 'pointer',
+                                            position: 'relative'
+                                        }}
+                                    >
+                                        <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        {design.logo?.url === img.url && (
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                right: 0,
+                                                width: '20px',
+                                                height: '20px',
+                                                background: '#8b5cf6',
+                                                borderRadius: '50%',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                border: '1px solid #fff'
+                                            }}>
+                                                <Check size={12} color="#fff" />
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+
+                                {/* Upload Option */}
+                                <div style={{
+                                    width: '64px',
+                                    height: '64px',
+                                    borderRadius: '50%',
+                                    border: '1px dashed #cbd5e1',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer'
+                                }}>
+                                    <UploadCloud size={20} color="#94a3b8" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                )}
+            </div>
+
+            {/* BASIC INFORMATION ACCORDION */}
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+                <div
+                    onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
+                    style={{
+                        padding: '1.5rem',
+                        background: '#f8fafc',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        borderBottom: isBasicInfoOpen ? '1px solid #e2e8f0' : 'none'
+                    }}
+                >
+                    <div>
+                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
+                    </div>
+                    {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
+                </div>
+
+                {isBasicInfoOpen && (
+                    <div style={{ padding: '2rem', background: '#fff' }}>
+
+                        {/* HEADLINE FIELD */}
+                        <div style={{ marginBottom: '2rem' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                HEADLINE*
+                            </label>
+                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                                {/* Headline Input */}
+                                <input
+                                    type="text"
+                                    value={basicInfo.headline || ''}
+                                    onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
+                                    placeholder="Techoid"
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: '1px solid #1e293b',
+                                        fontSize: '0.9rem',
+                                        outline: 'none'
+                                    }}
+                                />
+
+                                {/* Text Color */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Text Color
+                                    </label>
+                                    <div style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        border: '1px solid #1e293b',
+                                        borderRadius: '4px',
+                                        padding: '0.5rem',
+                                        height: '44px'
+                                    }}>
+                                        <input
+                                            type="text"
+                                            value={basicInfo.headlineColor || '#2B1E99'}
+                                            onChange={(e) => handleBasicInfoUpdate('headlineColor', e.target.value)}
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#000',
+                                                fontWeight: '500',
+                                                textTransform: 'uppercase'
+                                            }}
+                                        />
+                                        <div style={{
+                                            width: '24px',
+                                            height: '24px',
+                                            background: basicInfo.headlineColor || '#2B1E99',
+                                            borderRadius: '2px',
+                                            flexShrink: 0
+                                        }}></div>
+                                    </div>
+                                </div>
+
+                                {/* Font */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Font
+                                    </label>
+                                    <select
+                                        value={basicInfo.headlineFont || 'Lato'}
+                                        onChange={(e) => handleBasicInfoUpdate('headlineFont', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            cursor: 'pointer',
+                                            background: '#fff'
+                                        }}
+                                    >
+                                        <option value="Lato">Lato</option>
+                                        <option value="Roboto">Roboto</option>
+                                        <option value="Open Sans">Open Sans</option>
+                                        <option value="Montserrat">Montserrat</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* ABOUT US FIELD */}
+                        <div style={{ marginBottom: '0' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                ABOUT US
+                            </label>
+                            <textarea
+                                value={basicInfo.aboutUs || ''}
+                                onChange={(e) => handleBasicInfoUpdate('aboutUs', e.target.value)}
+                                placeholder="Follow us and get updates delivered to your favorite social media channel."
+                                rows={3}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.75rem',
+                                    borderRadius: '4px',
+                                    border: '1px solid #1e293b',
+                                    fontSize: '0.9rem',
+                                    outline: 'none',
+                                    resize: 'vertical',
+                                    fontFamily: 'inherit'
+                                }}
+                            />
+                        </div>
+
+                    </div>
+                )}
+            </div>
+
+            {/* LINKS ACCORDION */}
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+                <div
+                    onClick={() => setIsLinksOpen(!isLinksOpen)}
+                    style={{
+                        padding: '1.5rem',
+                        background: '#f8fafc',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        borderBottom: isLinksOpen ? '1px solid #e2e8f0' : 'none'
+                    }}
+                >
+                    <div>
+                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>LINKS</div>
+                    </div>
+                    {isLinksOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
+                </div>
+
+                {isLinksOpen && (
+                    <div style={{ padding: '2rem', background: '#fff' }}>
+
+                        {links.map((link) => (
+                            <div key={link.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem', alignItems: 'end' }}>
+                                {/* URL Input */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                        URL*
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={link.url}
+                                        onChange={(e) => handleLinkUpdate(link.id, 'url', e.target.value)}
+                                        placeholder="https://"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                </div>
+
+                                {/* Link Title Input & Delete */}
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                    <div style={{ flex: 1 }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                            LINK TITLE*
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={link.title}
+                                            onChange={(e) => handleLinkUpdate(link.id, 'title', e.target.value)}
+                                            placeholder="Visit Us Online"
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                borderRadius: '4px',
+                                                border: '1px solid #1e293b',
+                                                fontSize: '0.9rem',
+                                                outline: 'none'
+                                            }}
+                                        />
+                                    </div>
+                                    <div
+                                        onClick={() => handleRemoveLink(link.id)}
+                                        style={{
+                                            width: '24px',
+                                            height: '24px',
+                                            borderRadius: '50%',
+                                            border: '1px solid #e2e8f0',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                            flexShrink: 0
+                                        }}
+                                    >
+                                        <X size={14} color="#cbd5e1" />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+
+                        {/* Add More Links Button */}
+                        <button
+                            onClick={handleAddLink}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                padding: '0.75rem 1.5rem',
+                                borderRadius: '4px',
+                                border: '1px solid #8b5cf6',
+                                background: '#fff',
+                                color: '#8b5cf6',
+                                fontWeight: 'bold',
+                                fontSize: '0.9rem',
+                                cursor: 'pointer',
+                                marginTop: '1rem'
+                            }}
+                        >
+                            <Plus size={18} />
+                            Add More Links
+                        </button>
+
+                    </div>
+                )}
+            </div>
+
+            {/* SOCIAL MEDIA CHANNELS ACCORDION */}
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+                <div
+                    onClick={() => setIsSocialOpen(!isSocialOpen)}
+                    style={{
+                        padding: '1.5rem',
+                        background: '#f8fafc',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        borderBottom: isSocialOpen ? '1px solid #e2e8f0' : 'none'
+                    }}
+                >
+                    <div>
+                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
+                    </div>
+                    {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
+                </div>
+
+                {isSocialOpen && (
+                    <div style={{ padding: '2rem', background: '#fff' }}>
+
+                        {/* Selected Social Channels */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: socialLinks.length > 0 ? '2.5rem' : '0' }}>
+                            {socialLinks.map((link) => {
+                                const platform = socialPlatforms.find(p => p.id === link.platform) || socialPlatforms[0];
+                                const Icon = platform.icon;
+
+                                return (
+                                    <div key={link.id}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b' }}>
+                                                {platform.name}*
+                                            </label>
+                                            <div style={{ cursor: 'pointer' }} onClick={() => handleSocialLinkRemove(link.id)}>
+                                                <X size={14} color="#cbd5e1" />
+                                            </div>
+                                        </div>
+                                        <div style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            border: '1px solid #1e293b',
+                                            borderRadius: '4px',
+                                            height: '44px',
+                                            overflow: 'hidden'
+                                        }}>
+                                            <div style={{
+                                                width: '44px',
+                                                height: '100%',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                borderRight: '1px solid #1e293b',
+                                                background: platform.color
+                                            }}>
+                                                <Icon size={20} color="#fff" />
+                                            </div>
+                                            <input
+                                                type="text"
+                                                value={link.url}
+                                                onChange={(e) => handleSocialLinkUpdate(link.id, e.target.value)}
+                                                placeholder="https://"
+                                                style={{
+                                                    flex: 1,
+                                                    height: '100%',
+                                                    border: 'none',
+                                                    padding: '0 1rem',
+                                                    outline: 'none',
+                                                    color: '#64748b',
+                                                    fontSize: '0.9rem'
+                                                }}
+                                            />
+                                            <div style={{ padding: '0 0.5rem', color: '#cbd5e1' }}>
+                                                <RefreshCw size={14} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Add More Section */}
+                        <div style={{ marginTop: '1rem' }}>
+                            <div style={{
+                                fontSize: '0.75rem',
+                                fontWeight: 'bold',
+                                color: '#8b5cf6',
+                                marginBottom: '0.25rem',
+                                textTransform: 'uppercase'
+                            }}>
+                                ADD MORE
+                            </div>
+                            <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '1rem' }}>
+                                Click on the icon to add a social media profile.
+                            </div>
+
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+                                {socialPlatforms.map((platform) => {
+                                    const Icon = platform.icon;
+                                    return (
+                                        <div
+                                            key={platform.id}
+                                            onClick={() => handleSocialLinkAdd(platform.id)}
+                                            style={{
+                                                width: '40px',
+                                                height: '40px',
+                                                borderRadius: '8px',
+                                                background: platform.color,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                border: '1px solid transparent', // Can be used for hover effects
+                                                transition: 'transform 0.1s'
+                                            }}
+                                            title={platform.name}
+                                        >
+                                            <Icon size={20} color="#fff" />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                    </div>
+                )}
+            </div>
+
+        </div>
+    );
+};
+
+export default MultipleLinksConfig;
