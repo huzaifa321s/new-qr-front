@@ -109,6 +109,14 @@ const BusinessCardConfig = ({ config, onChange }) => {
         }));
     };
 
+    const deleteContactField = (field) => {
+        handleContactUpdate(field, '');
+    };
+
+    const deleteSocialField = (field) => {
+        handleSocialUpdate(field, '');
+    };
+
     const palettes = [
         { p: '#0B2D86', s: '#FFA800' },
         { p: '#FACC15', s: '#FEF9C3' },
@@ -229,8 +237,26 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             background: personalInfo.nameColor || '#000000',
                                             borderRadius: '2px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
-                                        }}></div>
+                                            border: '1px solid #e2e8f0',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="color"
+                                                value={personalInfo.nameColor || '#000000'}
+                                                onChange={(e) => handlePersonalInfoUpdate('nameColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -335,8 +361,26 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             background: personalInfo.titleColor || '#000000',
                                             borderRadius: '2px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
-                                        }}></div>
+                                            border: '1px solid #e2e8f0',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="color"
+                                                value={personalInfo.titleColor || '#000000'}
+                                                onChange={(e) => handlePersonalInfoUpdate('titleColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -418,8 +462,26 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             background: personalInfo.companyColor || '#000000',
                                             borderRadius: '2px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
-                                        }}></div>
+                                            border: '1px solid #e2e8f0',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="color"
+                                                value={personalInfo.companyColor || '#000000'}
+                                                onChange={(e) => handlePersonalInfoUpdate('companyColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -475,116 +537,282 @@ const BusinessCardConfig = ({ config, onChange }) => {
 
                         {/* PHONE */}
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    border: '1px solid #1e293b',
-                                    borderRadius: '4px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    flexShrink: 0
-                                }}>
-                                    <Phone size={20} color="#64748b" />
+                            {contact.phone ? (
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                    <div style={{
+                                        width: '48px',
+                                        height: '48px',
+                                        border: '1px solid #1e293b',
+                                        borderRadius: '4px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        flexShrink: 0
+                                    }}>
+                                        <Phone size={20} color="#64748b" />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={contact.phone || ''}
+                                        onChange={(e) => handleContactUpdate('phone', e.target.value)}
+                                        placeholder="15555555234"
+                                        style={{
+                                            flex: 1,
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                    <button
+                                        onClick={() => deleteContactField('phone')}
+                                        style={{
+                                            width: '48px',
+                                            height: '48px',
+                                            border: '1px solid #1e293b',
+                                            borderRadius: '4px',
+                                            background: '#fff',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            flexShrink: 0
+                                        }}
+                                    >
+                                        <X size={20} color="#64748b" />
+                                    </button>
                                 </div>
-                                <input
-                                    type="text"
-                                    value={contact.phone || ''}
-                                    onChange={(e) => handleContactUpdate('phone', e.target.value)}
-                                    placeholder="15555555234"
+                            ) : (
+                                <button
+                                    onClick={() => handleContactUpdate('phone', ' ')}
                                     style={{
-                                        flex: 1,
+                                        width: '100%',
                                         padding: '0.75rem',
                                         borderRadius: '4px',
-                                        border: '1px solid #1e293b',
+                                        border: '1px dashed #cbd5e1',
+                                        background: '#f8fafc',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '0.5rem',
+                                        color: '#64748b',
                                         fontSize: '0.9rem',
-                                        outline: 'none'
+                                        fontWeight: '500'
                                     }}
-                                />
-                            </div>
+                                >
+                                    <Plus size={18} />
+                                    Add Phone
+                                </button>
+                            )}
                         </div>
 
                         {/* EMAIL */}
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    border: '1px solid #1e293b',
-                                    borderRadius: '4px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    flexShrink: 0
-                                }}>
-                                    <Mail size={20} color="#64748b" />
+                            {contact.email ? (
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                    <div style={{
+                                        width: '48px',
+                                        height: '48px',
+                                        border: '1px solid #1e293b',
+                                        borderRadius: '4px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        flexShrink: 0
+                                    }}>
+                                        <Mail size={20} color="#64748b" />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={contact.email || ''}
+                                        onChange={(e) => handleContactUpdate('email', e.target.value)}
+                                        placeholder="Hellen@gmail.com"
+                                        style={{
+                                            flex: 1,
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                    <button
+                                        onClick={() => deleteContactField('email')}
+                                        style={{
+                                            width: '48px',
+                                            height: '48px',
+                                            border: '1px solid #1e293b',
+                                            borderRadius: '4px',
+                                            background: '#fff',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            flexShrink: 0
+                                        }}
+                                    >
+                                        <X size={20} color="#64748b" />
+                                    </button>
                                 </div>
-                                <input
-                                    type="text"
-                                    value={contact.email || ''}
-                                    onChange={(e) => handleContactUpdate('email', e.target.value)}
-                                    placeholder="Hellen@gmail.com"
+                            ) : (
+                                <button
+                                    onClick={() => handleContactUpdate('email', ' ')}
                                     style={{
-                                        flex: 1,
+                                        width: '100%',
                                         padding: '0.75rem',
                                         borderRadius: '4px',
-                                        border: '1px solid #1e293b',
+                                        border: '1px dashed #cbd5e1',
+                                        background: '#f8fafc',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '0.5rem',
+                                        color: '#64748b',
                                         fontSize: '0.9rem',
-                                        outline: 'none'
+                                        fontWeight: '500'
                                     }}
-                                />
-                            </div>
+                                >
+                                    <Plus size={18} />
+                                    Add Email
+                                </button>
+                            )}
                         </div>
 
                         {/* WEBSITE */}
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    border: '1px solid #1e293b',
-                                    borderRadius: '4px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    flexShrink: 0
-                                }}>
-                                    <Globe size={20} color="#64748b" />
+                            {contact.website ? (
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                    <div style={{
+                                        width: '48px',
+                                        height: '48px',
+                                        border: '1px solid #1e293b',
+                                        borderRadius: '4px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        flexShrink: 0
+                                    }}>
+                                        <Globe size={20} color="#64748b" />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={contact.website || ''}
+                                        onChange={(e) => handleContactUpdate('website', e.target.value)}
+                                        placeholder="https://Hellengrey.com"
+                                        style={{
+                                            flex: 1,
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                    <button
+                                        onClick={() => deleteContactField('website')}
+                                        style={{
+                                            width: '48px',
+                                            height: '48px',
+                                            border: '1px solid #1e293b',
+                                            borderRadius: '4px',
+                                            background: '#fff',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            flexShrink: 0
+                                        }}
+                                    >
+                                        <X size={20} color="#64748b" />
+                                    </button>
                                 </div>
-                                <input
-                                    type="text"
-                                    value={contact.website || ''}
-                                    onChange={(e) => handleContactUpdate('website', e.target.value)}
-                                    placeholder="https://Hellengrey.com"
+                            ) : (
+                                <button
+                                    onClick={() => handleContactUpdate('website', ' ')}
                                     style={{
-                                        flex: 1,
+                                        width: '100%',
                                         padding: '0.75rem',
                                         borderRadius: '4px',
-                                        border: '1px solid #1e293b',
+                                        border: '1px dashed #cbd5e1',
+                                        background: '#f8fafc',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '0.5rem',
+                                        color: '#64748b',
                                         fontSize: '0.9rem',
-                                        outline: 'none'
+                                        fontWeight: '500'
                                     }}
-                                />
-                            </div>
+                                >
+                                    <Plus size={18} />
+                                    Add Website
+                                </button>
+                            )}
                         </div>
 
                         {/* ADDRESS */}
                         <div style={{ marginBottom: '0' }}>
-                            <input
-                                type="text"
-                                value={contact.address || ''}
-                                onChange={(e) => handleContactUpdate('address', e.target.value)}
-                                placeholder="1000 Marketplace Ave. NY, 10001, United States"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
-                                    fontSize: '0.9rem',
-                                    outline: 'none'
-                                }}
-                            />
+                            {contact.address ? (
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                    <input
+                                        type="text"
+                                        value={contact.address || ''}
+                                        onChange={(e) => handleContactUpdate('address', e.target.value)}
+                                        placeholder="1000 Marketplace Ave. NY, 10001, United States"
+                                        style={{
+                                            flex: 1,
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                    <button
+                                        onClick={() => deleteContactField('address')}
+                                        style={{
+                                            width: '48px',
+                                            height: '48px',
+                                            border: '1px solid #1e293b',
+                                            borderRadius: '4px',
+                                            background: '#fff',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            flexShrink: 0
+                                        }}
+                                    >
+                                        <X size={20} color="#64748b" />
+                                    </button>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => handleContactUpdate('address', ' ')}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: '1px dashed #cbd5e1',
+                                        background: '#f8fafc',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '0.5rem',
+                                        color: '#64748b',
+                                        fontSize: '0.9rem',
+                                        fontWeight: '500'
+                                    }}
+                                >
+                                    <Plus size={18} />
+                                    Add Address
+                                </button>
+                            )}
                         </div>
 
                     </div>
@@ -617,180 +845,974 @@ const BusinessCardConfig = ({ config, onChange }) => {
                         {/* Grid for social media inputs */}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
 
-                            {/* Website */}
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                    Website*
-                                </label>
-                                <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
-                                    <div style={{
-                                        width: '32px',
-                                        height: '32px',
-                                        background: '#6366f1',
-                                        borderRadius: '4px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        marginRight: '0.5rem',
-                                        flexShrink: 0
-                                    }}>
-                                        <Globe size={18} color="#fff" />
+                            {social.website && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Website*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#6366f1',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <Globe size={18} color="#fff" />
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.website || ''}
+                                            onChange={(e) => handleSocialUpdate('website', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('website')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
                                     </div>
-                                    <input
-                                        type="text"
-                                        value={social.website || ''}
-                                        onChange={(e) => handleSocialUpdate('website', e.target.value)}
-                                        placeholder="https://"
-                                        style={{
-                                            border: 'none',
-                                            outline: 'none',
-                                            width: '100%',
-                                            fontSize: '0.85rem',
-                                            color: '#94a3b8'
-                                        }}
-                                    />
                                 </div>
-                            </div>
+                            )}
 
-                            {/* WhatsApp */}
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                    Whatsapp*
-                                </label>
-                                <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
-                                    <div style={{
-                                        width: '32px',
-                                        height: '32px',
-                                        background: '#25D366',
-                                        borderRadius: '4px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        marginRight: '0.5rem',
-                                        flexShrink: 0
-                                    }}>
-                                        <Phone size={18} color="#fff" />
+                            {social.whatsapp && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Whatsapp*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#25D366',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <Phone size={18} color="#fff" />
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.whatsapp || ''}
+                                            onChange={(e) => handleSocialUpdate('whatsapp', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('whatsapp')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
                                     </div>
-                                    <input
-                                        type="text"
-                                        value={social.whatsapp || ''}
-                                        onChange={(e) => handleSocialUpdate('whatsapp', e.target.value)}
-                                        placeholder="https://"
-                                        style={{
-                                            border: 'none',
-                                            outline: 'none',
-                                            width: '100%',
-                                            fontSize: '0.85rem',
-                                            color: '#94a3b8'
-                                        }}
-                                    />
                                 </div>
-                            </div>
+                            )}
 
-                            {/* Facebook */}
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                    Facebook*
-                                </label>
-                                <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
-                                    <div style={{
-                                        width: '32px',
-                                        height: '32px',
-                                        background: '#1877F2',
-                                        borderRadius: '4px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        marginRight: '0.5rem',
-                                        flexShrink: 0
-                                    }}>
-                                        <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>f</span>
+                            {social.facebook && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Facebook*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#1877F2',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>f</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.facebook || ''}
+                                            onChange={(e) => handleSocialUpdate('facebook', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('facebook')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
                                     </div>
-                                    <input
-                                        type="text"
-                                        value={social.facebook || ''}
-                                        onChange={(e) => handleSocialUpdate('facebook', e.target.value)}
-                                        placeholder="https://"
-                                        style={{
-                                            border: 'none',
-                                            outline: 'none',
-                                            width: '100%',
-                                            fontSize: '0.85rem',
-                                            color: '#94a3b8'
-                                        }}
-                                    />
                                 </div>
-                            </div>
+                            )}
 
-                            {/* LinkedIn */}
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                    Linkedin*
-                                </label>
-                                <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
-                                    <div style={{
-                                        width: '32px',
-                                        height: '32px',
-                                        background: '#0A66C2',
-                                        borderRadius: '4px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        marginRight: '0.5rem',
-                                        flexShrink: 0
-                                    }}>
-                                        <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>in</span>
+                            {social.linkedin && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Linkedin*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#0A66C2',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>in</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.linkedin || ''}
+                                            onChange={(e) => handleSocialUpdate('linkedin', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('linkedin')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
                                     </div>
-                                    <input
-                                        type="text"
-                                        value={social.linkedin || ''}
-                                        onChange={(e) => handleSocialUpdate('linkedin', e.target.value)}
-                                        placeholder="https://"
-                                        style={{
-                                            border: 'none',
-                                            outline: 'none',
-                                            width: '100%',
-                                            fontSize: '0.85rem',
-                                            color: '#94a3b8'
-                                        }}
-                                    />
                                 </div>
-                            </div>
+                            )}
 
-                            {/* TikTok */}
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                    Tiktok*
-                                </label>
-                                <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
-                                    <div style={{
-                                        width: '32px',
-                                        height: '32px',
-                                        background: '#000',
-                                        borderRadius: '4px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        marginRight: '0.5rem',
-                                        flexShrink: 0
-                                    }}>
-                                        <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>♪</span>
+                            {social.tiktok && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Tiktok*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#000',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>♪</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.tiktok || ''}
+                                            onChange={(e) => handleSocialUpdate('tiktok', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('tiktok')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
                                     </div>
-                                    <input
-                                        type="text"
-                                        value={social.tiktok || ''}
-                                        onChange={(e) => handleSocialUpdate('tiktok', e.target.value)}
-                                        placeholder="https://"
-                                        style={{
-                                            border: 'none',
-                                            outline: 'none',
-                                            width: '100%',
-                                            fontSize: '0.85rem',
-                                            color: '#94a3b8'
-                                        }}
-                                    />
                                 </div>
-                            </div>
+                            )}
+
+                            {social.instagram && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Instagram*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>📷</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.instagram || ''}
+                                            onChange={(e) => handleSocialUpdate('instagram', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('instagram')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {social.twitter && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Twitter (X)*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#000',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>𝕏</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.twitter || ''}
+                                            onChange={(e) => handleSocialUpdate('twitter', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('twitter')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {social.discord && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Discord*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#5865F2',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '16px' }}>💬</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.discord || ''}
+                                            onChange={(e) => handleSocialUpdate('discord', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('discord')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {social.youtube && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        YouTube*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#FF0000',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '16px' }}>▶</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.youtube || ''}
+                                            onChange={(e) => handleSocialUpdate('youtube', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('youtube')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {social.twitch && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Twitch*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#9146FF',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '16px' }}>📺</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.twitch || ''}
+                                            onChange={(e) => handleSocialUpdate('twitch', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('twitch')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {social.line && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Line*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#00B900',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>💬</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.line || ''}
+                                            onChange={(e) => handleSocialUpdate('line', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('line')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {social.snapchat && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Snapchat*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#FFFC00',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ fontSize: '18px' }}>👻</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.snapchat || ''}
+                                            onChange={(e) => handleSocialUpdate('snapchat', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('snapchat')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {social.tumblr && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Tumblr*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#35465C',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>t</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.tumblr || ''}
+                                            onChange={(e) => handleSocialUpdate('tumblr', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('tumblr')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {social.spotify && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Spotify*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#1DB954',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '16px' }}>🎵</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.spotify || ''}
+                                            onChange={(e) => handleSocialUpdate('spotify', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('spotify')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {social.dribbble && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Dribbble*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#EA4C89',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '16px' }}>🏀</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.dribbble || ''}
+                                            onChange={(e) => handleSocialUpdate('dribbble', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('dribbble')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {social.pinterest && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Pinterest*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#E60023',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>P</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.pinterest || ''}
+                                            onChange={(e) => handleSocialUpdate('pinterest', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('pinterest')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {social.telegram && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Telegram*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#0088cc',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '16px' }}>✈️</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.telegram || ''}
+                                            onChange={(e) => handleSocialUpdate('telegram', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('telegram')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {social.behance && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Behance*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#1769FF',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>Be</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.behance || ''}
+                                            onChange={(e) => handleSocialUpdate('behance', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('behance')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {social.reddit && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Reddit*
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            background: '#FF4500',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: '0.5rem',
+                                            flexShrink: 0
+                                        }}>
+                                            <span style={{ color: '#fff', fontSize: '16px' }}>👽</span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={social.reddit || ''}
+                                            onChange={(e) => handleSocialUpdate('reddit', e.target.value)}
+                                            placeholder="https://"
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#94a3b8'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => deleteSocialField('reddit')}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                padding: '0.25rem',
+                                                cursor: 'pointer',
+                                                color: '#94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
 
                         </div>
 
@@ -806,79 +1828,79 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             {/* Social Media Icons Grid */}
                             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                                 {/* Facebook */}
-                                <div style={{ width: '40px', height: '40px', background: '#1877F2', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('facebook', ' ')} style={{ width: '40px', height: '40px', background: '#1877F2', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '20px', fontWeight: 'bold' }}>f</span>
                                 </div>
                                 {/* Instagram */}
-                                <div style={{ width: '40px', height: '40px', background: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('instagram', ' ')} style={{ width: '40px', height: '40px', background: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '20px', fontWeight: 'bold' }}>📷</span>
                                 </div>
                                 {/* X (Twitter) */}
-                                <div style={{ width: '40px', height: '40px', background: '#000', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('twitter', ' ')} style={{ width: '40px', height: '40px', background: '#000', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>𝕏</span>
                                 </div>
                                 {/* LinkedIn */}
-                                <div style={{ width: '40px', height: '40px', background: '#0A66C2', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('linkedin', ' ')} style={{ width: '40px', height: '40px', background: '#0A66C2', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>in</span>
                                 </div>
                                 {/* Discord */}
-                                <div style={{ width: '40px', height: '40px', background: '#5865F2', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('discord', ' ')} style={{ width: '40px', height: '40px', background: '#5865F2', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '18px' }}>💬</span>
                                 </div>
                                 {/* Twitch */}
-                                <div style={{ width: '40px', height: '40px', background: '#9146FF', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('twitch', ' ')} style={{ width: '40px', height: '40px', background: '#9146FF', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '18px' }}>📺</span>
                                 </div>
                                 {/* Line */}
-                                <div style={{ width: '40px', height: '40px', background: '#00B900', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('line', ' ')} style={{ width: '40px', height: '40px', background: '#00B900', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>💬</span>
                                 </div>
                                 {/* YouTube */}
-                                <div style={{ width: '40px', height: '40px', background: '#FF0000', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('youtube', ' ')} style={{ width: '40px', height: '40px', background: '#FF0000', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '18px' }}>▶</span>
                                 </div>
                                 {/* WhatsApp */}
-                                <div style={{ width: '40px', height: '40px', background: '#25D366', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('whatsapp', ' ')} style={{ width: '40px', height: '40px', background: '#25D366', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <Phone size={20} color="#fff" />
                                 </div>
                                 {/* Snapchat */}
-                                <div style={{ width: '40px', height: '40px', background: '#FFFC00', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('snapchat', ' ')} style={{ width: '40px', height: '40px', background: '#FFFC00', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ fontSize: '20px' }}>👻</span>
                                 </div>
                                 {/* TikTok */}
-                                <div style={{ width: '40px', height: '40px', background: '#000', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('tiktok', ' ')} style={{ width: '40px', height: '40px', background: '#000', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '20px' }}>♪</span>
                                 </div>
                                 {/* Tumblr */}
-                                <div style={{ width: '40px', height: '40px', background: '#35465C', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('tumblr', ' ')} style={{ width: '40px', height: '40px', background: '#35465C', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>t</span>
                                 </div>
                                 {/* Spotify */}
-                                <div style={{ width: '40px', height: '40px', background: '#1DB954', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('spotify', ' ')} style={{ width: '40px', height: '40px', background: '#1DB954', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '18px' }}>🎵</span>
                                 </div>
                                 {/* Dribbble */}
-                                <div style={{ width: '40px', height: '40px', background: '#EA4C89', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('dribbble', ' ')} style={{ width: '40px', height: '40px', background: '#EA4C89', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '18px' }}>🏀</span>
                                 </div>
                                 {/* Pinterest */}
-                                <div style={{ width: '40px', height: '40px', background: '#E60023', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('pinterest', ' ')} style={{ width: '40px', height: '40px', background: '#E60023', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>P</span>
                                 </div>
                                 {/* Telegram */}
-                                <div style={{ width: '40px', height: '40px', background: '#0088cc', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('telegram', ' ')} style={{ width: '40px', height: '40px', background: '#0088cc', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '18px' }}>✈️</span>
                                 </div>
                                 {/* Behance */}
-                                <div style={{ width: '40px', height: '40px', background: '#1769FF', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('behance', ' ')} style={{ width: '40px', height: '40px', background: '#1769FF', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>Be</span>
                                 </div>
                                 {/* Reddit */}
-                                <div style={{ width: '40px', height: '40px', background: '#FF4500', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('reddit', ' ')} style={{ width: '40px', height: '40px', background: '#FF4500', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <span style={{ color: '#fff', fontSize: '18px' }}>👽</span>
                                 </div>
                                 {/* Website */}
-                                <div style={{ width: '40px', height: '40px', background: '#6366f1', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                <div onClick={() => handleSocialUpdate('website', ' ')} style={{ width: '40px', height: '40px', background: '#6366f1', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                     <Globe size={20} color="#fff" />
                                 </div>
                             </div>

@@ -1,4 +1,5 @@
-import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Clock, Wifi, Baby, Accessibility, Utensils, Plane, PawPrint, Car, Bed, Coffee, Wine, Phone, Mail, Globe } from 'lucide-react';
+import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Clock, Wifi, Baby, Accessibility, Utensils, Plane, PawPrint, Car, Bed, Coffee, Wine, Phone, Mail, Globe, Plus, MapPin, Instagram, Facebook, Twitter, Linkedin, MessageCircle, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Github } from 'lucide-react';
+import ColorPicker from './ColorPicker';
 
 import { useState } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
@@ -176,10 +177,98 @@ const BusinessPageConfig = ({ config, onChange }) => {
                 logoOptions={pictureOptions}
                 logoLabel="YOUR PICTURE"
                 logoHelpText="128x128px, 1:1 Ratio"
-            />
+            >
+                {/* HEADER IMAGE SECTION */}
+                <div style={{ marginTop: '2rem', borderTop: '1px dashed #e2e8f0', paddingTop: '2rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
+                            HEADER IMAGE
+                        </span>
+                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                            Minimum width: 400px, 3:2 Ratio
+                        </span>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                        {/* Remove/Clear Option */}
+                        <div
+                            onClick={() => handleDesignUpdate('heroImage', '')}
+                            style={{
+                                width: '64px',
+                                height: '64px',
+                                borderRadius: '8px',
+                                border: '1px solid #e2e8f0',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                background: '#fff'
+                            }}
+                        >
+                            <X size={24} color="#cbd5e1" />
+                        </div>
+
+                        {/* Header Options */}
+                        {[
+                            'https://img.freepik.com/free-vector/hand-drawn-social-media-doodles_23-2149862823.jpg',
+                            'https://img.freepik.com/free-vector/social-media-marketing-concept-marketing-with-applications_23-2148421838.jpg',
+                            'https://img.freepik.com/free-vector/black-white-doodle-seamless-pattern_1159-4567.jpg',
+                            'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg',
+                            'https://img.freepik.com/free-vector/seamless-pattern-with-red-geometric-shapes_1017-31359.jpg'
+                        ].map((url, idx) => (
+                            <div
+                                key={idx}
+                                onClick={() => handleDesignUpdate('heroImage', url)}
+                                style={{
+                                    width: '64px',
+                                    height: '64px',
+                                    borderRadius: '8px',
+                                    overflow: 'hidden',
+                                    border: design.heroImage === url ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                    cursor: 'pointer',
+                                    position: 'relative'
+                                }}
+                            >
+                                <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                {design.heroImage === url && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '-6px',
+                                        right: '-6px',
+                                        width: '20px',
+                                        height: '20px',
+                                        background: '#8b5cf6',
+                                        borderRadius: '50%',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        border: '2px solid #fff'
+                                    }}>
+                                        <Check size={10} color="#fff" />
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+
+                        {/* Upload Option */}
+                        <div style={{
+                            width: '64px',
+                            height: '64px',
+                            borderRadius: '8px',
+                            border: '1px dashed #cbd5e1',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer'
+                        }}>
+                            <UploadCloud size={20} color="#94a3b8" />
+                        </div>
+                    </div>
+                </div>
+            </ReusableDesignAccordion>
 
             {/* BASIC INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem' }}>
                 <div
                     onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
                     style={{
@@ -226,40 +315,11 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                     </div>
 
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                            Text Color
-                                        </label>
-                                        <div style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            border: '1px solid #1e293b',
-                                            borderRadius: '4px',
-                                            padding: '0.5rem',
-                                            height: '44px'
-                                        }}>
-                                            <input
-                                                type="text"
-                                                value={businessInfo.companyNameColor || '#FFFFFF'}
-                                                onChange={(e) => handleBusinessInfoUpdate('companyNameColor', e.target.value)}
-                                                style={{
-                                                    border: 'none',
-                                                    outline: 'none',
-                                                    width: '100%',
-                                                    fontSize: '0.9rem',
-                                                    color: '#000',
-                                                    fontWeight: '500',
-                                                    textTransform: 'uppercase'
-                                                }}
-                                            />
-                                            <div style={{
-                                                width: '28px',
-                                                height: '28px',
-                                                background: businessInfo.companyNameColor || '#FFFFFF',
-                                                borderRadius: '2px',
-                                                flexShrink: 0,
-                                                border: '1px solid #e2e8f0'
-                                            }}></div>
-                                        </div>
+                                        <ColorPicker
+                                            label="Text Color"
+                                            color={businessInfo.companyNameColor || '#FFFFFF'}
+                                            onChange={(color) => handleBusinessInfoUpdate('companyNameColor', color)}
+                                        />
                                     </div>
 
                                     <div>
@@ -309,40 +369,11 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                     </div>
 
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                            Text Color
-                                        </label>
-                                        <div style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            border: '1px solid #1e293b',
-                                            borderRadius: '4px',
-                                            padding: '0.5rem',
-                                            height: '44px'
-                                        }}>
-                                            <input
-                                                type="text"
-                                                value={businessInfo.headlineColor || '#FFFFFF'}
-                                                onChange={(e) => handleBusinessInfoUpdate('headlineColor', e.target.value)}
-                                                style={{
-                                                    border: 'none',
-                                                    outline: 'none',
-                                                    width: '100%',
-                                                    fontSize: '0.9rem',
-                                                    color: '#000',
-                                                    fontWeight: '500',
-                                                    textTransform: 'uppercase'
-                                                }}
-                                            />
-                                            <div style={{
-                                                width: '28px',
-                                                height: '28px',
-                                                background: businessInfo.headlineColor || '#FFFFFF',
-                                                borderRadius: '2px',
-                                                flexShrink: 0,
-                                                border: '1px solid #e2e8f0'
-                                            }}></div>
-                                        </div>
+                                        <ColorPicker
+                                            label="Text Color"
+                                            color={businessInfo.headlineColor || '#FFFFFF'}
+                                            onChange={(color) => handleBusinessInfoUpdate('headlineColor', color)}
+                                        />
                                     </div>
 
                                     <div>
@@ -436,10 +467,10 @@ const BusinessPageConfig = ({ config, onChange }) => {
                         </div>
                     )
                 }
-            </div >
+            </div>
 
             {/* OPENING HOURS ACCORDION */}
-            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
                 <div
                     onClick={() => setIsOpeningHoursOpen(!isOpeningHoursOpen)}
                     style={{
@@ -581,10 +612,10 @@ const BusinessPageConfig = ({ config, onChange }) => {
                         </div>
                     )
                 }
-            </div >
+            </div>
 
             {/* FACILITIES ACCORDION */}
-            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
                 <div
                     onClick={() => setIsFacilitiesOpen(!isFacilitiesOpen)}
                     style={{
@@ -681,7 +712,7 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                     <PawPrint size={28} />
                                 </div>
 
-                                {/* Parking (P icon - using text) */}
+                                {/* Parking */}
                                 <div
                                     onClick={() => handleFacilityToggle('parking')}
                                     style={{
@@ -752,10 +783,10 @@ const BusinessPageConfig = ({ config, onChange }) => {
                         </div>
                     )
                 }
-            </div >
+            </div>
 
             {/* CONTACT INFORMATION ACCORDION */}
-            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
                 <div
                     onClick={() => setIsContactOpen(!isContactOpen)}
                     style={{
@@ -822,140 +853,295 @@ const BusinessPageConfig = ({ config, onChange }) => {
 
                             {/* LOCATION */}
                             <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    LOCATION*
-                                </label>
-                                <input
-                                    type="text"
-                                    value={contact.location || ''}
-                                    onChange={(e) => handleContactUpdate('location', e.target.value)}
-                                    placeholder="1000 Marketplace Ave. NY, 10001, United States"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
+                                {(contact.location && contact.location.length > 0) || contact.location === ' ' ? (
+                                    <>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
+                                                LOCATION
+                                            </label>
+                                            <div
+                                                onClick={() => handleContactUpdate('location', '')}
+                                                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                                            >
+                                                <X size={14} color="#ef4444" />
+                                                <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '600' }}>Delete</span>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                            <div style={{
+                                                width: '48px',
+                                                height: '48px',
+                                                border: '1px solid #e2e8f0',
+                                                borderRadius: '4px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                flexShrink: 0
+                                            }}>
+                                                <MapPin size={20} color="#64748b" />
+                                            </div>
+                                            <input
+                                                type="text"
+                                                value={contact.location === ' ' ? '' : contact.location}
+                                                onChange={(e) => handleContactUpdate('location', e.target.value)}
+                                                placeholder="1000 Marketplace Ave. NY, 10001, United States"
+                                                style={{
+                                                    flex: 1,
+                                                    padding: '0.75rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #e2e8f0',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    color: '#64748b'
+                                                }}
+                                            />
+                                        </div>
+                                    </>
+                                ) : (
+                                    <button
+                                        onClick={() => handleContactUpdate('location', ' ')}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px dashed #cbd5e1',
+                                            background: '#f8fafc',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: '0.5rem',
+                                            color: '#64748b',
+                                            fontSize: '0.9rem',
+                                            fontWeight: '500'
+                                        }}
+                                    >
+                                        <Plus size={18} />
+                                        Add Location
+                                    </button>
+                                )}
                             </div>
 
                             {/* PHONE */}
                             <div style={{ marginBottom: '2rem' }}>
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                    {/* Phone Icon Box */}
-                                    <div style={{
-                                        width: '48px',
-                                        height: '48px',
-                                        border: '1px solid #e2e8f0',
-                                        borderRadius: '4px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flexShrink: 0
-                                    }}>
-                                        <Phone size={20} color="#64748b" />
-                                    </div>
-
-                                    {/* Phone Input */}
-                                    <input
-                                        type="text"
-                                        value={contact.phone || ''}
-                                        onChange={(e) => handleContactUpdate('phone', e.target.value)}
-                                        placeholder="15555551234"
+                                {(contact.phone && contact.phone.length > 0) || contact.phone === ' ' ? (
+                                    <>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
+                                                PHONE
+                                            </label>
+                                            <div
+                                                onClick={() => handleContactUpdate('phone', '')}
+                                                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                                            >
+                                                <X size={14} color="#ef4444" />
+                                                <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '600' }}>Delete</span>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                            <div style={{
+                                                width: '48px',
+                                                height: '48px',
+                                                border: '1px solid #e2e8f0',
+                                                borderRadius: '4px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                flexShrink: 0
+                                            }}>
+                                                <Phone size={20} color="#64748b" />
+                                            </div>
+                                            <input
+                                                type="text"
+                                                value={contact.phone === ' ' ? '' : contact.phone}
+                                                onChange={(e) => handleContactUpdate('phone', e.target.value)}
+                                                placeholder="15555551234"
+                                                style={{
+                                                    flex: 1,
+                                                    padding: '0.75rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #e2e8f0',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    color: '#64748b'
+                                                }}
+                                            />
+                                        </div>
+                                    </>
+                                ) : (
+                                    <button
+                                        onClick={() => handleContactUpdate('phone', ' ')}
                                         style={{
-                                            flex: 1,
+                                            width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #e2e8f0',
+                                            border: '1px dashed #cbd5e1',
+                                            background: '#f8fafc',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: '0.5rem',
+                                            color: '#64748b',
                                             fontSize: '0.9rem',
-                                            outline: 'none',
-                                            color: '#64748b'
+                                            fontWeight: '500'
                                         }}
-                                    />
-                                </div>
+                                    >
+                                        <Plus size={18} />
+                                        Add Phone
+                                    </button>
+                                )}
                             </div>
 
                             {/* EMAIL */}
                             <div style={{ marginBottom: '2rem' }}>
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                    {/* Email Icon Box */}
-                                    <div style={{
-                                        width: '48px',
-                                        height: '48px',
-                                        border: '1px solid #e2e8f0',
-                                        borderRadius: '4px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flexShrink: 0
-                                    }}>
-                                        <Mail size={20} color="#64748b" />
-                                    </div>
-
-                                    {/* Email Input */}
-                                    <input
-                                        type="email"
-                                        value={contact.email || ''}
-                                        onChange={(e) => handleContactUpdate('email', e.target.value)}
-                                        placeholder="Hellen@gmail.com"
+                                {(contact.email && contact.email.length > 0) || contact.email === ' ' ? (
+                                    <>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
+                                                EMAIL
+                                            </label>
+                                            <div
+                                                onClick={() => handleContactUpdate('email', '')}
+                                                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                                            >
+                                                <X size={14} color="#ef4444" />
+                                                <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '600' }}>Delete</span>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                            <div style={{
+                                                width: '48px',
+                                                height: '48px',
+                                                border: '1px solid #e2e8f0',
+                                                borderRadius: '4px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                flexShrink: 0
+                                            }}>
+                                                <Mail size={20} color="#64748b" />
+                                            </div>
+                                            <input
+                                                type="email"
+                                                value={contact.email === ' ' ? '' : contact.email}
+                                                onChange={(e) => handleContactUpdate('email', e.target.value)}
+                                                placeholder="Hellen@gmail.com"
+                                                style={{
+                                                    flex: 1,
+                                                    padding: '0.75rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #e2e8f0',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    color: '#64748b'
+                                                }}
+                                            />
+                                        </div>
+                                    </>
+                                ) : (
+                                    <button
+                                        onClick={() => handleContactUpdate('email', ' ')}
                                         style={{
-                                            flex: 1,
+                                            width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #e2e8f0',
+                                            border: '1px dashed #cbd5e1',
+                                            background: '#f8fafc',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: '0.5rem',
+                                            color: '#64748b',
                                             fontSize: '0.9rem',
-                                            outline: 'none',
-                                            color: '#64748b'
+                                            fontWeight: '500'
                                         }}
-                                    />
-                                </div>
+                                    >
+                                        <Plus size={18} />
+                                        Add Email
+                                    </button>
+                                )}
                             </div>
 
                             {/* WEBSITE */}
                             <div style={{ marginBottom: '0' }}>
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                    {/* Website Icon Box */}
-                                    <div style={{
-                                        width: '48px',
-                                        height: '48px',
-                                        border: '1px solid #e2e8f0',
-                                        borderRadius: '4px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flexShrink: 0
-                                    }}>
-                                        <Globe size={20} color="#64748b" />
-                                    </div>
-
-                                    {/* Website Input */}
-                                    <input
-                                        type="text"
-                                        value={contact.website || ''}
-                                        onChange={(e) => handleContactUpdate('website', e.target.value)}
-                                        placeholder="https://Hellengrey.com"
+                                {(contact.website && contact.website.length > 0) || contact.website === ' ' ? (
+                                    <>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
+                                                WEBSITE
+                                            </label>
+                                            <div
+                                                onClick={() => handleContactUpdate('website', '')}
+                                                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                                            >
+                                                <X size={14} color="#ef4444" />
+                                                <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '600' }}>Delete</span>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                            <div style={{
+                                                width: '48px',
+                                                height: '48px',
+                                                border: '1px solid #e2e8f0',
+                                                borderRadius: '4px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                flexShrink: 0
+                                            }}>
+                                                <Globe size={20} color="#64748b" />
+                                            </div>
+                                            <input
+                                                type="text"
+                                                value={contact.website === ' ' ? '' : contact.website}
+                                                onChange={(e) => handleContactUpdate('website', e.target.value)}
+                                                placeholder="https://Hellengrey.com"
+                                                style={{
+                                                    flex: 1,
+                                                    padding: '0.75rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #e2e8f0',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    color: '#64748b'
+                                                }}
+                                            />
+                                        </div>
+                                    </>
+                                ) : (
+                                    <button
+                                        onClick={() => handleContactUpdate('website', ' ')}
                                         style={{
-                                            flex: 1,
+                                            width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #e2e8f0',
+                                            border: '1px dashed #cbd5e1',
+                                            background: '#f8fafc',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: '0.5rem',
+                                            color: '#64748b',
                                             fontSize: '0.9rem',
-                                            outline: 'none',
-                                            color: '#64748b'
+                                            fontWeight: '500'
                                         }}
-                                    />
-                                </div>
+                                    >
+                                        <Plus size={18} />
+                                        Add Website
+                                    </button>
+                                )}
                             </div>
 
                         </div>
                     )
                 }
-            </div >
+            </div>
 
             {/* SOCIAL MEDIA CHANNELS ACCORDION */}
-            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
                 <div
                     onClick={() => setIsSocialOpen(!isSocialOpen)}
                     style={{
@@ -977,454 +1163,128 @@ const BusinessPageConfig = ({ config, onChange }) => {
                 {
                     isSocialOpen && (
                         <div style={{ padding: '2rem', background: '#fff' }}>
+                            {(() => {
+                                const SOCIAL_PLATFORMS = [
+                                    { id: 'website', name: 'Website', icon: Globe, color: '#6366f1' },
+                                    { id: 'facebook', name: 'Facebook', icon: Facebook, color: '#1877f2' },
+                                    { id: 'instagram', name: 'Instagram', icon: Instagram, color: '#E1306C' },
+                                    { id: 'twitter', name: 'X', icon: Twitter, color: '#000000' },
+                                    { id: 'linkedin', name: 'LinkedIn', icon: Linkedin, color: '#0077b5' },
+                                    { id: 'discord', name: 'Discord', icon: Gamepad2, color: '#5865f2' },
+                                    { id: 'twitch', name: 'Twitch', icon: Twitch, color: '#9146ff' },
+                                    { id: 'youtube', name: 'YouTube', icon: Youtube, color: '#ff0000' },
+                                    { id: 'whatsapp', name: 'WhatsApp', icon: MessageCircle, color: '#25d366' },
+                                    { id: 'snapchat', name: 'Snapchat', icon: Ghost, color: '#fffc00', textColor: '#000' },
+                                    { id: 'tiktok', name: 'TikTok', icon: Music, color: '#000000' },
+                                    { id: 'pinterest', name: 'Pinterest', icon: Github, color: '#e60023' }, // Placeholder
+                                    { id: 'dribbble', name: 'Dribbble', icon: Dribbble, color: '#ea4c89' },
+                                    { id: 'telegram', name: 'Telegram', icon: MessageSquare, color: '#0088cc' },
+                                    { id: 'reddit', name: 'Reddit', icon: Github, color: '#ff4500' }, // Placeholder
+                                    { id: 'spotify', name: 'Spotify', icon: Music, color: '#1DB954' },
+                                ];
 
-                            {/* Social Media Inputs Grid */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                                // Helper to get active platforms
+                                const activePlatforms = SOCIAL_PLATFORMS.filter(p => social[p.id] !== undefined);
+                                const availablePlatforms = SOCIAL_PLATFORMS.filter(p => social[p.id] === undefined);
 
-                                {/* Website */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Website*
-                                    </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                        <div style={{
-                                            width: '32px',
-                                            height: '32px',
-                                            background: '#6366f1',
-                                            borderRadius: '4px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            flexShrink: 0
-                                        }}>
-                                            <Globe size={18} color="#fff" />
+                                return (
+                                    <>
+                                        {/* Active Inputs Grid */}
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                                            {activePlatforms.map((platform) => (
+                                                <div key={platform.id}>
+                                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                                        {platform.name}*
+                                                    </label>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                        <div style={{
+                                                            width: '40px',
+                                                            height: '40px',
+                                                            background: platform.color,
+                                                            borderRadius: '8px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            flexShrink: 0
+                                                        }}>
+                                                            <platform.icon size={20} color={platform.textColor || "#fff"} />
+                                                        </div>
+                                                        <input
+                                                            type="text"
+                                                            value={social[platform.id] || ''}
+                                                            onChange={(e) => handleSocialUpdate(platform.id, e.target.value)}
+                                                            placeholder="https://"
+                                                            style={{
+                                                                flex: 1,
+                                                                padding: '0.75rem',
+                                                                borderRadius: '8px',
+                                                                border: '1px solid #1e293b',
+                                                                fontSize: '0.9rem',
+                                                                outline: 'none',
+                                                                color: '#334155'
+                                                            }}
+                                                        />
+                                                        <button
+                                                            onClick={() => handleSocialUpdate(platform.id, undefined)}
+                                                            style={{
+                                                                background: 'none',
+                                                                border: 'none',
+                                                                cursor: 'pointer',
+                                                                color: '#cbd5e1',
+                                                                padding: '0.25rem'
+                                                            }}
+                                                        >
+                                                            <div style={{ width: '24px', height: '24px', borderRadius: '50%', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                                <X size={14} />
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
-                                        <input
-                                            type="text"
-                                            value={social.website || ''}
-                                            onChange={(e) => handleSocialUpdate('website', e.target.value)}
-                                            placeholder="https://"
-                                            style={{
-                                                flex: 1,
-                                                padding: '0.5rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
-                                                fontSize: '0.85rem',
-                                                outline: 'none',
-                                                color: '#94a3b8'
-                                            }}
-                                        />
-                                    </div>
-                                </div>
 
-                                {/* Facebook */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Facebook*
-                                    </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                        <div style={{
-                                            width: '32px',
-                                            height: '32px',
-                                            background: '#1877f2',
-                                            borderRadius: '4px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            flexShrink: 0,
-                                            fontSize: '18px',
-                                            fontWeight: 'bold',
-                                            color: '#fff'
-                                        }}>
-                                            f
+                                        {/* ADD MORE Section */}
+                                        <div>
+                                            <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                ADD MORE
+                                            </div>
+                                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                                                Click on the icon to add a social media profile.
+                                            </div>
+
+                                            {/* Social Media Icons Grid */}
+                                            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                                                {availablePlatforms.map((platform) => (
+                                                    <div
+                                                        key={platform.id}
+                                                        onClick={() => handleSocialUpdate(platform.id, '')}
+                                                        style={{
+                                                            width: '40px',
+                                                            height: '40px',
+                                                            borderRadius: '8px',
+                                                            border: `1px solid ${platform.color}`,
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            cursor: 'pointer',
+                                                            color: platform.color,
+                                                            transition: 'all 0.2s',
+                                                            background: '#fff'
+                                                        }}
+                                                    >
+                                                        <platform.icon size={20} />
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
-                                        <input
-                                            type="text"
-                                            value={social.facebook || ''}
-                                            onChange={(e) => handleSocialUpdate('facebook', e.target.value)}
-                                            placeholder="https://"
-                                            style={{
-                                                flex: 1,
-                                                padding: '0.5rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
-                                                fontSize: '0.85rem',
-                                                outline: 'none',
-                                                color: '#94a3b8'
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Pinterest */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Pinterest*
-                                    </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                        <div style={{
-                                            width: '32px',
-                                            height: '32px',
-                                            background: '#e60023',
-                                            borderRadius: '4px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            flexShrink: 0,
-                                            fontSize: '18px',
-                                            fontWeight: 'bold',
-                                            color: '#fff'
-                                        }}>
-                                            P
-                                        </div>
-                                        <input
-                                            type="text"
-                                            value={social.pinterest || ''}
-                                            onChange={(e) => handleSocialUpdate('pinterest', e.target.value)}
-                                            placeholder="https://"
-                                            style={{
-                                                flex: 1,
-                                                padding: '0.5rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
-                                                fontSize: '0.85rem',
-                                                outline: 'none',
-                                                color: '#94a3b8'
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            {/* ADD MORE Section */}
-                            <div>
-                                <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    ADD MORE
-                                </div>
-                                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
-                                    Click on the icon to add a social media profile.
-                                </div>
-
-                                {/* Social Media Icons Grid */}
-                                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                                    {/* Facebook */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#1877f2',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '20px',
-                                        fontWeight: 'bold',
-                                        color: '#fff'
-                                    }}>
-                                        f
-                                    </div>
-
-                                    {/* Instagram */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '20px',
-                                        fontWeight: 'bold',
-                                        color: '#fff'
-                                    }}>
-                                        📷
-                                    </div>
-
-                                    {/* X (Twitter) */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#000',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '18px',
-                                        fontWeight: 'bold',
-                                        color: '#fff'
-                                    }}>
-                                        𝕏
-                                    </div>
-
-                                    {/* LinkedIn */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#0077b5',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '18px',
-                                        fontWeight: 'bold',
-                                        color: '#fff'
-                                    }}>
-                                        in
-                                    </div>
-
-                                    {/* Discord */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#5865f2',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '20px',
-                                        color: '#fff'
-                                    }}>
-                                        💬
-                                    </div>
-
-                                    {/* Twitch */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#9146ff',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '20px',
-                                        color: '#fff'
-                                    }}>
-                                        📺
-                                    </div>
-
-                                    {/* Line */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#00b900',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '20px',
-                                        fontWeight: 'bold',
-                                        color: '#fff'
-                                    }}>
-                                        L
-                                    </div>
-
-                                    {/* YouTube */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#ff0000',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '20px',
-                                        color: '#fff'
-                                    }}>
-                                        ▶
-                                    </div>
-
-                                    {/* WhatsApp */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#25d366',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '20px',
-                                        color: '#fff'
-                                    }}>
-                                        💬
-                                    </div>
-
-                                    {/* Snapchat */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#fffc00',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '20px',
-                                        color: '#000'
-                                    }}>
-                                        👻
-                                    </div>
-
-                                    {/* TikTok */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#000',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '20px',
-                                        color: '#fff'
-                                    }}>
-                                        ♪
-                                    </div>
-
-                                    {/* Tumblr */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#35465c',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '18px',
-                                        fontWeight: 'bold',
-                                        color: '#fff'
-                                    }}>
-                                        t
-                                    </div>
-
-                                    {/* Spotify */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#1db954',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '20px',
-                                        color: '#fff'
-                                    }}>
-                                        🎵
-                                    </div>
-
-                                    {/* Dribbble */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#ea4c89',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '20px',
-                                        color: '#fff'
-                                    }}>
-                                        🏀
-                                    </div>
-
-                                    {/* Pinterest */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#e60023',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '18px',
-                                        fontWeight: 'bold',
-                                        color: '#fff'
-                                    }}>
-                                        P
-                                    </div>
-
-                                    {/* Telegram */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#0088cc',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '20px',
-                                        color: '#fff'
-                                    }}>
-                                        ✈️
-                                    </div>
-
-                                    {/* Behance */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#1769ff',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '18px',
-                                        fontWeight: 'bold',
-                                        color: '#fff'
-                                    }}>
-                                        Bē
-                                    </div>
-
-                                    {/* Reddit */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#ff4500',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '20px',
-                                        color: '#fff'
-                                    }}>
-                                        👽
-                                    </div>
-
-                                    {/* Website */}
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#6366f1',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer'
-                                    }}>
-                                        <Globe size={20} color="#fff" />
-                                    </div>
-                                </div>
-                            </div>
-
+                                    </>
+                                );
+                            })()}
                         </div>
                     )
                 }
-            </div >
-        </div >
+            </div>
+        </div>
     );
 };
 
