@@ -345,6 +345,10 @@ const CustomConfig = ({ config, onChange }) => {
         updateComponentData(compId, field, value);
     };
 
+    const deleteContactField = (compId, field) => {
+        updateComponentData(compId, field, '');
+    };
+
     // --- Companies Helpers ---
     const handleCompanyChange = (compId, companyId, field, value) => {
         const comp = addedComponents.find(c => c.id === compId);
@@ -419,15 +423,15 @@ const CustomConfig = ({ config, onChange }) => {
     };
 
     // --- Facilities Helpers ---
-    const toggleFacility = (compId, facility) => {
+    const toggleFacility = (compId, facilityName) => {
         const comp = addedComponents.find(c => c.id === compId);
         if (!comp) return;
-        const exists = comp.data.selectedFacilities.includes(facility);
+        const exists = comp.data.selectedFacilities.includes(facilityName);
         let newFacilities;
         if (exists) {
-            newFacilities = comp.data.selectedFacilities.filter(f => f !== facility);
+            newFacilities = comp.data.selectedFacilities.filter(f => f !== facilityName);
         } else {
-            newFacilities = [...comp.data.selectedFacilities, facility];
+            newFacilities = [...comp.data.selectedFacilities, facilityName];
         }
         updateComponentData(compId, 'selectedFacilities', newFacilities);
     };
@@ -668,7 +672,7 @@ const CustomConfig = ({ config, onChange }) => {
                                         <>
                                             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
                                                 <div><label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>{comp.type}*</label><input type="text" value={comp.data.text} onChange={(e) => updateComponentData(comp.id, 'text', e.target.value)} style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none' }} /></div>
-                                                <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Text Color</label><div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}><input type="text" value={comp.data.color} onChange={(e) => updateComponentData(comp.id, 'color', e.target.value)} style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.9rem', color: '#000', fontWeight: '500' }} /><div style={{ width: '28px', height: '28px', background: comp.data.color, borderRadius: '2px' }}></div></div></div>
+                                                <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Text Color</label><div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}><input type="text" value={comp.data.color} onChange={(e) => updateComponentData(comp.id, 'color', e.target.value)} style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.9rem', color: '#000', fontWeight: '500' }} /><div style={{ width: '28px', height: '28px', borderRadius: '2px', position: 'relative', overflow: 'hidden', border: '1px solid #e2e8f0' }}><div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: comp.data.color }}></div><input type="color" value={comp.data.color} onChange={(e) => updateComponentData(comp.id, 'color', e.target.value)} style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', cursor: 'pointer', opacity: 0 }} /></div></div></div>
                                                 <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Font</label><div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.75rem', height: '44px', cursor: 'pointer' }}><span style={{ fontSize: '0.9rem', color: '#000' }}>{comp.data.font}</span><ChevronDown size={14} color="#94a3b8" /></div></div>
                                             </div>
                                             <div style={{ position: 'relative', height: '1px', background: 'none', borderTop: '1px dashed #e2e8f0', margin: '2rem 0' }}><span style={{ position: 'absolute', top: '-10px', left: '2rem', background: '#fff', padding: '0 1rem', fontSize: '0.85rem', fontWeight: '600', color: '#1e293b' }}>Formatting</span></div>
@@ -701,12 +705,12 @@ const CustomConfig = ({ config, onChange }) => {
                                                 <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Font Family</label><div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.75rem', height: '44px', cursor: 'pointer' }}><span style={{ fontSize: '0.9rem', color: '#000' }}>{comp.data.fontFamily}</span><ChevronDown size={14} color="#94a3b8" /></div></div>
                                             </div>
                                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
-                                                <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Text Color</label><div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}><input type="text" value={comp.data.textColor} onChange={(e) => updateComponentData(comp.id, 'textColor', e.target.value)} style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.9rem', color: '#000', fontWeight: '500' }} /><div style={{ width: '28px', height: '28px', background: comp.data.textColor, borderRadius: '2px' }}></div></div></div>
-                                                <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Background Color</label><div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}><input type="text" value={comp.data.bgColor} onChange={(e) => updateComponentData(comp.id, 'bgColor', e.target.value)} style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.9rem', color: '#000', fontWeight: '500' }} /><div style={{ width: '28px', height: '28px', background: comp.data.bgColor, borderRadius: '2px' }}></div></div></div>
+                                                <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Text Color</label><div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}><input type="text" value={comp.data.textColor} onChange={(e) => updateComponentData(comp.id, 'textColor', e.target.value)} style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.9rem', color: '#000', fontWeight: '500' }} /><div style={{ width: '28px', height: '28px', borderRadius: '2px', position: 'relative', overflow: 'hidden', border: '1px solid #e2e8f0' }}><div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: comp.data.textColor }}></div><input type="color" value={comp.data.textColor} onChange={(e) => updateComponentData(comp.id, 'textColor', e.target.value)} style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', cursor: 'pointer', opacity: 0 }} /></div></div></div>
+                                                <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Background Color</label><div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}><input type="text" value={comp.data.bgColor} onChange={(e) => updateComponentData(comp.id, 'bgColor', e.target.value)} style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.9rem', color: '#000', fontWeight: '500' }} /><div style={{ width: '28px', height: '28px', borderRadius: '2px', position: 'relative', overflow: 'hidden', border: '1px solid #e2e8f0' }}><div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: comp.data.bgColor }}></div><input type="color" value={comp.data.bgColor} onChange={(e) => updateComponentData(comp.id, 'bgColor', e.target.value)} style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', cursor: 'pointer', opacity: 0 }} /></div></div></div>
                                             </div>
                                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
                                                 <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Border Width</label><input type="text" value={comp.data.borderWidth} onChange={(e) => updateComponentData(comp.id, 'borderWidth', e.target.value)} style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none' }} /></div>
-                                                <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Border Color</label><div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}><input type="text" value={comp.data.borderColor} onChange={(e) => updateComponentData(comp.id, 'borderColor', e.target.value)} style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.9rem', color: '#000', fontWeight: '500' }} /><div style={{ width: '28px', height: '28px', background: comp.data.borderColor, borderRadius: '2px' }}></div></div></div>
+                                                <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Border Color</label><div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}><input type="text" value={comp.data.borderColor} onChange={(e) => updateComponentData(comp.id, 'borderColor', e.target.value)} style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.9rem', color: '#000', fontWeight: '500' }} /><div style={{ width: '28px', height: '28px', borderRadius: '2px', position: 'relative', overflow: 'hidden', border: '1px solid #e2e8f0' }}><div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: comp.data.borderColor }}></div><input type="color" value={comp.data.borderColor} onChange={(e) => updateComponentData(comp.id, 'borderColor', e.target.value)} style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', cursor: 'pointer', opacity: 0 }} /></div></div></div>
                                             </div>
                                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
                                                 <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Border Radius</label><input type="text" value={comp.data.borderRadius} onChange={(e) => updateComponentData(comp.id, 'borderRadius', e.target.value)} style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none' }} /></div>
@@ -742,7 +746,7 @@ const CustomConfig = ({ config, onChange }) => {
                                             </div>
                                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
                                                 <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Border Width</label><input type="text" value={comp.data.borderWidth} onChange={(e) => updateComponentData(comp.id, 'borderWidth', e.target.value)} style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none' }} /></div>
-                                                <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Border Color</label><div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}><input type="text" value={comp.data.borderColor} onChange={(e) => updateComponentData(comp.id, 'borderColor', e.target.value)} style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.9rem', color: '#000', fontWeight: '500' }} /><div style={{ width: '28px', height: '28px', background: comp.data.borderColor, borderRadius: '2px' }}></div></div></div>
+                                                <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Border Color</label><div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}><input type="text" value={comp.data.borderColor} onChange={(e) => updateComponentData(comp.id, 'borderColor', e.target.value)} style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.9rem', color: '#000', fontWeight: '500' }} /><div style={{ width: '28px', height: '28px', borderRadius: '2px', position: 'relative', overflow: 'hidden', border: '1px solid #e2e8f0' }}><div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: comp.data.borderColor }}></div><input type="color" value={comp.data.borderColor} onChange={(e) => updateComponentData(comp.id, 'borderColor', e.target.value)} style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', cursor: 'pointer', opacity: 0 }} /></div></div></div>
                                             </div>
                                             <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Frame</label><div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>{['circle', 'square', 'rounded'].map(f => (<div key={f} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }} onClick={() => updateComponentData(comp.id, 'frame', f)}><div style={{ width: '20px', height: '20px', borderRadius: '50%', border: comp.data.frame === f ? '6px solid #8b5cf6' : '1px solid #e2e8f0', background: '#fff' }}></div><span style={{ fontSize: '0.9rem', fontWeight: comp.data.frame === f ? 'bold' : 'normal', color: '#1e293b', textTransform: 'capitalize' }}>{f}</span></div>))}</div></div>
                                         </>
@@ -1029,55 +1033,124 @@ const CustomConfig = ({ config, onChange }) => {
                                         <div style={{ background: '#f8f9fc', borderRadius: '8px', padding: '1.5rem' }}>
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                                 {/* Phone */}
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                                    <div style={{ width: '48px', height: '48px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                                        <Phone size={20} color="#64748b" />
+                                                {comp.data.phone ? (
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                                        <div style={{ width: '48px', height: '48px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                            <Phone size={20} color="#64748b" />
+                                                        </div>
+                                                        <input
+                                                            type="text"
+                                                            value={comp.data.phone}
+                                                            onChange={(e) => handleContactChange(comp.id, 'phone', e.target.value)}
+                                                            placeholder="+1 555 555 1234"
+                                                            style={{ flex: 1, padding: '0.75rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none', color: '#334155', background: '#fff' }}
+                                                        />
+                                                        <div
+                                                            onClick={() => deleteContactField(comp.id, 'phone')}
+                                                            style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
+                                                        >
+                                                            <X size={16} color="#94a3b8" />
+                                                        </div>
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        value={comp.data.phone}
-                                                        onChange={(e) => handleContactChange(comp.id, 'phone', e.target.value)}
-                                                        placeholder="+1 555 555 1234"
-                                                        style={{ flex: 1, padding: '0.75rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none', color: '#334155', background: '#fff' }}
-                                                    />
-                                                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
-                                                        <X size={16} color="#94a3b8" />
-                                                    </div>
-                                                </div>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => handleContactChange(comp.id, 'phone', '+1 555 555 1234')}
+                                                        style={{
+                                                            background: 'transparent',
+                                                            border: 'none',
+                                                            color: '#8b5cf6',
+                                                            fontSize: '0.9rem',
+                                                            fontWeight: '600',
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '0.5rem',
+                                                            padding: '0.5rem'
+                                                        }}
+                                                    >
+                                                        <Plus size={16} /> Add Phone
+                                                    </button>
+                                                )}
 
                                                 {/* Email */}
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                                    <div style={{ width: '48px', height: '48px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                                        <Mail size={20} color="#64748b" />
+                                                {comp.data.email ? (
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                                        <div style={{ width: '48px', height: '48px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                            <Mail size={20} color="#64748b" />
+                                                        </div>
+                                                        <input
+                                                            type="email"
+                                                            value={comp.data.email}
+                                                            onChange={(e) => handleContactChange(comp.id, 'email', e.target.value)}
+                                                            placeholder="Hellen@gmail.com"
+                                                            style={{ flex: 1, padding: '0.75rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none', color: '#334155', background: '#fff' }}
+                                                        />
+                                                        <div
+                                                            onClick={() => deleteContactField(comp.id, 'email')}
+                                                            style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
+                                                        >
+                                                            <X size={16} color="#94a3b8" />
+                                                        </div>
                                                     </div>
-                                                    <input
-                                                        type="email"
-                                                        value={comp.data.email}
-                                                        onChange={(e) => handleContactChange(comp.id, 'email', e.target.value)}
-                                                        placeholder="Hellen@gmail.com"
-                                                        style={{ flex: 1, padding: '0.75rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none', color: '#334155', background: '#fff' }}
-                                                    />
-                                                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
-                                                        <X size={16} color="#94a3b8" />
-                                                    </div>
-                                                </div>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => handleContactChange(comp.id, 'email', 'example@gmail.com')}
+                                                        style={{
+                                                            background: 'transparent',
+                                                            border: 'none',
+                                                            color: '#8b5cf6',
+                                                            fontSize: '0.9rem',
+                                                            fontWeight: '600',
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '0.5rem',
+                                                            padding: '0.5rem'
+                                                        }}
+                                                    >
+                                                        <Plus size={16} /> Add Email
+                                                    </button>
+                                                )}
 
                                                 {/* Website */}
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                                    <div style={{ width: '48px', height: '48px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                                        <Globe size={20} color="#64748b" />
+                                                {comp.data.website ? (
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                                        <div style={{ width: '48px', height: '48px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                            <Globe size={20} color="#64748b" />
+                                                        </div>
+                                                        <input
+                                                            type="url"
+                                                            value={comp.data.website}
+                                                            onChange={(e) => handleContactChange(comp.id, 'website', e.target.value)}
+                                                            placeholder="https://example.com"
+                                                            style={{ flex: 1, padding: '0.75rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none', color: '#334155', background: '#fff' }}
+                                                        />
+                                                        <div
+                                                            onClick={() => deleteContactField(comp.id, 'website')}
+                                                            style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
+                                                        >
+                                                            <X size={16} color="#94a3b8" />
+                                                        </div>
                                                     </div>
-                                                    <input
-                                                        type="url"
-                                                        value={comp.data.website}
-                                                        onChange={(e) => handleContactChange(comp.id, 'website', e.target.value)}
-                                                        placeholder="https://Hellengrey.com"
-                                                        style={{ flex: 1, padding: '0.75rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none', color: '#334155', background: '#fff' }}
-                                                    />
-                                                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
-                                                        <X size={16} color="#94a3b8" />
-                                                    </div>
-                                                </div>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => handleContactChange(comp.id, 'website', 'https://example.com')}
+                                                        style={{
+                                                            background: 'transparent',
+                                                            border: 'none',
+                                                            color: '#8b5cf6',
+                                                            fontSize: '0.9rem',
+                                                            fontWeight: '600',
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '0.5rem',
+                                                            padding: '0.5rem'
+                                                        }}
+                                                    >
+                                                        <Plus size={16} /> Add Website
+                                                    </button>
+                                                )}
                                             </div>
                                         </div>
                                     )}
@@ -1263,13 +1336,21 @@ const CustomConfig = ({ config, onChange }) => {
                                                     <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '500', color: '#64748b', marginBottom: '0.5rem' }}>
                                                         Text Color
                                                     </label>
-                                                    <input
-                                                        type="text"
-                                                        value={comp.data.textColor}
-                                                        onChange={(e) => updateComponentData(comp.id, 'textColor', e.target.value)}
-                                                        placeholder="#FFFFFF"
-                                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none', color: '#334155', background: '#fff' }}
-                                                    />
+                                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0.75rem', height: '44px' }}>
+                                                        <input
+                                                            type="text"
+                                                            value={comp.data.textColor}
+                                                            onChange={(e) => updateComponentData(comp.id, 'textColor', e.target.value)}
+                                                            placeholder="#FFFFFF"
+                                                            style={{
+                                                                flex: 1, border: 'none', outline: 'none', fontSize: '0.9rem', color: '#334155', background: 'transparent'
+                                                            }}
+                                                        />
+                                                        <div style={{ width: '28px', height: '28px', borderRadius: '2px', position: 'relative', overflow: 'hidden', border: '1px solid #e2e8f0', flexShrink: 0 }}>
+                                                            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: comp.data.textColor || '#000' }}></div>
+                                                            <input type="color" value={comp.data.textColor || '#000000'} onChange={(e) => updateComponentData(comp.id, 'textColor', e.target.value)} style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', cursor: 'pointer', opacity: 0 }} />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div>
                                                     <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '500', color: '#64748b', marginBottom: '0.5rem' }}>
@@ -1298,7 +1379,10 @@ const CustomConfig = ({ config, onChange }) => {
                                                         placeholder="#0B2D86"
                                                         style={{ flex: 1, padding: '0.75rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none', color: '#334155', background: '#fff' }}
                                                     />
-                                                    <div style={{ width: '44px', height: '44px', borderRadius: '4px', background: comp.data.bgColor, border: '1px solid #cbd5e1' }}></div>
+                                                    <div style={{ width: '44px', height: '44px', borderRadius: '4px', position: 'relative', overflow: 'hidden', border: '1px solid #cbd5e1' }}>
+                                                        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: comp.data.bgColor }}></div>
+                                                        <input type="color" value={comp.data.bgColor} onChange={(e) => updateComponentData(comp.id, 'bgColor', e.target.value)} style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', cursor: 'pointer', opacity: 0 }} />
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -1545,7 +1629,10 @@ const CustomConfig = ({ config, onChange }) => {
                                             onChange={(e) => handleDesignUpdate('primaryColor', e.target.value)}
                                             style={{ border: 'none', outline: 'none', width: '100%', fontWeight: 'bold', fontSize: '1rem', color: '#0f172a' }}
                                         />
-                                        <div style={{ width: '32px', height: '32px', background: primaryColor, borderRadius: '4px' }}></div>
+                                        <div style={{ width: '32px', height: '32px', borderRadius: '4px', position: 'relative', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+                                            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: primaryColor }}></div>
+                                            <input type="color" value={primaryColor} onChange={(e) => handleDesignUpdate('primaryColor', e.target.value)} style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', cursor: 'pointer', opacity: 0 }} />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -1560,7 +1647,10 @@ const CustomConfig = ({ config, onChange }) => {
                                             onChange={(e) => handleDesignUpdate('secondaryColor', e.target.value)}
                                             style={{ border: 'none', outline: 'none', width: '100%', fontWeight: 'bold', fontSize: '1rem', color: '#0f172a' }}
                                         />
-                                        <div style={{ width: '32px', height: '32px', background: secondaryColor, borderRadius: '4px' }}></div>
+                                        <div style={{ width: '32px', height: '32px', borderRadius: '4px', position: 'relative', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+                                            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: secondaryColor }}></div>
+                                            <input type="color" value={secondaryColor} onChange={(e) => handleDesignUpdate('secondaryColor', e.target.value)} style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', cursor: 'pointer', opacity: 0 }} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

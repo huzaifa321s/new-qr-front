@@ -44,13 +44,13 @@ const Generator = () => {
 
     // Helper function to generate QR value URL for preview/display
     const getQRValue = () => {
-        const baseUrl = window.location.origin.includes('localhost') 
-            ? 'http://localhost:5173' 
+        const baseUrl = window.location.origin.includes('localhost')
+            ? 'http://localhost:5173'
             : window.location.origin;
-        
+
         // Priority: generatedShortId (after creation) > editingQr.shortId (edit mode) > preview
         const id = generatedShortId || (isEditing ? editingQr?.shortId : null);
-        
+
         if (!id) {
             // For preview during creation, use a preview URL that matches the pattern
             if (selectedType === 'app-store') {
@@ -58,21 +58,21 @@ const Generator = () => {
             } else if (selectedType === 'menu' || selectedType === 'business-page') {
                 return `${baseUrl}/view/preview`;
             } else {
-                const backendUrl = window.location.origin.includes('localhost') 
-                    ? 'http://localhost:3000' 
+                const backendUrl = window.location.origin.includes('localhost')
+                    ? 'http://localhost:3000'
                     : window.location.origin.replace(':5173', ':3000');
                 return `${backendUrl}/preview`;
             }
         }
-        
+
         // Generate actual URL based on type
         if (selectedType === 'app-store') {
             return `${baseUrl}/app/${id}`;
         } else if (selectedType === 'menu' || selectedType === 'business-page') {
             return `${baseUrl}/view/${id}`;
         } else {
-            const backendUrl = window.location.origin.includes('localhost') 
-                ? 'http://localhost:3000' 
+            const backendUrl = window.location.origin.includes('localhost')
+                ? 'http://localhost:3000'
                 : window.location.origin.replace(':5173', ':3000');
             return `${backendUrl}/${id}`;
         }
@@ -128,8 +128,8 @@ const Generator = () => {
                 timings: editingQr.timings || defaultConfig.timings,
                 social: editingQr.social ? { ...defaultConfig.social, ...editingQr.social } : defaultConfig.social,
                 // Re-merge design to include page styles (like colors) and QR design
-                design: { 
-                    ...defaultConfig.design, 
+                design: {
+                    ...defaultConfig.design,
                     ...editingQr.design,
                     // Ensure QR design fields are preserved
                     dots: editingQr.design?.dots || defaultConfig.design?.dots,
@@ -140,7 +140,7 @@ const Generator = () => {
                     imageOptions: editingQr.design?.imageOptions || defaultConfig.design?.imageOptions
                 }
             }));
-            
+
             // Also update qrDesign state with saved design
             if (editingQr.design) {
                 const defaultDesign = {
@@ -161,7 +161,7 @@ const Generator = () => {
                 });
             }
         } else {
-            setPageConfig(defaultConfig);
+            setPageConfig({ ...defaultConfig, type: selectedType });
         }
     }, [selectedType, editingQr]);
 
@@ -184,19 +184,19 @@ const Generator = () => {
             // For new QRs, backend will generate the correct URL, so we can send a placeholder
             // For editing, use existing shortId to generate correct URL
             let qrDataUrl = 'https://placeholder.com';
-            
+
             if (isEditing) {
-                const baseUrl = window.location.origin.includes('localhost') 
-                    ? 'http://localhost:5173' 
+                const baseUrl = window.location.origin.includes('localhost')
+                    ? 'http://localhost:5173'
                     : window.location.origin;
-                
+
                 if (selectedType === 'app-store') {
                     qrDataUrl = `${baseUrl}/app/${editingQr.shortId}`;
                 } else if (selectedType === 'menu' || selectedType === 'business-page') {
                     qrDataUrl = `${baseUrl}/view/${editingQr.shortId}`;
                 } else {
-                    const backendUrl = window.location.origin.includes('localhost') 
-                        ? 'http://localhost:3000' 
+                    const backendUrl = window.location.origin.includes('localhost')
+                        ? 'http://localhost:3000'
                         : window.location.origin.replace(':5173', ':3000');
                     qrDataUrl = `${backendUrl}/${editingQr.shortId}`;
                 }
@@ -491,19 +491,42 @@ const Generator = () => {
                 </div>
 
                 {activeStep === 'content' ? (
-                    <div style={{
-                        transform: 'scale(0.85)',
-                        transformOrigin: 'top center',
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column'
-                    }}>
-                        <MobilePreview 
-                            config={pageConfig} 
-                            qrDesign={qrDesign}
-                            qrValue={getQRValue()}
-                        />
-                    </div>
+                    <>
+                        <div style={{
+                            transform: 'scale(0.85)',
+                            transformOrigin: 'top center',
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            position: 'relative',
+                            zIndex: 2
+                        }}>
+                            <MobilePreview
+                                config={pageConfig}
+                                qrDesign={qrDesign}
+                                qrValue={getQRValue()}
+                            />
+                        </div>
+                        {/* Background QR for Content Step */}
+                        <div style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            opacity: 0.1,
+                            zIndex: 1,
+                            pointerEvents: 'none'
+                        }}>
+                            <QRRenderer
+                                value={getQRValue()}
+                                design={{
+                                    ...pageConfig.design,
+                                    ...qrDesign
+                                }}
+                                size={350}
+                            />
+                        </div>
+                    </>
                 ) : (
                     <>
                         <div style={{ position: 'relative', width: '100%', marginTop: '2rem' }}>

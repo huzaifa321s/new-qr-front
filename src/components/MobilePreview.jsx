@@ -1,7 +1,48 @@
-import React, { useState } from 'react';
-import { Phone, MapPin, Clock, Globe, Instagram, Facebook, Twitter, X, Copy, Mail, Linkedin, MessageCircle, Wifi, Armchair, Accessibility, Calendar, User, Heart } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Phone, MapPin, Clock, Globe, Instagram, Facebook, Twitter, X, Copy, Mail, Linkedin, MessageCircle, Wifi, Armchair, Accessibility, Calendar, User, Heart, Briefcase } from 'lucide-react';
 
-const MobilePreview = ({ config }) => {
+const AutoSlider = ({ images }) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        if (!images || images.length <= 1) return;
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % images.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, [images]);
+
+    if (!images || images.length === 0) return null;
+
+    return (
+        <div style={{
+            width: '100%',
+            overflow: 'hidden',
+            borderRadius: '8px',
+            marginBottom: '1rem',
+            position: 'relative'
+        }}>
+            <div style={{
+                display: 'flex',
+                transition: 'transform 0.5s ease-in-out',
+                transform: `translateX(-${currentIndex * 100}%)`,
+                width: '100%'
+            }}>
+                {images.map((img, idx) => (
+                    <img key={idx} src={img} alt={`Slide ${idx}`} style={{
+                        width: '100%',
+                        height: '200px',
+                        objectFit: 'cover',
+                        flexShrink: 0,
+                        display: 'block'
+                    }} />
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const MobilePreview = ({ config, isLiveView = false }) => {
     const { design, businessInfo, menu, timings, social, appLinks, coupon, personalInfo, contact, type, facilities } = config;
     const [showCouponModal, setShowCouponModal] = useState(false);
     const [showExchangeModal, setShowExchangeModal] = useState(false);
@@ -9,12 +50,56 @@ const MobilePreview = ({ config }) => {
     const [leadGenStep, setLeadGenStep] = useState('form'); // 'form', 'thankYou'
     const [surveyStep, setSurveyStep] = useState('language'); // 'language', 'survey', 'thankYou'
     const [selectedLanguage, setSelectedLanguage] = useState('English');
-    const [selectedMenuTab, setSelectedMenuTab] = useState('Burger'); // 'Burger', 'Coffee', 'Juices'
+    const [selectedMenuTab, setSelectedMenuTab] = useState('');
+
+    const defaultCategories = [
+        {
+            id: 'burger',
+            name: 'Burger',
+            products: [
+                {
+                    id: 'p1',
+                    name: 'Zinger Burger',
+                    price: '10',
+                    description: 'jalapeno + cheese',
+                    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=100&q=80'
+                },
+                {
+                    id: 'p2',
+                    name: 'Chicken Burger',
+                    price: '12',
+                    description: 'Jalapeno + cheese + grilled chicken',
+                    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=100&q=80'
+                }
+            ]
+        },
+        {
+            id: 'coffee',
+            name: 'Coffee',
+            products: []
+        },
+        {
+            id: 'juices',
+            name: 'Juices',
+            products: []
+        }
+    ];
+
+    const activeCategories = menu?.categories?.length > 0 ? menu.categories : defaultCategories;
+
+    useEffect(() => {
+        if (activeCategories.length > 0 && !selectedMenuTab) {
+            setSelectedMenuTab(activeCategories[0].id);
+        } else if (activeCategories.length > 0 && !activeCategories.find(c => c.id === selectedMenuTab)) {
+            setSelectedMenuTab(activeCategories[0].id);
+        }
+    }, [activeCategories, selectedMenuTab]); // 'Burger', 'Coffee', 'Juices'
     const [reviewStep, setReviewStep] = useState('main'); // 'main', 'food', 'review', 'thankYou'
     const [selectedReviewCategory, setSelectedReviewCategory] = useState('');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [showImageModal, setShowImageModal] = useState(false);
     const [customMenuOpenCat, setCustomMenuOpenCat] = useState(null);
+    const [customMenuSelectedTab, setCustomMenuSelectedTab] = useState({});
 
     const images = [
         'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&h=800&fit=crop',
@@ -59,10 +144,10 @@ const MobilePreview = ({ config }) => {
     // AFTER – colour independence
     // -------------------------------------
     // 1️⃣ Primary colour (used for the header)
-    const primaryColor = design?.color?.dark || '#0f3485';
+    const primaryColor = design?.primaryColor || design?.color?.dark || '#0f3485';
 
     // 2️⃣ Secondary colour (used for buttons, etc.)
-    const secondaryColor = design?.color?.light || '#06b6d4';
+    const secondaryColor = design?.secondaryColor || design?.color?.light || '#06b6d4';
 
     // 3️⃣ Header colour – you can keep it equal to primary,
     //    or allow an explicit “header” key in the design object.
@@ -96,177 +181,208 @@ const MobilePreview = ({ config }) => {
 
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 <div style={{ padding: '2rem 1.5rem', height: '100%', overflowY: 'auto' }}>
-                    {config.customComponents?.map(comp => {
-                        switch (comp.type) {
-                            case 'heading':
-                            case 'description':
-                                return (
-                                    <div key={comp.id} style={{
-                                        color: comp.data.color,
-                                        fontFamily: comp.data.font,
-                                        textAlign: comp.data.align,
-                                        fontSize: `${comp.data.size}px`,
-                                        fontWeight: comp.type === 'heading' ? 'bold' : 'normal',
-                                        marginBottom: '1rem',
-                                        wordBreak: 'break-word'
-                                    }}>
-                                        {comp.data.text}
-                                    </div>
-                                );
-                            case 'button':
-                                return (
-                                    <div key={comp.id} style={{ display: 'flex', justifyContent: comp.data.position, marginBottom: '1rem' }}>
-                                        <a href={comp.data.link} target="_blank" rel="noopener noreferrer" style={{
-                                            backgroundColor: comp.data.bgColor,
-                                            color: comp.data.textColor,
-                                            border: `${comp.data.borderWidth}px solid ${comp.data.borderColor}`,
-                                            borderRadius: `${comp.data.borderRadius}px`,
-                                            fontFamily: comp.data.fontFamily,
-                                            fontSize: `${comp.data.fontSize}px`,
-                                            padding: '0.75rem 1.5rem',
-                                            textDecoration: 'none',
-                                            width: comp.data.width === 'full' ? '100%' : 'auto',
-                                            textAlign: 'center',
-                                            display: 'inline-block',
-                                            cursor: 'pointer',
-                                            boxSizing: 'border-box'
-                                        }}>
-                                            {comp.data.text}
-                                        </a>
-                                    </div>
-                                );
-                            case 'logo':
-                                const logoSrc = comp.data.url || logoOptions[comp.data.selectedLogo];
-                                if (!logoSrc) return null;
-                                return (
-                                    <div key={comp.id} style={{ display: 'flex', justifyContent: comp.data.position, marginBottom: '1rem' }}>
-                                        <img src={logoSrc} alt="Logo" style={{
-                                            width: `${comp.data.size}px`,
-                                            height: `${comp.data.size}px`,
-                                            objectFit: 'cover',
-                                            borderRadius: comp.data.frame === 'circle' ? '50%' : comp.data.frame === 'rounded' ? '12px' : '0',
-                                            border: `${comp.data.borderWidth}px solid ${comp.data.borderColor}`
-                                        }} />
-                                    </div>
-                                );
-                            case 'image':
-                                const imgSrc = comp.data.url || imageOptions[comp.data.selectedImage];
-                                if (!imgSrc) return null;
-                                return (
-                                    <div key={comp.id} style={{ marginBottom: '1rem' }}>
-                                        <img src={imgSrc} alt="Custom" style={{
-                                            width: '100%',
-                                            height: 'auto',
-                                            borderRadius: '8px'
-                                        }} />
-                                    </div>
-                                );
-                            case 'slider':
-                                if (!comp.data.images || comp.data.images.length === 0) return null;
-                                return (
-                                    <div key={comp.id} style={{ marginBottom: '1rem', display: 'flex', overflowX: 'auto', gap: '0.5rem', paddingBottom: '0.5rem' }}>
-                                        {comp.data.images.map((img, idx) => (
-                                            <img key={idx} src={img} alt={`Slide ${idx}`} style={{
-                                                width: '100%',
-                                                height: '200px',
-                                                objectFit: 'cover',
-                                                borderRadius: '8px',
-                                                flex: '0 0 auto'
-                                            }} />
-                                        ))}
-                                    </div>
-                                );
-                            case 'video':
-                                if (!comp.data.url) return null;
-                                return (
-                                    <div key={comp.id} style={{ marginBottom: '1rem' }}>
-                                        <video src={comp.data.url} controls style={{ width: '100%', borderRadius: '8px', background: '#000' }} />
-                                        <div style={{ marginTop: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem', color: '#1e293b' }}>{comp.data.title}</div>
-                                    </div>
-                                );
-                            case 'pdf':
-                                if (!comp.data.url) return null;
-                                return (
-                                    <div key={comp.id} style={{ marginBottom: '1rem' }}>
-                                        <a href={comp.data.url} target="_blank" rel="noopener noreferrer" style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '1rem',
-                                            padding: '1rem',
-                                            background: '#f8fafc',
-                                            border: '1px solid #e2e8f0',
-                                            borderRadius: '8px',
-                                            textDecoration: 'none',
-                                            color: '#1e293b'
-                                        }}>
-                                            <div style={{
-                                                width: '40px',
-                                                height: '40px',
-                                                background: '#ef4444',
-                                                borderRadius: '8px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                color: '#fff',
-                                                fontWeight: 'bold',
-                                                fontSize: '0.8rem'
-                                            }}>PDF</div>
-                                            <div style={{ flex: 1, overflow: 'hidden' }}>
-                                                <div style={{ fontWeight: '600', fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{comp.data.fileName}</div>
-                                                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Click to view</div>
+                    {(!config.customComponents || config.customComponents.length === 0) ? (
+                        <div style={{
+                            height: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            textAlign: 'center',
+                            padding: '2rem'
+                        }}>
+                            <h3 style={{
+                                color: '#8b5cf6',
+                                fontSize: '1.5rem',
+                                fontWeight: 'bold',
+                                lineHeight: '1.4'
+                            }}>
+                                Add components and create<br />your custom type
+                            </h3>
+                        </div>
+                    ) : (
+                        <>
+                            {/* Render all components except social_links */}
+                            {config.customComponents.filter(comp => comp.type !== 'social_links').map(comp => {
+                                switch (comp.type) {
+                                    case 'heading':
+                                    case 'description':
+                                        return (
+                                            <div key={comp.id} style={{
+                                                color: comp.data.color,
+                                                fontFamily: comp.data.font,
+                                                textAlign: comp.data.align,
+                                                fontSize: `${comp.data.size}px`,
+                                                fontWeight: comp.type === 'heading' ? 'bold' : 'normal',
+                                                marginBottom: '1rem',
+                                                wordBreak: 'break-word'
+                                            }}>
+                                                {comp.data.text}
                                             </div>
-                                        </a>
-                                    </div>
-                                );
-                            case 'menu':
-                                if (!comp.data.categories || comp.data.categories.length === 0) return null;
-                                return (
-                                    <div key={comp.id} style={{ marginBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                        {comp.data.categories.map((cat) => (
-                                            <div key={cat.id} style={{ borderRadius: '8px', border: '1px solid #e2e8f0', overflow: 'hidden', background: '#f8fafc' }}>
-                                                <div
-                                                    onClick={() => setCustomMenuOpenCat(customMenuOpenCat === cat.id ? null : cat.id)}
-                                                    style={{
-                                                        padding: '1rem',
+                                        );
+                                    case 'button':
+                                        return (
+                                            <div key={comp.id} style={{ display: 'flex', justifyContent: comp.data.position, marginBottom: '1rem' }}>
+                                                <a href={comp.data.link} target="_blank" rel="noopener noreferrer" style={{
+                                                    backgroundColor: comp.data.bgColor,
+                                                    color: comp.data.textColor,
+                                                    border: `${comp.data.borderWidth}px solid ${comp.data.borderColor}`,
+                                                    borderRadius: `${comp.data.borderRadius}px`,
+                                                    fontFamily: comp.data.fontFamily,
+                                                    fontSize: `${comp.data.fontSize}px`,
+                                                    padding: '0.75rem 1.5rem',
+                                                    textDecoration: 'none',
+                                                    width: comp.data.width === 'full' ? '100%' : 'auto',
+                                                    textAlign: 'center',
+                                                    display: 'inline-block',
+                                                    cursor: 'pointer',
+                                                    boxSizing: 'border-box'
+                                                }}>
+                                                    {comp.data.text}
+                                                </a>
+                                            </div>
+                                        );
+                                    case 'logo':
+                                        const logoSrc = comp.data.url || logoOptions[comp.data.selectedLogo];
+                                        if (!logoSrc) return null;
+                                        return (
+                                            <div key={comp.id} style={{ display: 'flex', justifyContent: comp.data.position, marginBottom: '1rem' }}>
+                                                <img src={logoSrc} alt="Logo" style={{
+                                                    width: `${comp.data.size}px`,
+                                                    height: `${comp.data.size}px`,
+                                                    objectFit: 'cover',
+                                                    borderRadius: comp.data.frame === 'circle' ? '50%' : comp.data.frame === 'rounded' ? '12px' : '0',
+                                                    border: `${comp.data.borderWidth}px solid ${comp.data.borderColor}`
+                                                }} />
+                                            </div>
+                                        );
+                                    case 'image':
+                                        const imgSrc = comp.data.url || imageOptions[comp.data.selectedImage];
+                                        if (!imgSrc) return null;
+                                        return (
+                                            <div key={comp.id} style={{ marginBottom: '1rem' }}>
+                                                <img src={imgSrc} alt="Custom" style={{
+                                                    width: '100%',
+                                                    height: 'auto',
+                                                    borderRadius: '8px'
+                                                }} />
+                                            </div>
+                                        );
+                                    case 'slider':
+                                        return <AutoSlider key={comp.id} images={comp.data.images} />;
+                                    case 'video':
+                                        if (!comp.data.url) return null;
+                                        return (
+                                            <div key={comp.id} style={{ marginBottom: '1rem' }}>
+                                                <video src={comp.data.url} controls style={{ width: '100%', borderRadius: '8px', background: '#000' }} />
+                                            </div>
+                                        );
+                                    case 'pdf':
+                                        if (!comp.data.url) return null;
+                                        return (
+                                            <div key={comp.id} style={{ marginBottom: '1rem' }}>
+                                                <a href={comp.data.url} target="_blank" rel="noopener noreferrer" style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '1rem',
+                                                    padding: '1rem',
+                                                    background: '#f8fafc',
+                                                    border: '1px solid #e2e8f0',
+                                                    borderRadius: '8px',
+                                                    textDecoration: 'none',
+                                                    color: '#1e293b'
+                                                }}>
+                                                    <div style={{
+                                                        width: '40px',
+                                                        height: '40px',
+                                                        background: '#ef4444',
+                                                        borderRadius: '8px',
                                                         display: 'flex',
-                                                        justifyContent: 'space-between',
                                                         alignItems: 'center',
-                                                        cursor: 'pointer',
-                                                        background: '#fff'
-                                                    }}
-                                                >
-                                                    <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#1e293b', textTransform: 'uppercase' }}>
-                                                        {cat.name}
-                                                    </span>
-                                                    {customMenuOpenCat === cat.id ? (
-                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6" /></svg>
-                                                    ) : (
-                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
-                                                    )}
+                                                        justifyContent: 'center',
+                                                        color: '#fff',
+                                                        fontWeight: 'bold',
+                                                        fontSize: '0.8rem'
+                                                    }}>PDF</div>
+                                                    <div style={{ flex: 1, overflow: 'hidden' }}>
+                                                        <div style={{ fontWeight: '600', fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{comp.data.fileName}</div>
+                                                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Click to view</div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        );
+                                    case 'menu':
+                                        if (!comp.data.categories || comp.data.categories.length === 0) return null;
+
+                                        // Set default selected tab for this component if not set
+                                        const activeTab = customMenuSelectedTab[comp.id] || comp.data.categories[0].id;
+                                        const activeCategory = comp.data.categories.find(c => c.id === activeTab) || comp.data.categories[0];
+
+                                        return (
+                                            <div key={comp.id} style={{ marginBottom: '1rem' }}>
+                                                {/* Categories Tabs */}
+                                                <div style={{
+                                                    display: 'flex',
+                                                    overflowX: 'auto',
+                                                    gap: '1rem',
+                                                    paddingBottom: '0.5rem',
+                                                    marginBottom: '1rem',
+                                                    borderBottom: '1px solid #e2e8f0'
+                                                }}>
+                                                    {comp.data.categories.map((cat) => (
+                                                        <button
+                                                            key={cat.id}
+                                                            onClick={() => setCustomMenuSelectedTab(prev => ({ ...prev, [comp.id]: cat.id }))}
+                                                            style={{
+                                                                border: 'none',
+                                                                background: 'none',
+                                                                padding: '0.5rem 0',
+                                                                fontSize: '0.9rem',
+                                                                fontWeight: activeTab === cat.id ? 'bold' : '500',
+                                                                color: activeTab === cat.id ? '#8b5cf6' : '#64748b',
+                                                                cursor: 'pointer',
+                                                                position: 'relative',
+                                                                whiteSpace: 'nowrap'
+                                                            }}
+                                                        >
+                                                            {cat.name}
+                                                            {activeTab === cat.id && (
+                                                                <div style={{
+                                                                    position: 'absolute',
+                                                                    bottom: '-1px',
+                                                                    left: 0,
+                                                                    width: '100%',
+                                                                    height: '2px',
+                                                                    background: '#8b5cf6'
+                                                                }} />
+                                                            )}
+                                                        </button>
+                                                    ))}
                                                 </div>
-                                                {customMenuOpenCat === cat.id && (
-                                                    <div style={{ padding: '1rem', borderTop: '1px solid #e2e8f0' }}>
-                                                        {cat.products.map((prod) => (
-                                                            <div key={prod.id} style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', paddingBottom: '1rem', borderBottom: '1px dashed #e2e8f0' }}>
+
+                                                {/* Products List */}
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                                    {activeCategory.products && activeCategory.products.length > 0 ? (
+                                                        activeCategory.products.map((prod) => (
+                                                            <div key={prod.id} style={{ display: 'flex', gap: '1rem', paddingBottom: '1rem', borderBottom: '1px dashed #e2e8f0' }}>
                                                                 <div style={{ flex: 1 }}>
                                                                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                                                                        <span style={{ fontWeight: '600', fontSize: '0.9rem', color: '#334155' }}>{prod.name}</span>
+                                                                        <span style={{ fontWeight: '600', fontSize: '0.9rem', color: '#1e293b' }}>{prod.name}</span>
                                                                         <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#8b5cf6' }}>{businessInfo?.currency || '$'}{prod.price}</span>
                                                                     </div>
                                                                     <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>{prod.description}</p>
@@ -277,17 +393,373 @@ const MobilePreview = ({ config }) => {
                                                                     </div>
                                                                 )}
                                                             </div>
+                                                        ))
+                                                    ) : (
+                                                        <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8', fontSize: '0.9rem' }}>No products in this category</div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        );
+                                    case 'weekly_schedule':
+                                        if (!comp.data.timings || comp.data.timings.length === 0) return null;
+
+                                        return (
+                                            <div key={comp.id} style={{ marginBottom: '1.5rem' }}>
+                                                <div style={{ marginBottom: '1rem' }}>
+                                                    <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#1e3a8a', margin: 0 }}>OPENING HOURS</h3>
+                                                </div>
+
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                                    {comp.data.timings.map((dayInfo) => (
+                                                        <div key={dayInfo.day} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem' }}>
+                                                            <span style={{ fontWeight: '500', color: '#64748b' }}>{dayInfo.day}</span>
+                                                            <span style={{
+                                                                color: dayInfo.isOpen ? '#64748b' : '#ef4444',
+                                                                fontWeight: '400'
+                                                            }}>
+                                                                {dayInfo.isOpen ? `${dayInfo.start} - ${dayInfo.end}` : 'closed'}
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        );
+                                    case 'days_scheduler':
+                                        if (!comp.data.days || comp.data.days.length === 0) return null;
+
+                                        return (
+                                            <div key={comp.id} style={{ marginBottom: '1.5rem' }}>
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                                    {comp.data.days.map((dayItem, index) => (
+                                                        <div key={dayItem.id} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                                            <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#fbbf24', marginBottom: '0.25rem' }}>
+                                                                DAY {index + 1}
+                                                            </div>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                                <Calendar size={18} color="#64748b" />
+                                                                <span style={{ fontSize: '0.9rem', fontWeight: '500', color: '#1e293b' }}>
+                                                                    {new Date(dayItem.date).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' })}
+                                                                </span>
+                                                            </div>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                                <Clock size={18} color="#64748b" />
+                                                                <span style={{ fontSize: '0.9rem', color: '#64748b' }}>
+                                                                    {dayItem.beginsAt} - {dayItem.endsAt} (GMT+5)
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        );
+                                    case 'contacts':
+                                        return (
+                                            <div key={comp.id} style={{ marginBottom: '1.5rem' }}>
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0rem' }}>
+                                                    {comp.data.phone && (
+                                                        <>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 0' }}>
+                                                                <div style={{
+                                                                    width: '40px',
+                                                                    height: '40px',
+                                                                    borderRadius: '50%',
+                                                                    border: '2px solid #3b82f6',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center',
+                                                                    flexShrink: 0
+                                                                }}>
+                                                                    <Phone size={20} color="#3b82f6" />
+                                                                </div>
+                                                                <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '400' }}>
+                                                                    {comp.data.phone}
+                                                                </span>
+                                                            </div>
+                                                            <div style={{ height: '1px', background: '#e2e8f0', margin: '0' }}></div>
+                                                        </>
+                                                    )}
+                                                    {comp.data.email && (
+                                                        <>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 0' }}>
+                                                                <div style={{
+                                                                    width: '40px',
+                                                                    height: '40px',
+                                                                    borderRadius: '50%',
+                                                                    border: '2px solid #3b82f6',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center',
+                                                                    flexShrink: 0
+                                                                }}>
+                                                                    <Mail size={20} color="#3b82f6" />
+                                                                </div>
+                                                                <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '400' }}>
+                                                                    {comp.data.email}
+                                                                </span>
+                                                            </div>
+                                                            <div style={{ height: '1px', background: '#e2e8f0', margin: '0' }}></div>
+                                                        </>
+                                                    )}
+                                                    {comp.data.website && (
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 0' }}>
+                                                            <div style={{
+                                                                width: '40px',
+                                                                height: '40px',
+                                                                borderRadius: '50%',
+                                                                border: '2px solid #3b82f6',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                flexShrink: 0
+                                                            }}>
+                                                                <Globe size={20} color="#3b82f6" />
+                                                            </div>
+                                                            <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '400' }}>
+                                                                {comp.data.website}
+                                                            </span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        );
+                                    case 'companies':
+                                        if (!comp.data.companies || comp.data.companies.length === 0) return null;
+
+                                        return (
+                                            <div key={comp.id} style={{ marginBottom: '1.5rem' }}>
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0rem' }}>
+                                                    {comp.data.companies.map((company, index) => (
+                                                        <React.Fragment key={company.id}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 0' }}>
+                                                                <div style={{
+                                                                    width: '40px',
+                                                                    height: '40px',
+                                                                    borderRadius: '50%',
+                                                                    border: '2px solid #fbbf24',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center',
+                                                                    flexShrink: 0
+                                                                }}>
+                                                                    <Briefcase size={20} color="#fbbf24" />
+                                                                </div>
+                                                                <div style={{ flex: 1 }}>
+                                                                    <div style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '500' }}>
+                                                                        {company.name}
+                                                                    </div>
+                                                                    <div style={{ fontSize: '0.85rem', color: '#fbbf24', fontWeight: '400' }}>
+                                                                        {company.profession}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {index < comp.data.companies.length - 1 && (
+                                                                <div style={{ height: '1px', background: '#e2e8f0', margin: '0' }}></div>
+                                                            )}
+                                                        </React.Fragment>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        );
+                                    case 'multiple_links':
+                                        if (!comp.data.links || comp.data.links.length === 0) return null;
+
+                                        return (
+                                            <div key={comp.id} style={{ marginBottom: '1.5rem' }}>
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                                    {comp.data.links.map((link) => (
+                                                        <a
+                                                            key={link.id}
+                                                            href={link.url}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            style={{
+                                                                display: 'block',
+                                                                background: '#fbbf24',
+                                                                color: '#fff',
+                                                                padding: '1rem',
+                                                                borderRadius: '24px',
+                                                                textAlign: 'center',
+                                                                fontSize: '0.95rem',
+                                                                fontWeight: '600',
+                                                                textDecoration: 'none',
+                                                                cursor: 'pointer'
+                                                            }}
+                                                        >
+                                                            {link.title}
+                                                        </a>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        );
+                                    case 'facilities':
+                                        if (!comp.data.selectedFacilities || comp.data.selectedFacilities.length === 0) return null;
+
+                                        const facilityIcons = {
+                                            'WiFi': <Wifi size={24} />,
+                                            'Parking': '🅿️',
+                                            'Wheelchair': '♿',
+                                            'Restrooms': '🚻',
+                                            'Pets': '🐾',
+                                            'Parking_P': 'P',
+                                            'Bus': '🚌',
+                                            'Car_Parking': '🚗',
+                                            'Hotel': '🏨',
+                                            'Coffee': '☕',
+                                            'Bar': '🍷',
+                                            'Restaurant': '🍴'
+                                        };
+
+                                        const facilityLabels = {
+                                            'WiFi': 'wifi',
+                                            'Parking': 'parking',
+                                            'Wheelchair': 'handicap',
+                                            'Restrooms': 'restrooms',
+                                            'Pets': 'pets',
+                                            'Parking_P': 'parking',
+                                            'Bus': 'bus',
+                                            'Car_Parking': 'car',
+                                            'Hotel': 'hotel',
+                                            'Coffee': 'coffee',
+                                            'Bar': 'bar',
+                                            'Restaurant': 'restaurant'
+                                        };
+
+                                        return (
+                                            <div key={comp.id} style={{ marginBottom: '1.5rem' }}>
+                                                <div style={{
+                                                    background: '#fff',
+                                                    padding: '1rem 0',
+                                                    borderRadius: '8px'
+                                                }}>
+                                                    <h3 style={{
+                                                        fontSize: '0.9rem',
+                                                        fontWeight: 'bold',
+                                                        color: '#1e3a8a',
+                                                        margin: '0 0 1rem 0',
+                                                        paddingLeft: '1rem'
+                                                    }}>
+                                                        FACILITIES
+                                                    </h3>
+                                                    <div style={{
+                                                        display: 'flex',
+                                                        gap: '1.5rem',
+                                                        overflowX: 'auto',
+                                                        paddingLeft: '1rem',
+                                                        paddingRight: '1rem',
+                                                        paddingBottom: '0.5rem'
+                                                    }}>
+                                                        {comp.data.selectedFacilities.map((facilityName) => (
+                                                            <div key={facilityName} style={{
+                                                                display: 'flex',
+                                                                flexDirection: 'column',
+                                                                alignItems: 'center',
+                                                                gap: '0.5rem',
+                                                                minWidth: '60px'
+                                                            }}>
+                                                                <div style={{
+                                                                    width: '50px',
+                                                                    height: '50px',
+                                                                    borderRadius: '8px',
+                                                                    background: '#fff',
+                                                                    border: '2px solid #3b82f6',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center',
+                                                                    fontSize: typeof facilityIcons[facilityName] === 'string' ? '1.5rem' : '1rem',
+                                                                    color: '#3b82f6'
+                                                                }}>
+                                                                    {facilityIcons[facilityName] || '📍'}
+                                                                </div>
+                                                                <span style={{
+                                                                    fontSize: '0.75rem',
+                                                                    color: '#64748b',
+                                                                    textAlign: 'center'
+                                                                }}>
+                                                                    {facilityLabels[facilityName] || facilityName.toLowerCase()}
+                                                                </span>
+                                                            </div>
                                                         ))}
                                                     </div>
-                                                )}
+                                                </div>
                                             </div>
-                                        ))}
+                                        );
+                                    default:
+                                        return null;
+                                }
+                            })}
+
+                            {/* Render social_links at the bottom as footer */}
+                            {config.customComponents.filter(comp => comp.type === 'social_links').map(comp => {
+                                if (!comp.data.selectedPlatforms || comp.data.selectedPlatforms.length === 0) return null;
+
+                                const platformIcons = {
+                                    'Facebook': '📘',
+                                    'Instagram': '📷',
+                                    'X': '✖️',
+                                    'LinkedIn': '💼',
+                                    'Discord': '🎮',
+                                    'Twitch': '🎬',
+                                    'Kick': '⚡',
+                                    'YouTube': '▶️',
+                                    'WhatsApp': '💬',
+                                    'Snapchat': '👻',
+                                    'TikTok': '🎵',
+                                    'Tumblr': '📝',
+                                    'Spotify': '🎧',
+                                    'Dribbble': '🏀',
+                                    'Pinterest': '📌',
+                                    'Telegram': '✈️',
+                                    'Behance': '🎨',
+                                    'Reddit': '🤖',
+                                    'Website': '🌐'
+                                };
+
+                                return (
+                                    <div key={comp.id} style={{ marginBottom: '1.5rem' }}>
+                                        <div style={{
+                                            background: comp.data.bgColor || '#0B2D86',
+                                            borderRadius: '0 0 50% 50% / 0 0 30% 30%',
+                                            padding: '2rem 1.5rem 3rem',
+                                            textAlign: 'center'
+                                        }}>
+                                            <h3 style={{
+                                                color: comp.data.textColor || '#FFFFFF',
+                                                fontSize: '0.95rem',
+                                                fontWeight: '500',
+                                                margin: '0 0 1.5rem 0',
+                                                fontFamily: comp.data.font || 'Lato'
+                                            }}>
+                                                {comp.data.heading || 'Follow us on'}
+                                            </h3>
+                                            <div style={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                gap: '1rem',
+                                                flexWrap: 'wrap'
+                                            }}>
+                                                {comp.data.selectedPlatforms.map((platform) => (
+                                                    <a
+                                                        key={platform.name}
+                                                        href={platform.url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        style={{
+                                                            fontSize: '2rem',
+                                                            textDecoration: 'none',
+                                                            cursor: 'pointer'
+                                                        }}
+                                                    >
+                                                        {platformIcons[platform.name] || '🌐'}
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        </div>
                                     </div>
                                 );
-                            default:
-                                return null;
-                        }
-                    })}
+                            })}
+                        </>
+                    )}
                 </div>
             </div>
         );
@@ -296,20 +768,20 @@ const MobilePreview = ({ config }) => {
     if (isBioPage) {
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 <div style={{ height: '100%', overflowY: 'auto', background: '#fff' }}>
                     {/* Header with Curve */}
@@ -480,20 +952,20 @@ const MobilePreview = ({ config }) => {
     if (isSurvey) {
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 {surveyStep === 'language' && (
                     <div style={{ height: '100%', overflowY: 'auto', background: '#fff', display: 'flex', flexDirection: 'column' }}>
@@ -1497,27 +1969,22 @@ const MobilePreview = ({ config }) => {
                         </button>
                     </div>
 
-                    {/* Opening Hours */}
+                    {/* Weekly Schedule */}
                     <div style={{ padding: '1.5rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-                            <Clock size={24} color={headerColor} />
-                            <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: headerColor, margin: 0 }}>OPENING HOURS</h3>
+                        <div style={{ marginBottom: '1.5rem' }}>
+                            <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#1e3a8a', margin: 0 }}>OPENING HOURS</h3>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            {Object.entries(timings).map(([day, time]) => (
-                                <div key={day} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem', color: '#475569' }}>
-                                    <span style={{ fontWeight: '600', width: '100px' }}>{day}</span>
-                                    {day === 'Friday' ? (
-                                        <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <span style={{ color: '#fbbf24', fontWeight: 'bold', fontSize: '0.8rem' }}>OPEN NOW</span>
-                                            <span>{time.open} - {time.close}</span>
-                                        </div>
-                                    ) : (
-                                        <span style={{ color: time.isOpen ? '#475569' : '#ef4444' }}>
-                                            {time.isOpen ? `${time.open} - ${time.close}` : 'closed'}
-                                        </span>
-                                    )}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            {Array.isArray(businessInfo?.timings) && businessInfo.timings.map((dayInfo) => (
+                                <div key={dayInfo.day} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem' }}>
+                                    <span style={{ fontWeight: '500', color: '#64748b' }}>{dayInfo.day}</span>
+                                    <span style={{
+                                        color: dayInfo.isOpen ? '#64748b' : '#ef4444',
+                                        fontWeight: '400'
+                                    }}>
+                                        {dayInfo.isOpen ? `${dayInfo.start} - ${dayInfo.end}` : 'closed'}
+                                    </span>
                                 </div>
                             ))}
                         </div>
@@ -1905,7 +2372,7 @@ const MobilePreview = ({ config }) => {
                             }}>
                                 <img src={design?.logo?.url} alt="Logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                             </div>
-                            <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0 }}>{businessInfo?.title}</h2>
+                            <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0, color: businessInfo?.titleColor || '#fff' }}>{businessInfo?.title}</h2>
                         </div>
 
                         {/* Hero Image */}
@@ -1915,7 +2382,7 @@ const MobilePreview = ({ config }) => {
 
                         {/* Title Section */}
                         <div style={{ padding: '1.5rem 1rem', textAlign: 'center' }}>
-                            <h1 style={{ color: '#fff', fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>{coupon?.title}</h1>
+                            <h1 style={{ color: coupon?.titleColor || '#fff', fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>{coupon?.title}</h1>
                         </div>
 
                         {/* Coupon Card */}
@@ -1983,7 +2450,7 @@ const MobilePreview = ({ config }) => {
                     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
                         {/* Header */}
                         <div style={{ padding: '3rem 1rem 1rem', textAlign: 'center' }}>
-                            <h2 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>{businessInfo?.title}</h2>
+                            <h2 style={{ color: businessInfo?.titleColor || '#fff', fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>{businessInfo?.title}</h2>
                         </div>
 
                         {/* Modal Card */}
@@ -4443,20 +4910,20 @@ const MobilePreview = ({ config }) => {
     if (type === 'video') {
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#000',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 {/* Video Container */}
                 <div style={{
@@ -4496,20 +4963,20 @@ const MobilePreview = ({ config }) => {
 
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 {/* Top White Space */}
                 <div style={{ height: '80px', background: '#f8fafc' }}></div>
@@ -4669,20 +5136,20 @@ const MobilePreview = ({ config }) => {
     if (isAppStore) {
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 <div style={{ height: '100%', overflowY: 'auto', background: '#fff' }}>
                     {/* Header / Cover */}
@@ -4699,146 +5166,172 @@ const MobilePreview = ({ config }) => {
                         borderBottomRightRadius: '50% 20%',
                         textAlign: 'center'
                     }}>
+                        {design?.logo?.url && (
+                            <div style={{
+                                width: '80px',
+                                height: '80px',
+                                borderRadius: '50%',
+                                background: '#fff',
+                                padding: '4px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginBottom: '1rem'
+                            }}>
+                                <img src={design.logo.url} alt="Logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                            </div>
+                        )}
                         <div style={{ marginTop: '10px' }}>
                             <h2 style={{ margin: '0', fontSize: '1.5rem', fontWeight: '800', color: businessInfo?.titleColor || '#fff' }}>{businessInfo?.title}</h2>
                             <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.9rem', opacity: 0.8, color: businessInfo?.subtitleColor || '#fff' }}>{businessInfo?.subtitle}</p>
                         </div>
-
-                        {design?.logo?.url && (
-                            <div style={{
-                                width: '120px',
-                                height: '120px',
-                                borderRadius: '50%',
-                                background: '#fff',
-                                position: 'absolute',
-                                bottom: '-60px',
-                                left: '50%',
-                                transform: 'translateX(-50%)',
-                                border: '4px solid #fff',
-                                overflow: 'hidden',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'
-                            }}>
-                                <img src={design.logo.url} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                            </div>
-                        )}
                     </div>
 
-                    {/* App Store Body */}
-                    <div style={{ marginTop: '80px', textAlign: 'center', padding: '0 1.5rem' }}>
-                        <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.25rem', fontWeight: '800', color: businessInfo?.ctaColor || '#1e293b' }}>DOWNLOAD NOW</h3>
-                        <p style={{ fontSize: '0.9rem', color: '#64748b', lineHeight: '1.5', margin: 0 }}>
-                            {businessInfo?.description}
-                        </p>
+                    {design?.logo?.url && (
+                        <div style={{ marginTop: '80px', textAlign: 'center', padding: '0 1.5rem' }}>
+                            <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.25rem', fontWeight: '800', color: businessInfo?.ctaColor || '#1e293b' }}>DOWNLOAD NOW</h3>
+                            <p style={{ fontSize: '0.9rem', color: '#64748b', lineHeight: '1.5', margin: 0 }}>
+                                {businessInfo?.description}
+                            </p>
 
-                        {/* Store Buttons */}
-                        <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            {appLinks?.buttonType === 'circular' ? (
-                                <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
-                                    {appLinks?.google && (
-                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                            {/* Store Buttons */}
+                            <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                {appLinks?.buttonType === 'circular' ? (
+                                    <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
+                                        {appLinks?.google && (
+                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                                                <div style={{
+                                                    width: '60px',
+                                                    height: '60px',
+                                                    borderRadius: '50%',
+                                                    background: secondaryColor,
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                                }}>
+                                                    <svg viewBox="0 0 24 24" fill="#fff" style={{ width: '32px', height: '32px' }}>
+                                                        <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.92 20.16,13.19L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                                                    </svg>
+                                                </div>
+                                                <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1e293b' }}>Google Play</span>
+                                            </div>
+                                        )}
+                                        {appLinks?.apple && (
+                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                                                <div style={{
+                                                    width: '60px',
+                                                    height: '60px',
+                                                    borderRadius: '50%',
+                                                    background: secondaryColor,
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                                }}>
+                                                    <svg viewBox="0 0 24 24" fill="#fff" style={{ width: '32px', height: '32px' }}>
+                                                        <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.9,7.75 14.37,6.65 15.97,6.84C16.63,6.87 18.5,7.1 19.72,8.9C19.66,8.94 17.55,10.18 17.59,12.73C17.63,15.32 19.81,16.26 19.82,16.26C19.81,16.28 19.46,17.5 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.37 12.36,4.26 13,3.5Z" />
+                                                    </svg>
+                                                </div>
+                                                <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1e293b' }}>App Store</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <>
+                                        {appLinks?.google && (
                                             <div style={{
-                                                width: '60px',
-                                                height: '60px',
-                                                borderRadius: '50%',
                                                 background: secondaryColor,
+                                                borderRadius: '12px',
+                                                padding: '0.5rem 1rem',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center',
-                                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                                gap: '1rem',
+                                                color: '#fff',
+                                                cursor: 'pointer',
+                                                textAlign: 'left'
                                             }}>
-                                                <svg viewBox="0 0 24 24" fill="#fff" style={{ width: '32px', height: '32px' }}>
-                                                    <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.92 20.16,13.19L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
-                                                </svg>
+                                                <div style={{ width: '32px', height: '32px' }}>
+                                                    {/* Google Play Icon SVG */}
+                                                    <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: '100%', height: '100%' }}>
+                                                        <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.92 20.16,13.19L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontSize: '0.65rem', textTransform: 'uppercase' }}>Get it on</div>
+                                                    <div style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Google Play</div>
+                                                </div>
                                             </div>
-                                            <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1e293b' }}>Google Play</span>
-                                        </div>
+                                        )}
+                                        {appLinks?.apple && (
+                                            <div style={{
+                                                background: secondaryColor,
+                                                borderRadius: '12px',
+                                                padding: '0.5rem 1rem',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '1rem',
+                                                color: '#fff',
+                                                cursor: 'pointer',
+                                                textAlign: 'left'
+                                            }}>
+                                                <div style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    {/* Apple Icon SVG */}
+                                                    <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: '100%', height: '100%' }}>
+                                                        <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.9,7.75 14.37,6.65 15.97,6.84C16.63,6.87 18.5,7.1 19.72,8.9C19.66,8.94 17.55,10.18 17.59,12.73C17.63,15.32 19.81,16.26 19.82,16.26C19.81,16.28 19.46,17.5 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.37 12.36,4.26 13,3.5Z" />
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontSize: '0.65rem', textTransform: 'uppercase' }}>Get it on</div>
+                                                    <div style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>App Store</div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+
+                            {/* App Status Media (Image/Video) */}
+                            {config.appStatus?.fileUrl && (
+                                <div style={{ marginTop: '2rem', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+                                    {config.appStatus.type === 'video' ? (
+                                        <video
+                                            controls
+                                            src={config.appStatus.fileUrl}
+                                            style={{ width: '100%', height: 'auto', display: 'block' }}
+                                        />
+                                    ) : (
+                                        <img
+                                            src={config.appStatus.fileUrl}
+                                            alt="App Screenshot"
+                                            style={{ width: '100%', height: 'auto', display: 'block' }}
+                                        />
                                     )}
-                                    {appLinks?.apple && (
-                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                                            <div style={{
-                                                width: '60px',
-                                                height: '60px',
-                                                borderRadius: '50%',
-                                                background: secondaryColor,
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                                            }}>
-                                                <svg viewBox="0 0 24 24" fill="#fff" style={{ width: '32px', height: '32px' }}>
-                                                    <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.9,7.75 14.37,6.65 15.97,6.84C16.63,6.87 18.5,7.1 19.72,8.9C19.66,8.94 17.55,10.18 17.59,12.73C17.63,15.32 19.81,16.26 19.82,16.26C19.81,16.28 19.46,17.5 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.37 12.36,4.26 13,3.5Z" />
-                                                </svg>
-                                            </div>
-                                            <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1e293b' }}>App Store</span>
+                                    {config.appStatus.launchDate && (
+                                        <div style={{
+                                            padding: '0.75rem',
+                                            background: '#f1f5f9',
+                                            fontSize: '0.85rem',
+                                            color: '#64748b',
+                                            textAlign: 'center',
+                                            fontWeight: '500'
+                                        }}>
+                                            Launching: {config.appStatus.launchDate}
                                         </div>
                                     )}
                                 </div>
-                            ) : (
-                                <>
-                                    {appLinks?.google && (
-                                        <div style={{
-                                            background: secondaryColor,
-                                            borderRadius: '12px',
-                                            padding: '0.5rem 1rem',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '1rem',
-                                            color: '#fff',
-                                            cursor: 'pointer',
-                                            textAlign: 'left'
-                                        }}>
-                                            <div style={{ width: '32px', height: '32px' }}>
-                                                {/* Google Play Icon SVG */}
-                                                <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: '100%', height: '100%' }}>
-                                                    <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.92 20.16,13.19L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <div style={{ fontSize: '0.65rem', textTransform: 'uppercase' }}>Get it on</div>
-                                                <div style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Google Play</div>
-                                            </div>
-                                        </div>
-                                    )}
-                                    {appLinks?.apple && (
-                                        <div style={{
-                                            background: secondaryColor,
-                                            borderRadius: '12px',
-                                            padding: '0.5rem 1rem',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '1rem',
-                                            color: '#fff',
-                                            cursor: 'pointer',
-                                            textAlign: 'left'
-                                        }}>
-                                            <div style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                {/* Apple Icon SVG */}
-                                                <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: '100%', height: '100%' }}>
-                                                    <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.9,7.75 14.37,6.65 15.97,6.84C16.63,6.87 18.5,7.1 19.72,8.9C19.66,8.94 17.55,10.18 17.59,12.73C17.63,15.32 19.81,16.26 19.82,16.26C19.81,16.28 19.46,17.5 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.37 12.36,4.26 13,3.5Z" />
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <div style={{ fontSize: '0.65rem', textTransform: 'uppercase' }}>Get it on</div>
-                                                <div style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>App Store</div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </>
+                            )}
+
+                            {/* Website Footer */}
+                            {businessInfo?.website && (
+                                <div style={{ marginTop: '2rem', textAlign: 'center', paddingBottom: '1rem' }}>
+                                    <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0, wordBreak: 'break-all' }}>
+                                        {businessInfo.website}
+                                    </p>
+                                </div>
                             )}
                         </div>
-
-                        {/* Website Footer */}
-                        {businessInfo?.website && (
-                            <div style={{ marginTop: '2rem', textAlign: 'center', paddingBottom: '1rem' }}>
-                                <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0, wordBreak: 'break-all' }}>
-                                    {businessInfo.website}
-                                </p>
-                            </div>
-                        )}
-                    </div>
+                    )}
                 </div>
             </div>
         );
@@ -4846,18 +5339,18 @@ const MobilePreview = ({ config }) => {
 
     return (
         <div style={{
-            width: '320px',
-            height: '640px',
+            width: isLiveView ? '100%' : '320px',
+            height: isLiveView ? '100vh' : '640px',
             background: '#fff',
-            borderRadius: '40px',
-            border: '12px solid #1e293b',
+            borderRadius: isLiveView ? '0' : '40px',
+            border: isLiveView ? 'none' : '12px solid #1e293b',
             overflow: 'hidden',
             position: 'relative',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-            margin: '0 auto'
+            boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            margin: isLiveView ? '0' : '0 auto'
         }}>
             {/* Notch */}
-            <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+            {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
             {/* Content Scrollable Area */}
             <div style={{ height: '100%', overflowY: 'auto', paddingBottom: '2rem', background: '#f5f6f8' }}>
@@ -4875,18 +5368,25 @@ const MobilePreview = ({ config }) => {
                         <div style={{ fontSize: '1rem', fontWeight: '700', letterSpacing: '-0.01em' }}>
                             {businessInfo?.title || "Bob's Cafe"}
                         </div>
-                        <div style={{
-                            width: '38px',
-                            height: '38px',
-                            borderRadius: '50%',
-                            background: '#fff',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            boxShadow: '0 6px 12px rgba(0,0,0,0.1)'
-                        }}>
-                            <Heart size={18} color={headerColor || '#b42318'} fill={headerColor || '#b42318'} />
-                        </div>
+                        {(design?.logo?.url || typeof design?.logo === 'string') && (
+                            <div style={{
+                                width: '38px',
+                                height: '38px',
+                                borderRadius: '50%',
+                                background: '#fff',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxShadow: '0 6px 12px rgba(0,0,0,0.1)',
+                                overflow: 'hidden'
+                            }}>
+                                <img
+                                    src={design?.logo?.url || design?.logo}
+                                    alt="Logo"
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     <div style={{
@@ -4896,7 +5396,7 @@ const MobilePreview = ({ config }) => {
                         boxShadow: '0 10px 20px rgba(0,0,0,0.18)'
                     }}>
                         <img
-                            src={businessInfo?.coverImage || businessInfo?.image || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=500&fit=crop'}
+                            src={design?.backgroundImage || businessInfo?.coverImage || businessInfo?.image || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=500&fit=crop'}
                             alt={businessInfo?.title || 'Cafe'}
                             style={{ width: '100%', height: '150px', objectFit: 'cover' }}
                         />
@@ -4907,7 +5407,7 @@ const MobilePreview = ({ config }) => {
                             {businessInfo?.headline || 'Eat.Refresh.Go'}
                         </h2>
                         <p style={{ margin: 0, color: 'rgba(255,255,255,0.85)', fontSize: '0.9rem', lineHeight: '1.5' }}>
-                            {businessInfo?.subtitle || businessInfo?.description || 'We aim to provide fresh and healthy snacks people on the go.'}
+                            {businessInfo?.description || 'We aim to provide fresh and healthy snacks people on the go.'}
                         </p>
                         <div style={{ marginTop: '0.25rem' }}>
                             <button style={{
@@ -4929,7 +5429,7 @@ const MobilePreview = ({ config }) => {
                 </div>
 
                 {/* Menu Section */}
-                {menu && menu.length > 0 && (
+                {activeCategories && activeCategories.length > 0 && (
                     <div style={{
                         background: '#fff',
                         marginTop: '0.6rem',
@@ -4943,258 +5443,223 @@ const MobilePreview = ({ config }) => {
                             gap: '1.25rem',
                             borderBottom: '2px solid #f1f5f9',
                             marginBottom: '1rem',
-                            paddingBottom: '0.5rem'
+                            paddingBottom: '0.5rem',
+                            overflowX: 'auto',
+                            whiteSpace: 'nowrap'
                         }}>
-                            {['Burger', 'Coffee', 'Juices'].map((tab) => (
+                            {activeCategories.map((category) => (
                                 <button
-                                    key={tab}
-                                    onClick={() => setSelectedMenuTab(tab)}
+                                    key={category.id}
+                                    onClick={() => setSelectedMenuTab(category.id)}
                                     style={{
                                         background: 'transparent',
                                         border: 'none',
                                         fontSize: '0.95rem',
-                                        fontWeight: selectedMenuTab === tab ? '800' : '600',
-                                        color: selectedMenuTab === tab ? (headerColor || '#7f1d1d') : '#8b95a5',
+                                        fontWeight: selectedMenuTab === category.id ? '800' : '600',
+                                        color: selectedMenuTab === category.id ? (headerColor || '#7f1d1d') : '#8b95a5',
                                         cursor: 'pointer',
                                         padding: '0.4rem 0',
-                                        borderBottom: selectedMenuTab === tab ? `3px solid ${headerColor || '#7f1d1d'}` : 'none',
-                                        marginBottom: selectedMenuTab === tab ? '-2px' : '0',
-                                        transition: 'all 0.2s ease'
+                                        borderBottom: selectedMenuTab === category.id ? `3px solid ${headerColor || '#7f1d1d'}` : 'none',
+                                        marginBottom: selectedMenuTab === category.id ? '-2px' : '0',
+                                        transition: 'all 0.2s ease',
+                                        whiteSpace: 'nowrap',
+                                        flexShrink: 0
                                     }}
                                 >
-                                    {tab}
+                                    {category.name}
                                 </button>
                             ))}
                         </div>
 
                         {/* Menu Items */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            {selectedMenuTab === 'Burger' && (
-                                <>
-                                    {/* Burger Item 1 */}
-                                    <div style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'flex-start',
-                                        padding: '0.75rem 0',
-                                        borderBottom: '1px solid #f1f5f9'
-                                    }}>
-                                        <div style={{ flex: 1 }}>
-                                            <h4 style={{
-                                                fontSize: '1rem',
-                                                fontWeight: '700',
-                                                color: '#1e293b',
-                                                margin: '0 0 0.25rem 0',
-                                                textTransform: 'uppercase'
-                                            }}>
-                                                ZINGER BURGER
-                                            </h4>
-                                            <p style={{
-                                                fontSize: '0.8rem',
-                                                color: '#64748b',
-                                                margin: '0 0 0.5rem 0',
-                                                lineHeight: '1.3'
-                                            }}>
-                                                Jalapeno + cheese
-                                            </p>
-                                            <p style={{
-                                                fontSize: '1rem',
-                                                fontWeight: '700',
-                                                color: headerColor || '#7f1d1d',
-                                                margin: 0
-                                            }}>
-                                                10.00 $
-                                            </p>
-                                        </div>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: '1rem' }}>
-                                            <button style={{
-                                                width: '35px',
-                                                height: '35px',
-                                                borderRadius: '50%',
-                                                background: headerColor || '#7f1d1d',
-                                                border: 'none',
-                                                color: '#fff',
-                                                fontSize: '1.25rem',
-                                                cursor: 'pointer',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                fontWeight: '300'
-                                            }}>
-                                                +
-                                            </button>
+                            {activeCategories.find(c => c.id === selectedMenuTab)?.products?.map((product) => (
+                                <div key={product.id} style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'flex-start',
+                                    padding: '0.75rem 0',
+                                    borderBottom: '1px solid #f1f5f9'
+                                }}>
+                                    <div style={{ flex: 1 }}>
+                                        <h4 style={{
+                                            fontSize: '1rem',
+                                            fontWeight: '700',
+                                            color: '#1e293b',
+                                            margin: '0 0 0.25rem 0',
+                                            textTransform: 'uppercase'
+                                        }}>
+                                            {product.name}
+                                        </h4>
+                                        <p style={{
+                                            fontSize: '0.8rem',
+                                            color: '#64748b',
+                                            margin: '0 0 0.5rem 0',
+                                            lineHeight: '1.3'
+                                        }}>
+                                            {product.description}
+                                        </p>
+                                        <p style={{
+                                            fontSize: '1rem',
+                                            fontWeight: '700',
+                                            color: headerColor || '#7f1d1d',
+                                            margin: 0
+                                        }}>
+                                            {product.price} {businessInfo?.currency || '$'}
+                                        </p>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: '1rem' }}>
+                                        <button style={{
+                                            width: '35px',
+                                            height: '35px',
+                                            borderRadius: '50%',
+                                            background: headerColor || '#7f1d1d',
+                                            border: 'none',
+                                            color: '#fff',
+                                            fontSize: '1.25rem',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontWeight: '300'
+                                        }}>
+                                            +
+                                        </button>
+                                        {product.image && (
                                             <div style={{
                                                 width: '60px',
                                                 height: '60px',
                                                 borderRadius: '8px',
                                                 overflow: 'hidden',
-                                                flexShrink: 0
+                                                flexShrink: 0,
+                                                position: 'relative'
                                             }}>
                                                 <img
-                                                    src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&h=200&fit=crop"
-                                                    alt="Burger"
-                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                    src={product.image}
+                                                    alt={product.name}
+                                                    style={{
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        objectFit: 'cover',
+                                                        transition: 'opacity 0.3s ease-in-out'
+                                                    }}
                                                 />
                                             </div>
-                                        </div>
+                                        )}
                                     </div>
-
-                                    {/* Burger Item 2 */}
-                                    <div style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'flex-start',
-                                        padding: '0.75rem 0',
-                                        borderBottom: '1px solid #f1f5f9'
-                                    }}>
-                                        <div style={{ flex: 1 }}>
-                                            <h4 style={{
-                                                fontSize: '1rem',
-                                                fontWeight: '700',
-                                                color: '#1e293b',
-                                                margin: '0 0 0.25rem 0',
-                                                textTransform: 'uppercase'
-                                            }}>
-                                                CHICKEN BURGER
-                                            </h4>
-                                            <p style={{
-                                                fontSize: '0.8rem',
-                                                color: '#64748b',
-                                                margin: '0 0 0.5rem 0',
-                                                lineHeight: '1.3'
-                                            }}>
-                                                Jalapeno + cheese + grilled chicken
-                                            </p>
-                                            <p style={{
-                                                fontSize: '1rem',
-                                                fontWeight: '700',
-                                                color: headerColor || '#7f1d1d',
-                                                margin: 0
-                                            }}>
-                                                12.00 $
-                                            </p>
-                                        </div>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: '1rem' }}>
-                                            <button style={{
-                                                width: '35px',
-                                                height: '35px',
-                                                borderRadius: '50%',
-                                                background: headerColor || '#7f1d1d',
-                                                border: 'none',
-                                                color: '#fff',
-                                                fontSize: '1.25rem',
-                                                cursor: 'pointer',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                fontWeight: '300'
-                                            }}>
-                                                +
-                                            </button>
-                                            <div style={{
-                                                width: '60px',
-                                                height: '60px',
-                                                borderRadius: '8px',
-                                                overflow: 'hidden',
-                                                flexShrink: 0
-                                            }}>
-                                                <img
-                                                    src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&h=200&fit=crop"
-                                                    alt="Burger"
-                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </>
-                            )}
-
-                            {selectedMenuTab === 'Coffee' && (
-                                <div style={{
-                                    textAlign: 'center',
-                                    padding: '3rem 1rem',
-                                    color: headerColor || '#7f1d1d'
-                                }}>
-                                    <p style={{
-                                        fontSize: '1rem',
-                                        fontWeight: '600',
-                                        margin: 0
-                                    }}>
-                                        No Item available in this category!
-                                    </p>
                                 </div>
-                            )}
-
-                            {selectedMenuTab === 'Juices' && (
-                                <div style={{
-                                    textAlign: 'center',
-                                    padding: '3rem 1rem',
-                                    color: headerColor || '#7f1d1d'
-                                }}>
-                                    <p style={{
-                                        fontSize: '1rem',
-                                        fontWeight: '600',
-                                        margin: 0
-                                    }}>
-                                        No Item available in this category!
-                                    </p>
-                                </div>
-                            )}
+                            ))}
                         </div>
 
-                        {/* Timings Section */}
-                        <div style={{
-                            background: '#fff',
-                            borderRadius: '12px',
-                            padding: '1rem',
-                            marginTop: '1.5rem',
-                            border: '1px solid #f1f5f9'
-                        }}>
-                            <h3 style={{
-                                fontSize: '0.95rem',
-                                fontWeight: '700',
-                                color: '#1e293b',
-                                margin: '0 0 1rem 0',
-                                textTransform: 'uppercase'
-                            }}>
-                                TIMINGS
-                            </h3>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <Clock size={18} color="#64748b" />
-                                    <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: '600' }}>
-                                        MONDAY - SATURDAY
-                                    </span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <Clock size={18} color="#64748b" />
-                                    <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: '600' }}>
-                                        12 pm to 11 pm
-                                    </span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <Clock size={18} color="#64748b" />
-                                    <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: '600' }}>
-                                        SUNDAY CLOSED
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
+
                 )}
 
-                {/* Social Media */}
-                <div style={{ padding: '1rem', textAlign: 'center' }}>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-                        {social?.instagram && <Instagram size={20} color={primaryColor} />}
-                        {social?.facebook && <Facebook size={20} color={primaryColor} />}
-                        {social?.twitter && <Twitter size={20} color={primaryColor} />}
-                        {social?.website && <Globe size={20} color={primaryColor} />}
+                {/* Timings Section */}
+                <div style={{
+                    background: '#fff',
+                    padding: '1rem',
+                    marginTop: '1.5rem',
+                }}>
+                    <h3 style={{
+                        fontSize: '0.8rem',
+                        fontWeight: '800',
+                        color: '#8b5cf6', // Purple
+                        margin: '0 0 1rem 0',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em'
+                    }}>
+                        TIMINGS
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        {(() => {
+                            const availableTimings = businessInfo?.timings?.filter(t => t.isOpen) || [];
+                            if (availableTimings.length === 0) {
+                                return (
+                                    <div style={{ padding: '0.5rem', textAlign: 'center', color: '#64748b' }}>
+                                        Closed
+                                    </div>
+                                );
+                            }
+
+                            const firstDay = availableTimings[0];
+                            const lastDay = availableTimings[availableTimings.length - 1];
+                            const timeString = firstDay.start && firstDay.end ? `${firstDay.start} - ${firstDay.end}` : '';
+                            const dayRange = availableTimings.length === 1 ? firstDay.day.toUpperCase() : `${firstDay.day.toUpperCase()} - ${lastDay.day.toUpperCase()}`;
+
+                            return (
+                                <>
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                                        <Calendar size={20} color="#8b5cf6" />
+                                        <div>
+                                            <span style={{ display: 'block', fontSize: '0.9rem', color: '#1e293b', fontWeight: '700' }}>
+                                                {dayRange}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    {timeString && (
+                                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                                            <Clock size={20} color="#8b5cf6" />
+                                            <div>
+                                                <span style={{ display: 'block', fontSize: '0.9rem', color: '#1e293b', fontWeight: '600' }}>
+                                                    {timeString} (GMT +5)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
+                            );
+                        })()}
                     </div>
                 </div>
-
             </div>
-        </div>
+
+
+            {/* Social Media */}
+            <div style={{ padding: '1rem', textAlign: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+                    {social?.instagram && <Instagram size={20} color={primaryColor} />}
+                    {social?.facebook && <Facebook size={20} color={primaryColor} />}
+                    {social?.twitter && <Twitter size={20} color={primaryColor} />}
+                    {social?.website && <Globe size={20} color={primaryColor} />}
+                </div>
+            </div>
+
+            {/* Website Footer */}
+            {
+                businessInfo?.website && (
+                    <div style={{
+                        padding: '3rem 1rem 2rem 1rem',
+                        textAlign: 'center',
+                        background: '#8b5cf6',
+                        borderRadius: '50% 50% 0 0',
+                        marginTop: '2rem',
+                        marginBottom: '-2rem', // Pull it down slightly if needed or just let it sit
+                        position: 'relative',
+                        zIndex: 1
+                    }}>
+                        <a
+                            href={businessInfo.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                fontSize: '0.9rem',
+                                color: '#fff',
+                                textDecoration: 'none',
+                                fontWeight: '500',
+                                wordBreak: 'break-all',
+                                opacity: 0.9
+                            }}
+                        >
+                            {businessInfo.website.replace(/^https?:\/\//, '')}
+                        </a>
+                    </div>
+                )
+            }
+
+        </div >
+
     );
 };
 

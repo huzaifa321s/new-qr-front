@@ -28,13 +28,13 @@ const AppStoreLanding = () => {
     return (
         <div style={{
             minHeight: '100vh',
-            background: '#f1f5f9',
+            background: '#fff',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center'
         }}>
-            <div style={{ width: '100%', maxWidth: '480px', height: '100vh', background: '#fff', overflowY: 'auto' }}>
-                <MobilePreview config={qrData} />
+            <div style={{ width: '100%', height: '100vh', background: '#fff', overflow: 'hidden' }}>
+                <MobilePreview config={qrData} isLiveView={true} />
             </div>
         </div>
     );

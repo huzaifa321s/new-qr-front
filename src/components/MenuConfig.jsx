@@ -23,31 +23,41 @@ const MenuConfig = ({ config, onChange }) => {
             return config.menu.categories;
         }
         return [
-        {
-            id: 'burger',
-            name: 'Burger',
-            products: [
-                {
-                    id: 'p1',
-                    name: 'Zinger Burger',
-                    price: '10',
-                    description: 'jalapeno + cheese',
-                    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=100&q=80'
-                }
-            ]
-        },
-        {
-            id: 'coffee',
-            name: 'Coffee',
-            products: []
-        },
-        {
-            id: 'juices',
-            name: 'Juices',
-            products: []
-        }
+            {
+                id: 'burger',
+                name: 'Burger',
+                products: [
+                    {
+                        id: 'p1',
+                        name: 'Zinger Burger',
+                        price: '10',
+                        description: 'jalapeno + cheese',
+                        image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=100&q=80'
+                    }
+                ]
+            },
+            {
+                id: 'coffee',
+                name: 'Coffee',
+                products: []
+            },
+            {
+                id: 'juices',
+                name: 'Juices',
+                products: []
+            }
         ];
     });
+
+    // Sync categories to parent if they are not already set (initial load)
+    useEffect(() => {
+        if (!config.menu?.categories || config.menu.categories.length === 0) {
+            onChange(prev => ({
+                ...prev,
+                menu: { ...prev.menu, categories: categories }
+            }));
+        }
+    }, []);
 
     // Timings State
     const [timeFormat, setTimeFormat] = useState(businessInfo?.timeFormat || 'AM/PM');
@@ -128,7 +138,7 @@ const MenuConfig = ({ config, onChange }) => {
     const handleTimeFormatChange = (format) => {
         setTimeFormat(format);
         onChange(prev => ({ ...prev, businessInfo: { ...prev.businessInfo, timeFormat: format } }));
-        
+
         // Remove AM/PM from all timings if switching to 24 hrs
         if (format === '24 hrs') {
             const updatedTimings = timings.map(t => ({
@@ -336,19 +346,19 @@ const MenuConfig = ({ config, onChange }) => {
                 {isBasicInfoOpen && (
                     <div style={{ padding: '2rem' }}>
                         <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>RESTAURANT NAME*</label><input type="text" value={businessInfo.title || ''} onChange={e => handleBusinessInfoUpdate('title', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
-                        <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>TITLE*</label><input type="text" value={businessInfo.subtitle || ''} onChange={e => handleBusinessInfoUpdate('subtitle', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
+                        <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>TITLE*</label><input type="text" value={businessInfo.headline || ''} onChange={e => handleBusinessInfoUpdate('headline', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
                         <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>DESCRIPTION</label><textarea value={businessInfo.description || ''} onChange={e => handleBusinessInfoUpdate('description', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
                         <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>WEBSITE*</label><input type="text" value={businessInfo.website || ''} onChange={e => handleBusinessInfoUpdate('website', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
                         <div style={{ marginBottom: '1.5rem' }}>
                             <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>CURRENCY</label>
                             <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-                                <div 
-                                    onClick={() => handleBusinessInfoUpdate('currency', '$')} 
-                                    style={{ 
-                                        display: 'flex', 
-                                        alignItems: 'center', 
-                                        gap: '0.5rem', 
-                                        cursor: 'pointer' 
+                                <div
+                                    onClick={() => handleBusinessInfoUpdate('currency', '$')}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.5rem',
+                                        cursor: 'pointer'
                                     }}
                                 >
                                     <div style={{
@@ -372,13 +382,13 @@ const MenuConfig = ({ config, onChange }) => {
                                     </div>
                                     <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>$</span>
                                 </div>
-                                <div 
-                                    onClick={() => handleBusinessInfoUpdate('currency', 'PKR')} 
-                                    style={{ 
-                                        display: 'flex', 
-                                        alignItems: 'center', 
-                                        gap: '0.5rem', 
-                                        cursor: 'pointer' 
+                                <div
+                                    onClick={() => handleBusinessInfoUpdate('currency', 'PKR')}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.5rem',
+                                        cursor: 'pointer'
                                     }}
                                 >
                                     <div style={{
@@ -442,7 +452,7 @@ const MenuConfig = ({ config, onChange }) => {
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                                     <input type="text" value={cat.name} onChange={(e) => handleCategoryNameChange(cat.id, e.target.value)} style={{ flex: 1, padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '1rem', outline: 'none' }} />
                                                     <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                                        <div 
+                                                        <div
                                                             onClick={() => handleRemoveCategory(cat.id)}
                                                             style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
                                                         >
@@ -465,9 +475,9 @@ const MenuConfig = ({ config, onChange }) => {
                                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                                                 {prod.image && (
                                                                     <div style={{ position: 'relative', width: '50px', height: '50px', borderRadius: '4px', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
-                                                                        <img 
-                                                                            src={prod.image} 
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.3s ease' }} 
+                                                                        <img
+                                                                            src={prod.image}
+                                                                            style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.3s ease' }}
                                                                         />
                                                                     </div>
                                                                 )}
@@ -489,7 +499,7 @@ const MenuConfig = ({ config, onChange }) => {
                                                             </div>
                                                         </div>
                                                         <div style={{ position: 'absolute', right: '-40px', top: '0', height: '100%', display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '0.5rem' }}>
-                                                            <div 
+                                                            <div
                                                                 onClick={() => handleRemoveProduct(cat.id, prod.id)}
                                                                 style={{ width: '28px', height: '28px', borderRadius: '50%', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: '#fff' }}
                                                             >

@@ -306,8 +306,26 @@ const CouponConfig = ({ config, onChange }) => {
                                             background: businessInfo.titleColor || '#FFFFFF',
                                             borderRadius: '2px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
-                                        }}></div>
+                                            border: '1px solid #e2e8f0',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="color"
+                                                value={businessInfo.titleColor || '#FFFFFF'}
+                                                onChange={(e) => handleBusinessInfoUpdate('titleColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -389,8 +407,26 @@ const CouponConfig = ({ config, onChange }) => {
                                             background: coupon.titleColor || '#FFFFFF',
                                             borderRadius: '2px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
-                                        }}></div>
+                                            border: '1px solid #e2e8f0',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="color"
+                                                value={coupon.titleColor || '#FFFFFF'}
+                                                onChange={(e) => handleCouponUpdate('titleColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -494,10 +530,9 @@ const CouponConfig = ({ config, onChange }) => {
                                 COUPON EFFECTIVE DATE*
                             </label>
                             <input
-                                type="text"
+                                type="date"
                                 value={coupon.expiry || ''}
                                 onChange={(e) => handleCouponUpdate('expiry', e.target.value)}
-                                placeholder="24 Mar 2025"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
@@ -505,7 +540,7 @@ const CouponConfig = ({ config, onChange }) => {
                                     border: '1px solid #1e293b',
                                     fontSize: '0.9rem',
                                     outline: 'none',
-                                    color: '#94a3b8'
+                                    color: '#000'
                                 }}
                             />
                         </div>

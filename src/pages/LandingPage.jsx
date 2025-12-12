@@ -40,8 +40,8 @@ const LandingPage = () => {
                 On actual mobile, it might look like a phone-in-phone, which implies we might need to update MobilePreview later to be responsive,
                 but for now, consistency ("whi mobile preview") is the priority.
             */}
-            <div style={{ width: '100%', maxWidth: '480px', height: '100vh', background: '#fff', overflowY: 'auto' }}>
-                <MobilePreview config={qrData} />
+            <div style={{ width: '100%', height: '100vh', background: '#fff', overflow: 'hidden' }}>
+                <MobilePreview config={qrData} isLiveView={true} />
             </div>
         </div>
     );
