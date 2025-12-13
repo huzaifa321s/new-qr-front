@@ -1,5 +1,4 @@
-import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check } from 'lucide-react';
-
+import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Facebook, Instagram, Twitter, Linkedin, Youtube, Globe, MessageCircle, Music, MessageSquare, Twitch, Send, Ghost, Headphones, Pin, Bot } from 'lucide-react';
 import { useState } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
@@ -98,6 +97,27 @@ const SocialMediaConfig = ({ config, onChange }) => {
         }));
     };
 
+    const handleDeleteSocial = (urlKey, textKey) => {
+        onChange(prev => {
+            const newSocial = { ...prev.social };
+            delete newSocial[urlKey];
+            delete newSocial[textKey];
+            return { ...prev, social: newSocial };
+        });
+    };
+
+    const handleAddSocial = (urlKey, textKey) => {
+        if (social[urlKey] !== undefined) return; // Already active
+        onChange(prev => ({
+            ...prev,
+            social: {
+                ...prev.social,
+                [urlKey]: '',
+                [textKey]: ''
+            }
+        }));
+    };
+
     const handleShareOptionUpdate = (key, value) => {
         onChange(prev => ({
             ...prev,
@@ -107,6 +127,27 @@ const SocialMediaConfig = ({ config, onChange }) => {
             }
         }));
     };
+
+    const platformConfig = [
+        { id: 'website', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Website', icon: Globe, color: '#6366f1', placeholder: 'https://' },
+        { id: 'facebook', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: Facebook, color: '#1877f2', placeholder: 'https://facebook.com/...' },
+        { id: 'instagram', urlKey: 'instagramUrl', textKey: 'instagramText', name: 'Instagram', icon: Instagram, color: '#E4405F', placeholder: 'https://instagram.com/...' },
+        { id: 'twitter', urlKey: 'twitterUrl', textKey: 'twitterText', name: 'X (Twitter)', icon: Twitter, color: '#000000', placeholder: 'https://x.com/...' },
+        { id: 'linkedin', urlKey: 'linkedinUrl', textKey: 'linkedinText', name: 'LinkedIn', icon: Linkedin, color: '#0a66c2', placeholder: 'https://linkedin.com/in/...' },
+        { id: 'discord', urlKey: 'discordUrl', textKey: 'discordText', name: 'Discord', icon: MessageSquare, color: '#5865f2', placeholder: 'https://discord.gg/...' },
+        { id: 'twitch', urlKey: 'twitchUrl', textKey: 'twitchText', name: 'Twitch', icon: Twitch, color: '#9146ff', placeholder: 'https://twitch.tv/...' },
+        { id: 'kickstarter', urlKey: 'kickstarterUrl', textKey: 'kickstarterText', name: 'Kickstarter', icon: ({ size }) => <span style={{ fontSize: size, fontWeight: 'bold' }}>K</span>, color: '#05ce78', placeholder: 'https://kickstarter.com/...' },
+        { id: 'youtube', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'YouTube', icon: Youtube, color: '#ff0000', placeholder: 'https://youtube.com/...' },
+        { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: MessageCircle, color: '#25d366', placeholder: 'https://wa.me/...' },
+        { id: 'snapchat', urlKey: 'snapchatUrl', textKey: 'snapchatText', name: 'Snapchat', icon: Ghost, color: '#fffc00', placeholder: 'https://snapchat.com/add/...' },
+        { id: 'tiktok', urlKey: 'tiktokUrl', textKey: 'tiktokText', name: 'TikTok', icon: Music, color: '#000000', placeholder: 'https://tiktok.com/@...' },
+        { id: 'tumblr', urlKey: 'tumblrUrl', textKey: 'tumblrText', name: 'Tumblr', icon: ({ size }) => <span style={{ fontSize: size, fontWeight: 'bold' }}>t</span>, color: '#35465c', placeholder: 'https://tumblr.com/...' },
+        { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: Headphones, color: '#1db954', placeholder: 'https://open.spotify.com/...' },
+        { id: 'telegram', urlKey: 'telegramUrl', textKey: 'telegramText', name: 'Telegram', icon: Send, color: '#0088cc', placeholder: 'https://t.me/...' },
+        { id: 'behance', urlKey: 'behanceUrl', textKey: 'behanceText', name: 'Behance', icon: ({ size }) => <span style={{ fontSize: Math.max(10, size - 4), fontWeight: 'bold' }}>Bē</span>, color: '#1769ff', placeholder: 'https://behance.net/...' },
+        { id: 'pinterest', urlKey: 'pinterestUrl', textKey: 'pinterestText', name: 'Pinterest', icon: Pin, color: '#e60023', placeholder: 'https://pinterest.com/...' },
+        { id: 'reddit', urlKey: 'redditUrl', textKey: 'redditText', name: 'Reddit', icon: Bot, color: '#ff4500', placeholder: 'https://reddit.com/user/...' },
+    ];
 
     const palettes = [
         { p: '#0B2D86', s: '#FFA800' },
@@ -392,8 +433,28 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                             background: basicInfo.headlineColor || '#FFFFFF',
                                             borderRadius: '2px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
-                                        }}></div>
+                                            border: '1px solid #e2e8f0',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="color"
+                                                value={basicInfo.headlineColor || '#FFFFFF'}
+                                                onChange={(e) => handleBasicInfoUpdate('headlineColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0,
+                                                    padding: 0,
+                                                    margin: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -475,267 +536,105 @@ const SocialMediaConfig = ({ config, onChange }) => {
                 {isSocialOpen && (
                     <div style={{ padding: '2rem', background: '#fff' }}>
 
-                        {/* WEBSITE */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                                {/* URL Input */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        WEBSITE
-                                    </label>
-                                    <div style={{ marginBottom: '0.25rem' }}>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                            URL
-                                        </label>
-                                        <div style={{ position: 'relative' }}>
-                                            <div style={{
-                                                position: 'absolute',
-                                                left: '12px',
-                                                top: '50%',
-                                                transform: 'translateY(-50%)',
-                                                width: '24px',
-                                                height: '24px',
-                                                background: '#6366f1',
-                                                borderRadius: '4px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                fontSize: '0.9rem',
-                                                color: '#fff'
-                                            }}>
-                                                🌐
+                        {/* Dynamic Render of Active Platforms */}
+                        {platformConfig.filter(p => social[p.urlKey] !== undefined).map(platform => {
+                            const Icon = platform.icon;
+                            const isUrlInvalid = social[platform.urlKey] && !social[platform.urlKey].startsWith('http');
+
+                            return (
+                                <div key={platform.id} style={{ marginBottom: '2rem' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                                        {/* URL Input */}
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                {platform.name.toUpperCase()}
+                                            </label>
+                                            <div style={{ marginBottom: '0.25rem' }}>
+                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                                    URL
+                                                </label>
+                                                <div style={{ position: 'relative' }}>
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        left: '12px',
+                                                        top: '50%',
+                                                        transform: 'translateY(-50%)',
+                                                        width: '24px',
+                                                        height: '24px',
+                                                        background: platform.color,
+                                                        borderRadius: '4px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        fontSize: '0.9rem',
+                                                        color: platform.color === '#fffc00' ? '#000' : '#fff'
+                                                    }}>
+                                                        <Icon size={14} />
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        value={social[platform.urlKey] || ''}
+                                                        onChange={(e) => handleSocialUpdate(platform.urlKey, e.target.value)}
+                                                        placeholder={platform.placeholder}
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.75rem 0.75rem 0.75rem 3rem',
+                                                            borderRadius: '4px',
+                                                            border: isUrlInvalid ? '1px solid #ef4444' : '1px solid #e2e8f0', // Only erroneous if invalid
+                                                            fontSize: '0.9rem',
+                                                            outline: 'none'
+                                                        }}
+                                                    />
+                                                </div>
                                             </div>
-                                            <input
-                                                type="text"
-                                                value={social.websiteUrl || ''}
-                                                onChange={(e) => handleSocialUpdate('websiteUrl', e.target.value)}
-                                                placeholder="https://"
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem 0.75rem 0.75rem 3rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #ef4444',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none'
-                                                }}
-                                            />
+                                            {isUrlInvalid && (
+                                                <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.25rem' }}>
+                                                    Please enter a valid URL (starting with http/https).
+                                                </div>
+                                            )}
                                         </div>
-                                    </div>
-                                    <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.25rem' }}>
-                                        Please enter a valid website URL.
-                                    </div>
-                                </div>
 
-                                {/* Text Input */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem', marginTop: '1.7rem' }}>
-                                        Text
-                                    </label>
-                                    <div style={{ position: 'relative' }}>
-                                        <input
-                                            type="text"
-                                            value={social.websiteText || ''}
-                                            onChange={(e) => handleSocialUpdate('websiteText', e.target.value)}
-                                            placeholder="Visit us online"
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                paddingRight: '3rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
-                                                fontSize: '0.9rem',
-                                                outline: 'none'
-                                            }}
-                                        />
-                                        <div style={{
-                                            position: 'absolute',
-                                            right: '12px',
-                                            top: '50%',
-                                            transform: 'translateY(-50%)',
-                                            cursor: 'pointer',
-                                            color: '#cbd5e1'
-                                        }}>
-                                            <X size={20} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* FACEBOOK */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                                {/* URL Input */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        FACEBOOK
-                                    </label>
-                                    <div style={{ marginBottom: '0.25rem' }}>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                            URL
-                                        </label>
-                                        <div style={{ position: 'relative' }}>
-                                            <div style={{
-                                                position: 'absolute',
-                                                left: '12px',
-                                                top: '50%',
-                                                transform: 'translateY(-50%)',
-                                                width: '24px',
-                                                height: '24px',
-                                                background: '#1877f2',
-                                                borderRadius: '4px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                fontSize: '0.75rem',
-                                                color: '#fff',
-                                                fontWeight: 'bold'
-                                            }}>
-                                                f
+                                        {/* Text Input */}
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem', marginTop: '1.7rem' }}>
+                                                Text
+                                            </label>
+                                            <div style={{ position: 'relative' }}>
+                                                <input
+                                                    type="text"
+                                                    value={social[platform.textKey] || ''}
+                                                    onChange={(e) => handleSocialUpdate(platform.textKey, e.target.value)}
+                                                    placeholder={platform.name}
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.75rem',
+                                                        paddingRight: '3rem',
+                                                        borderRadius: '4px',
+                                                        border: '1px solid #1e293b',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none'
+                                                    }}
+                                                />
+                                                <div
+                                                    onClick={() => handleDeleteSocial(platform.urlKey, platform.textKey)}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        right: '12px',
+                                                        top: '50%',
+                                                        transform: 'translateY(-50%)',
+                                                        cursor: 'pointer',
+                                                        color: '#ef4444'
+                                                    }}
+                                                    title="Remove Platform"
+                                                >
+                                                    <X size={20} />
+                                                </div>
                                             </div>
-                                            <input
-                                                type="text"
-                                                value={social.facebookUrl || ''}
-                                                onChange={(e) => handleSocialUpdate('facebookUrl', e.target.value)}
-                                                placeholder="https://"
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem 0.75rem 0.75rem 3rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #ef4444',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none'
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.25rem' }}>
-                                        Please enter a valid facebook URL.
-                                    </div>
-                                </div>
-
-                                {/* Text Input */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem', marginTop: '1.7rem' }}>
-                                        Text
-                                    </label>
-                                    <div style={{ position: 'relative' }}>
-                                        <input
-                                            type="text"
-                                            value={social.facebookText || ''}
-                                            onChange={(e) => handleSocialUpdate('facebookText', e.target.value)}
-                                            placeholder="Facebook"
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                paddingRight: '3rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
-                                                fontSize: '0.9rem',
-                                                outline: 'none'
-                                            }}
-                                        />
-                                        <div style={{
-                                            position: 'absolute',
-                                            right: '12px',
-                                            top: '50%',
-                                            transform: 'translateY(-50%)',
-                                            cursor: 'pointer',
-                                            color: '#cbd5e1'
-                                        }}>
-                                            <X size={20} />
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        {/* YOUTUBE */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                                {/* URL Input */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        YOUTUBE
-                                    </label>
-                                    <div style={{ marginBottom: '0.25rem' }}>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                            URL
-                                        </label>
-                                        <div style={{ position: 'relative' }}>
-                                            <div style={{
-                                                position: 'absolute',
-                                                left: '12px',
-                                                top: '50%',
-                                                transform: 'translateY(-50%)',
-                                                width: '24px',
-                                                height: '24px',
-                                                background: '#ff0000',
-                                                borderRadius: '4px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                fontSize: '0.9rem',
-                                                color: '#fff'
-                                            }}>
-                                                ▶
-                                            </div>
-                                            <input
-                                                type="text"
-                                                value={social.youtubeUrl || ''}
-                                                onChange={(e) => handleSocialUpdate('youtubeUrl', e.target.value)}
-                                                placeholder="https://"
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem 0.75rem 0.75rem 3rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #ef4444',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none'
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.25rem' }}>
-                                        Please enter a valid youtube URL.
-                                    </div>
-                                </div>
-
-                                {/* Text Input */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem', marginTop: '1.7rem' }}>
-                                        Text
-                                    </label>
-                                    <div style={{ position: 'relative' }}>
-                                        <input
-                                            type="text"
-                                            value={social.youtubeText || ''}
-                                            onChange={(e) => handleSocialUpdate('youtubeText', e.target.value)}
-                                            placeholder="Youtube"
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                paddingRight: '3rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
-                                                fontSize: '0.9rem',
-                                                outline: 'none'
-                                            }}
-                                        />
-                                        <div style={{
-                                            position: 'absolute',
-                                            right: '12px',
-                                            top: '50%',
-                                            transform: 'translateY(-50%)',
-                                            cursor: 'pointer',
-                                            color: '#cbd5e1'
-                                        }}>
-                                            <X size={20} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            );
+                        })}
 
                         {/* ADD MORE Section */}
                         <div>
@@ -748,59 +647,31 @@ const SocialMediaConfig = ({ config, onChange }) => {
 
                             {/* Social Media Icons Grid */}
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(48px, 1fr))', gap: '0.75rem' }}>
-                                {/* Facebook */}
-                                <div style={{ width: '48px', height: '48px', background: '#1877f2', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.5rem', color: '#fff' }}>f</div>
-
-                                {/* Instagram */}
-                                <div style={{ width: '48px', height: '48px', background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>📷</div>
-
-                                {/* X (Twitter) */}
-                                <div style={{ width: '48px', height: '48px', background: '#000', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>𝕏</div>
-
-                                {/* LinkedIn */}
-                                <div style={{ width: '48px', height: '48px', background: '#0a66c2', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>in</div>
-
-                                {/* Discord */}
-                                <div style={{ width: '48px', height: '48px', background: '#5865f2', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>💬</div>
-
-                                {/* Twitch */}
-                                <div style={{ width: '48px', height: '48px', background: '#9146ff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>📺</div>
-
-                                {/* Kickstarter */}
-                                <div style={{ width: '48px', height: '48px', background: '#05ce78', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>K</div>
-
-                                {/* YouTube */}
-                                <div style={{ width: '48px', height: '48px', background: '#ff0000', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>▶</div>
-
-                                {/* WhatsApp */}
-                                <div style={{ width: '48px', height: '48px', background: '#25d366', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>💬</div>
-
-                                {/* Snapchat */}
-                                <div style={{ width: '48px', height: '48px', background: '#fffc00', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#000' }}>👻</div>
-
-                                {/* TikTok */}
-                                <div style={{ width: '48px', height: '48px', background: '#000', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>🎵</div>
-
-                                {/* Tumblr */}
-                                <div style={{ width: '48px', height: '48px', background: '#35465c', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>t</div>
-
-                                {/* Spotify */}
-                                <div style={{ width: '48px', height: '48px', background: '#1db954', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>🎵</div>
-
-                                {/* Telegram */}
-                                <div style={{ width: '48px', height: '48px', background: '#0088cc', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>✈️</div>
-
-                                {/* Behance */}
-                                <div style={{ width: '48px', height: '48px', background: '#1769ff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>Bē</div>
-
-                                {/* Pinterest */}
-                                <div style={{ width: '48px', height: '48px', background: '#e60023', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>📌</div>
-
-                                {/* Reddit */}
-                                <div style={{ width: '48px', height: '48px', background: '#ff4500', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>🤖</div>
-
-                                {/* Website */}
-                                <div style={{ width: '48px', height: '48px', background: '#6366f1', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>🌐</div>
+                                {platformConfig.map(platform => {
+                                    const Icon = platform.icon;
+                                    const isActive = social[platform.urlKey] !== undefined;
+                                    return (
+                                        <div
+                                            key={platform.id}
+                                            onClick={() => handleAddSocial(platform.urlKey, platform.textKey)}
+                                            style={{
+                                                width: '48px',
+                                                height: '48px',
+                                                background: platform.color,
+                                                borderRadius: '8px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: isActive ? 'default' : 'pointer',
+                                                opacity: isActive ? 0.5 : 1, // Dim if active
+                                                color: platform.color === '#fffc00' ? '#000' : '#fff'
+                                            }}
+                                            title={isActive ? "Already added" : `Add ${platform.name}`}
+                                        >
+                                            <Icon size={24} />
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
 

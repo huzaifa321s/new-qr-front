@@ -11,10 +11,10 @@ const MultipleLinksConfig = ({ config, onChange }) => {
     const design = config.design || {};
     const basicInfo = config.basicInfo || {};
     const links = config.links || [
-        { id: '1', url: '', title: '' },
-        { id: '2', url: '', title: '' },
-        { id: '3', url: '', title: '' },
-        { id: '4', url: '', title: '' }
+        { id: '1', url: '', title: 'Visit Us Online' },
+        { id: '2', url: '', title: 'Talk to Us' },
+        { id: '3', url: '', title: 'Instagram' },
+        { id: '4', url: '', title: 'Youtube' }
     ];
     const socialLinks = config.socialLinks || [];
 
@@ -478,8 +478,27 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                             height: '24px',
                                             background: basicInfo.headlineColor || '#2B1E99',
                                             borderRadius: '2px',
-                                            flexShrink: 0
-                                        }}></div>
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="color"
+                                                value={basicInfo.headlineColor || '#2B1E99'}
+                                                onChange={(e) => handleBasicInfoUpdate('headlineColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 

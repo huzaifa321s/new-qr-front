@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, FileText, Edit2, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const PDFConfig = ({ config, onChange }) => {
@@ -10,6 +10,7 @@ const PDFConfig = ({ config, onChange }) => {
     const design = config.design || {};
     const basicInfo = config.basicInfo || {};
     const uploadPdf = config.uploadPdf || {};
+    const fileInputRef = useRef(null);
 
     const primaryColor = design.color?.header || '#0B2D86';
     const secondaryColor = design.color?.light || '#FFA800';
@@ -85,14 +86,25 @@ const PDFConfig = ({ config, onChange }) => {
         }));
     };
 
-    // Simulate file upload for UI demonstration
-    const handleFileUpload = () => {
-        // In a real app, this would handle the file input event
-        handleUploadPdfUpdate('uploadedFile', { name: 'Qr Insight Presentation.pdf', size: '2.5MB' });
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const url = URL.createObjectURL(file);
+            handleUploadPdfUpdate('pdfUrl', url);
+            handleUploadPdfUpdate('uploadedFile', {
+                name: file.name,
+                size: (file.size / (1024 * 1024)).toFixed(2) + ' MB'
+            });
+        }
+    };
+
+    const handleUploadButtonClick = () => {
+        fileInputRef.current.click();
     };
 
     const handleFileDelete = () => {
         handleUploadPdfUpdate('uploadedFile', null);
+        handleUploadPdfUpdate('pdfUrl', '');
     };
 
     const palettes = [
@@ -214,8 +226,26 @@ const PDFConfig = ({ config, onChange }) => {
                                             background: basicInfo.companyNameColor || '#FFFFFF',
                                             borderRadius: '2px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
-                                        }}></div>
+                                            border: '1px solid #e2e8f0',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="color"
+                                                value={basicInfo.companyNameColor || '#FFFFFF'}
+                                                onChange={(e) => handleBasicInfoUpdate('companyNameColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -301,8 +331,27 @@ const PDFConfig = ({ config, onChange }) => {
                                             height: '24px',
                                             background: basicInfo.pdfTitleColor || '#FFA800',
                                             borderRadius: '2px',
-                                            flexShrink: 0
-                                        }}></div>
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="color"
+                                                value={basicInfo.pdfTitleColor || '#FFA800'}
+                                                onChange={(e) => handleBasicInfoUpdate('pdfTitleColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -416,7 +465,7 @@ const PDFConfig = ({ config, onChange }) => {
                                 type="text"
                                 value={uploadPdf.pdfUrl || ''}
                                 onChange={(e) => handleUploadPdfUpdate('pdfUrl', e.target.value)}
-                                placeholder="Paste URL of your PDF"
+                                placeholder="https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
@@ -431,19 +480,28 @@ const PDFConfig = ({ config, onChange }) => {
                             {/* OR Separator */}
                             <div style={{ textAlign: 'center', margin: '0.5rem 0 1rem 0', color: '#8b5cf6', fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase' }}>OR</div>
 
+                            {/* Hidden File Input */}
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleFileChange}
+                                accept="application/pdf"
+                                style={{ display: 'none' }}
+                            />
+
                             {/* Upload Button */}
                             <button
-                                onClick={handleFileUpload}
-                                disabled={!!uploadPdf.uploadedFile}
+                                onClick={handleUploadButtonClick}
+                                disabled={!!uploadPdf.pdfUrl}
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
                                     border: '1px solid #e2e8f0',
                                     background: '#f1f5f9',
-                                    color: uploadPdf.uploadedFile ? '#cbd5e1' : '#94a3b8',
+                                    color: uploadPdf.pdfUrl ? '#cbd5e1' : '#94a3b8',
                                     fontSize: '0.9rem',
-                                    cursor: uploadPdf.uploadedFile ? 'not-allowed' : 'pointer',
+                                    cursor: uploadPdf.pdfUrl ? 'not-allowed' : 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',

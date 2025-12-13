@@ -580,31 +580,38 @@ const ReviewsConfig = ({ config, onChange }) => {
                                         alignItems: 'center',
                                         border: '1px solid #1e293b',
                                         borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
+                                        padding: '0.25rem',
+                                        height: '44px',
+                                        gap: '0.5rem'
                                     }}>
+                                        <input
+                                            type="color"
+                                            value={basicInfo.organizationNameColor || '#FFFFFF'}
+                                            onChange={(e) => handleBasicInfoUpdate('organizationNameColor', e.target.value)}
+                                            style={{
+                                                width: '30px',
+                                                height: '30px',
+                                                border: 'none',
+                                                background: 'none',
+                                                padding: 0,
+                                                cursor: 'pointer'
+                                            }}
+                                        />
                                         <input
                                             type="text"
                                             value={basicInfo.organizationNameColor || '#FFFFFF'}
                                             onChange={(e) => handleBasicInfoUpdate('organizationNameColor', e.target.value)}
                                             style={{
+                                                flex: 1,
                                                 border: 'none',
                                                 outline: 'none',
-                                                width: '100%',
                                                 fontSize: '0.85rem',
                                                 color: '#000',
                                                 fontWeight: '500',
-                                                textTransform: 'uppercase'
+                                                textTransform: 'uppercase',
+                                                minWidth: 0
                                             }}
                                         />
-                                        <div style={{
-                                            width: '24px',
-                                            height: '24px',
-                                            background: basicInfo.organizationNameColor || '#FFFFFF',
-                                            borderRadius: '2px',
-                                            flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
-                                        }}></div>
                                     </div>
                                 </div>
 
@@ -668,31 +675,38 @@ const ReviewsConfig = ({ config, onChange }) => {
                                         alignItems: 'center',
                                         border: '1px solid #1e293b',
                                         borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
+                                        padding: '0.25rem',
+                                        height: '44px',
+                                        gap: '0.5rem'
                                     }}>
                                         <input
-                                            type="text"
-                                            value={basicInfo.titleColor || '#2131AE'}
+                                            type="color"
+                                            value={basicInfo.titleColor || '#1e293b'}
                                             onChange={(e) => handleBasicInfoUpdate('titleColor', e.target.value)}
                                             style={{
+                                                width: '30px',
+                                                height: '30px',
+                                                border: 'none',
+                                                background: 'none',
+                                                padding: 0,
+                                                cursor: 'pointer'
+                                            }}
+                                        />
+                                        <input
+                                            type="text"
+                                            value={basicInfo.titleColor || '#1e293b'}
+                                            onChange={(e) => handleBasicInfoUpdate('titleColor', e.target.value)}
+                                            style={{
+                                                flex: 1,
                                                 border: 'none',
                                                 outline: 'none',
-                                                width: '100%',
                                                 fontSize: '0.85rem',
                                                 color: '#000',
                                                 fontWeight: '500',
-                                                textTransform: 'uppercase'
+                                                textTransform: 'uppercase',
+                                                minWidth: 0
                                             }}
                                         />
-                                        <div style={{
-                                            width: '24px',
-                                            height: '24px',
-                                            background: basicInfo.titleColor || '#2131AE',
-                                            borderRadius: '2px',
-                                            flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
-                                        }}></div>
                                     </div>
                                 </div>
 
