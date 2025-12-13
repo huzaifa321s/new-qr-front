@@ -44,7 +44,7 @@ const AutoSlider = ({ images }) => {
 };
 
 const MobilePreview = ({ config, isLiveView = false }) => {
-    const { design, businessInfo, menu, timings, social, appLinks, coupon, personalInfo, contact, exchange, type, facilities } = config;
+    const { design, businessInfo, menu, timings, social, appLinks, coupon, personalInfo, basicInfo, contact, exchange, type, facilities, socialLinks, form, customFields, thankYou, rating } = config;
     const [showCouponModal, setShowCouponModal] = useState(false);
     const [showExchangeModal, setShowExchangeModal] = useState(false);
     const [ratingStep, setRatingStep] = useState('rating'); // 'rating', 'userInfo', 'thankYou'
@@ -869,7 +869,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         <div style={{
                             width: '110px',
                             height: '110px',
-                            borderRadius: '50%',
+                            borderRadius: (design?.pictureFrame === 'rectangular' || design?.profile?.shape === 'rectangular') ? '12px' : '50%',
                             background: '#fff',
                             padding: '3px',
                             position: 'absolute',
@@ -879,20 +879,33 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                         }}>
                             <img
-                                src={design?.profile?.url}
+                                src={design?.picture?.url || design?.profile?.url || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop'}
                                 alt="Profile"
-                                style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                                style={{ width: '100%', height: '100%', borderRadius: (design?.pictureFrame === 'rectangular' || design?.profile?.shape === 'rectangular') ? '12px' : '50%', objectFit: 'cover' }}
                             />
                         </div>
                     </div>
 
                     {/* Name and Title */}
                     <div style={{ textAlign: 'center', padding: '0 1rem', marginBottom: '1rem' }}>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: headerColor, margin: '0 0 0.5rem 0', textTransform: 'uppercase' }}>
-                            {personalInfo?.name}
+                        <h2 style={{
+                            fontSize: '1.5rem',
+                            fontWeight: 'bold',
+                            color: basicInfo?.nameColor || headerColor,
+                            fontFamily: basicInfo?.nameFont || 'Lato',
+                            margin: '0 0 0.5rem 0',
+                            textTransform: 'uppercase'
+                        }}>
+                            {basicInfo?.name || personalInfo?.name}
                         </h2>
-                        <p style={{ fontSize: '0.95rem', color: '#1e293b', margin: 0, fontWeight: '500' }}>
-                            {personalInfo?.title}
+                        <p style={{
+                            fontSize: '0.95rem',
+                            color: basicInfo?.companyNameColor || '#1e293b',
+                            fontFamily: basicInfo?.companyNameFont || 'Lato',
+                            margin: 0,
+                            fontWeight: '500'
+                        }}>
+                            {basicInfo?.companyName || personalInfo?.title}
                         </p>
                     </div>
 
@@ -902,63 +915,91 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     {/* Bio Section */}
                     <div style={{ padding: '0 2rem', marginBottom: '2rem' }}>
                         <p style={{ fontSize: '0.9rem', color: '#475569', lineHeight: '1.6', margin: 0, textAlign: 'center' }}>
-                            {personalInfo?.bio}
+                            {basicInfo?.description || personalInfo?.bio}
                         </p>
                     </div>
 
                     {/* Action Buttons */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '0 1.5rem', marginBottom: '2rem' }}>
-                        <button style={{
-                            background: '#fff',
-                            border: `2px solid ${headerColor}`,
-                            color: headerColor,
-                            padding: '0.75rem',
-                            borderRadius: '50px',
-                            fontSize: '0.95rem',
-                            fontWeight: '600',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '0.5rem'
-                        }}>
-                            <Phone size={18} />
-                            Talk to Me
-                        </button>
-                        <button style={{
-                            background: '#fff',
-                            border: `2px solid ${headerColor}`,
-                            color: headerColor,
-                            padding: '0.75rem',
-                            borderRadius: '50px',
-                            fontSize: '0.95rem',
-                            fontWeight: '600',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '0.5rem'
-                        }}>
-                            <Mail size={18} />
-                            Email Me
-                        </button>
-                        <button style={{
-                            background: '#fff',
-                            border: `2px solid ${headerColor}`,
-                            color: headerColor,
-                            padding: '0.75rem',
-                            borderRadius: '50px',
-                            fontSize: '0.95rem',
-                            fontWeight: '600',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '0.5rem'
-                        }}>
-                            <Globe size={18} />
-                            Visit Us
-                        </button>
+                        {contact?.phone !== null && (
+                            <a
+                                href={`tel:${contact?.phone}`}
+                                style={{ textDecoration: 'none' }}
+                            >
+                                <button style={{
+                                    width: '100%',
+                                    background: '#fff',
+                                    border: `2px solid ${headerColor}`,
+                                    color: headerColor,
+                                    padding: '0.75rem',
+                                    borderRadius: '50px',
+                                    fontSize: '0.95rem',
+                                    fontWeight: '600',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.5rem'
+                                }}>
+                                    <Phone size={18} />
+                                    {contact?.phoneButtonTitle || 'Talk to Me'}
+                                </button>
+                            </a>
+                        )}
+
+                        {contact?.email !== null && (
+                            <a
+                                href={`mailto:${contact?.email}`}
+                                style={{ textDecoration: 'none' }}
+                            >
+                                <button style={{
+                                    width: '100%',
+                                    background: '#fff',
+                                    border: `2px solid ${headerColor}`,
+                                    color: headerColor,
+                                    padding: '0.75rem',
+                                    borderRadius: '50px',
+                                    fontSize: '0.95rem',
+                                    fontWeight: '600',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.5rem'
+                                }}>
+                                    <Mail size={18} />
+                                    {contact?.emailButtonTitle || 'Email Me'}
+                                </button>
+                            </a>
+                        )}
+
+                        {contact?.website !== null && (
+                            <a
+                                href={contact?.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ textDecoration: 'none' }}
+                            >
+                                <button style={{
+                                    width: '100%',
+                                    background: '#fff',
+                                    border: `2px solid ${headerColor}`,
+                                    color: headerColor,
+                                    padding: '0.75rem',
+                                    borderRadius: '50px',
+                                    fontSize: '0.95rem',
+                                    fontWeight: '600',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.5rem'
+                                }}>
+                                    <Globe size={18} />
+                                    {contact?.websiteButtonTitle || 'Visit Us'}
+                                </button>
+                            </a>
+                        )}
                     </div>
 
                     {/* Bottom Section with Social Icons */}
@@ -970,50 +1011,60 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             padding: '2rem 1rem 1.5rem',
                             display: 'flex',
                             justifyContent: 'center',
-                            gap: '1.5rem'
+                            flexWrap: 'wrap',
+                            gap: '1rem'
                         }}>
-                            {social?.facebook && (
-                                <div style={{
-                                    width: '50px',
-                                    height: '50px',
-                                    borderRadius: '50%',
-                                    background: '#3b82f6',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    color: '#fff'
-                                }}>
-                                    <Facebook size={24} />
-                                </div>
-                            )}
-                            {social?.instagram && (
-                                <div style={{
-                                    width: '50px',
-                                    height: '50px',
-                                    borderRadius: '50%',
-                                    background: '#ec4899',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    color: '#fff'
-                                }}>
-                                    <Instagram size={24} />
-                                </div>
-                            )}
-                            {social?.website && (
-                                <div style={{
-                                    width: '50px',
-                                    height: '50px',
-                                    borderRadius: '50%',
-                                    background: '#06b6d4',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    color: '#fff'
-                                }}>
-                                    <Globe size={24} />
-                                </div>
-                            )}
+                            {[
+                                { id: 'facebook', icon: Facebook, color: '#3b82f6' },
+                                { id: 'instagram', icon: Instagram, color: '#ec4899' },
+                                { id: 'twitter', icon: Twitter, color: '#000000' },
+                                { id: 'linkedin', icon: Linkedin, color: '#0a66c2' },
+                                { id: 'youtube', icon: Youtube, color: '#ef4444' },
+                                { id: 'whatsapp', icon: MessageCircle, color: '#22c55e' },
+                                { id: 'spotify', icon: Music, color: '#1db954' },
+                                { id: 'website', icon: Globe, color: '#06b6d4' },
+                                { id: 'twitch', icon: Twitch, color: '#9146ff' },
+                                { id: 'github', icon: Github, color: '#333333' },
+                                { id: 'snapchat', icon: Ghost, color: '#FFFC00', textColor: '#000' },
+                                { id: 'dribbble', icon: Dribbble, color: '#ea4c89' },
+                                { id: 'discord', icon: Gamepad2, color: '#5865F2' },
+                                { id: 'pinterest', icon: Video, color: '#bd081c' },
+                                { id: 'tiktok', icon: Video, color: '#000000' },
+                                { id: 'reddit', icon: MessageSquare, color: '#ff4500' }
+                            ].map((platform) => {
+                                if (social?.[platform.id]) {
+                                    const Icon = platform.icon;
+                                    return (
+                                        <a
+                                            key={platform.id}
+                                            href={social[platform.id]}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ textDecoration: 'none' }}
+                                        >
+                                            <div style={{
+                                                width: '45px',
+                                                height: '45px',
+                                                borderRadius: '12px',
+                                                background: platform.color,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                color: platform.textColor || '#fff',
+                                                cursor: 'pointer',
+                                                transition: 'transform 0.2s ease',
+                                                boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+                                            }}
+                                                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                                                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                            >
+                                                <Icon size={22} />
+                                            </div>
+                                        </a>
+                                    );
+                                }
+                                return null;
+                            })}
                         </div>
                     </div>
                 </div>
@@ -1064,15 +1115,27 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                         {/* Business Name */}
                         <div style={{ textAlign: 'center', padding: '1rem 1.5rem 0.5rem' }}>
-                            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1e293b', margin: 0 }}>
-                                {businessInfo?.title}
+                            <h2 style={{
+                                fontSize: '1.5rem',
+                                fontWeight: 'bold',
+                                color: basicInfo?.organizationNameColor || '#1e293b',
+                                margin: 0,
+                                fontFamily: basicInfo?.organizationNameFont || 'Lato'
+                            }}>
+                                {basicInfo?.organizationName || 'Organization Name'}
                             </h2>
                         </div>
 
                         {/* Description */}
                         <div style={{ textAlign: 'center', padding: '0 2rem 1.5rem' }}>
-                            <p style={{ fontSize: '0.9rem', color: '#475569', lineHeight: '1.5', margin: 0 }}>
-                                {businessInfo?.description}
+                            <p style={{
+                                fontSize: '0.9rem',
+                                color: basicInfo?.descriptionColor || '#475569',
+                                lineHeight: '1.5',
+                                margin: 0,
+                                fontFamily: basicInfo?.descriptionFont || 'Lato'
+                            }}>
+                                {basicInfo?.description || 'We aim to provide fresh and healthy snacks for people on the go.'}
                             </p>
                         </div>
 
@@ -1088,7 +1151,38 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 cursor: 'pointer',
                                 position: 'relative'
                             }}>
-                                <span style={{ fontSize: '1.2rem' }}>🇺🇸</span>
+                                {(() => {
+                                    const languageData = [
+                                        { name: 'English', code: 'us' },
+                                        { name: 'Urdu', code: 'pk' },
+                                        { name: 'Arabic', code: 'sa' },
+                                        { name: 'Spanish', code: 'es' },
+                                        { name: 'French', code: 'fr' },
+                                        { name: 'German', code: 'de' },
+                                        { name: 'Chinese', code: 'cn' },
+                                        { name: 'Japanese', code: 'jp' },
+                                        { name: 'Korean', code: 'kr' },
+                                        { name: 'Russian', code: 'ru' },
+                                        { name: 'Portuguese', code: 'pt' },
+                                        { name: 'Italian', code: 'it' },
+                                        { name: 'Dutch', code: 'nl' },
+                                        { name: 'Turkish', code: 'tr' },
+                                        { name: 'Hindi', code: 'in' },
+                                        { name: 'Bengali', code: 'bd' },
+                                        { name: 'Vietnamese', code: 'vn' },
+                                        { name: 'Thai', code: 'th' },
+                                        { name: 'Indonesian', code: 'id' },
+                                        { name: 'Malay', code: 'my' }
+                                    ].find(l => l.name === selectedLanguage);
+
+                                    return languageData ? (
+                                        <img
+                                            src={`https://flagcdn.com/w20/${languageData.code}.png`}
+                                            alt={selectedLanguage}
+                                            style={{ width: '20px', height: '15px', objectFit: 'cover', borderRadius: '2px' }}
+                                        />
+                                    ) : null;
+                                })()}
                                 <select
                                     value={selectedLanguage}
                                     onChange={(e) => setSelectedLanguage(e.target.value)}
@@ -1099,24 +1193,32 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         border: 'none',
                                         outline: 'none',
                                         background: 'transparent',
-                                        cursor: 'pointer'
-                                    }}
-                                >
-                                    <option value="English">English</option>
-                                    <option value="Urdu">Urdu</option>
+                                        cursor: 'pointer',
+                                        paddingRight: '1.5rem'
+                                    }}>
+                                    {config.survey?.languages && config.survey.languages.length > 0 ? (
+                                        config.survey.languages.map((lang, idx) => (
+                                            <option key={idx} value={lang}>{lang}</option>
+                                        ))
+                                    ) : (
+                                        <>
+                                            <option value="English">English</option>
+                                            <option value="Urdu">اردو</option>
+                                        </>
+                                    )}
                                 </select>
                             </div>
                         </div>
 
-                        {/* Start Button */}
-                        <div style={{ padding: '0 1.5rem 1rem', display: 'flex', justifyContent: 'center' }}>
+                        {/* Next Button */}
+                        <div style={{ padding: '0 1.5rem 1.5rem', display: 'flex', justifyContent: 'flex-end' }}>
                             <button
                                 onClick={() => setSurveyStep('survey')}
                                 style={{
-                                    width: '50px',
-                                    height: '50px',
+                                    width: '60px',
+                                    height: '60px',
                                     borderRadius: '50%',
-                                    background: '#10b981',
+                                    background: design?.color?.header || '#10b981',
                                     border: 'none',
                                     color: '#fff',
                                     fontSize: '1.5rem',
@@ -1124,15 +1226,22 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    boxShadow: '0 4px 6px -1px rgba(16, 185, 129, 0.3)'
+                                    boxShadow: `0 4px 6px -1px ${design?.color?.header || '#10b981'}40`
                                 }}
                             >
                                 ›
                             </button>
                         </div>
 
-                        {/* Illustration */}
-                        <div style={{ marginTop: 'auto', padding: '1rem', position: 'relative' }}>
+                        {/* Illustration with Background */}
+                        <div style={{
+                            marginTop: 'auto',
+                            padding: '2rem 1rem 1rem',
+                            position: 'relative',
+                            background: design?.color?.light || '#68D87F',
+                            borderTopLeftRadius: '30px',
+                            borderTopRightRadius: '30px'
+                        }}>
                             <img
                                 src={design?.illustration || 'https://img.freepik.com/free-vector/customer-survey-concept-illustration_114360-5321.jpg'}
                                 alt="Survey Illustration"
@@ -1338,80 +1447,107 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                         {/* Thank You Message */}
                         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1e293b', margin: '0 0 0.5rem 0' }}>
-                                We appreciate your
+                            <h2 style={{
+                                fontSize: '1.5rem',
+                                fontWeight: 'bold',
+                                color: config.thankYou?.titleColor || '#1e293b',
+                                margin: '0 0 0.5rem 0',
+                                fontFamily: config.thankYou?.titleFont || 'Lato'
+                            }}>
+                                {config.thankYou?.title || 'We appreciate your feedback!'}
                             </h2>
-                            <h3 style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#1e293b', margin: 0 }}>
-                                feedback!
-                            </h3>
-                            <p style={{ fontSize: '0.9rem', color: '#64748b', margin: '0.75rem 0 0 0' }}>
-                                Your response has been recorded.
+                            <p style={{ fontSize: '0.9rem', color: '#64748b', margin: '0.75rem 0 0 0', lineHeight: '1.5' }}>
+                                {config.thankYou?.message || 'Thank you for completing the survey! Your feedback helps us improve.'}
                             </p>
                         </div>
 
                         {/* Visit Website Button */}
-                        <button style={{
-                            background: '#10b981',
-                            border: 'none',
-                            color: '#fff',
-                            padding: '0.875rem 2rem',
-                            borderRadius: '50px',
-                            fontSize: '1rem',
-                            fontWeight: '600',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            marginBottom: '2rem'
-                        }}>
+                        <button
+                            onClick={() => window.open(config.thankYou?.redirectUrl || config.basicInfo?.website, '_blank')}
+                            style={{
+                                background: design?.color?.header || '#10b981',
+                                border: 'none',
+                                color: '#fff',
+                                padding: '0.875rem 2rem',
+                                borderRadius: '50px',
+                                fontSize: '1rem',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                marginBottom: '2rem'
+                            }}>
                             <Globe size={20} />
                             Visit Our Website
                         </button>
 
-                        {/* Footer Message */}
-                        <p style={{ fontSize: '0.85rem', color: '#64748b', textAlign: 'center', lineHeight: '1.5', marginBottom: '1.5rem' }}>
-                            Thank you for completing the survey! Your feedback helps us improve.
-                        </p>
+                        {/* Footer Message - Removed duplicate */}
 
-                        {/* Social Icons */}
-                        <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-                            <div style={{
-                                width: '45px',
-                                height: '45px',
-                                borderRadius: '50%',
-                                background: '#5b8fd9',
-                                display: 'flex',
-                                alignItems: 'center',
+                        {/* Social Icons - Only show selected ones with URLs */}
+                        {socialLinks && socialLinks.length > 0 && socialLinks.some(link => link.url && link.url.trim() !== '') && (
+                            <div style={{ 
+                                display: 'flex', 
+                                gap: '0.75rem', 
+                                marginBottom: '2rem',
                                 justifyContent: 'center',
-                                color: '#fff'
+                                flexWrap: 'wrap',
+                                alignItems: 'center'
                             }}>
-                                <Globe size={22} />
+                                {socialLinks
+                                    .filter(link => link.url && link.url.trim() !== '')
+                                    .map((link) => {
+                                        // Social media platform mapping
+                                        const platformConfig = {
+                                            website: { icon: Globe, color: '#6366f1', name: 'Website' },
+                                            facebook: { icon: Facebook, color: '#1877f2', name: 'Facebook' },
+                                            instagram: { icon: Instagram, color: '#E1306C', gradient: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', name: 'Instagram' },
+                                            twitter: { icon: Twitter, color: '#000000', name: 'X' },
+                                            linkedin: { icon: Linkedin, color: '#0077b5', name: 'LinkedIn' },
+                                            youtube: { icon: Youtube, color: '#ff0000', name: 'YouTube' },
+                                            snapchat: { icon: Ghost, color: '#fffc00', name: 'Snapchat', textColor: '#000' },
+                                            tiktok: { icon: Music, color: '#000000', name: 'TikTok' },
+                                            spotify: { icon: Music, color: '#1db954', name: 'Spotify' },
+                                            behance: { icon: Dribbble, color: '#1769ff', name: 'Behance' },
+                                        };
+
+                                        const platform = platformConfig[link.platform];
+                                        if (!platform) return null;
+
+                                        const Icon = platform.icon;
+                                        const url = link.url.startsWith('http') ? link.url : `https://${link.url}`;
+
+                                        return (
+                                            <div
+                                                key={link.id}
+                                                onClick={() => window.open(url, '_blank')}
+                                                style={{
+                                                    width: '45px',
+                                                    height: '45px',
+                                                    borderRadius: '50%',
+                                                    background: platform.gradient || platform.color,
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    color: platform.textColor || '#fff',
+                                                    cursor: 'pointer',
+                                                    transition: 'transform 0.2s',
+                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                                }}
+                                                onMouseEnter={(e) => {
+                                                    e.currentTarget.style.transform = 'scale(1.1)';
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.currentTarget.style.transform = 'scale(1)';
+                                                }}
+                                                title={platform.name}
+                                            >
+                                                <Icon size={22} color={platform.textColor || "#fff"} />
+                                            </div>
+                                        );
+                                    })}
                             </div>
-                            <div style={{
-                                width: '45px',
-                                height: '45px',
-                                borderRadius: '50%',
-                                background: '#3b82f6',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#fff'
-                            }}>
-                                <Facebook size={22} />
-                            </div>
-                            <div style={{
-                                width: '45px',
-                                height: '45px',
-                                borderRadius: '50%',
-                                background: '#ec4899',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#fff'
-                            }}>
-                                <Instagram size={22} />
-                            </div>
-                        </div>
+                        )}
 
                         {/* Illustration */}
                         <div style={{ marginTop: 'auto', width: '100%' }}>
@@ -1470,33 +1606,47 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />
                                 </div>
-                                <h2 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#fff', margin: 0 }}>
-                                    {businessInfo?.title}
+                                <h2 style={{ 
+                                    fontSize: '1.1rem', 
+                                    fontWeight: 'bold', 
+                                    color: basicInfo?.companyNameColor || '#fff', 
+                                    margin: 0,
+                                    fontFamily: basicInfo?.companyNameFont || 'Lato'
+                                }}>
+                                    {basicInfo?.companyName || businessInfo?.title}
                                 </h2>
                             </div>
 
-                            {/* Hero Image */}
-                            <div style={{
-                                width: '100%',
-                                height: '150px',
-                                borderRadius: '12px',
-                                overflow: 'hidden',
-                                marginBottom: '1rem'
-                            }}>
-                                <img
-                                    src={design?.heroImage}
-                                    alt="Hero"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                />
-                            </div>
+                            {/* Header Image */}
+                            {design?.headerImage?.url && (
+                                <div style={{
+                                    width: '100%',
+                                    height: '150px',
+                                    borderRadius: '12px',
+                                    overflow: 'hidden',
+                                    marginBottom: '1rem'
+                                }}>
+                                    <img
+                                        src={design.headerImage.url}
+                                        alt="Header"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                </div>
+                            )}
 
                             {/* Title and Description */}
                             <div style={{ color: '#fff' }}>
-                                <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>
-                                    {businessInfo?.formTitle}
+                                <h3 style={{ 
+                                    fontSize: '1.25rem', 
+                                    fontWeight: 'bold', 
+                                    margin: '0 0 0.5rem 0',
+                                    color: basicInfo?.headlineColor || '#fff',
+                                    fontFamily: basicInfo?.headlineFont || 'Lato'
+                                }}>
+                                    {basicInfo?.headline || businessInfo?.formTitle || 'Important Document'}
                                 </h3>
                                 <p style={{ fontSize: '0.9rem', margin: 0, opacity: 0.95 }}>
-                                    {businessInfo?.formDescription}
+                                    {basicInfo?.description || businessInfo?.formDescription || 'Download this document today.'}
                                 </p>
                             </div>
                         </div>
@@ -1504,43 +1654,161 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         {/* Form Section */}
                         <div style={{ padding: '1.5rem' }}>
                             <form style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                                {/* Full Name Field */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>
-                                        Full Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder=""
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            border: '1px solid #cbd5e1',
-                                            borderRadius: '8px',
-                                            fontSize: '1rem',
-                                            outline: 'none'
-                                        }}
-                                    />
-                                </div>
+                                {/* Standard Form Fields - Only show checked ones */}
+                                {form?.fullName && (
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>
+                                            Full Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            placeholder=""
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                border: '1px solid #cbd5e1',
+                                                borderRadius: '8px',
+                                                fontSize: '1rem',
+                                                outline: 'none'
+                                            }}
+                                        />
+                                    </div>
+                                )}
 
-                                {/* Email Field */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>
-                                        Email
-                                    </label>
-                                    <input
-                                        type="email"
-                                        placeholder=""
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            border: '1px solid #cbd5e1',
-                                            borderRadius: '8px',
-                                            fontSize: '1rem',
-                                            outline: 'none'
-                                        }}
-                                    />
-                                </div>
+                                {form?.contactNumber && (
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>
+                                            Contact Number
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            placeholder=""
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                border: '1px solid #cbd5e1',
+                                                borderRadius: '8px',
+                                                fontSize: '1rem',
+                                                outline: 'none'
+                                            }}
+                                        />
+                                    </div>
+                                )}
+
+                                {form?.organizationName && (
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>
+                                            Organization Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            placeholder=""
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                border: '1px solid #cbd5e1',
+                                                borderRadius: '8px',
+                                                fontSize: '1rem',
+                                                outline: 'none'
+                                            }}
+                                        />
+                                    </div>
+                                )}
+
+                                {form?.email && (
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>
+                                            Email
+                                        </label>
+                                        <input
+                                            type="email"
+                                            placeholder=""
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                border: '1px solid #cbd5e1',
+                                                borderRadius: '8px',
+                                                fontSize: '1rem',
+                                                outline: 'none'
+                                            }}
+                                        />
+                                    </div>
+                                )}
+
+                                {form?.jobTitle && (
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>
+                                            Job Title
+                                        </label>
+                                        <input
+                                            type="text"
+                                            placeholder=""
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                border: '1px solid #cbd5e1',
+                                                borderRadius: '8px',
+                                                fontSize: '1rem',
+                                                outline: 'none'
+                                            }}
+                                        />
+                                    </div>
+                                )}
+
+                                {form?.website && (
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>
+                                            Website
+                                        </label>
+                                        <input
+                                            type="url"
+                                            placeholder=""
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                border: '1px solid #cbd5e1',
+                                                borderRadius: '8px',
+                                                fontSize: '1rem',
+                                                outline: 'none'
+                                            }}
+                                        />
+                                    </div>
+                                )}
+
+                                {/* Custom Fields */}
+                                {customFields && customFields.length > 0 && customFields.map((field) => {
+                                    const fieldTypeOptions = {
+                                        text: { label: 'Text', type: 'text' },
+                                        fullName: { label: 'Full Name', type: 'text' },
+                                        contactNumber: { label: 'Contact Number', type: 'tel' },
+                                        organizationName: { label: 'Organization Name', type: 'text' },
+                                        email: { label: 'Email', type: 'email' },
+                                        jobTitle: { label: 'Job Title', type: 'text' },
+                                        website: { label: 'Website', type: 'url' }
+                                    };
+                                    const fieldConfig = fieldTypeOptions[field.type] || { label: 'Text', type: 'text' };
+                                    const displayLabel = field.label || fieldConfig.label;
+
+                                    return (
+                                        <div key={field.id}>
+                                            <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>
+                                                {displayLabel}
+                                            </label>
+                                            <input
+                                                type={fieldConfig.type}
+                                                placeholder=""
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    border: '1px solid #cbd5e1',
+                                                    borderRadius: '8px',
+                                                    fontSize: '1rem',
+                                                    outline: 'none'
+                                                }}
+                                            />
+                                        </div>
+                                    );
+                                })}
 
                                 {/* Submit Button */}
                                 <button
@@ -1577,32 +1845,47 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             marginBottom: '2rem'
                         }}>
                             {/* Business Name */}
-                            <h2 style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#fff', margin: '0 0 1rem 0', textAlign: 'center' }}>
-                                {businessInfo?.title}
+                            <h2 style={{ 
+                                fontSize: '1.3rem', 
+                                fontWeight: 'bold', 
+                                color: basicInfo?.companyNameColor || '#fff', 
+                                margin: '0 0 1rem 0', 
+                                textAlign: 'center',
+                                fontFamily: basicInfo?.companyNameFont || 'Lato'
+                            }}>
+                                {basicInfo?.companyName || businessInfo?.title}
                             </h2>
 
-                            {/* Hero Image */}
-                            <div style={{
-                                width: '100%',
-                                height: '140px',
-                                borderRadius: '12px',
-                                overflow: 'hidden',
-                                marginBottom: '1rem'
-                            }}>
-                                <img
-                                    src={design?.heroImage}
-                                    alt="Hero"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                />
-                            </div>
+                            {/* Header Image */}
+                            {design?.headerImage?.url && (
+                                <div style={{
+                                    width: '100%',
+                                    height: '140px',
+                                    borderRadius: '12px',
+                                    overflow: 'hidden',
+                                    marginBottom: '1rem'
+                                }}>
+                                    <img
+                                        src={design.headerImage.url}
+                                        alt="Header"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                </div>
+                            )}
 
                             {/* Title and Description */}
                             <div style={{ color: '#fff', textAlign: 'center' }}>
-                                <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>
-                                    {businessInfo?.formTitle}
+                                <h3 style={{ 
+                                    fontSize: '1.2rem', 
+                                    fontWeight: 'bold', 
+                                    margin: '0 0 0.5rem 0',
+                                    color: basicInfo?.headlineColor || '#fff',
+                                    fontFamily: basicInfo?.headlineFont || 'Lato'
+                                }}>
+                                    {basicInfo?.headline || businessInfo?.formTitle || 'Important Document'}
                                 </h3>
                                 <p style={{ fontSize: '0.85rem', margin: 0, opacity: 0.95 }}>
-                                    {businessInfo?.formDescription}
+                                    {basicInfo?.description || businessInfo?.formDescription || 'Download this document today.'}
                                 </p>
                             </div>
                         </div>
@@ -1624,11 +1907,32 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         </div>
 
                         {/* Thank You Message */}
-                        <div style={{ textAlign: 'center' }}>
+                        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
                             <p style={{ fontSize: '1rem', color: '#1e293b', lineHeight: '1.6', margin: 0 }}>
-                                Thanks for submitting! You can now download your content. thanks again
+                                {thankYou?.message || 'Thanks for submitting! You can now download your content, thanks again'}
                             </p>
                         </div>
+
+                        {/* Download Button */}
+                        {thankYou?.buttonText && thankYou?.url && (
+                            <button
+                                onClick={() => window.open(thankYou.url, '_blank')}
+                                style={{
+                                    width: '100%',
+                                    background: headerColor,
+                                    color: '#fff',
+                                    border: 'none',
+                                    padding: '0.875rem',
+                                    borderRadius: '8px',
+                                    fontSize: '1rem',
+                                    fontWeight: 'bold',
+                                    cursor: 'pointer',
+                                    marginTop: '0.5rem'
+                                }}
+                            >
+                                {thankYou.buttonText}
+                            </button>
+                        )}
                     </div>
                 )}
             </div>
@@ -1665,8 +1969,14 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         }}>
                             {/* Business Name and Logo */}
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                                <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#fff', margin: 0 }}>
-                                    {businessInfo?.title}
+                                <h2 style={{ 
+                                    fontSize: '1.5rem', 
+                                    fontWeight: 'bold', 
+                                    color: basicInfo?.nameColor || '#fff', 
+                                    margin: 0,
+                                    fontFamily: basicInfo?.nameFont || 'Lato'
+                                }}>
+                                    {basicInfo?.name || businessInfo?.title}
                                 </h2>
                                 <div style={{
                                     width: '45px',
@@ -1686,19 +1996,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 </div>
                             </div>
 
-                            {/* Hero Image */}
-                            <div style={{
-                                width: '100%',
-                                height: '180px',
-                                borderRadius: '12px',
-                                overflow: 'hidden'
-                            }}>
-                                <img
-                                    src={design?.heroImage}
-                                    alt="Hero"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                />
-                            </div>
+                            {/* Header Image */}
+                            {design?.headerImage?.url && (
+                                <div style={{
+                                    width: '100%',
+                                    height: '180px',
+                                    borderRadius: '12px',
+                                    overflow: 'hidden'
+                                }}>
+                                    <img
+                                        src={design.headerImage.url}
+                                        alt="Header"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         {/* Question and Rating Section */}
@@ -1706,40 +2018,122 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             {/* Question */}
                             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                                 <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#1e293b', margin: 0 }}>
-                                    {businessInfo?.question}
+                                    {rating?.question || businessInfo?.question}
                                 </h3>
                             </div>
 
-                            {/* Thumbs Up/Down Icons */}
-                            <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '3rem' }}>
-                                {/* Thumbs Up */}
-                                <div style={{
-                                    width: '70px',
-                                    height: '70px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer'
-                                }}>
-                                    <svg width="60" height="60" viewBox="0 0 24 24" fill="#cbd5e1" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M7 22V11M2 13V20C2 21.1046 2.89543 22 4 22H16.4262C17.907 22 19.1662 20.9197 19.3914 19.4562L20.4683 12.4562C20.7479 10.6389 19.3418 9 17.5032 9H14C13.4477 9 13 8.55228 13 8V4.46584C13 3.10399 11.896 2 10.5342 2C10.2093 2 9.91498 2.1913 9.78306 2.48812L7.26394 8.40614C7.09895 8.76727 6.74546 9 6.35684 9H4C2.89543 9 2 9.89543 2 11V13Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </div>
+                            {/* Rating Buttons - Based on Selected Type */}
+                            {rating?.type === 'thumbs' && (
+                                <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '3rem' }}>
+                                    {/* Thumbs Up */}
+                                    <div style={{
+                                        width: '70px',
+                                        height: '70px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer'
+                                    }}>
+                                        <svg width="60" height="60" viewBox="0 0 24 24" fill="#cbd5e1" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M7 22V11M2 13V20C2 21.1046 2.89543 22 4 22H16.4262C17.907 22 19.1662 20.9197 19.3914 19.4562L20.4683 12.4562C20.7479 10.6389 19.3418 9 17.5032 9H14C13.4477 9 13 8.55228 13 8V4.46584C13 3.10399 11.896 2 10.5342 2C10.2093 2 9.91498 2.1913 9.78306 2.48812L7.26394 8.40614C7.09895 8.76727 6.74546 9 6.35684 9H4C2.89543 9 2 9.89543 2 11V13Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </div>
 
-                                {/* Thumbs Down */}
-                                <div style={{
-                                    width: '70px',
-                                    height: '70px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer'
-                                }}>
-                                    <svg width="60" height="60" viewBox="0 0 24 24" fill="#cbd5e1" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M17 2V13M22 11V4C22 2.89543 21.1046 2 20 2H7.57377C6.09297 2 4.83379 3.08026 4.60859 4.54377L3.53165 11.5438C3.25211 13.3611 4.65824 15 6.49681 15H10C10.5523 15 11 15.4477 11 16V19.5342C11 20.896 12.104 22 13.4658 22C13.7907 22 14.085 21.8087 14.2169 21.5119L16.7361 15.5939C16.901 15.2327 17.2545 15 17.6432 15H20C21.1046 15 22 14.1046 22 13V11Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
+                                    {/* Thumbs Down */}
+                                    <div style={{
+                                        width: '70px',
+                                        height: '70px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer'
+                                    }}>
+                                        <svg width="60" height="60" viewBox="0 0 24 24" fill="#cbd5e1" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M17 2V13M22 11V4C22 2.89543 21.1046 2 20 2H7.57377C6.09297 2 4.83379 3.08026 4.60859 4.54377L3.53165 11.5438C3.25211 13.3611 4.65824 15 6.49681 15H10C10.5523 15 11 15.4477 11 16V19.5342C11 20.896 12.104 22 13.4658 22C13.7907 22 14.085 21.8087 14.2169 21.5119L16.7361 15.5939C16.901 15.2327 17.2545 15 17.6432 15H20C21.1046 15 22 14.1046 22 13V11Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
+
+                            {rating?.type === 'emoji' && (
+                                <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginBottom: '3rem' }}>
+                                    <div style={{
+                                        width: '70px',
+                                        height: '70px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        fontSize: '3rem'
+                                    }}>
+                                        ☹️
+                                    </div>
+                                    <div style={{
+                                        width: '70px',
+                                        height: '70px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        fontSize: '3rem'
+                                    }}>
+                                        😐
+                                    </div>
+                                    <div style={{
+                                        width: '70px',
+                                        height: '70px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        fontSize: '3rem'
+                                    }}>
+                                        😊
+                                    </div>
+                                </div>
+                            )}
+
+                            {(!rating?.type || rating?.type === 'stars') && (
+                                <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '3rem' }}>
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <div
+                                            key={star}
+                                            style={{
+                                                width: '50px',
+                                                height: '50px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                fontSize: '2.5rem',
+                                                color: '#cbd5e1'
+                                            }}
+                                        >
+                                            ⭐
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Comment Section - Show if allowComment is true */}
+                            {rating?.allowComment && (
+                                <div style={{ marginBottom: '2rem' }}>
+                                    <textarea
+                                        placeholder="Add your comment..."
+                                        rows={4}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.875rem',
+                                            border: '1px solid #cbd5e1',
+                                            borderRadius: '8px',
+                                            fontSize: '1rem',
+                                            outline: 'none',
+                                            resize: 'vertical',
+                                            fontFamily: 'inherit'
+                                        }}
+                                    />
+                                </div>
+                            )}
 
                             {/* Submit Button */}
                             <button
@@ -1922,51 +2316,82 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 Rate Again
                             </button>
 
-                            {/* Social Icons */}
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                <div style={{
-                                    width: '50px',
-                                    height: '50px',
-                                    borderRadius: '50%',
-                                    background: '#5b8fd9',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    color: '#fff'
+                            {/* Social Icons - Grid Layout (3 rows, 4 columns) */}
+                            {socialLinks && socialLinks.length > 0 && socialLinks.some(link => link.url && link.url.trim() !== '') && (
+                                <div style={{ 
+                                    display: 'grid', 
+                                    gridTemplateColumns: 'repeat(4, 1fr)', 
+                                    gap: '0.75rem',
+                                    width: '100%',
+                                    maxWidth: '280px',
+                                    margin: '0 auto'
                                 }}>
-                                    <Globe size={24} />
+                                    {socialLinks
+                                        .filter(link => link.url && link.url.trim() !== '')
+                                        .map((link) => {
+                                            // Social media platform mapping
+                                            const platformConfig = {
+                                                website: { icon: Globe, color: '#6366f1', name: 'Website' },
+                                                facebook: { icon: Facebook, color: '#1877f2', name: 'Facebook' },
+                                                instagram: { icon: Instagram, color: '#E1306C', gradient: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', name: 'Instagram' },
+                                                twitter: { icon: Twitter, color: '#000000', name: 'X' },
+                                                linkedin: { icon: Linkedin, color: '#0077b5', name: 'LinkedIn' },
+                                                youtube: { icon: Youtube, color: '#ff0000', name: 'YouTube' },
+                                                whatsapp: { icon: MessageCircle, color: '#25d366', name: 'WhatsApp' },
+                                                snapchat: { icon: Ghost, color: '#fffc00', name: 'Snapchat', textColor: '#000' },
+                                                tiktok: { icon: Music, color: '#000000', name: 'TikTok' },
+                                                spotify: { icon: Music, color: '#1db954', name: 'Spotify' },
+                                                behance: { icon: Dribbble, color: '#1769ff', name: 'Behance' },
+                                                dribbble: { icon: Dribbble, color: '#ea4c89', name: 'Dribbble' },
+                                                tumblr: { icon: Github, color: '#35465c', name: 'Tumblr' },
+                                            };
+
+                                            const platform = platformConfig[link.platform];
+                                            if (!platform) return null;
+
+                                            const Icon = platform.icon;
+                                            const url = link.url.startsWith('http') ? link.url : `https://${link.url}`;
+
+                                            return (
+                                                <div
+                                                    key={link.id}
+                                                    onClick={() => window.open(url, '_blank')}
+                                                    style={{
+                                                        width: '50px',
+                                                        height: '50px',
+                                                        borderRadius: '50%',
+                                                        background: platform.gradient || platform.color,
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        color: platform.textColor || '#fff',
+                                                        cursor: 'pointer',
+                                                        transition: 'transform 0.2s',
+                                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                                                        margin: '0 auto'
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.transform = 'scale(1.1)';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.transform = 'scale(1)';
+                                                    }}
+                                                    title={platform.name}
+                                                >
+                                                    <Icon size={24} color={platform.textColor || "#fff"} />
+                                                </div>
+                                            );
+                                        })}
                                 </div>
-                                <div style={{
-                                    width: '50px',
-                                    height: '50px',
-                                    borderRadius: '50%',
-                                    background: '#3b82f6',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    color: '#fff'
-                                }}>
-                                    <Facebook size={24} />
-                                </div>
-                                <div style={{
-                                    width: '50px',
-                                    height: '50px',
-                                    borderRadius: '50%',
-                                    background: '#ec4899',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    color: '#fff'
-                                }}>
-                                    <Instagram size={24} />
-                                </div>
-                            </div>
+                            )}
                         </div>
 
                         {/* Footer URL */}
-                        <div style={{ padding: '1rem', textAlign: 'center', color: '#fff', fontSize: '0.9rem' }}>
-                            https://www.bobscafe.com
-                        </div>
+                        {basicInfo?.website && (
+                            <div style={{ padding: '1rem', textAlign: 'center', color: '#fff', fontSize: '0.9rem' }}>
+                                {basicInfo.website}
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

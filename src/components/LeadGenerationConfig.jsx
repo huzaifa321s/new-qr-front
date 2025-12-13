@@ -17,6 +17,7 @@ const LeadGenerationConfig = ({ config, onChange }) => {
         jobTitle: false,
         website: false
     };
+    const customFields = config.customFields || [];
     const thankYou = config.thankYou || {};
 
     const primaryColor = design.color?.header || '#6F0101';
@@ -98,6 +99,46 @@ const LeadGenerationConfig = ({ config, onChange }) => {
             }
         }));
     };
+
+    const handleAddCustomField = () => {
+        const newField = {
+            id: Date.now().toString(),
+            type: 'text',
+            label: ''
+        };
+        onChange(prev => ({
+            ...prev,
+            customFields: [...(prev.customFields || []), newField]
+        }));
+    };
+
+    const handleCustomFieldUpdate = (id, field, value) => {
+        const updatedFields = customFields.map(f =>
+            f.id === id ? { ...f, [field]: value } : f
+        );
+        onChange(prev => ({
+            ...prev,
+            customFields: updatedFields
+        }));
+    };
+
+    const handleCustomFieldRemove = (id) => {
+        const updatedFields = customFields.filter(f => f.id !== id);
+        onChange(prev => ({
+            ...prev,
+            customFields: updatedFields
+        }));
+    };
+
+    const fieldTypeOptions = [
+        { value: 'text', label: 'Text' },
+        { value: 'fullName', label: 'Full Name' },
+        { value: 'contactNumber', label: 'Contact Number' },
+        { value: 'organizationName', label: 'Organization Name' },
+        { value: 'email', label: 'Email' },
+        { value: 'jobTitle', label: 'Job Title' },
+        { value: 'website', label: 'Website' }
+    ];
 
     const palettes = [
         { p: '#0B2D86', s: '#FFA800' },
@@ -528,7 +569,8 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                         border: '1px solid #1e293b',
                                         borderRadius: '4px',
                                         padding: '0.5rem',
-                                        height: '44px'
+                                        height: '44px',
+                                        gap: '0.5rem'
                                     }}>
                                         <input
                                             type="text"
@@ -537,7 +579,7 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                             style={{
                                                 border: 'none',
                                                 outline: 'none',
-                                                width: '100%',
+                                                flex: 1,
                                                 fontSize: '0.85rem',
                                                 color: '#000',
                                                 fontWeight: '500',
@@ -545,13 +587,37 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                             }}
                                         />
                                         <div style={{
-                                            width: '24px',
-                                            height: '24px',
-                                            background: basicInfo.companyNameColor || '#FFFFFF',
-                                            borderRadius: '2px',
-                                            flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
-                                        }}></div>
+                                            width: '32px',
+                                            height: '32px',
+                                            borderRadius: '4px',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            border: '1px solid #e2e8f0',
+                                            flexShrink: 0
+                                        }}>
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                left: 0,
+                                                width: '100%',
+                                                height: '100%',
+                                                background: basicInfo.companyNameColor || '#FFFFFF'
+                                            }}></div>
+                                            <input
+                                                type="color"
+                                                value={basicInfo.companyNameColor || '#FFFFFF'}
+                                                onChange={(e) => handleBasicInfoUpdate('companyNameColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -616,7 +682,8 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                         border: '1px solid #1e293b',
                                         borderRadius: '4px',
                                         padding: '0.5rem',
-                                        height: '44px'
+                                        height: '44px',
+                                        gap: '0.5rem'
                                     }}>
                                         <input
                                             type="text"
@@ -625,7 +692,7 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                             style={{
                                                 border: 'none',
                                                 outline: 'none',
-                                                width: '100%',
+                                                flex: 1,
                                                 fontSize: '0.85rem',
                                                 color: '#000',
                                                 fontWeight: '500',
@@ -633,13 +700,37 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                             }}
                                         />
                                         <div style={{
-                                            width: '24px',
-                                            height: '24px',
-                                            background: basicInfo.headlineColor || '#FFFFFF',
-                                            borderRadius: '2px',
-                                            flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
-                                        }}></div>
+                                            width: '32px',
+                                            height: '32px',
+                                            borderRadius: '4px',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            border: '1px solid #e2e8f0',
+                                            flexShrink: 0
+                                        }}>
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                left: 0,
+                                                width: '100%',
+                                                height: '100%',
+                                                background: basicInfo.headlineColor || '#FFFFFF'
+                                            }}></div>
+                                            <input
+                                                type="color"
+                                                value={basicInfo.headlineColor || '#FFFFFF'}
+                                                onChange={(e) => handleBasicInfoUpdate('headlineColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -822,8 +913,88 @@ const LeadGenerationConfig = ({ config, onChange }) => {
 
                         </div>
 
+                        {/* Custom Fields */}
+                        {customFields.length > 0 && (
+                            <div style={{ marginBottom: '1.5rem' }}>
+                                <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '1rem', textTransform: 'uppercase' }}>
+                                    ASK THEM A PERSONALIZED QUESTION
+                                </div>
+                                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                                    Type your question and options
+                                </div>
+                                {customFields.map((field) => (
+                                    <div key={field.id} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                                        <div style={{ flex: 1 }}>
+                                            <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                                Type
+                                            </label>
+                                            <select
+                                                value={field.type || 'fullName'}
+                                                onChange={(e) => handleCustomFieldUpdate(field.id, 'type', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #1e293b',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    cursor: 'pointer',
+                                                    background: '#fff'
+                                                }}
+                                            >
+                                                {fieldTypeOptions.map(option => (
+                                                    <option key={option.value} value={option.value}>
+                                                        {option.label}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div style={{ flex: 2 }}>
+                                            <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                                Label
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={field.label || ''}
+                                                onChange={(e) => handleCustomFieldUpdate(field.id, 'label', e.target.value)}
+                                                placeholder="Type label"
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #1e293b',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none'
+                                                }}
+                                            />
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
+                                            <button
+                                                onClick={() => handleCustomFieldRemove(field.id)}
+                                                style={{
+                                                    width: '32px',
+                                                    height: '32px',
+                                                    borderRadius: '50%',
+                                                    border: 'none',
+                                                    background: '#f1f5f9',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    cursor: 'pointer',
+                                                    flexShrink: 0
+                                                }}
+                                            >
+                                                <X size={16} color="#64748b" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
                         {/* Add Customized Button */}
                         <button
+                            onClick={handleAddCustomField}
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',

@@ -157,6 +157,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                 logoOptions={profileImages}
                 logoLabel="YOUR PICTURE"
                 logoHelpText="128x128px, 1:1 Ratio"
+                logoShapeKey="profile.shape"
             />
 
             {/* BASIC INFORMATION ACCORDION */}

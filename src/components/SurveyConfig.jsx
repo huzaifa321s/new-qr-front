@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Trash2, Globe } from 'lucide-react';
+import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Trash2, Globe, Facebook, Instagram, Twitter, Linkedin, Youtube, Music, Ghost, MessageCircle, Send, Dribbble, Github, GripVertical } from 'lucide-react';
 import { useState } from 'react';
 
 const SurveyConfig = ({ config, onChange }) => {
@@ -10,91 +10,93 @@ const SurveyConfig = ({ config, onChange }) => {
 
     const design = config.design || {};
     const basicInfo = config.basicInfo || {};
-    const survey = config.survey || {
-        languages: ['English', 'Urdu'],
-        defaultLanguage: 'English',
-        questions: [
-            {
-                id: 1,
-                type: 'Options',
-                questions: {
-                    'English': 'Branch Name',
-                    'Urdu': 'برانچ کا نام'
-                },
-                options: [
-                    {
-                        id: 101,
-                        labels: {
-                            'English': 'Digital',
-                            'Urdu': 'ڈیجیٹل'
-                        }
+    const defaultSurveyQuestions = [
+        {
+            id: 1,
+            type: 'Options',
+            questions: {
+                'English': 'Branch Name',
+                'Urdu': 'برانچ کا نام'
+            },
+            options: [
+                {
+                    id: 101,
+                    labels: {
+                        'English': 'Digital',
+                        'Urdu': 'ڈیجیٹل'
                     }
-                ]
+                }
+            ]
+        },
+        {
+            id: 2,
+            type: 'Text',
+            questions: {
+                'English': 'Name of the Customer',
+                'Urdu': 'صارف کا نام'
             },
-            {
-                id: 2,
-                type: 'Text',
-                questions: {
-                    'English': 'Name of the Customer',
-                    'Urdu': 'صارف کا نام'
-                },
-                options: []
+            options: []
+        },
+        {
+            id: 3,
+            type: 'Phone Number',
+            questions: {
+                'English': 'Mobile No',
+                'Urdu': 'موبائل نمبر'
             },
-            {
-                id: 3,
-                type: 'Phone Number',
-                questions: {
-                    'English': 'Mobile No',
-                    'Urdu': 'موبائل نمبر'
-                },
-                options: []
+            options: []
+        },
+        {
+            id: 4,
+            type: 'Rating',
+            questions: {
+                'English': 'How much are you satisfied with the Environment and other facilities?',
+                'Urdu': 'کیا آپ ماحول اور دیگر سہولیات سے کتنے مطمئن ہیں؟'
             },
-            {
-                id: 4,
-                type: 'Rating',
-                questions: {
-                    'English': 'How much are you satisfied with the Environment and other facilities?',
-                    'Urdu': 'کیا آپ ماحول اور دیگر سہولیات سے کتنے مطمئن ہیں؟'
-                },
-                options: []
+            options: []
+        },
+        {
+            id: 5,
+            type: 'Rating',
+            questions: {
+                'English': 'How much are you satisfied with the knowledge capacity of staff regarding different services being offered?',
+                'Urdu': 'کیا آپ عملہ کی جانب سے پیش کی جانے والی مختلف خدمات سے متعلق معلومات فراہمی سے کتنے مطمئن ہیں؟'
             },
-            {
-                id: 5,
-                type: 'Rating',
-                questions: {
-                    'English': 'How much are you satisfied with the knowledge capacity of staff regarding different services being offered?',
-                    'Urdu': 'کیا آپ عملہ کی جانب سے پیش کی جانے والی مختلف خدمات سے متعلق معلومات فراہمی سے کتنے مطمئن ہیں؟'
-                },
-                options: []
+            options: []
+        },
+        {
+            id: 6,
+            type: 'Radio',
+            questions: {
+                'English': 'Will you recommend us?',
+                'Urdu': 'کیا آپ ہمیں تجویز کریں گے؟'
             },
-            {
-                id: 6,
-                type: 'Radio',
-                questions: {
-                    'English': 'Will you recommend us?',
-                    'Urdu': 'کیا آپ ہمیں تجویز کریں گے؟'
-                },
-                options: [
-                    {
-                        id: 601,
-                        labels: {
-                            'English': 'Yes',
-                            'Urdu': 'جی ہاں'
-                        }
-                    },
-                    {
-                        id: 602,
-                        labels: {
-                            'English': 'No',
-                            'Urdu': 'جی نہیں'
-                        }
+            options: [
+                {
+                    id: 601,
+                    labels: {
+                        'English': 'Yes',
+                        'Urdu': 'جی ہاں'
                     }
-                ]
-            }
-        ]
+                },
+                {
+                    id: 602,
+                    labels: {
+                        'English': 'No',
+                        'Urdu': 'جی نہیں'
+                    }
+                }
+            ]
+        }
+    ];
+
+    const survey = {
+        languages: config.survey?.languages || ['English', 'Urdu'],
+        defaultLanguage: config.survey?.defaultLanguage || 'English',
+        questions: config.survey?.questions || defaultSurveyQuestions
     };
     const thankYou = config.thankYou || {};
-    const social = config.social || {};
+    const socialLinks = config.socialLinks || [];
 
     const primaryColor = design.color?.header || '#2B853E';
     const secondaryColor = design.color?.light || '#68D87F';
@@ -301,6 +303,61 @@ const SurveyConfig = ({ config, onChange }) => {
             }
         }));
     };
+
+    // Social Links handlers
+    const handleSocialLinkAdd = (platformId) => {
+        // Check if platform already exists
+        const exists = socialLinks.some(link => link.platform === platformId);
+        if (exists) return;
+        
+        const newLink = { 
+            id: Date.now().toString(), 
+            platform: platformId, 
+            url: '' 
+        };
+        onChange(prev => ({ 
+            ...prev, 
+            socialLinks: [...(prev.socialLinks || []), newLink] 
+        }));
+    };
+
+    const handleSocialLinkUpdate = (id, value) => {
+        const newLinks = socialLinks.map(link =>
+            link.id === id ? { ...link, url: value } : link
+        );
+        onChange(prev => ({ ...prev, socialLinks: newLinks }));
+    };
+
+    const handleSocialLinkRemove = (id) => {
+        const newLinks = socialLinks.filter(link => link.id !== id);
+        onChange(prev => ({ ...prev, socialLinks: newLinks }));
+    };
+
+    const handleSocialLinkUnselect = (id) => {
+        // Remove the social link entirely
+        const newLinks = socialLinks.filter(link => link.id !== id);
+        onChange(prev => ({ ...prev, socialLinks: newLinks }));
+    };
+
+    // Social Media Platforms Configuration
+    const socialPlatforms = [
+        { id: 'website', name: 'Website', icon: Globe, color: '#6366f1' },
+        { id: 'facebook', name: 'Facebook', icon: Facebook, color: '#1877f2' },
+        { id: 'instagram', name: 'Instagram', icon: Instagram, color: '#E1306C', gradient: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)' },
+        { id: 'twitter', name: 'X', icon: Twitter, color: '#000000' },
+        { id: 'linkedin', name: 'LinkedIn', icon: Linkedin, color: '#0077b5' },
+        { id: 'discord', name: 'Discord', icon: MessageCircle, color: '#5865f2' },
+        { id: 'youtube', name: 'YouTube', icon: Youtube, color: '#ff0000' },
+        { id: 'whatsapp', name: 'WhatsApp', icon: MessageCircle, color: '#25d366' },
+        { id: 'snapchat', name: 'Snapchat', icon: Ghost, color: '#fffc00', textColor: '#000' },
+        { id: 'tiktok', name: 'TikTok', icon: Music, color: '#000000' },
+        { id: 'spotify', name: 'Spotify', icon: Music, color: '#1db954' },
+        { id: 'behance', name: 'Behance', icon: Dribbble, color: '#1769ff' },
+        { id: 'dribbble', name: 'Dribbble', icon: Dribbble, color: '#ea4c89' },
+        { id: 'pinterest', name: 'Pinterest', icon: Github, color: '#e60023' },
+        { id: 'telegram', name: 'Telegram', icon: Send, color: '#0088cc' },
+        { id: 'reddit', name: 'Reddit', icon: Github, color: '#ff4500' },
+    ];
 
     const palettes = [
         { p: '#0B2D86', s: '#FFA800' },
@@ -657,13 +714,31 @@ const SurveyConfig = ({ config, onChange }) => {
                                                 textTransform: 'uppercase'
                                             }}
                                         />
-                                        <div style={{
-                                            width: '24px',
-                                            height: '24px',
-                                            background: basicInfo.organizationNameColor || '#000000',
-                                            borderRadius: '2px',
-                                            flexShrink: 0
-                                        }}></div>
+                                        <div
+                                            onClick={() => document.getElementById('orgNameColorPicker').click()}
+                                            style={{
+                                                width: '24px',
+                                                height: '24px',
+                                                background: basicInfo.organizationNameColor || '#000000',
+                                                borderRadius: '2px',
+                                                flexShrink: 0,
+                                                cursor: 'pointer',
+                                                position: 'relative'
+                                            }}>
+                                            <input
+                                                id="orgNameColorPicker"
+                                                type="color"
+                                                value={basicInfo.organizationNameColor || '#000000'}
+                                                onChange={(e) => handleBasicInfoUpdate('organizationNameColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    opacity: 0,
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    cursor: 'pointer'
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -700,22 +775,106 @@ const SurveyConfig = ({ config, onChange }) => {
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 DESCRIPTION
                             </label>
-                            <textarea
-                                value={basicInfo.description || ''}
-                                onChange={(e) => handleBasicInfoUpdate('description', e.target.value)}
-                                placeholder="We aim to provide fresh and healthy snacks people on the go."
-                                rows={3}
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
-                                    fontSize: '0.9rem',
-                                    outline: 'none',
-                                    resize: 'vertical',
-                                    fontFamily: 'inherit'
-                                }}
-                            />
+                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                                {/* Description Textarea */}
+                                <textarea
+                                    value={basicInfo.description || ''}
+                                    onChange={(e) => handleBasicInfoUpdate('description', e.target.value)}
+                                    placeholder="We aim to provide fresh and healthy snacks for people on the go."
+                                    rows={3}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: '1px solid #1e293b',
+                                        fontSize: '0.9rem',
+                                        outline: 'none',
+                                        resize: 'vertical',
+                                        fontFamily: 'inherit'
+                                    }}
+                                />
+
+                                {/* Text Color */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Text Color
+                                    </label>
+                                    <div style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        border: '1px solid #1e293b',
+                                        borderRadius: '4px',
+                                        padding: '0.5rem',
+                                        height: '44px'
+                                    }}>
+                                        <input
+                                            type="text"
+                                            value={basicInfo.descriptionColor || '#475569'}
+                                            onChange={(e) => handleBasicInfoUpdate('descriptionColor', e.target.value)}
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                fontSize: '0.85rem',
+                                                color: '#000',
+                                                fontWeight: '500',
+                                                textTransform: 'uppercase'
+                                            }}
+                                        />
+                                        <div
+                                            onClick={() => document.getElementById('descColorPicker').click()}
+                                            style={{
+                                                width: '24px',
+                                                height: '24px',
+                                                background: basicInfo.descriptionColor || '#475569',
+                                                borderRadius: '2px',
+                                                flexShrink: 0,
+                                                cursor: 'pointer',
+                                                position: 'relative'
+                                            }}>
+                                            <input
+                                                id="descColorPicker"
+                                                type="color"
+                                                value={basicInfo.descriptionColor || '#475569'}
+                                                onChange={(e) => handleBasicInfoUpdate('descriptionColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    opacity: 0,
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    cursor: 'pointer'
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Font */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                        Font
+                                    </label>
+                                    <select
+                                        value={basicInfo.descriptionFont || 'Lato'}
+                                        onChange={(e) => handleBasicInfoUpdate('descriptionFont', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            cursor: 'pointer',
+                                            background: '#fff'
+                                        }}
+                                    >
+                                        <option value="Lato">Lato</option>
+                                        <option value="Roboto">Roboto</option>
+                                        <option value="Open Sans">Open Sans</option>
+                                        <option value="Montserrat">Montserrat</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         {/* WEBSITE FIELD */}
@@ -771,36 +930,194 @@ const SurveyConfig = ({ config, onChange }) => {
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 LANGUAGES
                             </label>
-                            <div style={{
-                                display: 'flex',
-                                gap: '0.5rem',
-                                flexWrap: 'wrap',
-                                padding: '0.75rem',
-                                borderRadius: '4px',
-                                border: '1px solid #1e293b',
-                                minHeight: '44px',
-                                alignItems: 'center'
-                            }}>
-                                {survey.languages.map((lang, idx) => (
-                                    <div key={idx} style={{
+
+                            {/* Language Tags Container with Dropdown */}
+                            <div style={{ position: 'relative' }}>
+                                <div
+                                    onClick={() => {
+                                        const dropdown = document.getElementById('languageDropdown');
+                                        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                                    }}
+                                    style={{
                                         display: 'flex',
-                                        alignItems: 'center',
                                         gap: '0.5rem',
-                                        background: '#f1f5f9',
-                                        padding: '0.25rem 0.5rem',
+                                        flexWrap: 'wrap',
+                                        padding: '0.75rem',
                                         borderRadius: '4px',
-                                        fontSize: '0.85rem'
-                                    }}>
-                                        <span>🇺🇸</span>
-                                        <span>{lang}</span>
-                                        <X
-                                            size={14}
-                                            color="#64748b"
-                                            style={{ cursor: 'pointer' }}
-                                            onClick={() => handleRemoveLanguage(lang)}
-                                        />
-                                    </div>
-                                ))}
+                                        border: '1px solid #1e293b',
+                                        minHeight: '44px',
+                                        alignItems: 'center',
+                                        cursor: 'pointer',
+                                        background: '#fff'
+                                    }}
+                                >
+                                    {survey.languages && survey.languages.map((lang, idx) => {
+                                        const languageData = [
+                                            { name: 'English', code: 'us' },
+                                            { name: 'Urdu', code: 'pk' },
+                                            { name: 'Arabic', code: 'sa' },
+                                            { name: 'Spanish', code: 'es' },
+                                            { name: 'French', code: 'fr' },
+                                            { name: 'German', code: 'de' },
+                                            { name: 'Chinese', code: 'cn' },
+                                            { name: 'Japanese', code: 'jp' },
+                                            { name: 'Korean', code: 'kr' },
+                                            { name: 'Russian', code: 'ru' },
+                                            { name: 'Portuguese', code: 'pt' },
+                                            { name: 'Italian', code: 'it' },
+                                            { name: 'Dutch', code: 'nl' },
+                                            { name: 'Turkish', code: 'tr' },
+                                            { name: 'Hindi', code: 'in' },
+                                            { name: 'Bengali', code: 'bd' },
+                                            { name: 'Vietnamese', code: 'vn' },
+                                            { name: 'Thai', code: 'th' },
+                                            { name: 'Indonesian', code: 'id' },
+                                            { name: 'Malay', code: 'my' },
+                                            { name: 'Polish', code: 'pl' },
+                                            { name: 'Ukrainian', code: 'ua' },
+                                            { name: 'Romanian', code: 'ro' },
+                                            { name: 'Greek', code: 'gr' },
+                                            { name: 'Czech', code: 'cz' },
+                                            { name: 'Swedish', code: 'se' },
+                                            { name: 'Norwegian', code: 'no' },
+                                            { name: 'Danish', code: 'dk' },
+                                            { name: 'Finnish', code: 'fi' },
+                                            { name: 'Hungarian', code: 'hu' }
+                                        ].find(l => l.name === lang);
+
+                                        return (
+                                            <div key={idx} style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '0.5rem',
+                                                background: '#f1f5f9',
+                                                padding: '0.25rem 0.5rem',
+                                                borderRadius: '4px',
+                                                fontSize: '0.85rem'
+                                            }}>
+                                                {languageData && (
+                                                    <img
+                                                        src={`https://flagcdn.com/w20/${languageData.code}.png`}
+                                                        alt={lang}
+                                                        style={{ width: '20px', height: '15px', objectFit: 'cover', borderRadius: '2px' }}
+                                                    />
+                                                )}
+                                                <span>{lang}</span>
+                                                <X
+                                                    size={14}
+                                                    color="#64748b"
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleRemoveLanguage(lang);
+                                                    }}
+                                                />
+                                            </div>
+                                        );
+                                    })}
+                                    {(!survey.languages || survey.languages.length === 0) && (
+                                        <span style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Select languages...</span>
+                                    )}
+                                    <ChevronDown size={16} color="#64748b" style={{ marginLeft: 'auto' }} />
+                                </div>
+
+                                {/* Dropdown Menu */}
+                                <div
+                                    id="languageDropdown"
+                                    style={{
+                                        display: 'none',
+                                        position: 'absolute',
+                                        top: '100%',
+                                        left: 0,
+                                        right: 0,
+                                        marginTop: '0.25rem',
+                                        background: '#fff',
+                                        border: '1px solid #e2e8f0',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                                        maxHeight: '300px',
+                                        overflowY: 'auto',
+                                        zIndex: 10
+                                    }}
+                                >
+                                    {[
+                                        { name: 'English', code: 'us' },
+                                        { name: 'Urdu', code: 'pk' },
+                                        { name: 'Arabic', code: 'sa' },
+                                        { name: 'Spanish', code: 'es' },
+                                        { name: 'French', code: 'fr' },
+                                        { name: 'German', code: 'de' },
+                                        { name: 'Chinese', code: 'cn' },
+                                        { name: 'Japanese', code: 'jp' },
+                                        { name: 'Korean', code: 'kr' },
+                                        { name: 'Russian', code: 'ru' },
+                                        { name: 'Portuguese', code: 'pt' },
+                                        { name: 'Italian', code: 'it' },
+                                        { name: 'Dutch', code: 'nl' },
+                                        { name: 'Turkish', code: 'tr' },
+                                        { name: 'Hindi', code: 'in' },
+                                        { name: 'Bengali', code: 'bd' },
+                                        { name: 'Vietnamese', code: 'vn' },
+                                        { name: 'Thai', code: 'th' },
+                                        { name: 'Indonesian', code: 'id' },
+                                        { name: 'Malay', code: 'my' },
+                                        { name: 'Polish', code: 'pl' },
+                                        { name: 'Ukrainian', code: 'ua' },
+                                        { name: 'Romanian', code: 'ro' },
+                                        { name: 'Greek', code: 'gr' },
+                                        { name: 'Czech', code: 'cz' },
+                                        { name: 'Swedish', code: 'se' },
+                                        { name: 'Norwegian', code: 'no' },
+                                        { name: 'Danish', code: 'dk' },
+                                        { name: 'Finnish', code: 'fi' },
+                                        { name: 'Hungarian', code: 'hu' }
+                                    ].map((language, idx) => {
+                                        const isSelected = survey.languages && survey.languages.includes(language.name);
+                                        return (
+                                            <div
+                                                key={idx}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (isSelected) {
+                                                        handleRemoveLanguage(language.name);
+                                                    } else {
+                                                        handleAddLanguage(language.name);
+                                                        // Auto-set as default if it's the first language
+                                                        if (!survey.languages || survey.languages.length === 0) {
+                                                            handleDefaultLanguageChange(language.name);
+                                                        }
+                                                    }
+                                                    // Close dropdown after selection
+                                                    document.getElementById('languageDropdown').style.display = 'none';
+                                                }}
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.75rem',
+                                                    padding: '0.75rem 1rem',
+                                                    cursor: 'pointer',
+                                                    background: isSelected ? '#f1f5f9' : '#fff',
+                                                    borderBottom: '1px solid #f1f5f9',
+                                                    transition: 'background 0.2s'
+                                                }}
+                                                onMouseOver={(e) => {
+                                                    if (!isSelected) e.currentTarget.style.background = '#f8fafc';
+                                                }}
+                                                onMouseOut={(e) => {
+                                                    if (!isSelected) e.currentTarget.style.background = '#fff';
+                                                }}
+                                            >
+                                                <img
+                                                    src={`https://flagcdn.com/w20/${language.code}.png`}
+                                                    alt={language.name}
+                                                    style={{ width: '20px', height: '15px', objectFit: 'cover', borderRadius: '2px' }}
+                                                />
+                                                <span style={{ flex: 1, fontSize: '0.9rem', color: '#1e293b' }}>{language.name}</span>
+                                                {isSelected && <Check size={16} color="#8b5cf6" />}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
 
@@ -809,24 +1126,153 @@ const SurveyConfig = ({ config, onChange }) => {
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 DEFAULT LANGUAGE*
                             </label>
-                            <select
-                                value={survey.defaultLanguage || 'English'}
-                                onChange={(e) => handleDefaultLanguageChange(e.target.value)}
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
-                                    fontSize: '0.9rem',
-                                    outline: 'none',
-                                    cursor: 'pointer',
-                                    background: '#fff'
-                                }}
-                            >
-                                {survey.languages.map((lang, idx) => (
-                                    <option key={idx} value={lang}>{lang}</option>
-                                ))}
-                            </select>
+
+                            {/* Custom Dropdown for Default Language */}
+                            <div style={{ position: 'relative' }}>
+                                <div
+                                    onClick={() => {
+                                        const dropdown = document.getElementById('defaultLanguageDropdown');
+                                        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                                    }}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.75rem',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: '1px solid #1e293b',
+                                        cursor: 'pointer',
+                                        background: '#fff'
+                                    }}
+                                >
+                                    {(() => {
+                                        const languageData = [
+                                            { name: 'English', code: 'us' },
+                                            { name: 'Urdu', code: 'pk' },
+                                            { name: 'Arabic', code: 'sa' },
+                                            { name: 'Spanish', code: 'es' },
+                                            { name: 'French', code: 'fr' },
+                                            { name: 'German', code: 'de' },
+                                            { name: 'Chinese', code: 'cn' },
+                                            { name: 'Japanese', code: 'jp' },
+                                            { name: 'Korean', code: 'kr' },
+                                            { name: 'Russian', code: 'ru' },
+                                            { name: 'Portuguese', code: 'pt' },
+                                            { name: 'Italian', code: 'it' },
+                                            { name: 'Dutch', code: 'nl' },
+                                            { name: 'Turkish', code: 'tr' },
+                                            { name: 'Hindi', code: 'in' },
+                                            { name: 'Bengali', code: 'bd' },
+                                            { name: 'Vietnamese', code: 'vn' },
+                                            { name: 'Thai', code: 'th' },
+                                            { name: 'Indonesian', code: 'id' },
+                                            { name: 'Malay', code: 'my' }
+                                        ].find(l => l.name === (survey.defaultLanguage || 'English'));
+
+                                        return languageData ? (
+                                            <>
+                                                <img
+                                                    src={`https://flagcdn.com/w20/${languageData.code}.png`}
+                                                    alt={survey.defaultLanguage || 'English'}
+                                                    style={{ width: '20px', height: '15px', objectFit: 'cover', borderRadius: '2px' }}
+                                                />
+                                                <span style={{ flex: 1, fontSize: '0.9rem', color: '#1e293b' }}>
+                                                    {survey.defaultLanguage || 'English'}
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <span style={{ flex: 1, fontSize: '0.9rem', color: '#94a3b8' }}>
+                                                Select default language...
+                                            </span>
+                                        );
+                                    })()}
+                                    <ChevronDown size={16} color="#64748b" />
+                                </div>
+
+                                {/* Dropdown Menu */}
+                                <div
+                                    id="defaultLanguageDropdown"
+                                    style={{
+                                        display: 'none',
+                                        position: 'absolute',
+                                        top: '100%',
+                                        left: 0,
+                                        right: 0,
+                                        marginTop: '0.25rem',
+                                        background: '#fff',
+                                        border: '1px solid #e2e8f0',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                                        maxHeight: '180px',
+                                        overflowY: 'scroll',
+                                        zIndex: 10
+                                    }}
+                                >
+                                    {survey.languages && survey.languages.map((lang, idx) => {
+                                        const languageData = [
+                                            { name: 'English', code: 'us' },
+                                            { name: 'Urdu', code: 'pk' },
+                                            { name: 'Arabic', code: 'sa' },
+                                            { name: 'Spanish', code: 'es' },
+                                            { name: 'French', code: 'fr' },
+                                            { name: 'German', code: 'de' },
+                                            { name: 'Chinese', code: 'cn' },
+                                            { name: 'Japanese', code: 'jp' },
+                                            { name: 'Korean', code: 'kr' },
+                                            { name: 'Russian', code: 'ru' },
+                                            { name: 'Portuguese', code: 'pt' },
+                                            { name: 'Italian', code: 'it' },
+                                            { name: 'Dutch', code: 'nl' },
+                                            { name: 'Turkish', code: 'tr' },
+                                            { name: 'Hindi', code: 'in' },
+                                            { name: 'Bengali', code: 'bd' },
+                                            { name: 'Vietnamese', code: 'vn' },
+                                            { name: 'Thai', code: 'th' },
+                                            { name: 'Indonesian', code: 'id' },
+                                            { name: 'Malay', code: 'my' }
+                                        ].find(l => l.name === lang);
+
+                                        const isSelected = survey.defaultLanguage === lang;
+
+                                        return (
+                                            <div
+                                                key={idx}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDefaultLanguageChange(lang);
+                                                    document.getElementById('defaultLanguageDropdown').style.display = 'none';
+                                                }}
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.75rem',
+                                                    padding: '0.75rem 1rem',
+                                                    cursor: 'pointer',
+                                                    background: isSelected ? '#f1f5f9' : '#fff',
+                                                    borderBottom: idx < survey.languages.length - 1 ? '1px solid #f1f5f9' : 'none',
+                                                    transition: 'background 0.2s'
+                                                }}
+                                                onMouseOver={(e) => {
+                                                    if (!isSelected) e.currentTarget.style.background = '#f8fafc';
+                                                }}
+                                                onMouseOut={(e) => {
+                                                    if (!isSelected) e.currentTarget.style.background = '#fff';
+                                                }}
+                                            >
+                                                {languageData && (
+                                                    <img
+                                                        src={`https://flagcdn.com/w20/${languageData.code}.png`}
+                                                        alt={lang}
+                                                        style={{ width: '20px', height: '15px', objectFit: 'cover', borderRadius: '2px' }}
+                                                    />
+                                                )}
+                                                <span style={{ flex: 1, fontSize: '0.9rem', color: '#1e293b' }}>{lang}</span>
+                                                {isSelected && <Check size={16} color="#8b5cf6" />}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
                         </div>
 
                         {/* QUESTIONS SECTION */}
@@ -853,7 +1299,7 @@ const SurveyConfig = ({ config, onChange }) => {
                             </div>
 
                             {/* Questions List */}
-                            {survey.questions.map((question, qIdx) => (
+                            {survey.questions && survey.questions.map((question, qIdx) => (
                                 <div key={question.id} style={{
                                     marginBottom: '2rem',
                                     padding: '1.5rem',
@@ -902,33 +1348,64 @@ const SurveyConfig = ({ config, onChange }) => {
                                     </div>
 
                                     {/* Question Inputs for each language */}
-                                    {survey.languages.map((lang, langIdx) => (
-                                        <div key={langIdx} style={{ marginBottom: '1rem' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                                                <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6' }}>
-                                                    {lang === 'English' ? 'en' : 'ur'}
-                                                </span>
-                                                <label style={{ fontSize: '0.7rem', color: '#64748b' }}>
-                                                    Question
-                                                </label>
+                                    {survey.languages && survey.languages.map((lang, langIdx) => {
+                                        // Map language names to codes
+                                        const langCode = {
+                                            'English': 'en',
+                                            'Urdu': 'ur',
+                                            'Arabic': 'ar',
+                                            'Spanish': 'es',
+                                            'French': 'fr',
+                                            'German': 'de',
+                                            'Chinese': 'zh',
+                                            'Japanese': 'ja',
+                                            'Korean': 'ko',
+                                            'Russian': 'ru',
+                                            'Portuguese': 'pt',
+                                            'Italian': 'it',
+                                            'Dutch': 'nl',
+                                            'Turkish': 'tr',
+                                            'Hindi': 'hi',
+                                            'Bengali': 'bn',
+                                            'Vietnamese': 'vi',
+                                            'Thai': 'th',
+                                            'Indonesian': 'id',
+                                            'Malay': 'ms'
+                                        }[lang] || 'en';
+
+                                        return (
+                                            <div key={langIdx} style={{ marginBottom: '1rem' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                                                    <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6' }}>
+                                                        {langCode}
+                                                    </span>
+                                                    <label style={{ fontSize: '0.7rem', color: '#64748b' }}>
+                                                        Question
+                                                    </label>
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    value={question.questions?.[lang] || ''}
+                                                    onChange={(e) => handleQuestionTextChange(question.id, lang, e.target.value)}
+                                                    placeholder={lang === 'English' ? 'Branch Name' : lang === 'Urdu' ? 'برانچ کا نام' : 'Question'}
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.75rem',
+                                                        borderRadius: '4px',
+                                                        border: question.questions?.[lang] ? '1px solid #1e293b' : '1px solid #ef4444',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        background: '#fff'
+                                                    }}
+                                                />
+                                                {!question.questions?.[lang] && (
+                                                    <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.25rem' }}>
+                                                        Question is required
+                                                    </div>
+                                                )}
                                             </div>
-                                            <input
-                                                type="text"
-                                                value={question.questions?.[lang] || ''}
-                                                onChange={(e) => handleQuestionTextChange(question.id, lang, e.target.value)}
-                                                placeholder={lang === 'English' ? 'Branch Name' : 'برانچ کا نام'}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #1e293b',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none',
-                                                    background: '#fff'
-                                                }}
-                                            />
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
 
                                     {/* OPTIONS Section (only for Options and Radio types) */}
                                     {(question.type === 'Options' || question.type === 'Radio') && (
@@ -951,33 +1428,58 @@ const SurveyConfig = ({ config, onChange }) => {
                                                         />
                                                     </div>
 
-                                                    {survey.languages.map((lang, langIdx) => (
-                                                        <div key={langIdx} style={{ marginBottom: '0.75rem' }}>
-                                                            <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.25rem' }}>
-                                                                Option Label ({lang === 'English' ? 'en' : 'ur'})
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                value={option.labels?.[lang] || ''}
-                                                                onChange={(e) => handleOptionLabelChange(question.id, option.id, lang, e.target.value)}
-                                                                placeholder={lang === 'English' ? 'Digital' : 'ڈیجیٹل'}
-                                                                style={{
-                                                                    width: '100%',
-                                                                    padding: '0.5rem',
-                                                                    borderRadius: '4px',
-                                                                    border: option.labels?.[lang] ? '1px solid #1e293b' : '1px solid #ef4444',
-                                                                    fontSize: '0.85rem',
-                                                                    outline: 'none',
-                                                                    background: '#fff'
-                                                                }}
-                                                            />
-                                                            {!option.labels?.[lang] && (
-                                                                <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.25rem' }}>
-                                                                    Option is required
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    ))}
+                                                    {survey.languages && survey.languages.map((lang, langIdx) => {
+                                                        const langCode = {
+                                                            'English': 'en',
+                                                            'Urdu': 'ur',
+                                                            'Arabic': 'ar',
+                                                            'Spanish': 'es',
+                                                            'French': 'fr',
+                                                            'German': 'de',
+                                                            'Chinese': 'zh',
+                                                            'Japanese': 'ja',
+                                                            'Korean': 'ko',
+                                                            'Russian': 'ru',
+                                                            'Portuguese': 'pt',
+                                                            'Italian': 'it',
+                                                            'Dutch': 'nl',
+                                                            'Turkish': 'tr',
+                                                            'Hindi': 'hi',
+                                                            'Bengali': 'bn',
+                                                            'Vietnamese': 'vi',
+                                                            'Thai': 'th',
+                                                            'Indonesian': 'id',
+                                                            'Malay': 'ms'
+                                                        }[lang] || 'en';
+
+                                                        return (
+                                                            <div key={langIdx} style={{ marginBottom: '0.75rem' }}>
+                                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.25rem' }}>
+                                                                    Option Label ({langCode})
+                                                                </label>
+                                                                <input
+                                                                    type="text"
+                                                                    value={option.labels?.[lang] || ''}
+                                                                    onChange={(e) => handleOptionLabelChange(question.id, option.id, lang, e.target.value)}
+                                                                    placeholder={lang === 'English' ? 'Digital' : lang === 'Urdu' ? 'ڈیجیٹل' : 'Option'}
+                                                                    style={{
+                                                                        width: '100%',
+                                                                        padding: '0.5rem',
+                                                                        borderRadius: '4px',
+                                                                        border: option.labels?.[lang] ? '1px solid #1e293b' : '1px solid #ef4444',
+                                                                        fontSize: '0.85rem',
+                                                                        outline: 'none',
+                                                                        background: '#fff'
+                                                                    }}
+                                                                />
+                                                                {!option.labels?.[lang] && (
+                                                                    <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.25rem' }}>
+                                                                        Option is required
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        );
+                                                    })}
                                                 </div>
                                             ))}
 
@@ -1079,13 +1581,31 @@ const SurveyConfig = ({ config, onChange }) => {
                                                 textTransform: 'uppercase'
                                             }}
                                         />
-                                        <div style={{
-                                            width: '24px',
-                                            height: '24px',
-                                            background: thankYou.titleColor || '#000000',
-                                            borderRadius: '2px',
-                                            flexShrink: 0
-                                        }}></div>
+                                        <div
+                                            onClick={() => document.getElementById('thankYouTitleColorPicker').click()}
+                                            style={{
+                                                width: '24px',
+                                                height: '24px',
+                                                background: thankYou.titleColor || '#000000',
+                                                borderRadius: '2px',
+                                                flexShrink: 0,
+                                                cursor: 'pointer',
+                                                position: 'relative'
+                                            }}>
+                                            <input
+                                                id="thankYouTitleColorPicker"
+                                                type="color"
+                                                value={thankYou.titleColor || '#000000'}
+                                                onChange={(e) => handleThankYouUpdate('titleColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    opacity: 0,
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    cursor: 'pointer'
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -1188,123 +1708,82 @@ const SurveyConfig = ({ config, onChange }) => {
                 {isSocialOpen && (
                     <div style={{ padding: '2rem', background: '#fff' }}>
 
-                        {/* Social Media Inputs Grid */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                        {/* Selected Social Media Inputs Grid */}
+                        {socialLinks.length > 0 && (
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                                {socialLinks.map((link) => {
+                                    const platform = socialPlatforms.find(p => p.id === link.platform);
+                                    if (!platform) return null;
+                                    const Icon = platform.icon;
 
-                            {/* Website */}
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                    Website*
-                                </label>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#6366f1',
-                                        borderRadius: '50%',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flexShrink: 0
-                                    }}>
-                                        <Globe size={20} color="#fff" />
-                                    </div>
-                                    <input
-                                        type="text"
-                                        value={social.website || ''}
-                                        onChange={(e) => handleSocialUpdate('website', e.target.value)}
-                                        placeholder="https://"
-                                        style={{
-                                            flex: 1,
-                                            padding: '0.5rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
-                                            fontSize: '0.85rem',
-                                            outline: 'none',
-                                            color: '#94a3b8'
-                                        }}
-                                    />
-                                </div>
+                                    return (
+                                        <div key={link.id} style={{ position: 'relative' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                                <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b' }}>
+                                                    {platform.name}*
+                                                </label>
+                                                <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+                                                    <div 
+                                                        style={{ 
+                                                            cursor: 'pointer',
+                                                            padding: '0.25rem',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center'
+                                                        }} 
+                                                        onClick={() => handleSocialLinkUnselect(link.id)}
+                                                        title="Unselect"
+                                                    >
+                                                        <X size={16} color="#cbd5e1" />
+                                                    </div>
+                                                    <div 
+                                                        style={{ 
+                                                            cursor: 'grab',
+                                                            padding: '0.25rem',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center'
+                                                        }}
+                                                        title="Drag to reorder"
+                                                    >
+                                                        <GripVertical size={16} color="#cbd5e1" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                <div style={{
+                                                    width: '40px',
+                                                    height: '40px',
+                                                    background: platform.gradient || platform.color,
+                                                    borderRadius: '50%',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    flexShrink: 0
+                                                }}>
+                                                    <Icon size={20} color={platform.textColor || "#fff"} />
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    value={link.url || ''}
+                                                    onChange={(e) => handleSocialLinkUpdate(link.id, e.target.value)}
+                                                    placeholder="https://"
+                                                    style={{
+                                                        flex: 1,
+                                                        padding: '0.5rem',
+                                                        borderRadius: '4px',
+                                                        border: '1px solid #1e293b',
+                                                        fontSize: '0.85rem',
+                                                        outline: 'none',
+                                                        color: '#94a3b8'
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
-
-                            {/* Facebook */}
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                    Facebook*
-                                </label>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: '#1877f2',
-                                        borderRadius: '50%',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flexShrink: 0,
-                                        fontSize: '22px',
-                                        fontWeight: 'bold',
-                                        color: '#fff'
-                                    }}>
-                                        f
-                                    </div>
-                                    <input
-                                        type="text"
-                                        value={social.facebook || ''}
-                                        onChange={(e) => handleSocialUpdate('facebook', e.target.value)}
-                                        placeholder="https://"
-                                        style={{
-                                            flex: 1,
-                                            padding: '0.5rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
-                                            fontSize: '0.85rem',
-                                            outline: 'none',
-                                            color: '#94a3b8'
-                                        }}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Instagram */}
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                    Instagram*
-                                </label>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
-                                        borderRadius: '50%',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flexShrink: 0,
-                                        fontSize: '22px',
-                                        color: '#fff'
-                                    }}>
-                                        📷
-                                    </div>
-                                    <input
-                                        type="text"
-                                        value={social.instagram || ''}
-                                        onChange={(e) => handleSocialUpdate('instagram', e.target.value)}
-                                        placeholder="https://"
-                                        style={{
-                                            flex: 1,
-                                            padding: '0.5rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
-                                            fontSize: '0.85rem',
-                                            outline: 'none',
-                                            color: '#94a3b8'
-                                        }}
-                                    />
-                                </div>
-                            </div>
-
-                        </div>
+                        )}
 
                         {/* ADD MORE Section */}
                         <div>
@@ -1317,314 +1796,39 @@ const SurveyConfig = ({ config, onChange }) => {
 
                             {/* Social Media Icons Grid */}
                             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                                {/* Facebook */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#1877f2',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '24px',
-                                    fontWeight: 'bold',
-                                    color: '#fff'
-                                }}>
-                                    f
-                                </div>
-
-                                {/* Instagram */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '24px',
-                                    fontWeight: 'bold',
-                                    color: '#fff'
-                                }}>
-                                    📷
-                                </div>
-
-                                {/* X (Twitter) */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#000',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '22px',
-                                    fontWeight: 'bold',
-                                    color: '#fff'
-                                }}>
-                                    𝕏
-                                </div>
-
-                                {/* LinkedIn */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#0077b5',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '22px',
-                                    fontWeight: 'bold',
-                                    color: '#fff'
-                                }}>
-                                    in
-                                </div>
-
-                                {/* Discord */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#5865f2',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '24px',
-                                    color: '#fff'
-                                }}>
-                                    💬
-                                </div>
-
-                                {/* Twitch */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#9146ff',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '24px',
-                                    color: '#fff'
-                                }}>
-                                    📺
-                                </div>
-
-                                {/* WeChat */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#09b83e',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '24px',
-                                    color: '#fff'
-                                }}>
-                                    💬
-                                </div>
-
-                                {/* YouTube */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#ff0000',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '24px',
-                                    color: '#fff'
-                                }}>
-                                    ▶
-                                </div>
-
-                                {/* WhatsApp */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#25d366',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '24px',
-                                    color: '#fff'
-                                }}>
-                                    💬
-                                </div>
-
-                                {/* Snapchat */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#fffc00',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '24px',
-                                    color: '#000'
-                                }}>
-                                    👻
-                                </div>
-
-                                {/* TikTok */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#000',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '24px',
-                                    color: '#fff'
-                                }}>
-                                    ♪
-                                </div>
-
-                                {/* Tumblr */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#35465c',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '22px',
-                                    fontWeight: 'bold',
-                                    color: '#fff'
-                                }}>
-                                    t
-                                </div>
-
-                                {/* Spotify */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#1db954',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '24px',
-                                    color: '#fff'
-                                }}>
-                                    🎵
-                                </div>
-
-                                {/* Dribbble */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#ea4c89',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '24px',
-                                    color: '#fff'
-                                }}>
-                                    🏀
-                                </div>
-
-                                {/* Pinterest */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#e60023',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '22px',
-                                    fontWeight: 'bold',
-                                    color: '#fff'
-                                }}>
-                                    P
-                                </div>
-
-                                {/* Telegram */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#0088cc',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '24px',
-                                    color: '#fff'
-                                }}>
-                                    ✈️
-                                </div>
-
-                                {/* Behance */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#1769ff',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '20px',
-                                    fontWeight: 'bold',
-                                    color: '#fff'
-                                }}>
-                                    Bē
-                                </div>
-
-                                {/* Reddit */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#ff4500',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    fontSize: '24px',
-                                    color: '#fff'
-                                }}>
-                                    👽
-                                </div>
-
-                                {/* Website */}
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    background: '#6366f1',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer'
-                                }}>
-                                    <Globe size={24} color="#fff" />
-                                </div>
+                                {socialPlatforms.map((platform) => {
+                                    const Icon = platform.icon;
+                                    const isAdded = socialLinks.some(link => link.platform === platform.id);
+                                    
+                                    return (
+                                        <div
+                                            key={platform.id}
+                                            onClick={() => !isAdded && handleSocialLinkAdd(platform.id)}
+                                            style={{
+                                                width: '48px',
+                                                height: '48px',
+                                                background: platform.gradient || platform.color,
+                                                borderRadius: '8px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: isAdded ? 'not-allowed' : 'pointer',
+                                                opacity: isAdded ? 0.5 : 1,
+                                                transition: 'transform 0.1s',
+                                                border: isAdded ? '2px solid #cbd5e1' : 'none'
+                                            }}
+                                            title={isAdded ? `${platform.name} already added` : `Add ${platform.name}`}
+                                            onMouseEnter={(e) => {
+                                                if (!isAdded) e.currentTarget.style.transform = 'scale(1.1)';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.transform = 'scale(1)';
+                                            }}
+                                        >
+                                            <Icon size={24} color={platform.textColor || "#fff"} />
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
 

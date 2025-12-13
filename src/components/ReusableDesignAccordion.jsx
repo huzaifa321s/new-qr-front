@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { ChevronDown, ChevronUp, RefreshCw, Check, UploadCloud, X } from 'lucide-react';
 import axios from 'axios';
@@ -35,6 +36,7 @@ const ReusableDesignAccordion = ({
     palettes = [],
     logoOptions = [],
     logoKey = 'logo', // Can be 'logo' (string url) or 'logo.url' (nested)
+    logoShapeKey,
     children
 }) => {
 
@@ -439,6 +441,51 @@ const ReusableDesignAccordion = ({
                                         <UploadCloud size={20} color="#94a3b8" />
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Shape Selection */}
+                    {showLogo && logoShapeKey && (
+                        <div style={{ marginBottom: children ? '2rem' : '0' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '1rem', textTransform: 'uppercase' }}>
+                                SHAPE
+                            </label>
+                            <div style={{ display: 'flex', gap: '2rem' }}>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                                    <input
+                                        type="radio"
+                                        name="shape"
+                                        checked={getValue(logoShapeKey) !== 'rectangular'} // Default to circular
+                                        onChange={() => {
+                                            if (logoShapeKey.includes('.')) {
+                                                const keys = logoShapeKey.split('.');
+                                                onChange(keys[0], { ...getValue(keys[0]), [keys[1]]: 'circular' });
+                                            } else {
+                                                onChange(logoShapeKey, 'circular');
+                                            }
+                                        }}
+                                        style={{ width: '16px', height: '16px', accentColor: '#8b5cf6' }}
+                                    />
+                                    <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>Circular</span>
+                                </label>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                                    <input
+                                        type="radio"
+                                        name="shape"
+                                        checked={getValue(logoShapeKey) === 'rectangular'}
+                                        onChange={() => {
+                                            if (logoShapeKey.includes('.')) {
+                                                const keys = logoShapeKey.split('.');
+                                                onChange(keys[0], { ...getValue(keys[0]), [keys[1]]: 'rectangular' });
+                                            } else {
+                                                onChange(logoShapeKey, 'rectangular');
+                                            }
+                                        }}
+                                        style={{ width: '16px', height: '16px', accentColor: '#8b5cf6' }}
+                                    />
+                                    <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>Rectangular</span>
+                                </label>
                             </div>
                         </div>
                     )}
