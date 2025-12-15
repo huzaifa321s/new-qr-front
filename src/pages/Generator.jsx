@@ -55,7 +55,7 @@ const Generator = () => {
             // For preview during creation, use a preview URL that matches the pattern
             if (selectedType === 'app-store') {
                 return `${baseUrl}/app/preview`;
-            } else if (selectedType === 'menu' || selectedType === 'business-page') {
+            } else if (selectedType === 'menu' || selectedType === 'business-page' || selectedType === 'custom-type') {
                 return `${baseUrl}/view/preview`;
             } else {
                 const backendUrl = window.location.origin.includes('localhost')
@@ -68,7 +68,7 @@ const Generator = () => {
         // Generate actual URL based on type
         if (selectedType === 'app-store') {
             return `${baseUrl}/app/${id}`;
-        } else if (selectedType === 'menu' || selectedType === 'business-page') {
+        } else if (selectedType === 'menu' || selectedType === 'business-page' || selectedType === 'custom-type') {
             return `${baseUrl}/view/${id}`;
         } else {
             const backendUrl = window.location.origin.includes('localhost')
@@ -127,6 +127,7 @@ const Generator = () => {
                 menu: editingQr.menu || defaultConfig.menu,
                 timings: editingQr.timings || defaultConfig.timings,
                 social: editingQr.social ? { ...defaultConfig.social, ...editingQr.social } : defaultConfig.social,
+                customComponents: editingQr.customComponents || defaultConfig.customComponents,
                 // Re-merge design to include page styles (like colors) and QR design
                 design: {
                     ...defaultConfig.design,
@@ -192,7 +193,7 @@ const Generator = () => {
 
                 if (selectedType === 'app-store') {
                     qrDataUrl = `${baseUrl}/app/${editingQr.shortId}`;
-                } else if (selectedType === 'menu' || selectedType === 'business-page') {
+                } else if (selectedType === 'menu' || selectedType === 'business-page' || selectedType === 'custom-type') {
                     qrDataUrl = `${baseUrl}/view/${editingQr.shortId}`;
                 } else {
                     const backendUrl = window.location.origin.includes('localhost')
@@ -222,6 +223,7 @@ const Generator = () => {
                 contact: pageConfig.contact,
                 personalInfo: pageConfig.personalInfo,
                 coupon: pageConfig.coupon,
+                customComponents: pageConfig.customComponents,
                 name: qrName
             };
 

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Phone, MapPin, Clock, Globe, Instagram, Facebook, Twitter, X, Copy, Mail, Linkedin, MessageCircle, Wifi, Armchair, Accessibility, Calendar, User, Heart, Briefcase, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Video, PenTool, Github, Send, Headphones, Pin, Bot, ChevronRight } from 'lucide-react';
+import { Phone, MapPin, Clock, Globe, Instagram, Facebook, Twitter, X, Copy, Mail, Linkedin, MessageCircle, Wifi, Armchair, Accessibility, Calendar, User, Heart, Briefcase, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Video, PenTool, Github, Send, Headphones, Pin, Bot, ChevronRight, Users, Baby, PawPrint, Plug, ParkingCircle, Bus, Car, Bed, Coffee, Martini, Utensils } from 'lucide-react';
+import { FaWhatsapp, FaDiscord, FaTwitch, FaSnapchat, FaTiktok, FaSpotify, FaPinterest, FaTelegram, FaReddit, FaBehance, FaTumblr } from 'react-icons/fa';
+import { SiKick } from 'react-icons/si';
 
 const AutoSlider = ({ images }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -43,8 +45,28 @@ const AutoSlider = ({ images }) => {
     );
 };
 
+const socialIconsMap = [
+    { id: 'facebook', icon: <Facebook size={20} />, color: '#1877F2' },
+    { id: 'instagram', icon: <Instagram size={20} />, color: '#E4405F' },
+    { id: 'twitter', icon: <Twitter size={20} />, color: '#1DA1F2' },
+    { id: 'linkedin', icon: <Linkedin size={20} />, color: '#0A66C2' },
+    { id: 'discord', icon: <FaDiscord size={20} />, color: '#5865F2' },
+    { id: 'twitch', icon: <FaTwitch size={20} />, color: '#9146FF' },
+    { id: 'kick', icon: <SiKick size={20} />, color: '#53FC18' },
+    { id: 'youtube', icon: <Youtube size={20} />, color: '#FF0000' },
+    { id: 'whatsapp', icon: <FaWhatsapp size={20} />, color: '#25D366' },
+    { id: 'snapchat', icon: <FaSnapchat size={20} />, color: '#FFFC00' },
+    { id: 'tiktok', icon: <FaTiktok size={20} />, color: '#000000' },
+    { id: 'tumblr', icon: <FaTumblr size={20} />, color: '#36465D' },
+    { id: 'spotify', icon: <FaSpotify size={20} />, color: '#1DB954' },
+    { id: 'dribbble', icon: <Globe size={20} />, color: '#EA4C89' },
+    { id: 'pinterest', icon: <FaPinterest size={20} />, color: '#BD081C' },
+    { id: 'telegram', icon: <FaTelegram size={20} />, color: '#0088cc' },
+    { id: 'behance', icon: <FaBehance size={20} />, color: '#1769ff' },
+];
+
 const MobilePreview = ({ config, isLiveView = false }) => {
-    const { design, businessInfo, menu, timings, social, appLinks, coupon, personalInfo, basicInfo, contact, exchange, type, facilities, socialLinks, form, customFields, thankYou, rating, uploadPdf } = config;
+    const { design, businessInfo, menu, timings, social, appLinks, coupon, personalInfo, basicInfo, contact, exchange, type, facilities, socialLinks, form, customFields, thankYou, rating, uploadPdf, content, video, feedback, images } = config;
     const [showCouponModal, setShowCouponModal] = useState(false);
     const [showExchangeModal, setShowExchangeModal] = useState(false);
     const [ratingStep, setRatingStep] = useState('rating'); // 'rating', 'userInfo', 'thankYou'
@@ -102,10 +124,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     const [customMenuOpenCat, setCustomMenuOpenCat] = useState(null);
     const [customMenuSelectedTab, setCustomMenuSelectedTab] = useState({});
 
-    const images = [
+    // Image QR Logic
+    const defaultImages = [
         'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&h=800&fit=crop',
         'https://images.unsplash.com/photo-1618556450994-a6a128ef0d9d?w=600&h=800&fit=crop'
     ];
+    // Normalize images (handle objects from config or fallback to defaults)
+    const displayImages = (images && images.length > 0)
+        ? images.map(img => typeof img === 'string' ? img : img.url)
+        : defaultImages;
+
+
 
     const productImages = [
         'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=300&h=300&fit=crop',
@@ -115,7 +144,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
     const [productImageIndex, setProductImageIndex] = useState(0);
     const [openAccordion, setOpenAccordion] = useState(null);
-    const [feedback, setFeedback] = useState('');
+    const [feedbackText, setFeedbackText] = useState('');
     const [exchangeFormData, setExchangeFormData] = useState({});
     const [exchangeErrors, setExchangeErrors] = useState({});
 
@@ -172,13 +201,14 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
     // Auto-slide images
     React.useEffect(() => {
-        if (type === 'image') {
+        if (type === 'image' && displayImages.length > 0) {
             const interval = setInterval(() => {
-                setCurrentImageIndex((prev) => (prev + 1) % images.length);
+                setCurrentImageIndex((prev) => (prev + 1) % displayImages.length);
             }, 3000);
             return () => clearInterval(interval);
         }
-    }, [type]);
+    }, [type, displayImages.length]);
+
 
     // Auto-slide product images
     React.useEffect(() => {
@@ -4344,59 +4374,114 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         })()}
                     </div>
 
-                    {/* Footer with Social Icons */}
-                    <div style={{
-                        background: footerBg,
-                        borderTopLeftRadius: '30px',
-                        borderTopRightRadius: '30px',
-                        padding: '1.5rem',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        gap: '1.5rem',
-                        marginTop: 'auto'
-                    }}>
-                        {/* Globe Icon */}
+                    {/* Social Media Footer */}
+                    {(socialLinks && socialLinks.length > 0) ? (
                         <div style={{
-                            width: '50px',
-                            height: '50px',
-                            borderRadius: '12px',
-                            background: '#3730a3',
+                            background: footerBg,
+                            borderTopLeftRadius: '30px',
+                            borderTopRightRadius: '30px',
+                            padding: '1.5rem',
                             display: 'flex',
-                            alignItems: 'center',
                             justifyContent: 'center',
-                            cursor: 'pointer'
+                            gap: '1rem',
+                            marginTop: 'auto',
+                            flexWrap: 'wrap'
                         }}>
-                            <Globe size={24} color="#fff" />
-                        </div>
+                            {socialLinks.map((link) => {
+                                const platformId = link.platform;
+                                // Mapping logic to get icon and color
+                                // You might need to import these icons or reuse the mapping logic if it's not passed down.
+                                // Since icons are Lucide icons imported at the top, we need to map them here or pass the icon components.
+                                // Re-creating the mapping map inside render or reusing a helper is fine.
 
-                        {/* Instagram Icon */}
-                        <div style={{
-                            width: '50px',
-                            height: '50px',
-                            borderRadius: '12px',
-                            background: '#e1306c',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer'
-                        }}>
-                            <Instagram size={24} color="#fff" />
-                        </div>
+                                const socialPlatformsMap = {
+                                    'facebook': { icon: Facebook, color: '#1877F2' },
+                                    'instagram': { icon: Instagram, color: '#E4405F' },
+                                    'twitter': { icon: Twitter, color: '#000000' },
+                                    'linkedin': { icon: Linkedin, color: '#0A66C2' },
+                                    'discord': { icon: Globe, color: '#5865F2' },
+                                    'youtube': { icon: Youtube, color: '#FF0000' },
+                                    'whatsapp': { icon: Globe, color: '#25D366' },
+                                    'snapchat': { icon: Globe, color: '#FFFC00' },
+                                    'tiktok': { icon: Globe, color: '#000000' },
+                                    'spotify': { icon: Globe, color: '#1DB954' },
+                                    'website': { icon: Globe, color: '#2B1E99' }
+                                };
 
-                        {/* Facebook Icon */}
-                        <div style={{
-                            width: '50px',
-                            height: '50px',
-                            borderRadius: '12px',
-                            background: '#1877f2',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer'
-                        }}>
-                            <Facebook size={24} color="#fff" />
+                                const platform = socialPlatformsMap[platformId] || { icon: Globe, color: '#3730a3' };
+                                const Icon = platform.icon;
+
+                                return (
+                                    <div key={link.id} style={{
+                                        width: '50px',
+                                        height: '50px',
+                                        borderRadius: '12px',
+                                        background: platform.color,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer'
+                                    }}>
+                                        <Icon size={24} color="#fff" />
+                                    </div>
+                                );
+                            })}
                         </div>
-                    </div>
+                    ) : (
+                        // Default Fallback if no social links
+                        <div style={{
+                            background: footerBg,
+                            borderTopLeftRadius: '30px',
+                            borderTopRightRadius: '30px',
+                            padding: '1.5rem',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            gap: '1.5rem',
+                            marginTop: 'auto'
+                        }}>
+                            {/* Globe Icon */}
+                            <div style={{
+                                width: '50px',
+                                height: '50px',
+                                borderRadius: '12px',
+                                background: '#3730a3',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer'
+                            }}>
+                                <Globe size={24} color="#fff" />
+                            </div>
+
+                            {/* Instagram Icon */}
+                            <div style={{
+                                width: '50px',
+                                height: '50px',
+                                borderRadius: '12px',
+                                background: '#e1306c',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer'
+                            }}>
+                                <Instagram size={24} color="#fff" />
+                            </div>
+
+                            {/* Facebook Icon */}
+                            <div style={{
+                                width: '50px',
+                                height: '50px',
+                                borderRadius: '12px',
+                                background: '#1877f2',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer'
+                            }}>
+                                <Facebook size={24} color="#fff" />
+                            </div>
+                        </div>
+                    )}
 
                     {/* Share Button */}
                     <div style={{
@@ -4433,6 +4518,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     }
 
     if (type === 'password-protected') {
+        const primaryColor = design?.color?.header || '#0a3d3d';
+        const headerImageUrl = design?.headerImage?.url || 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&h=200&fit=crop';
+
         return (
             <div style={{
                 width: '320px',
@@ -4453,7 +4541,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 <div style={{
                     height: '100%',
                     overflowY: 'auto',
-                    background: '#0a3d3d',
+                    background: primaryColor,
                     display: 'flex',
                     flexDirection: 'column'
                 }}>
@@ -4464,7 +4552,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         overflow: 'hidden'
                     }}>
                         <img
-                            src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&h=200&fit=crop"
+                            src={headerImageUrl}
                             alt="Security"
                             style={{
                                 width: '100%',
@@ -4482,103 +4570,38 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         flexDirection: 'column',
                         gap: '1rem'
                     }}>
-                        {/* Name */}
-                        <div style={{
-                            background: 'rgba(255, 255, 255, 0.08)',
-                            borderRadius: '8px',
-                            padding: '1rem',
-                            border: '1px solid rgba(255, 255, 255, 0.1)'
-                        }}>
-                            <div style={{
-                                fontSize: '0.75rem',
-                                color: '#fff',
-                                marginBottom: '0.25rem',
-                                opacity: 0.8
+                        {(config.infoFields && config.infoFields.length > 0 ? config.infoFields : [
+                            { id: '1', name: 'Name', value: 'Hellen Grey' },
+                            { id: '2', name: 'Address', value: '4059 Carling Avenue Ottawa Ontario' },
+                            { id: '3', name: 'Contact', value: '703-701-9964' }
+                        ]).map((field) => (
+                            <div key={field.id} style={{
+                                background: 'rgba(255, 255, 255, 0.08)',
+                                borderRadius: '8px',
+                                padding: '1rem',
+                                border: '1px solid rgba(255, 255, 255, 0.1)'
                             }}>
-                                Name:
+                                <div style={{
+                                    fontSize: '0.75rem',
+                                    color: '#fff',
+                                    marginBottom: '0.25rem',
+                                    opacity: 0.8,
+                                    textTransform: 'uppercase'
+                                }}>
+                                    {field.name}:
+                                </div>
+                                <div style={{
+                                    fontSize: '1rem',
+                                    color: '#fff',
+                                    fontWeight: '600',
+                                    lineHeight: '1.4',
+                                    wordBreak: 'break-word'
+                                }}>
+                                    {field.value}
+                                </div>
                             </div>
-                            <div style={{
-                                fontSize: '1rem',
-                                color: '#fff',
-                                fontWeight: '600'
-                            }}>
-                                Hellen Grey
-                            </div>
-                        </div>
+                        ))}
 
-                        {/* Address */}
-                        <div style={{
-                            background: 'rgba(255, 255, 255, 0.08)',
-                            borderRadius: '8px',
-                            padding: '1rem',
-                            border: '1px solid rgba(255, 255, 255, 0.1)'
-                        }}>
-                            <div style={{
-                                fontSize: '0.75rem',
-                                color: '#fff',
-                                marginBottom: '0.25rem',
-                                opacity: 0.8
-                            }}>
-                                Address:
-                            </div>
-                            <div style={{
-                                fontSize: '1rem',
-                                color: '#fff',
-                                fontWeight: '600',
-                                lineHeight: '1.4'
-                            }}>
-                                4059 Carling Avenue<br />
-                                Ottawa Ontario
-                            </div>
-                        </div>
-
-                        {/* Contact */}
-                        <div style={{
-                            background: 'rgba(255, 255, 255, 0.08)',
-                            borderRadius: '8px',
-                            padding: '1rem',
-                            border: '1px solid rgba(255, 255, 255, 0.1)'
-                        }}>
-                            <div style={{
-                                fontSize: '0.75rem',
-                                color: '#fff',
-                                marginBottom: '0.25rem',
-                                opacity: 0.8
-                            }}>
-                                Contact:
-                            </div>
-                            <div style={{
-                                fontSize: '1rem',
-                                color: '#fff',
-                                fontWeight: '600'
-                            }}>
-                                703-701-9964
-                            </div>
-                        </div>
-
-                        {/* Bank Account */}
-                        <div style={{
-                            background: 'rgba(255, 255, 255, 0.08)',
-                            borderRadius: '8px',
-                            padding: '1rem',
-                            border: '1px solid rgba(255, 255, 255, 0.1)'
-                        }}>
-                            <div style={{
-                                fontSize: '0.75rem',
-                                color: '#fff',
-                                marginBottom: '0.25rem',
-                                opacity: 0.8
-                            }}>
-                                Bank Account:
-                            </div>
-                            <div style={{
-                                fontSize: '1rem',
-                                color: '#fff',
-                                fontWeight: '600'
-                            }}>
-                                9647037019964
-                            </div>
-                        </div>
                     </div>
 
                     {/* Password Protected Notice */}
@@ -4596,12 +4619,78 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             This information is password-protected
                         </div>
                     </div>
-                </div>
-            </div>
+                </div >
+            </div >
         );
     }
 
     if (type === 'event') {
+        const primaryColor = design?.color?.header || '#0d9488';
+        const secondaryColor = design?.color?.light || '#0d9488';
+        const headerImageUrl = design?.headerImage?.url || 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&h=150&fit=crop';
+
+        // Basic Info
+        const companyName = config.businessInfo?.companyName || 'Sterling & Co.';
+        const companyNameColor = config.businessInfo?.companyNameColor || '#FFC700';
+        const companyNameFont = config.businessInfo?.companyNameFont || 'Lato';
+
+        const headline = config.businessInfo?.headline || '4th Annual Company Meetup';
+        const headlineColor = config.businessInfo?.headlineColor || '#FFFFFF';
+        const headlineFont = config.businessInfo?.headlineFont || 'Lato';
+
+        const description = config.businessInfo?.description || 'We aim to provide fresh and healthy snacks people on the go.';
+
+        const logoUrl = design?.logo?.url;
+
+        // Helper to format date
+        const formatEventDate = (dateLocal) => {
+            if (!dateLocal) return '';
+            const date = new Date(dateLocal);
+            // Verify if date is valid
+            if (isNaN(date.getTime())) return dateLocal;
+
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            const weekday = days[date.getDay()];
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = months[date.getMonth()];
+            const year = date.getFullYear();
+
+            return `${weekday}, ${day} ${month} ${year}`;
+        };
+
+        // Facility Icons Map
+        const facilityIcons = [
+            { id: 'wifi', icon: Wifi, label: 'Wifi' },
+            { id: 'plug', icon: Plug, label: 'Power' },
+            { id: 'wheelchair', icon: Accessibility, label: 'Accessibility' },
+            { id: 'restroom', icon: Users, label: 'Restroom' },
+            { id: 'baby', icon: Baby, label: 'Baby Station' },
+            { id: 'pet', icon: PawPrint, label: 'Pet Friendly' },
+            { id: 'parking', icon: ParkingCircle, label: 'Parking' },
+            { id: 'bus', icon: Bus, label: 'Bus' },
+            { id: 'car', icon: Car, label: 'Car' },
+            { id: 'bed', icon: Bed, label: 'Accommodation' },
+            { id: 'coffee', icon: Coffee, label: 'Coffee' },
+            { id: 'drink', icon: Martini, label: 'Bar' },
+            { id: 'food', icon: Utensils, label: 'Food' }
+        ];
+
+        // Social Platform Icons Map
+        const socialPlatforms = [
+            { id: 'facebook', icon: Facebook, color: '#1877F2' },
+            { id: 'instagram', icon: Instagram, color: '#E4405F' },
+            { id: 'twitter', icon: Twitter, color: '#1DA1F2' },
+            { id: 'linkedin', icon: Linkedin, color: '#0A66C2' },
+            { id: 'youtube', icon: Youtube, color: '#FF0000' },
+            { id: 'twitch', icon: Twitch, color: '#9146FF' },
+            { id: 'whatsapp', icon: MessageCircle, color: '#25D366' },
+            { id: 'spotify', icon: Music, color: '#1DB954' },
+            { id: 'telegram', icon: Send, color: '#0088cc' },
+            { id: 'website', icon: Globe, color: '#4b5563' }
+        ];
+
         return (
             <div style={{
                 width: '320px',
@@ -4620,13 +4709,46 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
 
                 <div style={{ height: '100%', overflowY: 'auto', background: '#fff' }}>
+                    {/* Branding Header */}
+                    <div style={{
+                        background: primaryColor,
+                        padding: '1rem 1.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        borderBottomLeftRadius: '24px',
+                    }}>
+                        <div style={{
+                            color: companyNameColor,
+                            fontFamily: companyNameFont,
+                            fontWeight: 'bold',
+                            fontSize: '1.1rem'
+                        }}>
+                            {companyName}
+                        </div>
+                        {logoUrl && (
+                            <div style={{
+                                width: '40px',
+                                height: '40px',
+                                borderRadius: '50%',
+                                background: '#fff',
+                                padding: '4px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <img src={logoUrl} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '50%' }} />
+                            </div>
+                        )}
+                    </div>
+
                     {/* Event Image */}
                     <div style={{
                         height: '140px',
                         overflow: 'hidden'
                     }}>
                         <img
-                            src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&h=150&fit=crop"
+                            src={headerImageUrl}
                             alt="Event"
                             style={{
                                 width: '100%',
@@ -4638,7 +4760,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                     {/* Event Header - Teal */}
                     <div style={{
-                        background: '#0d9488',
+                        background: primaryColor,
                         padding: '1.5rem',
                         textAlign: 'center',
                         color: '#fff'
@@ -4647,9 +4769,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             fontSize: '1.5rem',
                             fontWeight: 'bold',
                             margin: '0 0 0.75rem 0',
-                            lineHeight: '1.3'
+                            lineHeight: '1.3',
+                            color: headlineColor,
+                            fontFamily: headlineFont
                         }}>
-                            4th Annual Company Meetup
+                            {headline}
                         </h1>
                         <p style={{
                             fontSize: '0.875rem',
@@ -4657,68 +4781,48 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             lineHeight: '1.5',
                             opacity: 0.95
                         }}>
-                            We aim to provide fresh and healthy snacks people on the go.
+                            {description}
                         </p>
                     </div>
 
                     {/* Event Details */}
                     <div style={{ padding: '1.5rem' }}>
-                        {/* Day 1 */}
-                        <div style={{ marginBottom: '1.5rem' }}>
-                            <div style={{
-                                fontSize: '0.75rem',
-                                fontWeight: '700',
-                                color: '#0d9488',
-                                marginBottom: '0.5rem',
-                                letterSpacing: '0.5px'
-                            }}>
-                                DAY 1
+                        {(config.eventSchedule?.days || [
+                            { id: 1, date: '2023-03-03', begins: '04:00 AM', ends: '08:00 AM' },
+                            { id: 2, date: '2023-03-04', begins: '04:00 AM', ends: '08:00 AM' }
+                        ]).map((day, index) => (
+                            <div key={day.id} style={{ marginBottom: '1.5rem' }}>
+                                <div style={{
+                                    fontSize: '0.75rem',
+                                    fontWeight: '700',
+                                    color: '#0d9488',
+                                    marginBottom: '0.5rem',
+                                    letterSpacing: '0.5px',
+                                    textTransform: 'uppercase'
+                                }}>
+                                    DAY {index + 1}
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                                    <Calendar size={20} color="#0d9488" />
+                                    <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '600' }}>
+                                        {formatEventDate(day.date)}
+                                    </span>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                    <Clock size={20} color="#0d9488" />
+                                    <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '600' }}>
+                                        {day.begins} - {day.ends}
+                                    </span>
+                                </div>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                                <Calendar size={20} color="#0d9488" />
-                                <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '600' }}>
-                                    Friday, 03 Mar 2023
-                                </span>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <Clock size={20} color="#0d9488" />
-                                <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '600' }}>
-                                    04:00 PM - 08:00 PM
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* Day 2 */}
-                        <div style={{ marginBottom: '1.5rem' }}>
-                            <div style={{
-                                fontSize: '0.75rem',
-                                fontWeight: '700',
-                                color: '#0d9488',
-                                marginBottom: '0.5rem',
-                                letterSpacing: '0.5px'
-                            }}>
-                                DAY 2
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                                <Calendar size={20} color="#0d9488" />
-                                <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '600' }}>
-                                    Saturday, 04 Mar 2023
-                                </span>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <Clock size={20} color="#0d9488" />
-                                <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '600' }}>
-                                    04:00 PM - 08:00 PM
-                                </span>
-                            </div>
-                        </div>
+                        ))}
 
                         {/* Location */}
                         <div style={{ marginBottom: '1.5rem' }}>
                             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
                                 <MapPin size={20} color="#0d9488" style={{ marginTop: '2px' }} />
                                 <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '600', lineHeight: '1.5' }}>
-                                    NY, 10001, United States
+                                    {config.venue?.location || '1000 Marketplace Ave. NY, 10001, United States'}
                                 </span>
                             </div>
                         </div>
@@ -4743,27 +4847,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             </h3>
                             <div style={{
                                 display: 'flex',
-                                justifyContent: 'space-around',
-                                gap: '1rem'
+                                justifyContent: 'center',
+                                gap: '1rem',
+                                flexWrap: 'wrap'
                             }}>
-                                <div style={{ textAlign: 'center' }}>
-                                    <Wifi size={32} color="#3b82f6" />
-                                    <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>Wifi</div>
-                                </div>
-                                <div style={{ textAlign: 'center' }}>
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2">
-                                        <rect x="2" y="7" width="20" height="14" rx="2" />
-                                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                                    </svg>
-                                    <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>Sofa</div>
-                                </div>
-                                <div style={{ textAlign: 'center' }}>
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <path d="M12 6v6l4 2" />
-                                    </svg>
-                                    <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>Handicap</div>
-                                </div>
+                                {(config.facilities || ['wifi', 'plug', 'wheelchair']).map((facilityId) => {
+                                    const facility = facilityIcons.find(f => f.id === facilityId);
+                                    if (!facility) return null;
+                                    const Icon = facility.icon;
+                                    return (
+                                        <div key={facilityId} style={{ textAlign: 'center' }}>
+                                            <Icon size={32} color="#3b82f6" />
+                                            <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>{facility.label}</div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
 
@@ -4799,31 +4897,43 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 </div>
                                 <div>
                                     <div style={{ fontSize: '1rem', fontWeight: '700', color: '#1e293b' }}>
-                                        Hellen Grey
+                                        {config.contactInfo?.personName || 'Hellen Grey'}
                                     </div>
                                     <div style={{ fontSize: '0.875rem', color: '#0d9488', fontWeight: '600' }}>
-                                        Event Manager
+                                        {config.contactInfo?.designation || 'Event Manager'}
                                     </div>
                                 </div>
                             </div>
 
                             {/* Contact Info */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <Phone size={18} color="#0d9488" />
-                                    <span style={{ fontSize: '0.95rem', color: '#1e293b' }}>15555551234</span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <Mail size={18} color="#0d9488" />
-                                    <span style={{ fontSize: '0.95rem', color: '#1e293b' }}>Hellen@gmail.com</span>
-                                </div>
+                                {(config.contactInfo?.channels || [
+                                    { id: 1, type: 'phone', value: '15555551234' },
+                                    { id: 2, type: 'email', value: 'Hellen@gmail.com' }
+                                ]).map((channel) => {
+                                    const getIcon = (type) => {
+                                        switch (type) {
+                                            case 'phone': return <Phone size={18} color="#0d9488" />;
+                                            case 'email': return <Mail size={18} color="#0d9488" />;
+                                            case 'website': return <Globe size={18} color="#0d9488" />;
+                                            default: return <Globe size={18} color="#0d9488" />;
+                                        }
+                                    };
+
+                                    return (
+                                        <div key={channel.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                            {getIcon(channel.type)}
+                                            <span style={{ fontSize: '0.95rem', color: '#1e293b' }}>{channel.value}</span>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
 
                     {/* Footer - Teal */}
                     <div style={{
-                        background: '#0d9488',
+                        background: secondaryColor,
                         padding: '1.5rem',
                         textAlign: 'center',
                         color: '#fff'
@@ -4838,41 +4948,31 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         <div style={{
                             display: 'flex',
                             justifyContent: 'center',
-                            gap: '1rem'
+                            gap: '1rem',
+                            flexWrap: 'wrap'
                         }}>
-                            <div style={{
-                                width: '48px',
-                                height: '48px',
-                                borderRadius: '12px',
-                                background: '#3b82f6',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}>
-                                <Globe size={24} color="#fff" />
-                            </div>
-                            <div style={{
-                                width: '48px',
-                                height: '48px',
-                                borderRadius: '12px',
-                                background: '#f59e0b',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}>
-                                <Instagram size={24} color="#fff" />
-                            </div>
-                            <div style={{
-                                width: '48px',
-                                height: '48px',
-                                borderRadius: '12px',
-                                background: '#8b5cf6',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}>
-                                <Facebook size={24} color="#fff" />
-                            </div>
+                            {(config.socialLinks || [
+                                { id: 1, platform: 'website', url: '' },
+                                { id: 2, platform: 'instagram', url: '' },
+                                { id: 3, platform: 'facebook', url: '' }
+                            ]).map((link) => {
+                                const platform = socialPlatforms.find(p => p.id === link.platform);
+                                if (!platform) return null;
+                                const Icon = platform.icon;
+                                return (
+                                    <div key={link.id} style={{
+                                        width: '48px',
+                                        height: '48px',
+                                        borderRadius: '12px',
+                                        background: platform.color,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <Icon size={24} color="#fff" />
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
@@ -4881,6 +4981,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     }
 
     if (type === 'product-page') {
+        const primaryColor = design?.color?.header || '#FFB03E';
+        const secondaryColor = design?.color?.light || '#031D36';
+
         return (
             <div style={{
                 width: '320px',
@@ -4898,29 +5001,33 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 {/* Notch */}
                 <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
 
-                <div style={{ height: '100%', overflowY: 'auto', background: '#fbbf24' }}>
+                <div style={{ height: '100%', overflowY: 'auto', background: primaryColor }}>
                     {/* Header */}
                     <div style={{
-                        background: '#fbbf24',
+                        background: primaryColor,
                         padding: '2rem 1.5rem 1rem',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.75rem'
                     }}>
-                        <div style={{
-                            background: '#000',
-                            padding: '0.5rem 0.75rem',
-                            borderRadius: '8px'
-                        }}>
-                            <span style={{ color: '#fff', fontWeight: 'bold', fontSize: '0.9rem' }}>DayFresh</span>
-                        </div>
+                        {basicInfo?.logo && (
+                            <div style={{
+                                background: '#000',
+                                padding: '0.5rem 0.75rem',
+                                borderRadius: '8px',
+                                overflow: 'hidden'
+                            }}>
+                                <img src={basicInfo.logo} alt="Logo" style={{ height: '24px', width: 'auto', objectFit: 'contain' }} />
+                            </div>
+                        )}
                         <h1 style={{
                             fontSize: '1.5rem',
                             fontWeight: 'bold',
-                            color: '#000',
-                            margin: 0
+                            color: basicInfo?.companyTextColor || '#000',
+                            margin: 0,
+                            fontFamily: basicInfo?.companyFont || 'sans-serif'
                         }}>
-                            Dairyland
+                            {basicInfo?.companyName || 'Dairyland'}
                         </h1>
                     </div>
 
@@ -4928,7 +5035,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     <div style={{
                         position: 'relative',
                         height: '200px',
-                        background: '#fbbf24',
+                        background: primaryColor,
                         padding: '0 1.5rem 1.5rem'
                     }}>
                         <div style={{
@@ -4937,7 +5044,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             overflow: 'hidden',
                             borderRadius: '12px'
                         }}>
-                            {productImages.map((img, index) => (
+                            {(basicInfo?.productImages && basicInfo.productImages.length > 0 ? basicInfo.productImages.map(img => img.url) : [
+                                'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400',
+                                'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400'
+                            ]).map((img, index) => (
                                 <img
                                     key={index}
                                     src={img}
@@ -4962,14 +5072,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             display: 'flex',
                             gap: '0.5rem'
                         }}>
-                            {productImages.map((_, index) => (
+                            {(basicInfo?.productImages && basicInfo.productImages.length > 0 ? basicInfo.productImages : [
+                                { url: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400' },
+                                { url: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400' }
+                            ]).map((_, index) => (
                                 <div
                                     key={index}
                                     style={{
                                         width: index === productImageIndex ? '24px' : '8px',
                                         height: '8px',
                                         borderRadius: '4px',
-                                        background: index === productImageIndex ? '#fbbf24' : 'rgba(255,255,255,0.5)',
+                                        background: index === productImageIndex ? primaryColor : 'rgba(255,255,255,0.5)',
                                         transition: 'all 0.3s'
                                     }}
                                 />
@@ -4979,11 +5092,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                     {/* Product Info */}
                     <div style={{
-                        background: '#fbbf24',
+                        background: primaryColor,
                         padding: '0 1.5rem 1.5rem'
                     }}>
                         <div style={{
-                            background: '#fbbf24',
+                            background: primaryColor,
                             borderRadius: '12px',
                             padding: '1rem',
                             display: 'flex',
@@ -4994,10 +5107,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 <h2 style={{
                                     fontSize: '1.1rem',
                                     fontWeight: 'bold',
-                                    color: '#000',
-                                    margin: '0 0 0.25rem 0'
+                                    color: basicInfo?.titleTextColor || '#000',
+                                    margin: '0 0 0.25rem 0',
+                                    fontFamily: basicInfo?.titleFont || 'sans-serif'
                                 }}>
-                                    Chocolate Flavored Milk
+                                    {basicInfo?.productTitle || 'Chocolate Flavored Milk'}
                                 </h2>
                                 <p style={{
                                     fontSize: '0.875rem',
@@ -5005,7 +5119,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     margin: 0,
                                     opacity: 0.8
                                 }}>
-                                    325 ml
+                                    {basicInfo?.headline || '325 ml'}
                                 </p>
                             </div>
                             <div style={{
@@ -5013,176 +5127,61 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 fontWeight: 'bold',
                                 color: '#000'
                             }}>
-                                Rs 95
+                                {basicInfo?.currency || 'Rs'} {basicInfo?.price || '95'}
                             </div>
                         </div>
                     </div>
 
                     {/* Accordions */}
                     <div style={{ padding: '0 1.5rem 1rem' }}>
-                        {/* Description */}
-                        <div style={{ marginBottom: '0.75rem' }}>
-                            <button
-                                onClick={() => toggleAccordion('description')}
-                                style={{
-                                    width: '100%',
-                                    background: '#0a2540',
-                                    border: 'none',
-                                    borderRadius: '8px',
-                                    padding: '1rem',
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    cursor: 'pointer',
-                                    color: '#fff',
-                                    fontWeight: '600',
-                                    fontSize: '1rem'
-                                }}
-                            >
-                                Description
-                                <span style={{ transform: openAccordion === 'description' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>▼</span>
-                            </button>
-                            {openAccordion === 'description' && (
-                                <div style={{
-                                    background: '#fcd34d',
-                                    padding: '1rem',
-                                    borderBottomLeftRadius: '8px',
-                                    borderBottomRightRadius: '8px',
-                                    fontSize: '0.875rem',
-                                    color: '#000',
-                                    lineHeight: '1.6'
-                                }}>
-                                    The Dark, Smooth, Creaminess Of Chocolate Romances The Wholesome Goodness Of Real Cow'S Milk.
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Ingredients */}
-                        <div style={{ marginBottom: '0.75rem' }}>
-                            <button
-                                onClick={() => toggleAccordion('ingredients')}
-                                style={{
-                                    width: '100%',
-                                    background: '#0a2540',
-                                    border: 'none',
-                                    borderRadius: '8px',
-                                    padding: '1rem',
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    cursor: 'pointer',
-                                    color: '#fff',
-                                    fontWeight: '600',
-                                    fontSize: '1rem'
-                                }}
-                            >
-                                Ingredient
-                                <span style={{ transform: openAccordion === 'ingredients' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>▼</span>
-                            </button>
-                            {openAccordion === 'ingredients' && (
-                                <div style={{
-                                    background: '#fcd34d',
-                                    padding: '1rem',
-                                    borderBottomLeftRadius: '8px',
-                                    borderBottomRightRadius: '8px',
-                                    fontSize: '0.875rem',
-                                    color: '#000',
-                                    lineHeight: '1.6'
-                                }}>
-                                    Reduced Fat Milk<br />
-                                    Milk Solids<br />
-                                    Cocoa Powder<br />
-                                    Sugar<br />
-                                    Emulsifier: Vegetable Oil Origin (E471)<br />
-                                    Stabilizer (E407) & Chocolate Flavor
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Nutrition facts */}
-                        <div style={{ marginBottom: '0.75rem' }}>
-                            <button
-                                onClick={() => toggleAccordion('nutrition')}
-                                style={{
-                                    width: '100%',
-                                    background: '#0a2540',
-                                    border: 'none',
-                                    borderRadius: '8px',
-                                    padding: '1rem',
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    cursor: 'pointer',
-                                    color: '#fff',
-                                    fontWeight: '600',
-                                    fontSize: '1rem'
-                                }}
-                            >
-                                Nutrition facts
-                                <span style={{ transform: openAccordion === 'nutrition' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>▼</span>
-                            </button>
-                            {openAccordion === 'nutrition' && (
-                                <div style={{
-                                    background: '#fcd34d',
-                                    padding: '1rem',
-                                    borderBottomLeftRadius: '8px',
-                                    borderBottomRightRadius: '8px',
-                                    fontSize: '0.875rem',
-                                    color: '#000',
-                                    lineHeight: '1.6'
-                                }}>
-                                    Nutrient Measurement Precision Exact,<br />
-                                    Energy 84Cal,<br />
-                                    Carbohydrates 13.3g<br />
-                                    Fat 2.15g
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Allergens */}
-                        <div style={{ marginBottom: '0.75rem' }}>
-                            <button
-                                onClick={() => toggleAccordion('allergens')}
-                                style={{
-                                    width: '100%',
-                                    background: '#0a2540',
-                                    border: 'none',
-                                    borderRadius: '8px',
-                                    padding: '1rem',
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    cursor: 'pointer',
-                                    color: '#fff',
-                                    fontWeight: '600',
-                                    fontSize: '1rem'
-                                }}
-                            >
-                                Allergens
-                                <span style={{ transform: openAccordion === 'allergens' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>▼</span>
-                            </button>
-                            {openAccordion === 'allergens' && (
-                                <div style={{
-                                    background: '#fcd34d',
-                                    padding: '1rem',
-                                    borderBottomLeftRadius: '8px',
-                                    borderBottomRightRadius: '8px',
-                                    fontSize: '0.875rem',
-                                    color: '#000',
-                                    lineHeight: '1.6'
-                                }}>
-                                    Egg<br />
-                                    Milk
-                                </div>
-                            )}
-                        </div>
+                        {(content?.items || [
+                            { id: '1', title: 'Description', text: 'The Dark, Smooth, Creaminess Of Chocolate Romances The Wholesome Goodness Of Real Cow\'S Milk.' },
+                            { id: '2', title: 'Ingredient', text: '• Reduced Fat Milk\n• Milk Solids\nCocoa Powder\n• Sugar\n• Emulsifier: Vegetable Oil Origin (E471)\n• Stabilizer (E470) & Chocolate Flavor' }
+                        ]).map((item) => (
+                            <div key={item.id} style={{ marginBottom: '0.75rem' }}>
+                                <button
+                                    onClick={() => toggleAccordion(item.id)}
+                                    style={{
+                                        width: '100%',
+                                        background: secondaryColor,
+                                        border: 'none',
+                                        borderRadius: '8px',
+                                        padding: '1rem',
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        cursor: 'pointer',
+                                        color: '#fff',
+                                        fontWeight: '600',
+                                        fontSize: '1rem'
+                                    }}
+                                >
+                                    {item.title}
+                                    <span style={{ transform: openAccordion === item.id ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>▼</span>
+                                </button>
+                                {openAccordion === item.id && (
+                                    <div style={{
+                                        background: '#fcd34d',
+                                        padding: '1rem',
+                                        borderBottomLeftRadius: '8px',
+                                        borderBottomRightRadius: '8px',
+                                        fontSize: '0.875rem',
+                                        color: '#000',
+                                        lineHeight: '1.6',
+                                        whiteSpace: 'pre-wrap'
+                                    }}>
+                                        {item.text}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
 
                         {/* Certificates */}
                         <div style={{ marginBottom: '1rem' }}>
                             <button
                                 style={{
                                     width: '100%',
-                                    background: '#0a2540',
+                                    background: secondaryColor,
                                     border: 'none',
                                     borderRadius: '8px',
                                     padding: '1rem',
@@ -5199,7 +5198,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         {/* Buy Product Button */}
                         <button style={{
                             width: '100%',
-                            background: '#0a2540',
+                            background: secondaryColor,
                             border: 'none',
                             borderRadius: '8px',
                             padding: '1rem',
@@ -5222,23 +5221,50 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             margin: '0 0 1rem 0',
                             textAlign: 'center'
                         }}>
-                            Video
+                            {video?.title || 'Video'}
                         </h3>
                         <div style={{
                             borderRadius: '12px',
                             overflow: 'hidden',
                             background: '#000'
                         }}>
-                            <iframe
-                                width="100%"
-                                height="180"
-                                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                                title="Product Video"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                style={{ display: 'block' }}
-                            />
+                            {video?.url ? (
+                                video.url.startsWith('blob:') ? (
+                                    <video
+                                        width="100%"
+                                        height="180"
+                                        controls
+                                        style={{ display: 'block' }}
+                                    >
+                                        <source src={video.url} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
+                                ) : (
+                                    <iframe
+                                        width="100%"
+                                        height="180"
+                                        src={video.url.includes('youtube.com') || video.url.includes('youtu.be')
+                                            ? video.url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/')
+                                            : video.url}
+                                        title={video.title || 'Product Video'}
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        style={{ display: 'block' }}
+                                    />
+                                )
+                            ) : (
+                                <iframe
+                                    width="100%"
+                                    height="180"
+                                    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                                    title="Product Video"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    style={{ display: 'block' }}
+                                />
+                            )}
                         </div>
                     </div>
 
@@ -5246,11 +5272,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     <div style={{ padding: '0 1.5rem 1rem' }}>
                         <button style={{
                             width: '100%',
-                            background: '#0a2540',
+                            background: secondaryColor,
                             border: 'none',
                             borderRadius: '8px',
                             padding: '1rem',
-                            color: '#fff',
+                            color: feedback?.textColor || '#fff',
                             fontWeight: '600',
                             fontSize: '1rem',
                             cursor: 'pointer',
@@ -5258,14 +5284,15 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            gap: '0.5rem'
+                            gap: '0.5rem',
+                            fontFamily: feedback?.font || 'sans-serif'
                         }}>
                             <MessageCircle size={20} />
-                            Add Your Feedback
+                            {feedback?.title || 'Add Your Feedback'}
                         </button>
                         <textarea
-                            value={feedback}
-                            onChange={(e) => setFeedback(e.target.value)}
+                            value={feedbackText}
+                            onChange={(e) => setFeedbackText(e.target.value)}
                             placeholder="Write your feedback here..."
                             style={{
                                 width: '100%',
@@ -5287,7 +5314,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         <div style={{
                             background: '#fff',
                             borderRadius: '12px',
-                            padding: '1.5rem'
+                            padding: '1.5rem',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
                         }}>
                             <h3 style={{
                                 fontSize: '1.25rem',
@@ -5298,57 +5326,73 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 Contact Us
                             </h3>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <Phone size={20} color="#000" />
-                                    <span style={{ fontSize: '0.95rem', color: '#000' }}>111337374</span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <Mail size={20} color="#000" />
-                                    <span style={{ fontSize: '0.95rem', color: '#000' }}>info@dairylandltd.com</span>
-                                </div>
+                                {contact?.phone && (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                        <div style={{
+                                            width: '32px', height: '32px', borderRadius: '4px', background: '#031D36', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                        }}>
+                                            <Phone size={18} color="#fff" />
+                                        </div>
+                                        <span style={{ fontSize: '0.95rem', color: '#000' }}>{contact.phone}</span>
+                                    </div>
+                                )}
+                                {contact?.email && (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                        <div style={{
+                                            width: '32px', height: '32px', borderRadius: '4px', background: '#031D36', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                        }}>
+                                            <Mail size={18} color="#fff" />
+                                        </div>
+                                        <span style={{ fontSize: '0.95rem', color: '#000' }}>{contact.email}</span>
+                                    </div>
+                                )}
+                                {contact?.website && (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                        <div style={{
+                                            width: '32px', height: '32px', borderRadius: '4px', background: '#031D36', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                        }}>
+                                            <Globe size={18} color="#fff" />
+                                        </div>
+                                        <span style={{ fontSize: '0.95rem', color: '#000' }}>{contact.website}</span>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Social Media */}
-                            <div style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                gap: '1rem',
-                                marginTop: '1.5rem'
-                            }}>
+                            {contact?.socials && contact.socials.length > 0 && (
                                 <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    borderRadius: '50%',
-                                    background: '#e1306c',
                                     display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
+                                    justifyContent: 'center',
+                                    gap: '1rem',
+                                    marginTop: '1.5rem',
+                                    flexWrap: 'wrap'
                                 }}>
-                                    <Instagram size={24} color="#fff" />
+                                    {contact.socials.map((social, idx) => {
+                                        const iconObj = socialIconsMap.find(i => i.id === social.platform);
+                                        if (!iconObj) return null;
+                                        return (
+                                            <a
+                                                key={idx}
+                                                href={social.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                style={{
+                                                    width: '48px',
+                                                    height: '48px',
+                                                    borderRadius: '50%',
+                                                    background: '#fff',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+                                                }}
+                                            >
+                                                {React.cloneElement(iconObj.icon, { color: iconObj.color, size: 28 })}
+                                            </a>
+                                        );
+                                    })}
                                 </div>
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    borderRadius: '50%',
-                                    background: '#1877f2',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}>
-                                    <Facebook size={24} color="#fff" />
-                                </div>
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    borderRadius: '50%',
-                                    background: '#25d366',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}>
-                                    <MessageCircle size={24} color="#fff" />
-                                </div>
-                            </div>
+                            )}
                         </div>
                     </div>
 
@@ -5356,7 +5400,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     <div style={{ padding: '0 1.5rem 1.5rem' }}>
                         <button style={{
                             width: '100%',
-                            background: '#0a2540',
+                            background: 'secondaryColor',
                             border: 'none',
                             borderRadius: '8px',
                             padding: '1rem',
@@ -5661,8 +5705,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             objectFit: 'contain'
                         }}
                         poster="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=400&h=300&fit=crop"
+                        src={video?.url || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"}
                     >
-                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
                 </div>
@@ -5671,12 +5715,16 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     }
 
     if (type === 'image') {
+
+
         const nextImage = () => {
-            setCurrentImageIndex((prev) => (prev + 1) % images.length);
+            if (displayImages.length === 0) return;
+            setCurrentImageIndex((prev) => (prev + 1) % displayImages.length);
         };
 
         const prevImage = () => {
-            setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+            if (displayImages.length === 0) return;
+            setCurrentImageIndex((prev) => (prev - 1 + displayImages.length) % displayImages.length);
         };
 
         return (
@@ -5718,87 +5766,97 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             cursor: 'pointer'
                         }}
                     >
-                        {images.map((img, index) => (
-                            <img
-                                key={index}
-                                src={img}
-                                alt={`Image ${index + 1}`}
-                                style={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    width: '100%',
-                                    height: '100%',
-                                    objectFit: 'contain',
-                                    opacity: currentImageIndex === index ? 1 : 0,
-                                    transition: 'opacity 0.5s ease-in-out'
-                                }}
-                            />
-                        ))}
+                        {displayImages.length > 0 ? (
+                            displayImages.map((img, index) => (
+                                <img
+                                    key={index}
+                                    src={img}
+                                    alt={`Image ${index + 1}`}
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'contain',
+                                        opacity: currentImageIndex === index ? 1 : 0,
+                                        transition: 'opacity 0.5s ease-in-out'
+                                    }}
+                                />
+                            ))
+                        ) : (
+                            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+                                No images uploaded
+                            </div>
+                        )}
                     </div>
 
                     {/* Left Arrow */}
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            prevImage();
-                        }}
-                        style={{
-                            position: 'absolute',
-                            left: '1rem',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '50%',
-                            background: 'rgba(0, 0, 0, 0.6)',
-                            border: 'none',
-                            color: '#fff',
-                            fontSize: '1.25rem',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            zIndex: 10
-                        }}
-                    >
-                        ‹
-                    </button>
+                    {displayImages.length > 1 && (
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                prevImage();
+                            }}
+                            style={{
+                                position: 'absolute',
+                                left: '1rem',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                width: '40px',
+                                height: '40px',
+                                borderRadius: '50%',
+                                background: 'rgba(0, 0, 0, 0.6)',
+                                border: 'none',
+                                color: '#fff',
+                                fontSize: '1.25rem',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                zIndex: 10
+                            }}
+                        >
+                            ‹
+                        </button>
+                    )}
 
                     {/* Right Arrow */}
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            nextImage();
-                        }}
-                        style={{
-                            position: 'absolute',
-                            right: '1rem',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '50%',
-                            background: 'rgba(0, 0, 0, 0.6)',
-                            border: 'none',
-                            color: '#fff',
-                            fontSize: '1.25rem',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            zIndex: 10
-                        }}
-                    >
-                        ›
-                    </button>
+                    {displayImages.length > 1 && (
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                nextImage();
+                            }}
+                            style={{
+                                position: 'absolute',
+                                right: '1rem',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                width: '40px',
+                                height: '40px',
+                                borderRadius: '50%',
+                                background: 'rgba(0, 0, 0, 0.6)',
+                                border: 'none',
+                                color: '#fff',
+                                fontSize: '1.25rem',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                zIndex: 10
+                            }}
+                        >
+                            ›
+                        </button>
+                    )}
                 </div>
 
                 {/* Bottom White Space */}
                 <div style={{ height: '80px', background: '#f8fafc' }}></div>
 
                 {/* Image Modal */}
-                {showImageModal && (
+                {showImageModal && displayImages.length > 0 && (
                     <div style={{
                         position: 'absolute',
                         top: 0,

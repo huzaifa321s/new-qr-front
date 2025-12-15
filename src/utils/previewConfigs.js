@@ -245,6 +245,11 @@ export const imagePreviewConfig = {
     type: 'image'
 };
 
+export const customTypePreviewConfig = {
+    type: 'custom-type',
+    customComponents: []
+};
+
 export const getPreviewConfig = (type) => {
     switch (type) {
         case 'menu': return menuPreviewConfig;
@@ -266,6 +271,7 @@ export const getPreviewConfig = (type) => {
         case 'dynamic-url': return dynamicUrlPreviewConfig;
         case 'video': return videoPreviewConfig;
         case 'image': return imagePreviewConfig;
+        case 'custom-type': return customTypePreviewConfig;
         default: return null;
     }
 };

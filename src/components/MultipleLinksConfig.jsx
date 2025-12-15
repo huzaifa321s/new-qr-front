@@ -705,9 +705,6 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                             <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b' }}>
                                                 {platform.name}*
                                             </label>
-                                            <div style={{ cursor: 'pointer' }} onClick={() => handleSocialLinkRemove(link.id)}>
-                                                <X size={14} color="#cbd5e1" />
-                                            </div>
                                         </div>
                                         <div style={{
                                             display: 'flex',
@@ -743,8 +740,18 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                                     fontSize: '0.9rem'
                                                 }}
                                             />
-                                            <div style={{ padding: '0 0.5rem', color: '#cbd5e1' }}>
-                                                <RefreshCw size={14} />
+                                            <div
+                                                onClick={() => handleSocialLinkRemove(link.id)}
+                                                style={{
+                                                    padding: '0 0.5rem',
+                                                    cursor: 'pointer',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    height: '100%'
+                                                }}
+                                            >
+                                                <X size={16} color="#ef4444" />
                                             </div>
                                         </div>
                                     </div>

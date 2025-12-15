@@ -12,7 +12,7 @@ const CustomConfig = ({ config, onChange }) => {
     const design = config.design || {};
 
     // Added Components State
-    const [addedComponents, setAddedComponents] = useState([]);
+    const [addedComponents, setAddedComponents] = useState(config.customComponents || []);
     const [openComponentId, setOpenComponentId] = useState(null);
 
     // Menu Sub-accordion State
@@ -35,6 +35,20 @@ const CustomConfig = ({ config, onChange }) => {
             customComponents: addedComponents
         }));
     }, [addedComponents, onChange]);
+
+    // Initialize/Sync from config if provided (for edit mode)
+    useEffect(() => {
+        if (config.customComponents && config.customComponents.length > 0) {
+            // Only update if state is empty (initial load) or if we want to force sync?
+            // Simple check: if state is empty but config is not, load it.
+            // But we must check if we already loaded it to avoid overwriting user clearing all components.
+            // A better way is comparing IDs or json stringify, but for now let's trust initialization + this check for delayed load.
+            setAddedComponents(prev => {
+                if (prev.length === 0) return config.customComponents;
+                return prev;
+            });
+        }
+    }, [config.customComponents]);
 
     // Available Components List
     const components = [

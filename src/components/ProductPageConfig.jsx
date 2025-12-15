@@ -333,7 +333,12 @@ const ProductPageConfig = ({ config, onChange }) => {
                                         onChange={(e) => handleBasicInfoUpdate('companyTextColor', e.target.value)}
                                         style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.85rem', fontWeight: 'bold' }}
                                     />
-                                    <div style={{ width: '24px', height: '24px', background: basicInfo.companyTextColor || '#000000', borderRadius: '2px', border: '1px solid #e2e8f0' }}></div>
+                                    <input
+                                        type="color"
+                                        value={basicInfo.companyTextColor || '#000000'}
+                                        onChange={(e) => handleBasicInfoUpdate('companyTextColor', e.target.value)}
+                                        style={{ width: '24px', height: '24px', border: '1px solid #e2e8f0', borderRadius: '2px', cursor: 'pointer' }}
+                                    />
                                 </div>
                             </div>
                             <div>
@@ -455,7 +460,12 @@ const ProductPageConfig = ({ config, onChange }) => {
                                         onChange={(e) => handleBasicInfoUpdate('titleTextColor', e.target.value)}
                                         style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.85rem', fontWeight: 'bold' }}
                                     />
-                                    <div style={{ width: '24px', height: '24px', background: basicInfo.titleTextColor || '#000000', borderRadius: '2px', border: '1px solid #e2e8f0' }}></div>
+                                    <input
+                                        type="color"
+                                        value={basicInfo.titleTextColor || '#000000'}
+                                        onChange={(e) => handleBasicInfoUpdate('titleTextColor', e.target.value)}
+                                        style={{ width: '24px', height: '24px', border: '1px solid #e2e8f0', borderRadius: '2px', cursor: 'pointer' }}
+                                    />
                                 </div>
                             </div>
                             <div>
@@ -862,7 +872,12 @@ const ProductPageConfig = ({ config, onChange }) => {
                                         onChange={(e) => handleFeedbackUpdate('textColor', e.target.value)}
                                         style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.85rem', fontWeight: 'bold' }}
                                     />
-                                    <div style={{ width: '24px', height: '24px', background: feedback.textColor || '#000000', borderRadius: '2px', border: '1px solid #e2e8f0' }}></div>
+                                    <input
+                                        type="color"
+                                        value={feedback.textColor || '#000000'}
+                                        onChange={(e) => handleFeedbackUpdate('textColor', e.target.value)}
+                                        style={{ width: '24px', height: '24px', border: '1px solid #e2e8f0', borderRadius: '2px', cursor: 'pointer' }}
+                                    />
                                 </div>
                             </div>
                             <div>
@@ -921,59 +936,102 @@ const ProductPageConfig = ({ config, onChange }) => {
                     <div style={{ padding: '2rem', background: '#fff' }}>
 
                         {/* Phone */}
-                        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'center' }}>
-                            <div style={{ width: '42px', height: '42px', border: '1px solid #1e293b', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <Phone size={20} color="#1e293b" />
-                            </div>
-                            <div style={{ flex: 1, position: 'relative' }}>
-                                <div style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b' }}>
-                                    <Globe size={14} />
+                        {contact.phone != null ? (
+                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'center' }}>
+                                <div style={{ width: '42px', height: '42px', border: '1px solid #1e293b', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <Phone size={20} color="#1e293b" />
                                 </div>
-                                <input
-                                    type="text"
-                                    value={contact.phone || ''}
-                                    onChange={(e) => handleContactUpdate('phone', e.target.value)}
-                                    placeholder="111337374"
-                                    style={{ width: '100%', padding: '0.75rem 0.75rem 0.75rem 2.5rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
-                                />
-                                <div style={{ position: 'absolute', right: '-30px', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                    {/* Placeholder for icons outside input if needed, or just keep input simple */}
+                                <div style={{ flex: 1, position: 'relative' }}>
+                                    <div style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b' }}>
+                                        <Globe size={14} />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={contact.phone}
+                                        onChange={(e) => handleContactUpdate('phone', e.target.value)}
+                                        placeholder="111337374"
+                                        style={{ width: '100%', padding: '0.75rem 0.75rem 0.75rem 2.5rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
+                                    />
+                                </div>
+                                <div onClick={() => handleContactUpdate('phone', null)} style={{ cursor: 'pointer', opacity: 1, padding: '0.5rem', display: 'flex', alignItems: 'center' }}>
+                                    <X size={18} color="#ef4444" />
                                 </div>
                             </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', justifyContent: 'center' }}>
-                                <div style={{ cursor: 'pointer', opacity: 0.3 }}><X size={14} /></div>
-                                <div style={{ cursor: 'pointer', opacity: 0.3 }}><RefreshCw size={12} /></div>
+                        ) : (
+                            <div style={{ marginBottom: '1rem' }}>
+                                <button
+                                    onClick={() => handleContactUpdate('phone', '')}
+                                    style={{
+                                        display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', border: '1px solid #8b5cf6', borderRadius: '4px', color: '#8b5cf6', background: '#fff', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer'
+                                    }}
+                                >
+                                    <Plus size={14} /> Add Phone
+                                </button>
                             </div>
-                        </div>
+                        )}
 
                         {/* Email */}
-                        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', alignItems: 'center' }}>
-                            <div style={{ width: '42px', height: '42px', border: '1px solid #1e293b', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <Mail size={20} color="#1e293b" />
+                        {contact.email != null ? (
+                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', alignItems: 'center' }}>
+                                <div style={{ width: '42px', height: '42px', border: '1px solid #1e293b', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <Mail size={20} color="#1e293b" />
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <input
+                                        type="text"
+                                        value={contact.email}
+                                        onChange={(e) => handleContactUpdate('email', e.target.value)}
+                                        placeholder="info@dairylandltd.com"
+                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
+                                    />
+                                </div>
+                                <div onClick={() => handleContactUpdate('email', null)} style={{ cursor: 'pointer', opacity: 1, padding: '0.5rem', display: 'flex', alignItems: 'center' }}>
+                                    <X size={18} color="#ef4444" />
+                                </div>
                             </div>
-                            <div style={{ flex: 1 }}>
-                                <input
-                                    type="text"
-                                    value={contact.email || ''}
-                                    onChange={(e) => handleContactUpdate('email', e.target.value)}
-                                    placeholder="info@dairylandltd.com"
-                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
-                                />
+                        ) : (
+                            <div style={{ marginBottom: '1.5rem' }}>
+                                <button
+                                    onClick={() => handleContactUpdate('email', '')}
+                                    style={{
+                                        display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', border: '1px solid #8b5cf6', borderRadius: '4px', color: '#8b5cf6', background: '#fff', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer'
+                                    }}
+                                >
+                                    <Plus size={14} /> Add Email
+                                </button>
                             </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', justifyContent: 'center' }}>
-                                <div style={{ cursor: 'pointer', opacity: 0.3 }}><X size={14} /></div>
-                                <div style={{ cursor: 'pointer', opacity: 0.3 }}><RefreshCw size={12} /></div>
-                            </div>
-                        </div>
+                        )}
 
-                        {/* Add Website Button (Mock) */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <button style={{
-                                display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', border: '1px solid #8b5cf6', borderRadius: '4px', color: '#8b5cf6', background: '#fff', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer'
-                            }}>
-                                <Plus size={14} /> Add Website
-                            </button>
-                        </div>
+                        {/* Website */}
+                        {contact.website != null ? (
+                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', alignItems: 'center' }}>
+                                <div style={{ width: '42px', height: '42px', border: '1px solid #1e293b', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <Globe size={20} color="#1e293b" />
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <input
+                                        type="text"
+                                        value={contact.website}
+                                        onChange={(e) => handleContactUpdate('website', e.target.value)}
+                                        placeholder="https://www.example.com"
+                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
+                                    />
+                                </div>
+                                <div onClick={() => handleContactUpdate('website', null)} style={{ cursor: 'pointer', opacity: 1, padding: '0.5rem', display: 'flex', alignItems: 'center' }}>
+                                    <X size={18} color="#ef4444" />
+                                </div>
+                            </div>
+                        ) : (
+                            <div style={{ marginBottom: '2rem' }}>
+                                <button
+                                    onClick={() => handleContactUpdate('website', '')}
+                                    style={{
+                                        display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', border: '1px solid #8b5cf6', borderRadius: '4px', color: '#8b5cf6', background: '#fff', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer'
+                                    }}>
+                                    <Plus size={14} /> Add Website
+                                </button>
+                            </div>
+                        )}
 
                         {/* Social Media Inputs */}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
@@ -997,9 +1055,8 @@ const ProductPageConfig = ({ config, onChange }) => {
                                                     style={{ width: '100%', height: '42px', border: 'none', outline: 'none', padding: '0 0.5rem', fontSize: '0.9rem', color: '#64748b' }}
                                                 />
                                             </div>
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                                <div onClick={() => handleRemoveSocial(social.platform)} style={{ cursor: 'pointer', opacity: 0.3 }}><X size={14} /></div>
-                                                <div style={{ cursor: 'pointer', opacity: 0.3 }}><RefreshCw size={12} /></div>
+                                            <div onClick={() => handleRemoveSocial(social.platform)} style={{ cursor: 'pointer', opacity: 1, padding: '0.5rem', display: 'flex', alignItems: 'center' }}>
+                                                <X size={18} color="#ef4444" />
                                             </div>
                                         </div>
                                     </div>

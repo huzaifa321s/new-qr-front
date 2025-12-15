@@ -205,8 +205,26 @@ const PasswordProtectedConfig = ({ config, onChange }) => {
                                             height: '28px',
                                             background: primaryColor,
                                             borderRadius: '2px',
-                                            flexShrink: 0
-                                        }}></div>
+                                            flexShrink: 0,
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="color"
+                                                value={primaryColor}
+                                                onChange={(e) => handleColorUpdate('header', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -268,8 +286,26 @@ const PasswordProtectedConfig = ({ config, onChange }) => {
                                             background: secondaryColor,
                                             borderRadius: '2px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0' // Add border for white background
-                                        }}></div>
+                                            border: '1px solid #e2e8f0',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="color"
+                                                value={secondaryColor}
+                                                onChange={(e) => handleColorUpdate('light', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

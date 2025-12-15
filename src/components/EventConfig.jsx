@@ -574,8 +574,26 @@ const EventConfig = ({ config, onChange }) => {
                                             background: businessInfo.companyNameColor || '#FFC700',
                                             borderRadius: '2px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
-                                        }}></div>
+                                            border: '1px solid #e2e8f0',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="color"
+                                                value={businessInfo.companyNameColor || '#FFC700'}
+                                                onChange={(e) => handleBusinessInfoUpdate('companyNameColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -666,8 +684,26 @@ const EventConfig = ({ config, onChange }) => {
                                             background: businessInfo.headlineColor || '#FFFFFF',
                                             borderRadius: '2px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
-                                        }}></div>
+                                            border: '1px solid #e2e8f0',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="color"
+                                                value={businessInfo.headlineColor || '#FFFFFF'}
+                                                onChange={(e) => handleBusinessInfoUpdate('headlineColor', e.target.value)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-50%',
+                                                    left: '-50%',
+                                                    width: '200%',
+                                                    height: '200%',
+                                                    cursor: 'pointer',
+                                                    opacity: 0
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -1195,27 +1231,71 @@ const EventConfig = ({ config, onChange }) => {
                             ))}
                         </div>
 
-                        {/* Add Website Button */}
-                        <div style={{ marginTop: '1.5rem' }}>
-                            <button
-                                onClick={() => handleAddChannel('website')}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.5rem',
-                                    background: '#fff',
-                                    color: '#8b5cf6',
-                                    border: '1px solid #8b5cf6',
-                                    padding: '0.75rem 1.5rem',
-                                    borderRadius: '4px',
-                                    fontSize: '0.9rem',
-                                    fontWeight: '500',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                <Plus size={16} />
-                                Add Website
-                            </button>
+                        {/* Add Channel Buttons */}
+                        <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                            {!contactInfo.channels?.some(ch => ch.type === 'phone') && (
+                                <button
+                                    onClick={() => handleAddChannel('phone')}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.5rem',
+                                        background: '#fff',
+                                        color: '#8b5cf6',
+                                        border: '1px solid #8b5cf6',
+                                        padding: '0.75rem 1.5rem',
+                                        borderRadius: '4px',
+                                        fontSize: '0.9rem',
+                                        fontWeight: '500',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    <Plus size={16} />
+                                    Add Phone
+                                </button>
+                            )}
+                            {!contactInfo.channels?.some(ch => ch.type === 'email') && (
+                                <button
+                                    onClick={() => handleAddChannel('email')}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.5rem',
+                                        background: '#fff',
+                                        color: '#8b5cf6',
+                                        border: '1px solid #8b5cf6',
+                                        padding: '0.75rem 1.5rem',
+                                        borderRadius: '4px',
+                                        fontSize: '0.9rem',
+                                        fontWeight: '500',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    <Plus size={16} />
+                                    Add Email
+                                </button>
+                            )}
+                            {!contactInfo.channels?.some(ch => ch.type === 'website') && (
+                                <button
+                                    onClick={() => handleAddChannel('website')}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.5rem',
+                                        background: '#fff',
+                                        color: '#8b5cf6',
+                                        border: '1px solid #8b5cf6',
+                                        padding: '0.75rem 1.5rem',
+                                        borderRadius: '4px',
+                                        fontSize: '0.9rem',
+                                        fontWeight: '500',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    <Plus size={16} />
+                                    Add Website
+                                </button>
+                            )}
                         </div>
 
                     </div>
