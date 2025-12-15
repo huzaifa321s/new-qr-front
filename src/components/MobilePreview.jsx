@@ -5895,7 +5895,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                         {/* Full Image */}
                         <img
-                            src={images[currentImageIndex]}
+                            src={displayImages[currentImageIndex]}
                             alt="Full preview"
                             style={{
                                 maxWidth: '90%',

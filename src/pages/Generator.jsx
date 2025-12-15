@@ -32,8 +32,9 @@ const Generator = () => {
     const navigate = useNavigate();
     const params = new URLSearchParams(location.search);
     const typeFromQuery = params.get('type');
-    const { selectedType } = location.state || { selectedType: typeFromQuery || 'website' };
     const editingQr = location.state?.editingQr;
+    // Derive selectedType from state, editingQr, or query param
+    const selectedType = location.state?.selectedType || editingQr?.type || typeFromQuery || 'website';
     const isEditing = !!editingQr;
     const qrRef = useRef(null);
 
@@ -55,7 +56,7 @@ const Generator = () => {
             // For preview during creation, use a preview URL that matches the pattern
             if (selectedType === 'app-store') {
                 return `${baseUrl}/app/preview`;
-            } else if (selectedType === 'menu' || selectedType === 'business-page' || selectedType === 'custom-type') {
+            } else if (selectedType === 'menu' || selectedType === 'business-page' || selectedType === 'custom-type' || selectedType === 'coupon' || selectedType === 'business-card') {
                 return `${baseUrl}/view/preview`;
             } else {
                 const backendUrl = window.location.origin.includes('localhost')
@@ -68,7 +69,7 @@ const Generator = () => {
         // Generate actual URL based on type
         if (selectedType === 'app-store') {
             return `${baseUrl}/app/${id}`;
-        } else if (selectedType === 'menu' || selectedType === 'business-page' || selectedType === 'custom-type') {
+        } else if (selectedType === 'menu' || selectedType === 'business-page' || selectedType === 'custom-type' || selectedType === 'coupon' || selectedType === 'business-card') {
             return `${baseUrl}/view/${id}`;
         } else {
             const backendUrl = window.location.origin.includes('localhost')
@@ -122,12 +123,39 @@ const Generator = () => {
                 ...defaultConfig,
                 ...prev,
                 businessInfo: editingQr.businessInfo ? { ...defaultConfig.businessInfo, ...editingQr.businessInfo } : defaultConfig.businessInfo,
+                basicInfo: editingQr.basicInfo || defaultConfig.basicInfo,
                 appLinks: editingQr.appLinks ? { ...defaultConfig.appLinks, ...editingQr.appLinks } : defaultConfig.appLinks,
                 appStatus: editingQr.appStatus ? { ...defaultConfig.appStatus, ...editingQr.appStatus } : defaultConfig.appStatus,
                 menu: editingQr.menu || defaultConfig.menu,
                 timings: editingQr.timings || defaultConfig.timings,
                 social: editingQr.social ? { ...defaultConfig.social, ...editingQr.social } : defaultConfig.social,
+                coupon: editingQr.coupon || defaultConfig.coupon,
                 customComponents: editingQr.customComponents || defaultConfig.customComponents,
+                personalInfo: editingQr.personalInfo || defaultConfig.personalInfo,
+                contact: editingQr.contact || defaultConfig.contact,
+                facilities: editingQr.facilities || defaultConfig.facilities,
+                exchange: editingQr.exchange || defaultConfig.exchange,
+                openingHours: editingQr.openingHours || defaultConfig.openingHours,
+                basicInfo: editingQr.basicInfo || defaultConfig.basicInfo,
+                form: editingQr.form || defaultConfig.form,
+                customFields: editingQr.customFields || defaultConfig.customFields,
+                thankYou: editingQr.thankYou || defaultConfig.thankYou,
+                rating: editingQr.rating || defaultConfig.rating,
+                reviews: editingQr.reviews || defaultConfig.reviews,
+                shareOption: editingQr.shareOption || defaultConfig.shareOption,
+                uploadPdf: editingQr.pdf || defaultConfig.uploadPdf,
+                links: editingQr.links || defaultConfig.links,
+                socialLinks: editingQr.socialLinks || defaultConfig.socialLinks,
+                infoFields: editingQr.infoFields || defaultConfig.infoFields,
+                eventSchedule: editingQr.eventSchedule || defaultConfig.eventSchedule,
+                venue: editingQr.venue || defaultConfig.venue,
+                facilities: editingQr.facilities || defaultConfig.facilities,
+                contactInfo: editingQr.contactInfo || defaultConfig.contactInfo,
+                content: editingQr.productContent || defaultConfig.content,
+                video: editingQr.video || defaultConfig.video,
+                feedback: editingQr.feedback || defaultConfig.feedback,
+                url: editingQr.dynamicUrl || defaultConfig.url,
+                images: editingQr.images || defaultConfig.images,
                 // Re-merge design to include page styles (like colors) and QR design
                 design: {
                     ...defaultConfig.design,
@@ -193,7 +221,7 @@ const Generator = () => {
 
                 if (selectedType === 'app-store') {
                     qrDataUrl = `${baseUrl}/app/${editingQr.shortId}`;
-                } else if (selectedType === 'menu' || selectedType === 'business-page' || selectedType === 'custom-type') {
+                } else if (selectedType === 'menu' || selectedType === 'business-page' || selectedType === 'custom-type' || selectedType === 'coupon' || selectedType === 'business-card' || selectedType === 'bio-page' || selectedType === 'lead-generation' || selectedType === 'rating' || selectedType === 'reviews' || selectedType === 'social-media' || selectedType === 'pdf' || selectedType === 'multiple-links' || selectedType === 'password-protected' || selectedType === 'event' || selectedType === 'product-page' || selectedType === 'video' || selectedType === 'image') {
                     qrDataUrl = `${baseUrl}/view/${editingQr.shortId}`;
                 } else {
                     const backendUrl = window.location.origin.includes('localhost')
@@ -224,6 +252,28 @@ const Generator = () => {
                 personalInfo: pageConfig.personalInfo,
                 coupon: pageConfig.coupon,
                 customComponents: pageConfig.customComponents,
+                exchange: pageConfig.exchange,
+                openingHours: pageConfig.openingHours,
+                basicInfo: pageConfig.basicInfo,
+                form: pageConfig.form,
+                customFields: pageConfig.customFields,
+                thankYou: pageConfig.thankYou,
+                rating: pageConfig.rating,
+                reviews: pageConfig.reviews,
+                shareOption: pageConfig.shareOption,
+                pdf: pageConfig.uploadPdf, // Map frontend 'uploadPdf' to backend 'pdf'
+                links: pageConfig.links,
+                socialLinks: pageConfig.socialLinks,
+                infoFields: pageConfig.infoFields,
+                eventSchedule: pageConfig.eventSchedule,
+                venue: pageConfig.venue,
+                facilities: pageConfig.facilities,
+                contactInfo: pageConfig.contactInfo,
+                productContent: pageConfig.content,
+                video: pageConfig.video,
+                feedback: pageConfig.feedback,
+                images: pageConfig.images,
+                dynamicUrl: pageConfig.url,
                 name: qrName
             };
 
@@ -253,7 +303,7 @@ const Generator = () => {
         <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
             {/* Left Panel */}
             <div style={{ flex: 1, padding: '2rem', overflowY: 'auto', height: '100vh' }}>
-                <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+                <div style={{ maxWidth: '100%', margin: '0 auto' }}>
 
                     {/* Header / Nav */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
@@ -507,6 +557,7 @@ const Generator = () => {
                                 config={pageConfig}
                                 qrDesign={qrDesign}
                                 qrValue={getQRValue()}
+                                isEditor={true}
                             />
                         </div>
                         {/* Background QR for Content Step */}
@@ -588,5 +639,6 @@ const Generator = () => {
         </div>
     );
 };
+
 
 export default Generator;

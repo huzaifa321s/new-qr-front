@@ -47,40 +47,78 @@ const Dashboard = () => {
         setDownloadingQr(null);
     };
 
-const handleRunDownload = async () => {
-    if (!downloadingQr) {
-        handleCloseDownloadModal();
-        return;
-    }
+    const handleRunDownload = async () => {
+        if (!downloadingQr) {
+            handleCloseDownloadModal();
+            return;
+        }
 
-    try {
-        // Try to find the QR element
-        let qrElement = document.querySelector(`#modal-qr-${downloadingQr._id} canvas, #modal-qr-${downloadingQr._id} svg`) || 
-                       document.querySelector(`#qr-${downloadingQr._id} canvas, #qr-${downloadingQr._id} svg`);
+        try {
+            const filename = `${downloadingQr.name || 'qr-code'}.${downloadFormat}`;
 
-        const filename = `${downloadingQr.name || 'qr-code'}.${downloadFormat}`;
+            // ✅ USE BACKEND API FOR DOWNLOAD
+            const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const downloadUrl = `${backendUrl}/api/qr/download/${downloadingQr.shortId}?format=${downloadFormat}`;
 
-        // If we can't find the element but have a qrImageUrl, use that
-        if (!qrElement && downloadingQr.qrImageUrl) {
-            const response = await fetch(downloadingQr.qrImageUrl);
-            if (!response.ok) throw new Error('Failed to fetch QR code');
-            
+            console.log('📥 Downloading from:', downloadUrl);
+
+            // Fetch from backend
+            const response = await fetch(downloadUrl);
+
+            if (!response.ok) {
+                throw new Error(`Download failed: ${response.statusText}`);
+            }
+
+            // Get blob and download
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
+
             const link = document.createElement('a');
             link.download = filename;
             link.href = url;
+            link.style.display = 'none';
+
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-            handleCloseDownloadModal();
-            return;
-        } else if (!qrElement) {
-            throw new Error('QR code element not found');
+
+            // Cleanup
+            setTimeout(() => {
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            }, 100);
+
+            toast.success('QR code downloaded successfully!');
+
+        } catch (error) {
+            console.error('Download failed:', error);
+            toast.error('Failed to download QR code');
+
+            // ❌ FALLBACK: Only use client-side if backend fails
+            try {
+                await fallbackClientDownload();
+            } catch (fallbackError) {
+                console.error('Fallback also failed:', fallbackError);
+                // Last resort: open blob URL
+                if (downloadingQr?.qrImageUrl) {
+                    window.open(downloadingQr.qrImageUrl, '_blank');
+                }
+            }
         }
 
-        // Handle different download formats
+        handleCloseDownloadModal();
+    };
+
+    // ❌ Fallback function (only if backend fails)
+    const fallbackClientDownload = async () => {
+        let qrElement = document.querySelector(`#modal-qr-${downloadingQr._id} canvas, #modal-qr-${downloadingQr._id} svg`) ||
+            document.querySelector(`#qr-${downloadingQr._id} canvas, #qr-${downloadingQr._id} svg`);
+
+        if (!qrElement) {
+            throw new Error('QR element not found');
+        }
+
+        const filename = `${downloadingQr.name || 'qr-code'}.${downloadFormat}`;
+
         if (downloadFormat === 'pdf') {
             const dataUrl = await toPng(qrElement);
             const pdf = new jsPDF();
@@ -88,90 +126,14 @@ const handleRunDownload = async () => {
             const pdfWidth = pdf.internal.pageSize.getWidth() - 20;
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
             const x = (pdf.internal.pageSize.getWidth() - pdfWidth) / 2;
-            
+
             pdf.addImage(dataUrl, 'PNG', x, 10, pdfWidth, pdfHeight);
             pdf.save(filename);
-        } 
-      else if (downloadFormat === 'svg') {
-    // Get the canvas or create one from SVG
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const size = 512; // Fixed size for better quality
-    canvas.width = size;
-    canvas.height = size;
-    
-    // Get the actual QR code element
-    const qrCanvas = qrElement.tagName === 'CANVAS' ? 
-        qrElement : 
-        qrElement.querySelector('canvas');
-    
-    // Draw the QR code to our canvas
-    if (qrCanvas) {
-        // If we have a canvas, draw it directly
-        ctx.drawImage(qrCanvas, 0, 0, size, size);
-    } else {
-        // If it's an SVG, convert it to canvas first
-        const svgData = new XMLSerializer().serializeToString(qrElement);
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
-        
-        await new Promise((resolve) => {
-            img.onload = resolve;
-            img.onerror = resolve;
-            // Set a timeout in case the image fails to load
-            setTimeout(resolve, 1000);
-        });
-        
-        // Draw the image to canvas
-        ctx.drawImage(img, 0, 0, size, size);
-    }
-    
-    // Get the data URL from canvas
-    const pngDataUrl = canvas.toDataURL('image/png', 1.0);
-    
-    // Create a proper SVG with the image embedded
-    const svgContent = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-    <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-    <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" 
-         xmlns="http://www.w3.org/2000/svg" 
-         xmlns:xlink="http://www.w3.org/1999/xlink">
-        <title>QR Code</title>
-        <desc>Generated QR Code</desc>
-        <image width="${size}" height="${size}" xlink:href="${pngDataUrl}"/>
-    </svg>`;
-    
-    // Create a blob and download
-    const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    
-    const link = document.createElement('a');
-    link.download = filename;
-    link.href = url;
-    link.style.display = 'none';
-    
-    document.body.appendChild(link);
-    link.click();
-    
-    // Cleanup
-    setTimeout(() => {
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    }, 100);
-}
-        else {
-            // For PNG/JPG
-            const dataUrl = downloadFormat === 'jpg' || downloadFormat === 'jpeg' 
-                ? await toJpeg(qrElement, { 
-                    quality: 0.95,
-                    width: qrElement.offsetWidth * 2,
-                    height: qrElement.offsetHeight * 2
-                  }) 
-                : await toPng(qrElement, {
-                    width: qrElement.offsetWidth * 2,
-                    height: qrElement.offsetHeight * 2
-                  });
-            
+        } else {
+            const dataUrl = downloadFormat === 'jpg' || downloadFormat === 'jpeg'
+                ? await toJpeg(qrElement, { quality: 0.95 })
+                : await toPng(qrElement);
+
             const link = document.createElement('a');
             link.download = filename;
             link.href = dataUrl;
@@ -179,18 +141,7 @@ const handleRunDownload = async () => {
             link.click();
             document.body.removeChild(link);
         }
-    } catch (error) {
-        console.error('Download failed:', error);
-        toast.error('Failed to download QR code');
-        
-        // Final fallback
-        if (downloadingQr?.qrImageUrl) {
-            window.open(downloadingQr.qrImageUrl, '_blank');
-        }
-    }
-    
-    handleCloseDownloadModal();
-};
+    };
 
 
     const handleEditUrlClick = (qr) => {
@@ -686,7 +637,7 @@ const handleRunDownload = async () => {
                                                         value={`http://localhost:3000/${qr.shortId}`}
                                                         design={qr.design || {}}
                                                         size={58}
-                                                         id={`qr-${qr._id}`}  // Add this I
+                                                        id={`qr-${qr._id}`}  // Add this I
                                                         margin={5}
                                                     />
                                                 )}
