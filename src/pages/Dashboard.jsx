@@ -10,6 +10,42 @@ import toast, { Toaster } from 'react-hot-toast';
 import QRRenderer from '../components/QRRenderer';
 import { toPng, toJpeg, toSvg } from 'html-to-image';
 import { jsPDF } from 'jspdf';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { io } from 'socket.io-client';
+
+const DateCustomInput = React.forwardRef(({ value, onClick, startDate, endDate }, ref) => (
+    <div
+        onClick={onClick}
+        ref={ref}
+        style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            padding: '0.5rem 1rem',
+            border: '1px solid #ddd',
+            borderRadius: '50px',
+            background: '#fff',
+            cursor: 'pointer',
+            fontSize: '0.875rem',
+            color: '#666',
+            minWidth: '260px',
+            justifyContent: 'space-between',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+        }}
+    >
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ color: startDate ? '#333' : '#999' }}>
+                {startDate ? startDate.toLocaleDateString('en-CA') : 'Start date'}
+            </span>
+            <span style={{ margin: '0 0.75rem', color: '#ccc' }}>→</span>
+            <span style={{ color: endDate ? '#333' : '#999' }}>
+                {endDate ? endDate.toLocaleDateString('en-CA') : 'End date'}
+            </span>
+        </div>
+        <Calendar size={16} color="#999" />
+    </div>
+));
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -33,6 +69,10 @@ const Dashboard = () => {
     const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
     const [downloadingQr, setDownloadingQr] = useState(null);
     const [downloadFormat, setDownloadFormat] = useState('png');
+    const [sortOption, setSortOption] = useState('Last Created');
+    const [selectedTypeFilter, setSelectedTypeFilter] = useState('All types');
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     const baseUrl = window.location.origin;
 
@@ -185,9 +225,10 @@ const Dashboard = () => {
             await axios.put(`/api/qr/${id}`, { name: tempName });
             setQrs(prev => prev.map(q => q._id === id ? { ...q, name: tempName } : q));
             setRenamingId(null);
+            toast.success('QR label updated successfully');
         } catch (err) {
             console.error(err);
-            alert('Failed to update name');
+            toast.error('Error updating label');
         }
     };
 
@@ -203,9 +244,10 @@ const Dashboard = () => {
             await axios.delete(`/api/qr/${deleteConfirmationId}`);
             setQrs(prev => prev.filter(q => q._id !== deleteConfirmationId));
             setDeleteConfirmationId(null);
+            toast.success('QR deleted successfully');
         } catch (err) {
             console.error(err);
-            alert('Failed to delete QR code');
+            toast.error('Server error');
         } finally {
             setIsDeleting(false);
         }
@@ -218,6 +260,42 @@ const Dashboard = () => {
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
+        // Filter and Sort Logic
+        const filteredQrs = qrs
+            .filter(qr => {
+                const matchesSearch = searchTerm === '' ||
+                    qr.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    qr.shortId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    qr.type?.toLowerCase().includes(searchTerm.toLowerCase());
+
+                if (!matchesSearch) return false;
+
+                if (activeTab === 'Dynamic') return ['url', 'dynamic-url', 'business-page', 'menu', 'business-card', 'app-store', 'video', 'pdf', 'mp3', 'image', 'social-media', 'coupon', 'feedback', 'event', 'product-page', 'lead-generation', 'rating', 'reviews', 'password-protected', 'multiple-links'].includes(qr.type);
+                if (activeTab === 'Static') return ['text', 'email', 'sms', 'wifi', 'vcard'].includes(qr.type);
+
+                return true;
+            })
+            .filter(qr => {
+                if (sortOption === 'Last 30 Days') {
+                    const thirtyDaysAgo = new Date();
+                    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                    return new Date(qr.createdAt) >= thirtyDaysAgo;
+                }
+                return true;
+            })
+            .sort((a, b) => {
+                const dateA = new Date(a.createdAt);
+                const dateB = new Date(b.createdAt);
+                switch (sortOption) {
+                    case 'First Created': return dateA - dateB;
+                    case 'Most Scanned': return (b.scanCount || 0) - (a.scanCount || 0);
+                    case 'Last Created':
+                    case 'Last 30 Days':
+                    case 'Lifetime':
+                    default: return dateB - dateA;
+                }
+            });
+
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [activeMenuId]);
 
@@ -242,6 +320,25 @@ const Dashboard = () => {
             setLoading(false);
         }
     };
+
+    // Real-time scan updates
+    useEffect(() => {
+        const socketUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+        const socket = io(socketUrl);
+
+        socket.on('scan-updated', (data) => {
+            setQrs(prevQrs => prevQrs.map(qr => {
+                if (qr.shortId === data.shortId) {
+                    return { ...qr, scanCount: data.scanCount };
+                }
+                return qr;
+            }));
+        });
+
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
 
     const handleDownloadQR = (qr) => {
         try {
@@ -268,6 +365,95 @@ const Dashboard = () => {
         e.stopPropagation();
         setActiveMenuId(activeMenuId === id ? null : id);
     };
+
+    // Filter and Sort Logic
+    const filteredQrs = qrs
+        .filter(qr => {
+            // 1. Search Filter
+            const matchesSearch = searchTerm === '' ||
+                qr.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                qr.shortId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                qr.type?.toLowerCase().includes(searchTerm.toLowerCase());
+
+            if (!matchesSearch) return false;
+
+            // 2. Tab Filter
+            if (activeTab === 'Dynamic') return ['url', 'dynamic-url', 'business-page', 'menu', 'business-card', 'app-store', 'video', 'pdf', 'mp3', 'image', 'social-media', 'coupon', 'feedback', 'event', 'product-page', 'lead-generation', 'rating', 'reviews', 'password-protected', 'multiple-links'].includes(qr.type);
+            if (activeTab === 'Static') return ['text', 'email', 'sms', 'wifi', 'vcard'].includes(qr.type);
+            // if (activeTab === 'Favourite') return false; 
+
+            // 3. Type Filter Dropdown
+            if (selectedTypeFilter !== 'All types') {
+                if (qr.type !== selectedTypeFilter) return false;
+            }
+
+            return true;
+        })
+        .filter(qr => {
+            // 3. Timeframe Filter ("Last 30 Days")
+            if (sortOption === 'Last 30 Days') {
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                return new Date(qr.createdAt) >= thirtyDaysAgo;
+            }
+
+            // 4. Custom Date Range Filter
+            if (startDate && endDate) {
+                const qrDate = new Date(qr.createdAt);
+                // Set start date to beginning of day, end date to end of day
+                const start = new Date(startDate); start.setHours(0, 0, 0, 0);
+                const end = new Date(endDate); end.setHours(23, 59, 59, 999);
+
+                return qrDate >= start && qrDate <= end;
+            }
+
+            return true;
+        })
+        .sort((a, b) => {
+            // 4. Sorting Logic
+            const dateA = new Date(a.createdAt);
+            const dateB = new Date(b.createdAt);
+
+            switch (sortOption) {
+                case 'First Created':
+                    return dateA - dateB;
+                case 'Most Scanned':
+                    return (b.scanCount || 0) - (a.scanCount || 0);
+                case 'Last Created':
+                case 'Last 30 Days':
+                case 'Lifetime':
+                default:
+                    return dateB - dateA;
+            }
+        });
+
+    const qrTypes = [
+        { value: 'url', label: 'URL' },
+        { value: 'text', label: 'Text' },
+        { value: 'email', label: 'Email' },
+        { value: 'sms', label: 'SMS' },
+        { value: 'wifi', label: 'Wi-Fi' },
+        { value: 'vcard', label: 'vCard' },
+        { value: 'business-card', label: 'Business Card' },
+        { value: 'business-page', label: 'Business Page' },
+        { value: 'social-media', label: 'Social Media' },
+        { value: 'image', label: 'Image' },
+        { value: 'pdf', label: 'PDF' },
+        { value: 'app-store', label: 'App Store' },
+        { value: 'menu', label: 'Menu' },
+        { value: 'video', label: 'Video' },
+        { value: 'mp3', label: 'MP3' },
+        { value: 'coupon', label: 'Coupon' },
+        { value: 'feedback', label: 'Feedback' },
+        { value: 'event', label: 'Event' },
+        { value: 'product-page', label: 'Product Page' },
+        { value: 'lead-generation', label: 'Lead Generation' },
+        { value: 'rating', label: 'Rating' },
+        { value: 'reviews', label: 'Reviews' },
+        { value: 'password-protected', label: 'Password Protected' },
+        { value: 'multiple-links', label: 'Multiple Links' },
+        { value: 'dynamic-url', label: 'Dynamic URL' }
+    ].sort((a, b) => a.label.localeCompare(b.label));
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f5f7' }}>
@@ -390,23 +576,12 @@ const Dashboard = () => {
 
             {/* Main Content */}
             <div style={{ flex: 1, padding: '1.5rem 2rem', overflowY: 'auto' }}>
-                {/* Red Banner */}
-                <div style={{
-                    background: '#ff4757',
-                    color: '#ffffff',
-                    padding: '0.875rem 1.5rem',
-                    borderRadius: '8px',
-                    marginBottom: '1.5rem',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <div style={{ width: '20px', height: '20px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 'bold', color: '#ff4757' }}>!</div>
-                        <span style={{ fontSize: '0.875rem' }}>You have 6 days left on your Free Trial. Keep your QR codes active!</span>
-                    </div>
-                    <button style={{ background: 'transparent', color: '#ffffff', border: '2px solid #fff', padding: '0.4rem 1rem', borderRadius: '20px', fontWeight: '600', cursor: 'pointer', fontSize: '0.8rem' }}>Upgrade Now</button>
-                </div>
+
+
+
+
+
+
 
                 {/* Header */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
@@ -434,74 +609,89 @@ const Dashboard = () => {
                 {/* Filters Row */}
                 <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <div style={{ position: 'relative' }}>
-                        <select style={{
-                            padding: '0.5rem 2rem 0.5rem 0.75rem',
-                            border: '1px solid #ddd',
-                            borderRadius: '6px',
-                            fontSize: '0.875rem',
-                            color: '#666',
-                            background: '#fff',
-                            cursor: 'pointer',
-                            appearance: 'none'
-                        }}>
-                            <option>All types</option>
+                        <select
+                            value={selectedTypeFilter}
+                            onChange={(e) => setSelectedTypeFilter(e.target.value)}
+                            style={{
+                                padding: '0.5rem 2rem 0.5rem 0.75rem',
+                                border: '1px solid #ddd',
+                                borderRadius: '6px',
+                                fontSize: '0.875rem',
+                                color: '#666',
+                                background: '#fff',
+                                cursor: 'pointer',
+                                appearance: 'none',
+                                minWidth: '150px'
+                            }}
+                        >
+                            <option value="All types">All types</option>
+                            {qrTypes.map(type => (
+                                <option key={type.value} value={type.value}>{type.label}</option>
+                            ))}
                         </select>
                         <ChevronDown size={14} style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', color: '#666', pointerEvents: 'none' }} />
                     </div>
 
                     <div style={{ position: 'relative' }}>
-                        <select style={{
-                            padding: '0.5rem 2rem 0.5rem 0.75rem',
-                            border: '1px solid #ddd',
-                            borderRadius: '6px',
-                            fontSize: '0.875rem',
-                            color: '#666',
-                            background: '#fff',
-                            cursor: 'pointer',
-                            appearance: 'none'
-                        }}>
-                            <option>Last Created</option>
+                        <select
+                            value={sortOption}
+                            onChange={(e) => setSortOption(e.target.value)}
+                            style={{
+                                padding: '0.5rem 2rem 0.5rem 0.75rem',
+                                border: '1px solid #ddd',
+                                borderRadius: '6px',
+                                fontSize: '0.875rem',
+                                color: '#666',
+                                background: '#fff',
+                                cursor: 'pointer',
+                                appearance: 'none',
+                                minWidth: '140px'
+                            }}
+                        >
+                            <option value="Last Created">Last Created</option>
+                            <option value="First Created">First Created</option>
+                            <option value="Most Scanned">Most Scanned</option>
+                            <option value="Last 30 Days">Last 30 Days</option>
+                            <option value="Lifetime">Lifetime</option>
                         </select>
                         <ChevronDown size={14} style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', color: '#666', pointerEvents: 'none' }} />
                     </div>
 
-                    <input
-                        type="text"
-                        placeholder="Start date"
-                        style={{
-                            padding: '0.5rem 0.75rem',
-                            border: '1px solid #ddd',
-                            borderRadius: '6px',
-                            fontSize: '0.875rem',
-                            color: '#999',
-                            background: '#fff',
-                            width: '120px'
-                        }}
-                    />
-                    <span style={{ color: '#999' }}>→</span>
-                    <input
-                        type="text"
-                        placeholder="End date"
-                        style={{
-                            padding: '0.5rem 0.75rem',
-                            border: '1px solid #ddd',
-                            borderRadius: '6px',
-                            fontSize: '0.875rem',
-                            color: '#999',
-                            background: '#fff',
-                            width: '120px'
-                        }}
-                    />
+                    <div style={{ position: 'relative', zIndex: 10 }}>
+                        <DatePicker
+                            selected={startDate}
+                            onChange={(dates) => {
+                                const [start, end] = dates;
+                                setStartDate(start);
+                                setEndDate(end);
+                            }}
+                            startDate={startDate}
+                            endDate={endDate}
+                            selectsRange
+                            customInput={<DateCustomInput startDate={startDate} endDate={endDate} />}
+                        />
+                    </div>
 
                     <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <button style={{
-                            background: 'transparent',
-                            border: 'none',
-                            color: '#7c3aed',
-                            fontSize: '0.875rem',
-                            cursor: 'pointer',
-                            fontWeight: '500'
-                        }}>
+                        <button
+                            onClick={() => {
+                                setSearchTerm('');
+                                setActiveTab('All');
+                                setSortOption('Last Created');
+                                setSelectedTypeFilter('All types');
+                                setStartDate(null);
+                                setEndDate(null);
+                                toast.success('All filters cleared');
+                            }}
+                            style={{
+                                background: 'transparent',
+                                border: 'none',
+                                color: '#7c3aed',
+                                fontSize: '0.875rem',
+                                cursor: 'pointer',
+                                fontWeight: '500'
+                            }}
+                        >
                             Clear Filters
                         </button>
                         <div style={{ position: 'relative', width: '220px' }}>
@@ -568,12 +758,12 @@ const Dashboard = () => {
                             Retry
                         </button>
                     </div>
-                ) : qrs.length === 0 ? (
+                ) : filteredQrs.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '4rem', color: '#999' }}>No QR codes yet.</div>
                 ) : (
                     <>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            {qrs.map((qr, index) => {
+                            {filteredQrs.map((qr, index) => {
                                 const isMenuOpen = activeMenuId === qr._id;
                                 const expiryDate = new Date(qr.createdAt);
                                 expiryDate.setFullYear(expiryDate.getFullYear() + 1);
@@ -592,22 +782,7 @@ const Dashboard = () => {
                                             gap: '2rem'
                                         }}
                                     >
-                                        {/* FREE TRIAL Badge */}
-                                        <div style={{
-                                            position: 'absolute',
-                                            top: '12px',
-                                            right: '0',
-                                            background: '#fbbf24',
-                                            color: '#000',
-                                            fontSize: '0.65rem',
-                                            fontWeight: '800',
-                                            padding: '3px 10px',
-                                            borderTopLeftRadius: '8px',
-                                            borderBottomLeftRadius: '8px',
-                                            letterSpacing: '0.5px'
-                                        }}>
-                                            FREE TRIAL
-                                        </div>
+
 
                                         {/* QR Code + Info */}
                                         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', minWidth: '280px' }}>
