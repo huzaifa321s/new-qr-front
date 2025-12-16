@@ -158,13 +158,22 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
                         <label className="label" style={{ marginBottom: '1rem', display: 'block', color: '#0f172a', fontWeight: '600', fontSize: '0.85rem' }}>EYE FRAME (OUTER SQUARE)</label>
                         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
                             {[
-                                { id: 'square', svg: <path d="M5 5h40v40H5V5zm5 5v30h30V10H10z" fill="currentColor" /> },
-                                { id: 'circle', svg: <path d="M25 5C13.95 5 5 13.95 5 25s8.95 20 20 20 20-8.95 20-20S36.05 5 25 5zm0 5c8.28 0 15 6.72 15 15s-6.72 15-15 15-15-6.72-15-15 6.72-15 15-15z" fill="currentColor" /> },
-                                { id: 'rounded', svg: <path d="M12 5h26c3.87 0 7 3.13 7 7v26c0 3.87-3.13 7-7 7H12c-3.87 0-7-3.13-7-7V12c0-3.87 3.13-7 7-7zm0 5c-1.1 0-2 .9-2 2v26c0 1.1.9 2 2 2h26c1.1 0 2-.9 2-2V12c0-1.1-.9-2-2-2H12z" fill="currentColor" /> },
-                                { id: 'extra-rounded', svg: <path d="M18 5h14c7.18 0 13 5.82 13 13v14c0 7.18-5.82 13-13 13H18c-7.18 0-13-5.82-13-13V18c0-7.18 5.82-13 13-13zm0 5c-4.42 0-8 3.58-8 8v14c0 4.42 3.58 8 8 8h14c4.42 0 8-3.58 8-8V18c0-4.42-3.58-8-8-8H18z" fill="currentColor" /> },
-                                { id: 'leaf-top-right', svg: <path d="M12 5h26c3.87 0 7 3.13 7 7v26c0 3.87-3.13 7-7 7H12c-3.87 0-7-3.13-7-7V12c0-3.87 3.13-7 7-7zM38 10h-7v5h7c1.1 0 2 .9 2 2v21c0 1.1-.9 2-2 2H12c-1.1 0-2-.9-2-2V12c0-1.1.9-2 2-2h19v-5H12c-1.1 0-2 .9-2 2v26c0 1.1.9 2 2 2h26c1.1 0 2-.9 2-2V12c0-1.1-.9-2-2-2z" fill="currentColor" /> },
-                                { id: 'leaf-bottom-left', svg: <path d="M12 5h26c3.87 0 7 3.13 7 7v26c0 3.87-3.13 7-7 7H12c-3.87 0-7-3.13-7-7V12c0-3.87 3.13-7 7-7zm0 35h7v-5h-7c-1.1 0-2-.9-2-2V12c0-1.1.9-2 2-2h26c1.1 0 2 .9 2 2v26c0 1.1-.9 2-2 2H19v5h19c1.1 0 2-.9 2-2V12c0-1.1-.9-2-2-2H12c-1.1 0-2 .9-2 2v21c0 1.1.9 2 2 2z" fill="currentColor" /> },
-                                { id: 'dot-frame', svg: <><path d="M5 5h40v40H5V5zm5 5v30h30V10H10z" fill="currentColor" /><circle cx="25" cy="25" r="3" fill="currentColor" /></> },
+                                { id: 'circle', svg: <circle cx="25" cy="25" r="21.5" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                { id: 'square', svg: <rect x="3.5" y="3.5" width="43" height="43" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                {
+                                    id: 'dashed', svg: <>
+                                        <path d="M3.5 3.5 h15 v7 h-8 v8 h-7 v-15 z" fill="currentColor" />
+                                        <path d="M46.5 3.5 h-15 v7 h8 v8 h7 v-15 z" fill="currentColor" />
+                                        <path d="M3.5 46.5 h15 v-7 h-8 v-8 h-7 v15 z" fill="currentColor" />
+                                        <path d="M46.5 46.5 h-15 v-7 h8 v-8 h7 v15 z" fill="currentColor" />
+                                    </>
+                                },
+                                { id: 'rounded', svg: <rect x="3.5" y="3.5" width="43" height="43" rx="12" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                { id: 'leaf-top-right', svg: <path d="M3.5 23.5 A20 20 0 0 1 23.5 3.5 L46.5 3.5 L46.5 26.5 A20 20 0 0 1 26.5 46.5 L23.5 46.5 A20 20 0 0 1 3.5 26.5 Z" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                { id: 'leaf-top-left', svg: <path d="M3.5 3.5 L26.5 3.5 A20 20 0 0 1 46.5 23.5 L46.5 26.5 A20 20 0 0 1 26.5 46.5 L23.5 46.5 A20 20 0 0 1 3.5 26.5 Z" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                { id: 'leaf-bottom-right', svg: <path d="M3.5 23.5 A20 20 0 0 1 23.5 3.5 L26.5 3.5 A20 20 0 0 1 46.5 23.5 L46.5 46.5 L23.5 46.5 A20 20 0 0 1 3.5 26.5 Z" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                { id: 'leaf-bottom-left', svg: <path d="M23.5 3.5 A20 20 0 0 1 43.5 23.5 L43.5 26.5 A20 20 0 0 1 23.5 46.5 L3.5 46.5 L3.5 23.5 A20 20 0 0 1 23.5 3.5 Z" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                { id: 'dot-frame', svg: <><rect x="3.5" y="3.5" width="43" height="43" stroke="currentColor" strokeWidth="7" fill="none" /><circle cx="25" cy="25" r="7" fill="currentColor" /></> },
                             ].map((f, idx) => (
                                 <div
                                     key={idx}
@@ -239,16 +248,16 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
                         <label className="label" style={{ marginBottom: '1rem', display: 'block', color: '#0f172a', fontWeight: '600', fontSize: '0.85rem' }}>EYE BALL (INNER DOT)</label>
                         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
                             {[
-                                { id: 'dot', svg: <circle cx="25" cy="25" r="14" fill="currentColor" /> },
-                                { id: 'square', svg: <rect x="11" y="11" width="28" height="28" fill="currentColor" /> },
-                                { id: 'extra-rounded', svg: <rect x="11" y="11" width="28" height="28" rx="8" fill="currentColor" /> },
-                                { id: 'diamond', svg: <path d="M25 5 L45 25 L25 45 L5 25 Z" fill="currentColor" transform="scale(0.7) translate(10,10)" /> },
-                                { id: 'leaf-1', svg: <path d="M10 25 Q10 10 25 10 L40 10 L40 25 Q40 40 25 40 L10 40 Z" fill="currentColor" transform="scale(0.8) translate(6,6)" /> },
-                                { id: 'leaf-2', svg: <path d="M10 10 L25 10 Q40 10 40 25 L40 40 L25 40 Q10 40 10 25 Z" fill="currentColor" transform="scale(0.8) translate(6,6)" /> },
-                                { id: 'leaf-3', svg: <path d="M10 10 L25 10 L40 10 L40 25 Q40 40 25 40 Q10 40 10 25 Z" fill="currentColor" transform="scale(0.8) translate(6,6)" /> },
+                                { id: 'dot', svg: <circle cx="25" cy="25" r="17" fill="currentColor" /> },
+                                { id: 'square', svg: <rect x="9" y="9" width="32" height="32" fill="currentColor" /> },
+                                { id: 'rounded', svg: <rect x="9" y="9" width="32" height="32" rx="10" fill="currentColor" /> },
+                                { id: 'leaf-diag-1', svg: <path d="M25 9 L41 9 L41 25 A16 16 0 0 1 25 41 L9 41 L9 25 A16 16 0 0 1 25 9 Z" fill="currentColor" /> },
+                                { id: 'leaf-diag-2', svg: <path d="M9 25 L9 9 L25 9 A16 16 0 0 1 41 25 L41 41 L25 41 A16 16 0 0 1 9 25 Z" fill="currentColor" /> },
+                                { id: 'teardrop-tl', svg: <path d="M9 25 L9 9 L25 9 A16 16 0 0 1 41 25 A16 16 0 0 1 25 41 A16 16 0 0 1 9 25 Z" fill="currentColor" /> },
+                                { id: 'diamond', svg: <path d="M25 5 L45 25 L25 45 L5 25 Z" fill="currentColor" /> },
                                 { id: 'star', svg: <path d="M25 8 L30 18 L41 19 L32 26 L35 37 L25 31 L15 37 L18 26 L9 19 L20 18 Z" fill="currentColor" /> },
-                                { id: 'plus', svg: <path d="M20 10 H30 V20 H40 V30 H30 V40 H20 V30 H10 V20 H20 Z" fill="currentColor" /> },
-                                { id: 'cross', svg: <path d="M15 10 L25 20 L35 10 L40 15 L30 25 L40 35 L35 40 L25 30 L15 40 L10 35 L20 25 L10 15 Z" fill="currentColor" /> },
+                                { id: 'plus', svg: <path d="M18 5 L32 5 L32 18 L45 18 L45 32 L32 32 L32 45 L18 45 L18 32 L5 32 L5 18 L18 18 Z" fill="currentColor" /> },
+                                { id: 'cross', svg: <path d="M15 10 L25 5 L35 15 L30 25 L40 35 L35 40 L25 30 L15 40 L10 35 L20 25 L10 15 L15 10 Z" fill="currentColor" /> },
                             ].map((b, idx) => (
                                 <div
                                     key={idx}
@@ -406,10 +415,6 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
                             style={{
                                 width: '44px',
                                 height: '24px',
-                                background: design?.imageOptions?.hideBackgroundDots ? '#cbd5e1' : '#e2e8f0', // Inactive look for track, usually active is colored but user asked for "Remove Background Behind Logo" functionality.
-                                // Actually standard toggle: grey = off, color = on. 
-                                // Let's check the image. The image shows a toggle that is OFF (grey).
-                                // When active it should probably be purple.
                                 background: design?.imageOptions?.hideBackgroundDots ? '#8b5cf6' : '#cbd5e1',
                                 borderRadius: '12px',
                                 position: 'relative',

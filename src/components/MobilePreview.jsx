@@ -263,6 +263,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
         return (
             <div style={{
                 width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
                 borderRadius: isLiveView ? '0' : '40px',
@@ -270,7 +271,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 overflow: 'hidden',
                 position: 'relative',
                 boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: isLiveView ? '0' : '0 auto',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
@@ -872,6 +873,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
         return (
             <div style={{
                 width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
                 borderRadius: isLiveView ? '0' : '40px',
@@ -879,7 +881,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 overflow: 'hidden',
                 position: 'relative',
                 boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: isLiveView ? '0' : '0 auto',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
@@ -1107,6 +1109,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
         return (
             <div style={{
                 width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
                 borderRadius: isLiveView ? '0' : '40px',
@@ -1114,7 +1117,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 overflow: 'hidden',
                 position: 'relative',
                 boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: isLiveView ? '0' : '0 auto',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
@@ -1597,20 +1600,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     if (isLeadGeneration) {
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 {leadGenStep === 'form' && (
                     <div style={{ height: '100%', overflowY: 'auto', background: '#fff' }}>
@@ -1973,20 +1977,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     if (isRating) {
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 {ratingStep === 'rating' && (
                     <div style={{ height: '100%', overflowY: 'auto', background: '#f8fafc' }}>
@@ -2438,6 +2443,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
         return (
             <div style={{
                 width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
                 borderRadius: isLiveView ? '0' : '40px',
@@ -2445,12 +2451,12 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 overflow: 'hidden',
                 position: 'relative',
                 boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: isLiveView ? '0' : '0 auto',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 <div style={{ height: '100%', overflowY: 'auto', background: '#fff', display: 'flex', flexDirection: 'column' }}>
 
@@ -2653,20 +2659,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     if (isBusinessPage) {
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 <div style={{ height: '100%', overflowY: 'auto', background: '#fff' }}>
                     {/* Header */}
@@ -2889,20 +2896,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     if (isBusinessCard) {
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 {showExchangeModal ? (
                     /* Exchange Contact Modal View */
@@ -3279,20 +3287,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     if (isCoupon) {
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
+                height: isLiveView ? '100vh' : '640px',
                 background: showCouponModal ? primaryColor : '#f3f4f6',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 {/* Coupon Content */}
                 {!showCouponModal ? (
@@ -3493,20 +3502,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     if (isReviews) {
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 {/* Main Categories Page */}
                 {reviewStep === 'main' && (
@@ -4081,20 +4091,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 <div style={{ height: '100%', overflowY: 'auto', background: '#f8fafc' }}>
                     {/* Header Section */}
@@ -4244,20 +4255,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 <div style={{ height: '100%', overflowY: 'auto', background: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
                     {/* Header Section with Curved Bottom */}
@@ -4523,20 +4535,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 <div style={{
                     height: '100%',
@@ -4693,20 +4706,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 <div style={{ height: '100%', overflowY: 'auto', background: '#fff' }}>
                     {/* Branding Header */}
@@ -4986,20 +5000,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 <div style={{ height: '100%', overflowY: 'auto', background: primaryColor }}>
                     {/* Header */}
@@ -5420,20 +5435,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     if (type === 'dynamic-url') {
         return (
             <div style={{
-                width: '320px',
-                height: '640px',
+                width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
+                height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
-                borderRadius: '40px',
-                border: '12px solid #1e293b',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
                 {/* Notch */}
-                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
                 <div style={{
                     height: '100%',
@@ -5673,6 +5689,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
         return (
             <div style={{
                 width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
                 background: '#000',
                 borderRadius: isLiveView ? '0' : '40px',
@@ -5680,7 +5697,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 overflow: 'hidden',
                 position: 'relative',
                 boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: isLiveView ? '0' : '0 auto',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
@@ -5730,6 +5747,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
         return (
             <div style={{
                 width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
                 borderRadius: isLiveView ? '0' : '40px',
@@ -5737,7 +5755,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 overflow: 'hidden',
                 position: 'relative',
                 boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: isLiveView ? '0' : '0 auto',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
@@ -5913,6 +5931,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
         return (
             <div style={{
                 width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
                 background: '#fff',
                 borderRadius: isLiveView ? '0' : '40px',
@@ -5920,7 +5939,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 overflow: 'hidden',
                 position: 'relative',
                 boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: isLiveView ? '0' : '0 auto',
+                margin: isLiveView ? '0 auto' : '0 auto',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
@@ -6195,6 +6214,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     return (
         <div style={{
             width: isLiveView ? '100%' : '320px',
+            maxWidth: isLiveView ? '480px' : 'none',
             height: isLiveView ? '100vh' : '640px',
             background: '#fff',
             borderRadius: isLiveView ? '0' : '40px',
@@ -6202,7 +6222,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
             overflow: 'hidden',
             position: 'relative',
             boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-            margin: isLiveView ? '0' : '0 auto'
+            margin: isLiveView ? '0 auto' : '0 auto'
         }}>
             {/* Notch */}
             {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}

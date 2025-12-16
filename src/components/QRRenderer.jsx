@@ -167,6 +167,7 @@ const QRRenderer = forwardRef(({ value, design, size = 280, margin = 20, id }, r
             }
 
             // Draw Eyes (Position Patterns)
+            // Draw Eyes (Position Patterns)
             const drawEye = (r, c) => {
                 const x = margin + c * cellSize;
                 const y = margin + r * cellSize;
@@ -175,62 +176,143 @@ const QRRenderer = forwardRef(({ value, design, size = 280, margin = 20, id }, r
                 const frameColor = design.cornersSquare?.color || design.dots?.color || '#000000';
                 const ballColor = design.cornersDot?.color || design.dots?.color || '#000000';
 
-                // Get Styles
                 const frameStyle = design.cornersSquare?.style || 'square';
                 const ballStyle = design.cornersDot?.style || 'dot';
 
-                // Draw Frame (Outer)
-                // If shape exists in SHAPES.frame, use it (SVG path)
-                if (SHAPES.frame[frameStyle]) {
-                    // SVG paths are 50x50, we need to draw over 'eyeSize' (which covers 7x7 modules)
-                    // drawPath expects pathStr, x, y, color.
-                    // But drawPath scales based on 'cellSize / 50'. 
-                    // Wait, drawPath scaling: `const scale = cellSize / 50;`
-                    // That scales a 50x50 path to be 1x1 module size. 
-                    // Eyes are 7x7 modules. So we need a different scale or modify drawPath.
+                // Helper to draw geometric shape
+                const drawGeometricEye = (type, style, drawX, drawY, size, color) => {
+                    ctx.fillStyle = color;
+                    const center = size / 2;
+                    const radius = size / 2;
 
-                    // Let's modify usage of drawPath logic here locally for Eyes.
-                    // The SVG paths provided are likely designed for the FULL Eye (Outer Frame).
-                    // If they are 50x50 viewport, they should cover the 7x7 area.
+                    ctx.beginPath();
 
-                    ctx.save();
-                    ctx.translate(x, y);
-                    const scale = eyeSize / 50; // Scale 50 to 7 modules size
-                    ctx.scale(scale, scale);
-                    const p = new Path2D(SHAPES.frame[frameStyle]);
-                    ctx.fillStyle = frameColor;
-                    ctx.fill(p);
-                    ctx.restore();
+                    if (style === 'circle' || style === 'dot') {
+                        ctx.arc(drawX + center, drawY + center, radius, 0, Math.PI * 2);
+                    } else if (style === 'rounded') {
+                        const r = size * 0.25;
+                        if (ctx.roundRect) ctx.roundRect(drawX, drawY, size, size, r);
+                        else ctx.rect(drawX, drawY, size, size);
+                    } else if (style === 'extra-rounded') {
+                        const r = size * 0.45;
+                        if (ctx.roundRect) ctx.roundRect(drawX, drawY, size, size, r);
+                        else ctx.rect(drawX, drawY, size, size);
+                    } else if (style === 'dashed') {
+                        const thickness = size / 7;
+                        const legLen = size * 0.35;
+
+                        ctx.fillRect(drawX, drawY, legLen, thickness);
+                        ctx.fillRect(drawX, drawY, thickness, legLen);
+
+                        ctx.fillRect(drawX + size - legLen, drawY, legLen, thickness);
+                        ctx.fillRect(drawX + size - thickness, drawY, thickness, legLen);
+
+                        ctx.fillRect(drawX, drawY + size - thickness, legLen, thickness);
+                        ctx.fillRect(drawX, drawY + size - legLen, thickness, legLen);
+
+                        ctx.fillRect(drawX + size - legLen, drawY + size - thickness, legLen, thickness);
+                        ctx.fillRect(drawX + size - thickness, drawY + size - legLen, thickness, legLen);
+                        return;
+                    } else if (style.startsWith('leaf') || style.startsWith('teardrop')) {
+                        const r = size * 0.4;
+                        let radii = [0, 0, 0, 0];
+                        if (style === 'leaf-diag-1') radii = [r, 0, r, 0]; // TR & BL Sharp
+                        else if (style === 'leaf-diag-2') radii = [0, r, 0, r]; // TL & BR Sharp
+                        else if (style === 'teardrop-tl') radii = [0, r, r, r]; // TL Sharp
+                        else if (style === 'leaf-top-right') radii = [r, 0, r, r]; // Legacy support
+                        else if (style === 'leaf-top-left') radii = [0, r, r, r];
+                        else radii = [0, r, 0, r]; // Default diagonal
+
+                        // Fallback for ball leaf styles
+                        if (style === 'leaf-1') radii = [r, 0, r, 0];
+                        if (style === 'leaf-2') radii = [0, r, 0, r];
+                        if (style === 'leaf-3') radii = [r, r, 0, r];
+
+                        if (ctx.roundRect) ctx.roundRect(drawX, drawY, size, size, radii);
+                        else ctx.rect(drawX, drawY, size, size);
+                    } else if (style === 'diamond') {
+                        const mid = size / 2;
+                        ctx.moveTo(drawX + mid, drawY);
+                        ctx.lineTo(drawX + size, drawY + mid);
+                        ctx.lineTo(drawX + mid, drawY + size);
+                        ctx.lineTo(drawX, drawY + mid);
+                        ctx.closePath();
+                    } else if (style === 'star') {
+                        const cx = drawX + size / 2;
+                        const cy = drawY + size / 2;
+                        const spikes = 5;
+                        const outerRadius = size / 2;
+                        const innerRadius = size / 4;
+                        let rot = Math.PI / 2 * 3;
+                        let x = cx;
+                        let y = cy;
+                        const step = Math.PI / spikes;
+
+                        ctx.moveTo(cx, cy - outerRadius);
+                        for (let i = 0; i < spikes; i++) {
+                            x = cx + Math.cos(rot) * outerRadius;
+                            y = cy + Math.sin(rot) * outerRadius;
+                            ctx.lineTo(x, y);
+                            rot += step;
+
+                            x = cx + Math.cos(rot) * innerRadius;
+                            y = cy + Math.sin(rot) * innerRadius;
+                            ctx.lineTo(x, y);
+                            rot += step;
+                        }
+                        ctx.lineTo(cx, cy - outerRadius);
+                        ctx.closePath();
+                    } else if (style === 'plus') {
+                        const thickness = size / 3.5;
+                        const offset = (size - thickness) / 2;
+                        ctx.rect(drawX + offset, drawY, thickness, size); // V
+                        ctx.rect(drawX, drawY + offset, size, thickness); // H
+                    } else if (style === 'cross') {
+                        // X shape
+                        const thickness = size / 2.5; // Thicker for scannability
+                        // Use matrix rotation or path
+                        ctx.save();
+                        ctx.translate(drawX + size / 2, drawY + size / 2);
+                        ctx.rotate(45 * Math.PI / 180);
+                        ctx.translate(-(drawX + size / 2), -(drawY + size / 2));
+                        const offset = (size - thickness) / 2;
+                        ctx.rect(drawX + offset, drawY, thickness, size);
+                        ctx.rect(drawX, drawY + offset, size, thickness);
+                        ctx.restore();
+                        // Note: fillRect inside rotate doesn't work with ctx.fill() if correct path not closed?
+                        // Wait, drawGeometricEye ends with ctx.fill().
+                        // rect() adds to path. fillResult works.
+                        // But save/restore might mess up context for subsequent fill?
+                        // Actually ctx.rect adds to current path. Rotate affects the coordinates.
+                        // Ideally we should compute points.
+                        // Easier: Draw the plus path logic but with manually rotated points?
+                        // No, let's just use paths that persist.
+                        // ctx.rect works with current transform.
+                    } else {
+                        // Default Square (includes dot-frame)
+                        ctx.rect(drawX, drawY, size, size);
+                    }
+                    ctx.fill();
+                };
+
+                // Draw Outer Frame
+                ctx.fillStyle = frameColor;
+                if (frameStyle === 'dashed') {
+                    drawGeometricEye('frame', frameStyle, x, y, eyeSize, frameColor);
                 } else {
-                    // Fallback to square
-                    ctx.fillStyle = frameColor;
-                    ctx.fillRect(x, y, eyeSize, eyeSize);
-                    // Clear middle for square default
+                    drawGeometricEye('frame', frameStyle, x, y, eyeSize, frameColor);
+                    // Inner cutout
                     ctx.fillStyle = design.background?.color || '#ffffff';
-                    ctx.fillRect(x + cellSize, y + cellSize, 5 * cellSize, 5 * cellSize);
+                    const innerSize = 5 * cellSize;
+                    const innerOffset = cellSize;
+                    drawGeometricEye('frame', frameStyle, x + innerOffset, y + innerOffset, innerSize, design.background?.color || '#ffffff');
                 }
 
-                // Draw Ball (Inner)
-                // Inner ball starts at offset (2,2) relative to eye top-left
-                // Ball size is 3x3 modules
+                // Draw Inner Ball
                 const ballSize = 3 * cellSize;
                 const ballX = x + 2 * cellSize;
                 const ballY = y + 2 * cellSize;
-
-                if (SHAPES.ball[ballStyle]) {
-                    ctx.save();
-                    ctx.translate(ballX, ballY);
-                    const scale = ballSize / 50; // Scale 50 to 3 modules size
-                    ctx.scale(scale, scale);
-                    const p = new Path2D(SHAPES.ball[ballStyle]);
-                    ctx.fillStyle = ballColor;
-                    ctx.fill(p);
-                    ctx.restore();
-                } else {
-                    // Fallback to square/dot
-                    ctx.fillStyle = ballColor;
-                    ctx.fillRect(ballX, ballY, ballSize, ballSize);
-                }
+                drawGeometricEye('ball', ballStyle, ballX, ballY, ballSize, ballColor);
             };
 
             // Top-Left
@@ -263,7 +345,7 @@ const QRRenderer = forwardRef(({ value, design, size = 280, margin = 20, id }, r
     }, [value, design, size]);
 
     return (
-        <canvas    id={id}   ref={canvasRef} style={{ maxWidth: '100%', height: 'auto' }} />
+        <canvas id={id} ref={canvasRef} style={{ maxWidth: '100%', height: 'auto' }} />
     );
 });
 
