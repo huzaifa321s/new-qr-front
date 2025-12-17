@@ -1,11 +1,16 @@
-import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Eye } from 'lucide-react';
+import { useState, useRef } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const CouponConfig = ({ config, onChange }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isCouponOpen, setIsCouponOpen] = useState(false);
+
+    // New state for modal and hover
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const fileInputRef = useRef(null);
 
     const design = config.design || {};
     const coupon = config.coupon || {};
@@ -73,6 +78,35 @@ const CouponConfig = ({ config, onChange }) => {
                 image: url
             }
         }));
+    };
+
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Check file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            return;
+        }
+
+        // Check file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('File size should be less than 5MB');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            handleBackgroundImageUpdate(reader.result);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const triggerFileUpload = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
     };
 
     const handleBusinessInfoUpdate = (key, value) => {
@@ -211,22 +245,124 @@ const CouponConfig = ({ config, onChange }) => {
                             </div>
                         ))}
 
+                        {/* Custom Uploaded Image (if not in presets) */}
+                        {coupon.image && !backgroundImages.some(img => img.url === coupon.image) && (
+                            <div
+                                style={{
+                                    width: '64px',
+                                    height: '64px',
+                                    borderRadius: '4px',
+                                    overflow: 'hidden',
+                                    border: '2px solid #8b5cf6',
+                                    cursor: 'pointer',
+                                    position: 'relative'
+                                }}
+                                onMouseEnter={() => setIsHovered(true)}
+                                onMouseLeave={() => setIsHovered(false)}
+                                onClick={() => setIsModalOpen(true)}
+                            >
+                                <img src={coupon.image} alt="Custom Background" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <div style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    right: 0,
+                                    width: '20px',
+                                    height: '20px',
+                                    background: '#8b5cf6',
+                                    borderBottomLeftRadius: '4px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    zIndex: 2
+                                }}>
+                                    <Check size={12} color="#fff" />
+                                </div>
+                                {isHovered && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        background: 'rgba(0,0,0,0.5)',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        zIndex: 3
+                                    }}>
+                                        <Eye size={20} color="#fff" />
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         {/* Upload Option */}
-                        <div style={{
-                            width: '64px',
-                            height: '64px',
-                            borderRadius: '4px',
-                            border: '1px dashed #cbd5e1',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer'
-                        }}>
+                        <div
+                            onClick={triggerFileUpload}
+                            style={{
+                                width: '64px',
+                                height: '64px',
+                                borderRadius: '4px',
+                                border: '1px dashed #cbd5e1',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleFileUpload}
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                            />
                             <UploadCloud size={20} color="#94a3b8" />
                         </div>
                     </div>
                 </div>
             </ReusableDesignAccordion>
+
+            {/* Modal for Background Image Preview */}
+            {isModalOpen && coupon.image && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: 9999,
+                    background: 'rgba(0,0,0,0.8)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '2rem'
+                }} onClick={() => setIsModalOpen(false)}>
+                    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={e => e.stopPropagation()}>
+                        <img src={coupon.image} alt="Background Preview" style={{ maxWidth: '100%', maxHeight: '90vh', borderRadius: '8px' }} />
+                        <button
+                            onClick={() => setIsModalOpen(false)}
+                            style={{
+                                position: 'absolute',
+                                top: '-40px',
+                                right: '-40px',
+                                background: 'white',
+                                border: 'none',
+                                borderRadius: '50%',
+                                width: '40px',
+                                height: '40px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <X size={24} color="#000" />
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* BASIC INFORMATION ACCORDION */}
             <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>

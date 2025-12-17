@@ -3367,9 +3367,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         </div>
 
                         {/* Hero Image */}
-                        <div style={{ width: '100%', height: '200px', background: '#fff' }}>
-                            <img src={coupon?.image} alt="Sale" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        </div>
+                        {coupon?.image && (
+                            <div style={{ width: '100%', height: '200px', background: '#fff' }}>
+                                <img src={coupon.image} alt="Sale" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            </div>
+                        )}
 
                         {/* Title Section */}
                         <div style={{ padding: '1.5rem 1rem', textAlign: 'center' }}>
@@ -6314,50 +6316,56 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     </div>
 
                     {(() => {
-                        const heroImage = design?.backgroundImage === '' ? null : (design?.backgroundImage || businessInfo?.coverImage || businessInfo?.image || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=500&fit=crop');
+                        // Priority: heroImage (from config) -> backgroundImage (legacy) -> businessInfo -> Default
+                        // explicitly check for empty string or null (user removed image)
 
-                        if (!heroImage) return null;
+                        const isRemoved = design?.heroImage === '' || design?.heroImage === null;
+                        const imageSource = isRemoved ? null : (design?.heroImage || design?.backgroundImage || businessInfo?.coverImage || businessInfo?.image || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=500&fit=crop');
 
                         return (
-                            <div style={{
-                                marginTop: '0.9rem',
-                                borderRadius: '14px',
-                                overflow: 'hidden',
-                                boxShadow: '0 10px 20px rgba(0,0,0,0.18)'
-                            }}>
-                                <img
-                                    src={heroImage}
-                                    alt={businessInfo?.title || 'Cafe'}
-                                    style={{ width: '100%', height: '150px', objectFit: 'cover' }}
-                                />
-                            </div>
+                            <>
+                                {imageSource && (
+                                    <div style={{
+                                        marginTop: '0.9rem',
+                                        borderRadius: '14px',
+                                        overflow: 'hidden',
+                                        boxShadow: '0 10px 20px rgba(0,0,0,0.18)'
+                                    }}>
+                                        <img
+                                            src={imageSource}
+                                            alt={businessInfo?.title || 'Cafe'}
+                                            style={{ width: '100%', height: '150px', objectFit: 'cover' }}
+                                        />
+                                    </div>
+                                )}
+
+                                <div style={{ marginTop: imageSource ? '1rem' : '0', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                    <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', letterSpacing: '-0.01em' }}>
+                                        {businessInfo?.headline || 'Eat.Refresh.Go'}
+                                    </h2>
+                                    <p style={{ margin: 0, color: 'rgba(255,255,255,0.85)', fontSize: '0.9rem', lineHeight: '1.5' }}>
+                                        {businessInfo?.description || 'We aim to provide fresh and healthy snacks people on the go.'}
+                                    </p>
+                                    <div style={{ marginTop: '0.25rem' }}>
+                                        <button style={{
+                                            background: '#fff',
+                                            color: headerColor || '#7f1d1d',
+                                            border: 'none',
+                                            borderRadius: '6px',
+                                            padding: '0.5rem 0.9rem',
+                                            fontWeight: '800',
+                                            fontSize: '0.85rem',
+                                            letterSpacing: '0.02em',
+                                            cursor: 'pointer',
+                                            boxShadow: '0 4px 10px rgba(255,255,255,0.18)'
+                                        }}>
+                                            TIMINGS
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
                         );
                     })()}
-
-                    <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', letterSpacing: '-0.01em' }}>
-                            {businessInfo?.headline || 'Eat.Refresh.Go'}
-                        </h2>
-                        <p style={{ margin: 0, color: 'rgba(255,255,255,0.85)', fontSize: '0.9rem', lineHeight: '1.5' }}>
-                            {businessInfo?.description || 'We aim to provide fresh and healthy snacks people on the go.'}
-                        </p>
-                        <div style={{ marginTop: '0.25rem' }}>
-                            <button style={{
-                                background: '#fff',
-                                color: headerColor || '#7f1d1d',
-                                border: 'none',
-                                borderRadius: '6px',
-                                padding: '0.5rem 0.9rem',
-                                fontWeight: '800',
-                                fontSize: '0.85rem',
-                                letterSpacing: '0.02em',
-                                cursor: 'pointer',
-                                boxShadow: '0 4px 10px rgba(255,255,255,0.18)'
-                            }}>
-                                TIMINGS
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
                 {/* Menu Section */}

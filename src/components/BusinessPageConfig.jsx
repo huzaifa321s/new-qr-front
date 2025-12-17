@@ -1,7 +1,7 @@
-import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Clock, Wifi, Baby, Accessibility, Utensils, Plane, PawPrint, Car, Bed, Coffee, Wine, Phone, Mail, Globe, Plus, MapPin, Instagram, Facebook, Twitter, Linkedin, MessageCircle, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Github } from 'lucide-react';
+import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Clock, Wifi, Baby, Accessibility, Utensils, Plane, PawPrint, Car, Bed, Coffee, Wine, Phone, Mail, Globe, Plus, MapPin, Instagram, Facebook, Twitter, Linkedin, MessageCircle, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Github, Eye } from 'lucide-react';
 import ColorPicker from './ColorPicker';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const BusinessPageConfig = ({ config, onChange }) => {
@@ -11,6 +11,11 @@ const BusinessPageConfig = ({ config, onChange }) => {
     const [isFacilitiesOpen, setIsFacilitiesOpen] = useState(false);
     const [isContactOpen, setIsContactOpen] = useState(false);
     const [isSocialOpen, setIsSocialOpen] = useState(false);
+
+    // New state for modal and hover
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const fileInputRef = useRef(null);
 
     const design = config.design || {};
     const businessInfo = config.businessInfo || {};
@@ -137,6 +142,35 @@ const BusinessPageConfig = ({ config, onChange }) => {
         }));
     };
 
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Check file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            return;
+        }
+
+        // Check file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('File size should be less than 5MB');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            handleDesignUpdate('heroImage', reader.result);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const triggerFileUpload = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
     const palettes = [
         { p: '#0B2D86', s: '#FFA800' },
         { p: '#FACC15', s: '#FEF9C3' },
@@ -189,7 +223,7 @@ const BusinessPageConfig = ({ config, onChange }) => {
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                         {/* Remove/Clear Option */}
                         <div
-                            onClick={() => handleDesignUpdate('heroImage', '')}
+                            onClick={() => handleDesignUpdate('heroImage', null)}
                             style={{
                                 width: '64px',
                                 height: '64px',
@@ -247,22 +281,131 @@ const BusinessPageConfig = ({ config, onChange }) => {
                             </div>
                         ))}
 
+                        {/* Custom Uploaded Image (if not in presets) */}
+                        {design.heroImage && ![
+                            'https://img.freepik.com/free-vector/hand-drawn-social-media-doodles_23-2149862823.jpg',
+                            'https://img.freepik.com/free-vector/social-media-marketing-concept-marketing-with-applications_23-2148421838.jpg',
+                            'https://img.freepik.com/free-vector/black-white-doodle-seamless-pattern_1159-4567.jpg',
+                            'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg',
+                            'https://img.freepik.com/free-vector/seamless-pattern-with-red-geometric-shapes_1017-31359.jpg'
+                        ].includes(design.heroImage) && (
+                                <div
+                                    style={{
+                                        width: '64px',
+                                        height: '64px',
+                                        borderRadius: '8px',
+                                        overflow: 'hidden',
+                                        border: '2px solid #8b5cf6',
+                                        cursor: 'pointer',
+                                        position: 'relative'
+                                    }}
+                                    onMouseEnter={() => setIsHovered(true)}
+                                    onMouseLeave={() => setIsHovered(false)}
+                                    onClick={() => setIsModalOpen(true)}
+                                >
+                                    <img src={design.heroImage} alt="Custom Background" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '-6px',
+                                        right: '-6px',
+                                        width: '20px',
+                                        height: '20px',
+                                        background: '#8b5cf6',
+                                        borderRadius: '50%',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        border: '2px solid #fff',
+                                        zIndex: 2
+                                    }}>
+                                        <Check size={10} color="#fff" />
+                                    </div>
+                                    {isHovered && (
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            width: '100%',
+                                            height: '100%',
+                                            background: 'rgba(0,0,0,0.5)',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            zIndex: 3
+                                        }}>
+                                            <Eye size={20} color="#fff" />
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
                         {/* Upload Option */}
-                        <div style={{
-                            width: '64px',
-                            height: '64px',
-                            borderRadius: '8px',
-                            border: '1px dashed #cbd5e1',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer'
-                        }}>
+                        <div
+                            onClick={triggerFileUpload}
+                            style={{
+                                width: '64px',
+                                height: '64px',
+                                borderRadius: '8px',
+                                border: '1px dashed #cbd5e1',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleFileUpload}
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                            />
                             <UploadCloud size={20} color="#94a3b8" />
                         </div>
                     </div>
                 </div>
             </ReusableDesignAccordion>
+
+            {/* Modal for Background Image Preview */}
+            {isModalOpen && design.heroImage && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: 9999,
+                    background: 'rgba(0,0,0,0.8)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '2rem'
+                }} onClick={() => setIsModalOpen(false)}>
+                    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={e => e.stopPropagation()}>
+                        <img src={design.heroImage} alt="Header Preview" style={{ maxWidth: '100%', maxHeight: '90vh', borderRadius: '8px' }} />
+                        <button
+                            onClick={() => setIsModalOpen(false)}
+                            style={{
+                                position: 'absolute',
+                                top: '-40px',
+                                right: '-40px',
+                                background: 'white',
+                                border: 'none',
+                                borderRadius: '50%',
+                                width: '40px',
+                                height: '40px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <X size={24} color="#000" />
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* BASIC INFORMATION ACCORDION */}
             <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem' }}>
