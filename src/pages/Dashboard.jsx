@@ -1837,7 +1837,7 @@ const Dashboard = () => {
                 )
             }
 
-            <Toaster position="top-center" />
+
             <style>{`
                 @keyframes spin {
                     0% { transform: rotate(0deg); }

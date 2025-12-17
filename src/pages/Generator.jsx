@@ -43,6 +43,9 @@ const Generator = () => {
     const [qrName, setQrName] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedShortId, setGeneratedShortId] = useState(null); // Store shortId after creation
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+    const [showUnsavedModal, setShowUnsavedModal] = useState(false);
+    const [initialState, setInitialState] = useState({ pageConfig: {}, qrDesign: {}, qrName: '' });
 
     // Helper function to generate QR value URL for preview/display
     const getQRValue = () => {
@@ -120,9 +123,8 @@ const Generator = () => {
             });
 
             // Populate content - ensure all saved data is loaded
-            setPageConfig(prev => ({
+            const loadedConfig = {
                 ...defaultConfig,
-                ...prev,
                 businessInfo: editingQr.businessInfo ? { ...defaultConfig.businessInfo, ...editingQr.businessInfo } : defaultConfig.businessInfo,
                 basicInfo: editingQr.basicInfo || defaultConfig.basicInfo,
                 appLinks: editingQr.appLinks ? { ...defaultConfig.appLinks, ...editingQr.appLinks } : defaultConfig.appLinks,
@@ -169,7 +171,9 @@ const Generator = () => {
                     image: editingQr.design?.image || defaultConfig.design?.image,
                     imageOptions: editingQr.design?.imageOptions || defaultConfig.design?.imageOptions
                 }
-            }));
+            };
+
+            setPageConfig(loadedConfig);
 
             // Also update qrDesign state with saved design
             if (editingQr.design) {
@@ -181,19 +185,53 @@ const Generator = () => {
                     image: { url: '' },
                     imageOptions: { hideBackgroundDots: false, imageSize: 0.4 }
                 };
-                setQrDesign({
+                const loadedDesign = {
                     dots: { ...defaultDesign.dots, ...(editingQr.design.dots || {}) },
                     cornersSquare: { ...defaultDesign.cornersSquare, ...(editingQr.design.cornersSquare || {}) },
                     cornersDot: { ...defaultDesign.cornersDot, ...(editingQr.design.cornersDot || {}) },
                     background: { ...defaultDesign.background, ...(editingQr.design.background || {}) },
                     image: { ...defaultDesign.image, ...(editingQr.design.image || {}) },
                     imageOptions: { ...defaultDesign.imageOptions, ...(editingQr.design.imageOptions || {}) }
+                };
+                setQrDesign(loadedDesign);
+
+                // Store initial state for change detection
+                setInitialState({
+                    pageConfig: JSON.parse(JSON.stringify(loadedConfig)),
+                    qrDesign: JSON.parse(JSON.stringify(loadedDesign)),
+                    qrName: editingQr.name || ''
                 });
             }
         } else {
-            setPageConfig({ ...defaultConfig, type: selectedType });
+            const newConfig = { ...defaultConfig, type: selectedType };
+            setPageConfig(newConfig);
+
+            // Store initial state for new QR
+            const defaultDesign = {
+                dots: { style: 'square', color: '#000000' },
+                cornersSquare: { style: 'square', color: '#000000' },
+                cornersDot: { style: 'dot', color: '#000000' },
+                background: { color: '#ffffff' },
+                image: { url: '' },
+                imageOptions: { hideBackgroundDots: false, imageSize: 0.4 }
+            };
+            setInitialState({
+                pageConfig: JSON.parse(JSON.stringify(newConfig)),
+                qrDesign: JSON.parse(JSON.stringify(defaultDesign)),
+                qrName: ''
+            });
         }
     }, [selectedType, editingQr]);
+
+    // Detect changes
+    useEffect(() => {
+        if (!initialState.pageConfig || Object.keys(initialState.pageConfig).length === 0) return;
+
+        const currentStateStr = JSON.stringify({ pageConfig, qrDesign, qrName });
+        const initialStateStr = JSON.stringify(initialState);
+
+        setHasUnsavedChanges(currentStateStr !== initialStateStr);
+    }, [pageConfig, qrDesign, qrName, initialState]);
 
     const handleSave = async () => {
         if (!qrName.trim()) {
@@ -310,8 +348,16 @@ const Generator = () => {
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
                         <button
                             onClick={() => {
-                                if (activeStep === 'design') setActiveStep('content');
-                                else navigate(-1);
+                                if (activeStep === 'design') {
+                                    setActiveStep('content');
+                                } else {
+                                    // Check for unsaved changes before navigating back
+                                    if (hasUnsavedChanges) {
+                                        setShowUnsavedModal(true);
+                                    } else {
+                                        navigate(-1);
+                                    }
+                                }
                             }}
                             style={{
                                 background: '#e0f2fe',
@@ -662,6 +708,131 @@ const Generator = () => {
                     </>
                 )}
             </div>
+
+            {/* Unsaved Changes Modal */}
+            {showUnsavedModal && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 9999
+                }}>
+                    <div style={{
+                        backgroundColor: '#fff',
+                        borderRadius: '8px',
+                        padding: '2rem',
+                        maxWidth: '500px',
+                        width: '90%',
+                        position: 'relative',
+                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+                    }}>
+                        {/* Close button */}
+                        <button
+                            onClick={() => setShowUnsavedModal(false)}
+                            style={{
+                                position: 'absolute',
+                                top: '1rem',
+                                right: '1rem',
+                                background: 'transparent',
+                                border: 'none',
+                                fontSize: '1.5rem',
+                                color: '#9ca3af',
+                                cursor: 'pointer',
+                                padding: '0',
+                                width: '24px',
+                                height: '24px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            ×
+                        </button>
+
+                        {/* Modal content */}
+                        <div style={{ textAlign: 'center' }}>
+                            <h2 style={{
+                                fontSize: '1.5rem',
+                                fontWeight: '600',
+                                color: '#1f2937',
+                                marginBottom: '1rem',
+                                marginTop: '0'
+                            }}>
+                                Are you sure?
+                            </h2>
+                            <p style={{
+                                fontSize: '1rem',
+                                color: '#6b7280',
+                                marginBottom: '2rem',
+                                lineHeight: '1.5'
+                            }}>
+                                Are you sure to discard this page? This will lose all the change you made.
+                            </p>
+
+                            {/* Buttons */}
+                            <div style={{
+                                display: 'flex',
+                                gap: '1rem',
+                                justifyContent: 'center'
+                            }}>
+                                <button
+                                    onClick={() => setShowUnsavedModal(false)}
+                                    style={{
+                                        padding: '0.75rem 2.5rem',
+                                        fontSize: '1rem',
+                                        fontWeight: '500',
+                                        color: '#374151',
+                                        backgroundColor: '#fff',
+                                        border: '2px solid #d1d5db',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.target.style.backgroundColor = '#f9fafb';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.target.style.backgroundColor = '#fff';
+                                    }}
+                                >
+                                    No
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setShowUnsavedModal(false);
+                                        navigate(-1);
+                                    }}
+                                    style={{
+                                        padding: '0.75rem 2.5rem',
+                                        fontSize: '1rem',
+                                        fontWeight: '500',
+                                        color: '#fff',
+                                        backgroundColor: '#dc2626',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.target.style.backgroundColor = '#b91c1c';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.target.style.backgroundColor = '#dc2626';
+                                    }}
+                                >
+                                    Yes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

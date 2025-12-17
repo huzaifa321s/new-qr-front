@@ -136,7 +136,7 @@ const TemplateSelection = () => {
                         <div
                             className="custom-scrollbar"
                             style={{
-                                height: '65vh',
+                                height: '55vh',
                                 overflowY: 'auto',
                                 paddingRight: '1rem',
                                 marginBottom: '2rem'
@@ -275,7 +275,7 @@ const TemplateSelection = () => {
                 <div style={{
                     display: 'flex',
                     justifyContent: 'center',
-                    marginTop: '3rem'
+                    // marginTop: '1rem'
                 }}>
                     <button
                         onClick={handleContinue}
@@ -296,7 +296,6 @@ const TemplateSelection = () => {
                             alignItems: 'center',
                             borderRadius: '50px',
                             overflow: 'hidden',
-
                         }}>
                             <div style={{
                                 background: '#8b5cf6',

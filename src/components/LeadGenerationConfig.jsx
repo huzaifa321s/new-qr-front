@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check } from 'lucide-react';
 import { useState } from 'react';
+import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const LeadGenerationConfig = ({ config, onChange }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
@@ -30,24 +31,18 @@ const LeadGenerationConfig = ({ config, onChange }) => {
         }));
     };
 
-    const handleColorUpdate = (colorKey, value) => {
-        onChange(prev => ({
-            ...prev,
-            design: {
-                ...prev.design,
-                color: { ...prev.design.color, [colorKey]: value }
+    const handleDesignSectionUpdate = (key, value) => {
+        onChange(prev => {
+            const newDesign = { ...prev.design };
+            const keys = key.split('.');
+            if (keys.length === 1) {
+                newDesign[keys[0]] = value;
+            } else {
+                if (!newDesign[keys[0]]) newDesign[keys[0]] = {};
+                newDesign[keys[0]] = { ...newDesign[keys[0]], [keys[1]]: value };
             }
-        }));
-    };
-
-    const handleColorPaletteClick = (primary, secondary) => {
-        onChange(prev => ({
-            ...prev,
-            design: {
-                ...prev.design,
-                color: { header: primary, dark: primary, light: secondary }
-            }
-        }));
+            return { ...prev, design: newDesign };
+        });
     };
 
     const handleHeaderImageUpdate = (url) => {
@@ -56,16 +51,6 @@ const LeadGenerationConfig = ({ config, onChange }) => {
             design: {
                 ...prev.design,
                 headerImage: { url }
-            }
-        }));
-    };
-
-    const handleLogoUpdate = (url) => {
-        onChange(prev => ({
-            ...prev,
-            design: {
-                ...prev.design,
-                logo: { url }
             }
         }));
     };
@@ -166,352 +151,112 @@ const LeadGenerationConfig = ({ config, onChange }) => {
     return (
         <div>
             {/* DESIGN ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
-                    onClick={() => setIsDesignOpen(!isDesignOpen)}
-                    style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isDesignOpen ? '1px solid #e2e8f0' : 'none'
-                    }}
-                >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>DESIGN</div>
+            {/* DESIGN ACCORDION */}
+            <ReusableDesignAccordion
+                design={{
+                    ...design,
+                    color: {
+                        ...design.color,
+                        header: design.color?.header || '#6F0101',
+                        light: design.color?.light || '#FFFFFF'
+                    },
+                    logo: {
+                        ...design.logo,
+                        url: design.logo?.url
+                    }
+                }}
+                onChange={handleDesignSectionUpdate}
+                isOpen={isDesignOpen}
+                onToggle={() => setIsDesignOpen(!isDesignOpen)}
+                colorKeys={{ primary: 'color.header', secondary: 'color.light' }}
+                palettes={palettes}
+                logoKey="logo.url"
+                logoOptions={logoOptions}
+                logoLabel="YOUR LOGO"
+                logoHelpText="128x128px, 1:1 Ratio"
+            >
+                {/* HEADER IMAGE SECTION */}
+                <div style={{ marginBottom: '2rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
+                            HEADER IMAGE
+                        </span>
+                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                            Minimum width : 400px, 3:2 Ratio
+                        </span>
                     </div>
-                    {isDesignOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
 
-                {isDesignOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
-
-                        {/* COLORS SECTION */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '1rem', textTransform: 'uppercase' }}>
-                                COLORS
-                            </label>
-
-                            {/* Color Palettes */}
-                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-                                {palettes.map((palette, idx) => (
-                                    <div
-                                        key={idx}
-                                        onClick={() => handleColorPaletteClick(palette.p, palette.s)}
-                                        style={{
-                                            width: '64px',
-                                            height: '64px',
-                                            borderRadius: '50%',
-                                            overflow: 'hidden',
-                                            cursor: 'pointer',
-                                            border: (primaryColor === palette.p && secondaryColor === palette.s) ? '3px solid #8b5cf6' : '2px solid #e2e8f0',
-                                            position: 'relative',
-                                            background: `linear-gradient(180deg, ${palette.p} 50%, ${palette.s} 50%)`
-                                        }}
-                                    >
-                                        {(primaryColor === palette.p && secondaryColor === palette.s) && (
-                                            <div style={{
-                                                position: 'absolute',
-                                                top: '50%',
-                                                left: '50%',
-                                                transform: 'translate(-50%, -50%)',
-                                                width: '24px',
-                                                height: '24px',
-                                                background: '#8b5cf6',
-                                                borderRadius: '50%',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                border: '2px solid #fff'
-                                            }}>
-                                                <Check size={14} color="#fff" />
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Divider */}
-                            <div style={{
-                                position: 'relative',
-                                height: '1px',
-                                background: 'none',
-                                borderTop: '1px dashed #e2e8f0',
-                                margin: '2rem 0'
-                            }}></div>
-
-                            {/* Primary and Secondary Color Inputs */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', alignItems: 'center' }}>
-                                {/* Primary Color */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Primary Color
-                                    </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
-                                    }}>
-                                        <input
-                                            type="text"
-                                            value={primaryColor}
-                                            onChange={(e) => handleColorUpdate('header', e.target.value)}
-                                            style={{
-                                                border: 'none',
-                                                outline: 'none',
-                                                width: '100%',
-                                                fontSize: '0.9rem',
-                                                color: '#000',
-                                                fontWeight: '500',
-                                                textTransform: 'uppercase'
-                                            }}
-                                        />
-                                        <div style={{
-                                            width: '28px',
-                                            height: '28px',
-                                            background: primaryColor,
-                                            borderRadius: '2px',
-                                            flexShrink: 0
-                                        }}></div>
-                                    </div>
-                                </div>
-
-                                {/* Swap Icon */}
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    marginTop: '1.5rem'
-                                }}>
-                                    <div
-                                        onClick={() => handleColorPaletteClick(secondaryColor, primaryColor)}
-                                        style={{
-                                            width: '40px',
-                                            height: '40px',
-                                            borderRadius: '4px',
-                                            border: '1px solid #e2e8f0',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            cursor: 'pointer',
-                                            background: '#fff'
-                                        }}
-                                    >
-                                        <RefreshCw size={18} color="#64748b" />
-                                    </div>
-                                </div>
-
-                                {/* Secondary Color */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Secondary Color
-                                    </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
-                                    }}>
-                                        <input
-                                            type="text"
-                                            value={secondaryColor}
-                                            onChange={(e) => handleColorUpdate('light', e.target.value)}
-                                            style={{
-                                                border: 'none',
-                                                outline: 'none',
-                                                width: '100%',
-                                                fontSize: '0.9rem',
-                                                color: '#000',
-                                                fontWeight: '500',
-                                                textTransform: 'uppercase'
-                                            }}
-                                        />
-                                        <div style={{
-                                            width: '28px',
-                                            height: '28px',
-                                            background: secondaryColor,
-                                            borderRadius: '2px',
-                                            flexShrink: 0
-                                        }}></div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                        {/* Remove/Clear Option */}
+                        <div
+                            onClick={() => handleHeaderImageUpdate('')}
+                            style={{
+                                width: '80px',
+                                height: '53px',
+                                borderRadius: '4px',
+                                border: '1px solid #e2e8f0',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                background: '#fff'
+                            }}
+                        >
+                            <X size={24} color="#cbd5e1" />
                         </div>
 
-                        {/* HEADER IMAGE SECTION */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
-                                <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
-                                    HEADER IMAGE
-                                </span>
-                                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-                                    Minimum width : 400px, 3:2 Ratio
-                                </span>
-                            </div>
-
-                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                                {/* Remove/Clear Option */}
-                                <div
-                                    onClick={() => handleHeaderImageUpdate('')}
-                                    style={{
-                                        width: '80px',
-                                        height: '53px',
-                                        borderRadius: '4px',
-                                        border: '1px solid #e2e8f0',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        background: '#fff'
-                                    }}
-                                >
-                                    <X size={24} color="#cbd5e1" />
-                                </div>
-
-                                {/* Header Image Options */}
-                                {headerImageOptions.map(img => (
-                                    <div
-                                        key={img.id}
-                                        onClick={() => handleHeaderImageUpdate(img.url)}
-                                        style={{
-                                            width: '80px',
-                                            height: '53px',
-                                            borderRadius: '4px',
-                                            overflow: 'hidden',
-                                            border: design.headerImage?.url === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
-                                            cursor: 'pointer',
-                                            position: 'relative'
-                                        }}
-                                    >
-                                        <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                        {design.headerImage?.url === img.url && (
-                                            <div style={{
-                                                position: 'absolute',
-                                                top: 2,
-                                                right: 2,
-                                                width: '20px',
-                                                height: '20px',
-                                                background: '#8b5cf6',
-                                                borderRadius: '50%',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                border: '1px solid #fff'
-                                            }}>
-                                                <Check size={12} color="#fff" />
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-
-                                {/* Upload Option */}
-                                <div style={{
+                        {/* Header Image Options */}
+                        {headerImageOptions.map(img => (
+                            <div
+                                key={img.id}
+                                onClick={() => handleHeaderImageUpdate(img.url)}
+                                style={{
                                     width: '80px',
                                     height: '53px',
                                     borderRadius: '4px',
-                                    border: '1px dashed #cbd5e1',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer'
-                                }}>
-                                    <UploadCloud size={20} color="#94a3b8" />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* YOUR LOGO SECTION */}
-                        <div style={{ marginBottom: '0' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
-                                <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
-                                    YOUR LOGO
-                                </span>
-                                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-                                    128x128px, 1:1 Ratio
-                                </span>
-                            </div>
-
-                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                {/* Remove/Clear Option */}
-                                <div
-                                    onClick={() => handleLogoUpdate('')}
-                                    style={{
-                                        width: '64px',
-                                        height: '64px',
+                                    overflow: 'hidden',
+                                    border: design.headerImage?.url === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                    cursor: 'pointer',
+                                    position: 'relative'
+                                }}
+                            >
+                                <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                {design.headerImage?.url === img.url && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: 2,
+                                        right: 2,
+                                        width: '20px',
+                                        height: '20px',
+                                        background: '#8b5cf6',
                                         borderRadius: '50%',
-                                        border: '1px solid #e2e8f0',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        background: '#fff'
-                                    }}
-                                >
-                                    <X size={24} color="#cbd5e1" />
-                                </div>
-
-                                {/* Logo Options */}
-                                {logoOptions.map(img => (
-                                    <div
-                                        key={img.id}
-                                        onClick={() => handleLogoUpdate(img.url)}
-                                        style={{
-                                            width: '64px',
-                                            height: '64px',
-                                            borderRadius: '50%',
-                                            overflow: 'hidden',
-                                            border: design.logo?.url === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
-                                            cursor: 'pointer',
-                                            position: 'relative'
-                                        }}
-                                    >
-                                        <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                        {design.logo?.url === img.url && (
-                                            <div style={{
-                                                position: 'absolute',
-                                                top: 0,
-                                                right: 0,
-                                                width: '20px',
-                                                height: '20px',
-                                                background: '#8b5cf6',
-                                                borderRadius: '50%',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                border: '1px solid #fff'
-                                            }}>
-                                                <Check size={12} color="#fff" />
-                                            </div>
-                                        )}
+                                        border: '1px solid #fff'
+                                    }}>
+                                        <Check size={12} color="#fff" />
                                     </div>
-                                ))}
-
-                                {/* Upload Option */}
-                                <div style={{
-                                    width: '64px',
-                                    height: '64px',
-                                    borderRadius: '50%',
-                                    border: '1px dashed #cbd5e1',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer'
-                                }}>
-                                    <UploadCloud size={20} color="#94a3b8" />
-                                </div>
+                                )}
                             </div>
-                        </div>
+                        ))}
 
+                        {/* Upload Option */}
+                        <div style={{
+                            width: '80px',
+                            height: '53px',
+                            borderRadius: '4px',
+                            border: '1px dashed #cbd5e1',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer'
+                        }}>
+                            <UploadCloud size={20} color="#94a3b8" />
+                        </div>
                     </div>
-                )}
-            </div>
+                </div>
+            </ReusableDesignAccordion>
 
             {/* BASIC INFORMATION ACCORDION */}
             <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>

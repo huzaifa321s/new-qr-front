@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Upload, X, ArrowRight } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { ChevronDown, ChevronUp, Upload, X, ArrowRight, Check, Eye, UploadCloud } from 'lucide-react';
 import FormSection from './FormSection';
 import ColorPicker from './ColorPicker';
 
 const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrName, isGenerating, isEditing }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const fileInputRef = useRef(null);
+    const currentLogoUrl = design?.image?.url;
 
     const handleLogoUpload = (e) => {
         const file = e.target.files[0];
@@ -372,41 +376,138 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
                 </div>
             </FormSection>
 
+
             {/* SELECT A LOGO */}
             <FormSection title="SELECT A LOGO">
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                    <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>This will appear at the center of your QR Code</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
 
-                    {/* Upload Area */}
-                    <div
-                        onClick={() => document.getElementById('logo-upload').click()}
-                        style={{
-                            border: '2px dashed #e2e8f0',
-                            borderRadius: '8px',
-                            padding: '2rem',
-                            textAlign: 'center',
-                            background: '#f8fafc',
-                            cursor: 'pointer'
-                        }}
+                    {/* Upload Section */}
+                    <div style={{
+                        border: '2px dashed #cbd5e1',
+                        borderRadius: '12px',
+                        padding: '2rem',
+                        textAlign: 'center',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        background: isHovered ? '#f8fafc' : '#ffffff'
+                    }}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                        onClick={() => fileInputRef.current?.click()}
                     >
                         <input
-                            id="logo-upload"
+                            ref={fileInputRef}
                             type="file"
                             accept="image/*"
                             style={{ display: 'none' }}
                             onChange={handleLogoUpload}
                         />
-                        <Upload size={24} color="#94a3b8" style={{ marginBottom: '0.5rem' }} />
-                        <div style={{ fontSize: '0.9rem', fontWeight: '600', color: '#1e293b' }}>
-                            Drag file here or <span style={{ color: '#8b5cf6' }}>browse</span>
-                        </div>
-                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.25rem' }}>
-                            192x192 pixels. 5MB max file size.
+
+                        {design?.image?.url ? (
+                            <div style={{ position: 'relative', width: '100px', height: '100px', margin: '0 auto' }}>
+                                <img
+                                    src={design.image.url}
+                                    alt="Uploaded Logo"
+                                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                                />
+                                <div
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setDesign(prev => ({ ...prev, image: { ...prev.image, url: null } }));
+                                    }}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '-10px',
+                                        right: '-10px',
+                                        background: '#ef4444',
+                                        color: '#fff',
+                                        borderRadius: '50%',
+                                        width: '24px',
+                                        height: '24px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                    }}
+                                >
+                                    <X size={14} />
+                                </div>
+                            </div>
+                        ) : (
+                            <>
+                                <div style={{
+                                    width: '64px',
+                                    height: '64px',
+                                    borderRadius: '50%',
+                                    background: '#eff6ff',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    margin: '0 auto 1rem',
+                                    color: '#3b82f6'
+                                }}>
+                                    <Upload size={28} />
+                                </div>
+                                <div style={{ fontSize: '0.95rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>
+                                    Upload your custom logo
+                                </div>
+                                <div style={{ fontSize: '0.85rem', color: '#64748b' }}>
+                                    Supported formats: PNG, JPG, SVG
+                                </div>
+                            </>
+                        )}
+                    </div>
+
+                    {/* Social Logos Grid */}
+                    <div>
+                        <label style={{ display: 'block', marginBottom: '1rem', fontWeight: '600', color: '#0f172a', fontSize: '0.9rem' }}>
+                            OR CHOOSE FROM PRESETS
+                        </label>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(60px, 1fr))', gap: '1rem' }}>
+                            {socialLogos.map((social) => (
+                                <div
+                                    key={social.id}
+                                    onClick={() => handleSocialLogoSelect(social)}
+                                    style={{
+                                        width: '60px',
+                                        height: '60px',
+                                        border: design?.image?.url === social.src ? '2px solid #3b82f6' : '1px solid #e2e8f0',
+                                        borderRadius: '12px',
+                                        padding: '10px',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        background: '#fff',
+                                        boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                                        transition: 'all 0.2s',
+                                        position: 'relative'
+                                    }}
+                                >
+                                    <img src={social.src} alt={social.label} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                    {design?.image?.url === social.src && (
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: '-6px',
+                                            right: '-6px',
+                                            background: '#3b82f6',
+                                            color: '#fff',
+                                            borderRadius: '50%',
+                                            width: '18px',
+                                            height: '18px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontSize: '10px'
+                                        }}>✓</div>
+                                    )}
+                                </div>
+                            ))}
                         </div>
                     </div>
 
                     {/* Remove Background Toggle */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem', background: '#f8fafc', borderRadius: '8px' }}>
                         <div
                             onClick={() => setDesign(prev => ({
                                 ...prev,
@@ -415,7 +516,7 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
                             style={{
                                 width: '44px',
                                 height: '24px',
-                                background: design?.imageOptions?.hideBackgroundDots ? '#8b5cf6' : '#cbd5e1',
+                                background: design?.imageOptions?.hideBackgroundDots ? '#3b82f6' : '#cbd5e1',
                                 borderRadius: '12px',
                                 position: 'relative',
                                 cursor: 'pointer',
@@ -437,38 +538,12 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
                         <span style={{ fontSize: '0.9rem', fontWeight: '500', color: '#1e293b' }}>Remove Background Behind Logo</span>
                     </div>
 
-                    {/* Social Logos */}
-                    <div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
-                            {socialLogos.map((social) => (
-                                <div
-                                    key={social.id}
-                                    onClick={() => handleSocialLogoSelect(social)}
-                                    style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        padding: '4px',
-                                        border: '1px solid #e2e8f0',
-                                        borderRadius: '8px',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        background: '#fff',
-                                        transition: 'all 0.2s'
-                                    }}
-                                    onMouseEnter={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
-                                    onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
-                                >
-                                    <img src={social.src} alt={social.label} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
                     {/* Logo Size Slider */}
                     <div>
-                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#0f172a', marginBottom: '1rem' }}>Logo Size</label>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                            <label style={{ fontSize: '0.9rem', fontWeight: '600', color: '#0f172a' }}>Logo Size</label>
+                            <span style={{ fontSize: '0.85rem', color: '#64748b' }}>{Math.round((design?.imageOptions?.imageSize || 0.4) * 100)}%</span>
+                        </div>
                         <input
                             type="range"
                             min="0.1"
@@ -481,12 +556,12 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
                             }))}
                             style={{
                                 width: '100%',
-                                height: '4px',
+                                height: '6px',
                                 background: '#e2e8f0',
-                                borderRadius: '2px',
+                                borderRadius: '3px',
                                 outline: 'none',
                                 cursor: 'pointer',
-                                accentColor: '#8b5cf6'
+                                accentColor: '#3b82f6'
                             }}
                         />
                     </div>

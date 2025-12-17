@@ -322,17 +322,74 @@ const MenuConfig = ({ config, onChange }) => {
                 <div style={{ marginBottom: '2.5rem' }}>
                     <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>BACKGROUND IMAGE</div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+                        {/* Remove Image Button */}
                         <div onClick={() => handleDesignSectionUpdate('backgroundImage', '')} style={{ width: '80px', height: '80px', borderRadius: '4px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                             <X size={32} color="#e2e8f0" />
                         </div>
+
+                        {/* Preset Images */}
                         {bgImages.map(img => (
-                            <div key={img.id} onClick={() => handleDesignSectionUpdate('backgroundImage', img.url)} style={{ width: '80px', height: '80px', borderRadius: '4px', overflow: 'hidden', border: design.backgroundImage === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0' }}>
+                            <div key={img.id} onClick={() => handleDesignSectionUpdate('backgroundImage', img.url)} style={{ width: '80px', height: '80px', borderRadius: '4px', overflow: 'hidden', border: design.backgroundImage === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0', position: 'relative', cursor: 'pointer' }}>
                                 <img src={img.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                {design.backgroundImage === img.url && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '4px',
+                                        right: '4px',
+                                        background: '#8b5cf6',
+                                        borderRadius: '50%',
+                                        width: '20px',
+                                        height: '20px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <Check size={12} color="#fff" strokeWidth={3} />
+                                    </div>
+                                )}
                             </div>
                         ))}
-                        <div style={{ width: '80px', height: '80px', borderRadius: '4px', border: '1px dashed #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
+                        {/* Display Uploaded Image if it's not one of the presets */}
+                        {design.backgroundImage && !bgImages.find(img => img.url === design.backgroundImage) && (
+                            <div onClick={() => handleDesignSectionUpdate('backgroundImage', design.backgroundImage)} style={{ width: '80px', height: '80px', borderRadius: '4px', overflow: 'hidden', border: '2px solid #8b5cf6', position: 'relative', cursor: 'pointer' }}>
+                                <img src={design.backgroundImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '4px',
+                                    right: '4px',
+                                    background: '#8b5cf6',
+                                    borderRadius: '50%',
+                                    width: '20px',
+                                    height: '20px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    <Check size={12} color="#fff" strokeWidth={3} />
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Upload Button */}
+                        <label style={{ width: '80px', height: '80px', borderRadius: '4px', border: '1px dashed #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (file) {
+                                        const reader = new FileReader();
+                                        reader.onload = () => {
+                                            handleDesignSectionUpdate('backgroundImage', reader.result);
+                                        };
+                                        reader.readAsDataURL(file);
+                                    }
+                                }}
+                            />
                             <UploadCloud size={24} color="#94a3b8" />
-                        </div>
+                        </label>
                     </div>
                 </div>
             </ReusableDesignAccordion>
@@ -520,113 +577,118 @@ const MenuConfig = ({ config, onChange }) => {
                             <button onClick={handleAddCategory} style={{ background: '#fff', border: '1px solid #8b5cf6', color: '#8b5cf6', padding: '0.5rem 1rem', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '600', fontSize: '0.9rem', cursor: 'pointer' }}><Plus size={16} /> Add Category</button>
                         </div>
                     </div>
-                )}
-            </div>
+                )
+                }
+            </div >
 
             {/* TIMINGS ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
                 <div onClick={() => setIsTimingsOpen(!isTimingsOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', borderBottom: isTimingsOpen ? '1px solid #e2e8f0' : 'none' }}>
                     <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>TIMINGS</div>
                     {isTimingsOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
 
-                {isTimingsOpen && (
-                    <div style={{ padding: '2rem', background: '#faf9fc' }}>
-                        <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '2rem' }}>
-                                <button onClick={() => handleTimeFormatChange('24 hrs')} style={{ padding: '0.5rem 1rem', borderRadius: '4px', border: timeFormat === '24 hrs' ? '1px solid #8b5cf6' : '1px solid #e2e8f0', color: timeFormat === '24 hrs' ? '#8b5cf6' : '#94a3b8', background: '#fff', fontWeight: '600', fontSize: '0.8rem', cursor: 'pointer' }}>24 hrs</button>
-                                <button onClick={() => handleTimeFormatChange('AM/PM')} style={{ padding: '0.5rem 1rem', borderRadius: '4px', border: timeFormat === 'AM/PM' ? '1px solid #8b5cf6' : '1px solid #e2e8f0', color: timeFormat === 'AM/PM' ? '#8b5cf6' : '#94a3b8', background: '#fff', fontWeight: '600', fontSize: '0.8rem', cursor: 'pointer' }}>AM/PM</button>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                                {timings.map((day, ix) => (
-                                    <div key={day.day} style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', gap: '1.5rem', alignItems: 'center' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                                            <div onClick={() => handleTimingChange(ix, 'isOpen', !day.isOpen)} style={{ width: '20px', height: '20px', borderRadius: '4px', background: day.isOpen ? '#06b6d4' : '#fff', border: day.isOpen ? 'none' : '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>{day.isOpen && <Check size={14} color="#fff" strokeWidth={3} />}</div>
-                                            <span style={{ color: '#64748b', fontSize: '0.9rem', fontWeight: '500' }}>{day.day}</span>
+                {
+                    isTimingsOpen && (
+                        <div style={{ padding: '2rem', background: '#faf9fc' }}>
+                            <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '2rem' }}>
+                                    <button onClick={() => handleTimeFormatChange('24 hrs')} style={{ padding: '0.5rem 1rem', borderRadius: '4px', border: timeFormat === '24 hrs' ? '1px solid #8b5cf6' : '1px solid #e2e8f0', color: timeFormat === '24 hrs' ? '#8b5cf6' : '#94a3b8', background: '#fff', fontWeight: '600', fontSize: '0.8rem', cursor: 'pointer' }}>24 hrs</button>
+                                    <button onClick={() => handleTimeFormatChange('AM/PM')} style={{ padding: '0.5rem 1rem', borderRadius: '4px', border: timeFormat === 'AM/PM' ? '1px solid #8b5cf6' : '1px solid #e2e8f0', color: timeFormat === 'AM/PM' ? '#8b5cf6' : '#94a3b8', background: '#fff', fontWeight: '600', fontSize: '0.8rem', cursor: 'pointer' }}>AM/PM</button>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                    {timings.map((day, ix) => (
+                                        <div key={day.day} style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', gap: '1.5rem', alignItems: 'center' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                                                <div onClick={() => handleTimingChange(ix, 'isOpen', !day.isOpen)} style={{ width: '20px', height: '20px', borderRadius: '4px', background: day.isOpen ? '#06b6d4' : '#fff', border: day.isOpen ? 'none' : '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>{day.isOpen && <Check size={14} color="#fff" strokeWidth={3} />}</div>
+                                                <span style={{ color: '#64748b', fontSize: '0.9rem', fontWeight: '500' }}>{day.day}</span>
+                                            </div>
+                                            <div style={{ position: 'relative' }}><input type="text" value={day.start} onChange={(e) => handleTimingChange(ix, 'start', e.target.value)} style={{ width: '100%', padding: '0.75rem', paddingRight: '2.5rem', borderRadius: '4px', border: '1px solid #e2e8f0', fontSize: '0.9rem', outline: 'none', color: '#334155' }} /><div style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}><Clock size={16} color="#cbd5e1" /></div></div>
+                                            <div style={{ position: 'relative' }}><input type="text" value={day.end} onChange={(e) => handleTimingChange(ix, 'end', e.target.value)} style={{ width: '100%', padding: '0.75rem', paddingRight: '2.5rem', borderRadius: '4px', border: '1px solid #e2e8f0', fontSize: '0.9rem', outline: 'none', color: '#334155' }} /><div style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}><Clock size={16} color="#cbd5e1" /></div></div>
                                         </div>
-                                        <div style={{ position: 'relative' }}><input type="text" value={day.start} onChange={(e) => handleTimingChange(ix, 'start', e.target.value)} style={{ width: '100%', padding: '0.75rem', paddingRight: '2.5rem', borderRadius: '4px', border: '1px solid #e2e8f0', fontSize: '0.9rem', outline: 'none', color: '#334155' }} /><div style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}><Clock size={16} color="#cbd5e1" /></div></div>
-                                        <div style={{ position: 'relative' }}><input type="text" value={day.end} onChange={(e) => handleTimingChange(ix, 'end', e.target.value)} style={{ width: '100%', padding: '0.75rem', paddingRight: '2.5rem', borderRadius: '4px', border: '1px solid #e2e8f0', fontSize: '0.9rem', outline: 'none', color: '#334155' }} /><div style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}><Clock size={16} color="#cbd5e1" /></div></div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
-            </div>
+                    )
+                }
+            </div >
 
             {/* SOCIAL MEDIA CHANNELS */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
                 <div onClick={() => setIsSocialOpen(!isSocialOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', borderBottom: isSocialOpen ? '1px solid #e2e8f0' : 'none' }}>
                     <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
                     {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
 
-                {isSocialOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
-                        {/* Active Inputs Grid */}
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', marginBottom: '3rem' }}>
-                            {socials.map((social, index) => (
-                                <div key={index} style={{ width: '45%', position: 'relative' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem', fontWeight: 'bold' }}>{social.name}*</label>
-                                    <div style={{ position: 'relative' }}>
-                                        <div style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', width: '24px', height: '24px', borderRadius: '4px', background: getSocialColor(social.id), display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            {getSocialIcon(social.id)}
+                {
+                    isSocialOpen && (
+                        <div style={{ padding: '2rem', background: '#fff' }}>
+                            {/* Active Inputs Grid */}
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', marginBottom: '3rem' }}>
+                                {socials.map((social, index) => (
+                                    <div key={index} style={{ width: '45%', position: 'relative' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem', fontWeight: 'bold' }}>{social.name}*</label>
+                                        <div style={{ position: 'relative' }}>
+                                            <div style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', width: '24px', height: '24px', borderRadius: '4px', background: getSocialColor(social.id), display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                {getSocialIcon(social.id)}
+                                            </div>
+                                            <input
+                                                type="text"
+                                                value={social.url}
+                                                placeholder={social.placeholder}
+                                                onChange={(e) => handleSocialChange(index, e.target.value)}
+                                                style={{ width: '100%', padding: '0.75rem', paddingLeft: '3rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none' }}
+                                            />
                                         </div>
-                                        <input
-                                            type="text"
-                                            value={social.url}
-                                            placeholder={social.placeholder}
-                                            onChange={(e) => handleSocialChange(index, e.target.value)}
-                                            style={{ width: '100%', padding: '0.75rem', paddingLeft: '3rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none' }}
-                                        />
-                                    </div>
 
-                                    {/* Action Icons Outside */}
-                                    <div style={{ position: 'absolute', right: '-35px', top: '32px', display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-                                        <div onClick={() => handleRemoveSocial(index)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '24px', height: '24px', borderRadius: '50%', border: '1px solid #e2e8f0' }}>
-                                            <X size={12} color="#94a3b8" />
-                                        </div>
-                                        <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '24px', height: '24px' }}>
-                                            <ArrowUpDown size={16} color="#cbd5e1" />
+                                        {/* Action Icons Outside */}
+                                        <div style={{ position: 'absolute', right: '-35px', top: '32px', display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                                            <div onClick={() => handleRemoveSocial(index)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '24px', height: '24px', borderRadius: '50%', border: '1px solid #e2e8f0' }}>
+                                                <X size={12} color="#94a3b8" />
+                                            </div>
+                                            <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '24px', height: '24px' }}>
+                                                <ArrowUpDown size={16} color="#cbd5e1" />
+                                            </div>
                                         </div>
                                     </div>
+                                ))}
+                            </div>
+
+                            {/* ADD MORE */}
+                            <div>
+                                <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.2rem', textTransform: 'uppercase' }}>ADD MORE</div>
+                                <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: '1.5rem' }}>Click on the icon to add a social media profile.</div>
+
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+                                    {availableSocials.map((s) => {
+                                        const isSelected = socials.some(active => active.id === s.id);
+                                        return (
+                                            <div
+                                                key={s.id}
+                                                onClick={() => handleAddSocial(s.id)}
+                                                style={{
+                                                    width: '40px', height: '40px', borderRadius: '8px',
+                                                    background: s.color,
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    cursor: 'pointer',
+                                                    border: isSelected ? '3px solid #8b5cf6' : '2px solid transparent',
+                                                    boxShadow: isSelected ? '0 0 0 2px #fff inset' : 'none',
+                                                    opacity: isSelected ? 0.8 : 1
+                                                }}
+                                            >
+                                                {s.icon}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                            ))}
-                        </div>
-
-                        {/* ADD MORE */}
-                        <div>
-                            <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.2rem', textTransform: 'uppercase' }}>ADD MORE</div>
-                            <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: '1.5rem' }}>Click on the icon to add a social media profile.</div>
-
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-                                {availableSocials.map((s) => {
-                                    const isSelected = socials.some(active => active.id === s.id);
-                                    return (
-                                        <div
-                                            key={s.id}
-                                            onClick={() => handleAddSocial(s.id)}
-                                            style={{
-                                                width: '40px', height: '40px', borderRadius: '8px',
-                                                background: s.color,
-                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                cursor: 'pointer',
-                                                border: isSelected ? '3px solid #8b5cf6' : '2px solid transparent',
-                                                boxShadow: isSelected ? '0 0 0 2px #fff inset' : 'none',
-                                                opacity: isSelected ? 0.8 : 1
-                                            }}
-                                        >
-                                            {s.icon}
-                                        </div>
-                                    );
-                                })}
                             </div>
                         </div>
-                    </div>
-                )}
-            </div>
+                    )
+                }
+            </div >
 
-        </div>
+        </div >
     );
 };
 

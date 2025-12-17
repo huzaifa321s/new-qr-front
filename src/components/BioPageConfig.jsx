@@ -133,19 +133,16 @@ const BioPageConfig = ({ config, onChange }) => {
                         header: design.color?.header || '#7D2AE7',
                         light: design.color?.light || '#C291FF'
                     },
-                    picture: {
-                        ...design.picture,
-                        url: design.picture?.url
-                    }
+
                 }}
                 onChange={handleDesignSectionUpdate}
                 isOpen={isDesignOpen}
                 onToggle={() => setIsDesignOpen(!isDesignOpen)}
                 colorKeys={{ primary: 'color.header', secondary: 'color.light' }}
                 palettes={palettes}
-                logoKey="picture.url"
+                logoKey="logo.url"
                 logoOptions={pictureOptions}
-                logoLabel="YOUR PICTURE"
+                logoLabel="LOGO"
                 logoHelpText="128x128px, 1:1 Ratio"
             >
                 {/* PICTURE FRAME SECTION - Passed as Children */}

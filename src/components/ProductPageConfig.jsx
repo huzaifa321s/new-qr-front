@@ -284,7 +284,8 @@ const ProductPageConfig = ({ config, onChange }) => {
                 onToggle={() => setIsDesignOpen(!isDesignOpen)}
                 colorKeys={{ primary: 'color.header', secondary: 'color.light' }}
                 palettes={palettes}
-                showLogo={false}
+                logoKey="logo.url"
+                logoOptions={logoAvatars}
             />
 
             {/* BASIC INFORMATION ACCORDION */}
@@ -355,55 +356,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                             </div>
                         </div>
 
-                        {/* Logo Selection */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
-                                LOGO
-                            </label>
-                            <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginBottom: '1rem', marginTop: '0.2rem' }}>
-                                128x128px, 1:1 Ratio
-                            </div>
-                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                {/* Clear Button */}
-                                <div
-                                    onClick={() => handleBasicInfoUpdate('logo', '')}
-                                    style={{
-                                        width: '64px', height: '64px', borderRadius: '50%', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
-                                    }}
-                                >
-                                    <X size={24} color="#e2e8f0" style={{ fontWeight: '100' }} />
-                                </div>
 
-                                {/* Avatars */}
-                                {logoAvatars.map(av => (
-                                    <div
-                                        key={av.id}
-                                        onClick={() => handleBasicInfoUpdate('logo', av.url)}
-                                        style={{
-                                            width: '64px', height: '64px', borderRadius: '50%', border: basicInfo.logo === av.url ? '2px solid #8b5cf6' : '1px solid #fff', overflow: 'visible', cursor: 'pointer', position: 'relative'
-                                        }}
-                                    >
-                                        <img src={av.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-                                        {basicInfo.logo === av.url && (
-                                            <div style={{ position: 'absolute', top: '-2px', right: '-2px', background: '#8b5cf6', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #fff' }}>
-                                                <Check size={10} color="#fff" />
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-
-                                {/* Upload Button */}
-                                <div
-                                    onClick={() => fileInputRefLogo.current.click()}
-                                    style={{
-                                        width: '64px', height: '64px', borderRadius: '50%', border: '1px dashed #cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
-                                    }}
-                                >
-                                    <UploadCloud size={20} color="#94a3b8" />
-                                </div>
-                                <input type="file" ref={fileInputRefLogo} onChange={handleLogoUpload} style={{ display: 'none' }} accept="image/*" />
-                            </div>
-                        </div>
 
                         {/* Product Images */}
                         <div style={{ marginBottom: '2rem' }}>

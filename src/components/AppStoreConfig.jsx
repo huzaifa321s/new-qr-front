@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import FormSection from './FormSection';
 import ColorPicker from './ColorPicker';
 import FileUploader from './FileUploader';
-import { ChevronDown, ChevronUp, Upload, Calendar, Image as ImageIcon, Video, UploadCloud, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, Upload, Calendar, Image as ImageIcon, Video, UploadCloud, X, Check, Eye } from 'lucide-react';
 import axios from 'axios';
 
 const AppStoreConfig = ({ config, onChange }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
     // Helper to update nested state
     const updateConfig = (path, value) => {
         const keys = path.split('.');
@@ -151,139 +153,243 @@ const AppStoreConfig = ({ config, onChange }) => {
                     <div>
                         <label className="label" style={{ marginBottom: '0.5rem', display: 'block' }}>LOGO</label>
                         <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '1rem' }}>128x128px, 1:1 Ratio</div>
-                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                            {/* Upload Logo */}
-                            <label style={{
-                                width: '80px',
-                                height: '80px',
-                                border: '2px dashed #8b5cf6',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                background: '#f8fafc',
-                                position: 'relative',
-                                overflow: 'hidden',
-                                transition: 'all 0.2s'
-                            }}>
-                                {getValue('design.logo.url') ? (
-                                    <>
-                                        <img
-                                            src={getValue('design.logo.url')}
-                                            alt="logo"
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                        />
-                                        <button
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                updateConfig('design.logo.url', '');
-                                            }}
-                                            style={{
-                                                position: 'absolute',
-                                                top: '-8px',
-                                                right: '-8px',
-                                                background: '#8b5cf6',
-                                                border: 'none',
-                                                color: '#fff',
-                                                width: '28px',
-                                                height: '28px',
-                                                borderRadius: '50%',
-                                                cursor: 'pointer',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                fontSize: '18px',
-                                                lineHeight: '1',
-                                                fontWeight: 'bold',
-                                                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                                            }}
-                                            title="Remove logo"
-                                        >
-                                            ×
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2">
-                                            <circle cx="12" cy="12" r="10" />
-                                            <path d="M12 8v8M8 12h8" />
-                                        </svg>
-                                        <div style={{
-                                            position: 'absolute',
-                                            top: '-6px',
-                                            right: '-6px',
-                                            background: '#8b5cf6',
-                                            border: '2px solid #fff',
-                                            color: '#fff',
-                                            width: '24px',
-                                            height: '24px',
+                        {(() => {
+                            const currentUrl = getValue('design.logo.url');
+                            const presets = [
+                                { icon: '❤️', svg: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"%3E%3Ccircle cx="64" cy="64" r="60" fill="%23fff5f5" stroke="%23ec4899" stroke-width="2"/%3E%3Cpath d="M 40 60 L 60 75 L 90 45" stroke="%23ec4899" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E' },
+                                { icon: '🏪', svg: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"%3E%3Ccircle cx="64" cy="64" r="60" fill="%23f0fdf4" stroke="%2322c55e" stroke-width="2"/%3E%3Cpath d="M 35 45 L 35 95 Q 35 105 45 105 L 95 105 Q 105 105 105 95 L 105 55 Q 105 45 95 45 L 65 45 Q 55 45 55 55 L 55 95" stroke="%2322c55e" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E' },
+                                { icon: '⭐', svg: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"%3E%3Ccircle cx="64" cy="64" r="60" fill="%23fffbeb" stroke="%23f59e0b" stroke-width="2"/%3E%3Cpath d="M 64 35 L 74 60 L 100 60 L 80 75 L 90 100 L 64 85 L 38 100 L 48 75 L 28 60 L 54 60 Z" fill="%23f59e0b"/%3E%3C/svg%3E' },
+                                { icon: '🎯', svg: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"%3E%3Ccircle cx="64" cy="64" r="60" fill="%23f0f9ff" stroke="%230ea5e9" stroke-width="2"/%3E%3Ccircle cx="64" cy="64" r="20" fill="none" stroke="%230ea5e9" stroke-width="3"/%3E%3Ccircle cx="64" cy="64" r="3" fill="%230ea5e9"/%3E%3C/svg%3E' }
+                            ];
+                            const isPreset = presets.some(p => p.svg === currentUrl);
+
+                            return (
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+                                    {/* 1. Remove Button */}
+                                    <button
+                                        onClick={() => updateConfig('design.logo.url', '')}
+                                        style={{
+                                            minWidth: '80px',
+                                            height: '80px',
                                             borderRadius: '50%',
+                                            border: '1px solid #e2e8f0',
+                                            background: '#fff',
+                                            cursor: 'pointer',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            fontSize: '14px',
-                                            fontWeight: 'bold'
-                                        }}>
-                                            ✓
-                                        </div>
-                                    </>
-                                )}
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                            const reader = new FileReader();
-                                            reader.onload = (event) => {
-                                                updateConfig('design.logo.url', event.target?.result);
-                                            };
-                                            reader.readAsDataURL(file);
-                                        }
-                                    }}
-                                    style={{ display: 'none' }}
-                                />
-                            </label>
+                                            color: '#94a3b8',
+                                            transition: 'all 0.2s',
+                                            flexShrink: 0
+                                        }}
+                                        title="Remove Logo"
+                                        type="button"
+                                    >
+                                        <X size={32} strokeWidth={1} />
+                                    </button>
 
-                            {/* Preset Icons/Logos */}
-                            {[
-                                { icon: '❤️', label: 'Heart' },
-                                { icon: '🏪', label: 'Shop' },
-                                { icon: '⭐', label: 'Star' },
-                                { icon: '🎯', label: 'Target' }
-                            ].map((item, idx) => (
-                                <div
-                                    key={idx}
-                                    onClick={() => {
-                                        // Create SVG for icon
-                                        const icons = [
-                                            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"%3E%3Ccircle cx="64" cy="64" r="60" fill="%23fff5f5" stroke="%23ec4899" stroke-width="2"/%3E%3Cpath d="M 40 60 L 60 75 L 90 45" stroke="%23ec4899" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E',
-                                            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"%3E%3Ccircle cx="64" cy="64" r="60" fill="%23f0fdf4" stroke="%2322c55e" stroke-width="2"/%3E%3Cpath d="M 35 45 L 35 95 Q 35 105 45 105 L 95 105 Q 105 105 105 95 L 105 55 Q 105 45 95 45 L 65 45 Q 55 45 55 55 L 55 95" stroke="%2322c55e" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E',
-                                            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"%3E%3Ccircle cx="64" cy="64" r="60" fill="%23fffbeb" stroke="%23f59e0b" stroke-width="2"/%3E%3Cpath d="M 64 35 L 74 60 L 100 60 L 80 75 L 90 100 L 64 85 L 38 100 L 48 75 L 28 60 L 54 60 Z" fill="%23f59e0b"/%3E%3C/svg%3E',
-                                            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"%3E%3Ccircle cx="64" cy="64" r="60" fill="%23f0f9ff" stroke="%230ea5e9" stroke-width="2"/%3E%3Ccircle cx="64" cy="64" r="20" fill="none" stroke="%230ea5e9" stroke-width="3"/%3E%3Ccircle cx="64" cy="64" r="3" fill="%230ea5e9"/%3E%3C/svg%3E'
-                                        ];
-                                        updateConfig('design.logo.url', icons[idx]);
-                                    }}
-                                    style={{
-                                        width: '80px',
+                                    {/* 2. Presets */}
+                                    {presets.map((item, idx) => {
+                                        const isSelected = currentUrl === item.svg;
+                                        return (
+                                            <div
+                                                key={idx}
+                                                onClick={() => updateConfig('design.logo.url', item.svg)}
+                                                style={{
+                                                    minWidth: '80px',
+                                                    height: '80px',
+                                                    borderRadius: '50%',
+                                                    overflow: 'hidden',
+                                                    cursor: 'pointer',
+                                                    border: isSelected ? '3px solid #8b5cf6' : '2px solid #e2e8f0',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    background: '#f8fafc',
+                                                    fontSize: '40px',
+                                                    flexShrink: 0,
+                                                    position: 'relative'
+                                                }}
+                                            >
+                                                {item.icon}
+                                                {isSelected && (
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        top: '0',
+                                                        left: '0',
+                                                        width: '24px',
+                                                        height: '24px',
+                                                        borderRadius: '50%',
+                                                        background: '#8b5cf6',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        color: '#fff',
+                                                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                                                    }}>
+                                                        <Check size={14} strokeWidth={3} />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+
+                                    {/* 3. Custom Selection (if active and not preset) */}
+                                    {currentUrl && !isPreset && (
+                                        <div
+                                            style={{
+                                                minWidth: '80px',
+                                                height: '80px',
+                                                borderRadius: '50%',
+                                                overflow: 'hidden',
+                                                border: '3px solid #8b5cf6',
+                                                position: 'relative',
+                                                flexShrink: 0,
+                                                cursor: 'pointer'
+                                            }}
+                                            onMouseEnter={() => setIsHovered(true)}
+                                            onMouseLeave={() => setIsHovered(false)}
+                                            onClick={() => setIsModalOpen(true)}
+                                        >
+                                            <img src={currentUrl} alt="Custom Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+
+                                            {/* Hover Overlay */}
+                                            {isHovered && (
+                                                <div style={{
+                                                    position: 'absolute',
+                                                    inset: 0,
+                                                    background: 'rgba(0, 0, 0, 0.5)',
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    zIndex: 10
+                                                }}>
+                                                    <Eye size={20} color="#fff" />
+                                                    <span style={{ color: '#fff', fontSize: '10px', marginTop: '2px', fontWeight: '500' }}>Preview</span>
+                                                </div>
+                                            )}
+
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: '0',
+                                                left: '0',
+                                                width: '24px',
+                                                height: '24px',
+                                                borderRadius: '50%',
+                                                background: '#8b5cf6',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                color: '#fff',
+                                                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                                            }}>
+                                                <Check size={14} strokeWidth={3} />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* 4. Upload Button */}
+                                    <label style={{
+                                        minWidth: '80px',
                                         height: '80px',
                                         borderRadius: '50%',
-                                        overflow: 'hidden',
+                                        border: '2px dashed #cbd5e1',
+                                        background: '#f8fafc',
                                         cursor: 'pointer',
-                                        border: getValue('design.logo.url')?.includes(encodeURI(item.icon)) ? '3px solid #8b5cf6' : '2px solid #e2e8f0',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        background: '#f8fafc',
-                                        fontSize: '40px'
-                                    }}
-                                >
-                                    {item.icon}
+                                        color: '#64748b',
+                                        transition: 'all 0.2s',
+                                        flexShrink: 0
+                                    }} title="Upload Logo">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                    const reader = new FileReader();
+                                                    reader.onload = (event) => {
+                                                        updateConfig('design.logo.url', event.target?.result);
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            }}
+                                            style={{ display: 'none' }}
+                                        />
+                                        <UploadCloud size={24} />
+                                    </label>
                                 </div>
-                            ))}
-                        </div>
+                            );
+                        })()}
+
+                        {/* Modal for Custom Logo */}
+                        {isModalOpen && getValue('design.logo.url') && (
+                            <div
+                                style={{
+                                    position: 'fixed',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100vw',
+                                    height: '100vh',
+                                    background: 'rgba(0,0,0,0.5)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    zIndex: 9999
+                                }}
+                                onClick={(e) => {
+                                    if (e.target === e.currentTarget) setIsModalOpen(false);
+                                }}
+                            >
+                                <div style={{
+                                    background: '#fff',
+                                    padding: '1rem',
+                                    borderRadius: '12px',
+                                    position: 'relative',
+                                    maxWidth: '90%',
+                                    maxHeight: '90%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+                                }}>
+                                    <button
+                                        onClick={() => setIsModalOpen(false)}
+                                        style={{
+                                            position: 'absolute',
+                                            top: '-12px',
+                                            right: '-12px',
+                                            background: '#fff',
+                                            borderRadius: '50%',
+                                            border: 'none',
+                                            cursor: 'pointer',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                                            width: '32px',
+                                            height: '32px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: '#64748b'
+                                        }}
+                                    >
+                                        <X size={20} />
+                                    </button>
+                                    <img
+                                        src={getValue('design.logo.url')}
+                                        alt="Full Logo Check"
+                                        style={{
+                                            maxWidth: '400px',
+                                            maxHeight: '400px',
+                                            objectFit: 'contain',
+                                            display: 'block'
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </FormSection>

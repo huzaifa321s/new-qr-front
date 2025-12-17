@@ -1,6 +1,6 @@
 
-import React, { useRef } from 'react';
-import { ChevronDown, ChevronUp, RefreshCw, Check, UploadCloud, X } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { ChevronDown, ChevronUp, RefreshCw, Check, UploadCloud, X, Eye } from 'lucide-react';
 import axios from 'axios';
 
 /**
@@ -63,13 +63,15 @@ const ReusableDesignAccordion = ({
 
     const currentLogoUrl = getLogoUrl();
     const fileInputRef = useRef(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
     const handleColorPaletteClick = (p, s) => {
         onChange(colorKeys.primary, p);
         onChange(colorKeys.secondary, s);
     };
 
-    const handleFileUpload = async (e) => {
+    const handleFileUpload = (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
@@ -85,32 +87,18 @@ const ReusableDesignAccordion = ({
             return;
         }
 
-        try {
-            const formData = new FormData();
-            formData.append('logo', file);
-
-            const res = await axios.post('http://localhost:3000/api/upload/logo', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-
-            // Update logo based on logoKey structure
-            // For menu, logo is stored as object with url property
+        const reader = new FileReader();
+        reader.onload = () => {
+            const result = reader.result;
             if (logoKey.includes('.')) {
                 const keys = logoKey.split('.');
-                onChange(keys[0], { ...getValue(keys[0]), [keys[1]]: res.data.url });
+                onChange(keys[0], { ...getValue(keys[0]), [keys[1]]: result });
             } else {
                 // If logoKey is just 'logo', store as object with url property
-                onChange(logoKey, { url: res.data.url });
+                onChange(logoKey, { url: result });
             }
-        } catch (err) {
-            console.error('Upload failed:', err);
-            alert('Upload failed. Please try again.');
-        } finally {
-            // Reset file input
-            if (fileInputRef.current) {
-                fileInputRef.current.value = '';
-            }
-        }
+        };
+        reader.readAsDataURL(file);
     };
 
     const triggerFileUpload = () => {
@@ -345,7 +333,7 @@ const ReusableDesignAccordion = ({
                                 </span>
                             </div>
 
-                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', overflowX: 'auto', paddingBottom: '0.5rem', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                                 {/* Remove/Clear Option */}
                                 <div
                                     onClick={() => {
@@ -353,26 +341,27 @@ const ReusableDesignAccordion = ({
                                             const keys = logoKey.split('.');
                                             onChange(keys[0], { ...getValue(keys[0]), [keys[1]]: '' });
                                         } else {
-                                            // Clear logo by setting to empty object or null
                                             onChange(logoKey, null);
                                         }
                                     }}
                                     style={{
-                                        width: '64px',
-                                        height: '64px',
+                                        width: '80px',
+                                        height: '80px',
                                         borderRadius: '50%',
                                         border: '1px solid #e2e8f0',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         cursor: 'pointer',
-                                        background: '#fff'
+                                        background: '#fff',
+                                        flexShrink: 0
                                     }}
+                                    title="Remove Logo"
                                 >
                                     <X size={24} color="#cbd5e1" />
                                 </div>
 
-                                {/* Logo Options */}
+                                {/* Logo Presets */}
                                 {logoOptions && logoOptions.map(img => (
                                     <div
                                         key={img.id}
@@ -381,18 +370,18 @@ const ReusableDesignAccordion = ({
                                                 const keys = logoKey.split('.');
                                                 onChange(keys[0], { ...getValue(keys[0]), [keys[1]]: img.url });
                                             } else {
-                                                // Store as object with url property for consistency
                                                 onChange(logoKey, { url: img.url });
                                             }
                                         }}
                                         style={{
-                                            width: '64px',
-                                            height: '64px',
+                                            width: '80px',
+                                            height: '80px',
                                             borderRadius: '50%',
                                             overflow: 'hidden',
                                             border: currentLogoUrl === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
                                             cursor: 'pointer',
-                                            position: 'relative'
+                                            position: 'relative',
+                                            flexShrink: 0
                                         }}
                                     >
                                         <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -401,20 +390,75 @@ const ReusableDesignAccordion = ({
                                                 position: 'absolute',
                                                 top: 0,
                                                 right: 0,
-                                                width: '20px',
-                                                height: '20px',
+                                                width: '24px',
+                                                height: '24px',
                                                 background: '#8b5cf6',
                                                 borderRadius: '50%',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                border: '1px solid #fff'
+                                                border: '2px solid #fff'
                                             }}>
-                                                <Check size={12} color="#fff" />
+                                                <Check size={14} color="#fff" />
                                             </div>
                                         )}
                                     </div>
                                 ))}
+
+                                {/* Custom Uploaded Logo (if not in presets) */}
+                                {currentLogoUrl && !logoOptions?.some(o => o.url === currentLogoUrl) && (
+                                    <div
+                                        style={{
+                                            width: '80px',
+                                            height: '80px',
+                                            borderRadius: '50%',
+                                            overflow: 'hidden',
+                                            border: '2px solid #8b5cf6',
+                                            cursor: 'pointer',
+                                            position: 'relative',
+                                            flexShrink: 0
+                                        }}
+                                        onMouseEnter={() => setIsHovered(true)}
+                                        onMouseLeave={() => setIsHovered(false)}
+                                        onClick={() => setIsModalOpen(true)}
+                                    >
+                                        <img src={currentLogoUrl} alt="Custom Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            right: 0,
+                                            width: '24px',
+                                            height: '24px',
+                                            background: '#8b5cf6',
+                                            borderRadius: '50%',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            border: '2px solid #fff',
+                                            zIndex: 2
+                                        }}>
+                                            <Check size={14} color="#fff" />
+                                        </div>
+                                        {isHovered && (
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                left: 0,
+                                                width: '100%',
+                                                height: '100%',
+                                                background: 'rgba(0,0,0,0.5)',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                zIndex: 3
+                                            }}>
+                                                <Eye size={24} color="#fff" />
+                                                <span style={{ color: '#fff', fontSize: '10px', marginTop: '4px' }}>Preview</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
 
                                 {/* Upload Option */}
                                 <div>
@@ -428,17 +472,18 @@ const ReusableDesignAccordion = ({
                                     <div
                                         onClick={triggerFileUpload}
                                         style={{
-                                            width: '64px',
-                                            height: '64px',
+                                            width: '80px',
+                                            height: '80px',
                                             borderRadius: '50%',
                                             border: '1px dashed #cbd5e1',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            cursor: 'pointer'
+                                            cursor: 'pointer',
+                                            flexShrink: 0
                                         }}
                                     >
-                                        <UploadCloud size={20} color="#94a3b8" />
+                                        <UploadCloud size={24} color="#94a3b8" />
                                     </div>
                                 </div>
                             </div>
@@ -491,6 +536,45 @@ const ReusableDesignAccordion = ({
                     )}
 
                     {children}
+                </div>
+            )}
+            {/* Modal for Logo Preview */}
+            {isModalOpen && currentLogoUrl && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: 9999,
+                    background: 'rgba(0,0,0,0.8)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '2rem'
+                }} onClick={() => setIsModalOpen(false)}>
+                    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={e => e.stopPropagation()}>
+                        <img src={currentLogoUrl} alt="Logo Preview" style={{ maxWidth: '100%', maxHeight: '90vh', borderRadius: '8px' }} />
+                        <button
+                            onClick={() => setIsModalOpen(false)}
+                            style={{
+                                position: 'absolute',
+                                top: '-40px',
+                                right: '-40px',
+                                background: 'white',
+                                border: 'none',
+                                borderRadius: '50%',
+                                width: '40px',
+                                height: '40px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <X size={24} color="#000" />
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

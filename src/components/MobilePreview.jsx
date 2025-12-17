@@ -896,27 +896,29 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         borderBottomLeftRadius: '50% 20%',
                         borderBottomRightRadius: '50% 20%',
                         position: 'relative',
-                        marginBottom: '60px'
+                        marginBottom: (design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop') ? '60px' : '2rem'
                     }}>
                         {/* Profile Image */}
-                        <div style={{
-                            width: '110px',
-                            height: '110px',
-                            borderRadius: (design?.pictureFrame === 'rectangular' || design?.profile?.shape === 'rectangular') ? '12px' : '50%',
-                            background: '#fff',
-                            padding: '3px',
-                            position: 'absolute',
-                            bottom: '-55px',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                        }}>
-                            <img
-                                src={design?.picture?.url || design?.profile?.url || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop'}
-                                alt="Profile"
-                                style={{ width: '100%', height: '100%', borderRadius: (design?.pictureFrame === 'rectangular' || design?.profile?.shape === 'rectangular') ? '12px' : '50%', objectFit: 'cover' }}
-                            />
-                        </div>
+                        {(design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop') && (
+                            <div style={{
+                                width: '110px',
+                                height: '110px',
+                                borderRadius: (design?.pictureFrame === 'rectangular' || design?.profile?.shape === 'rectangular') ? '12px' : '50%',
+                                background: '#fff',
+                                padding: '3px',
+                                position: 'absolute',
+                                bottom: '-55px',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                            }}>
+                                <img
+                                    src={design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop'}
+                                    alt="Profile"
+                                    style={{ width: '100%', height: '100%', borderRadius: (design?.pictureFrame === 'rectangular' || design?.profile?.shape === 'rectangular') ? '12px' : '50%', objectFit: 'cover' }}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     {/* Name and Title */}
@@ -1127,25 +1129,27 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 {surveyStep === 'language' && (
                     <div style={{ height: '100%', overflowY: 'auto', background: '#fff', display: 'flex', flexDirection: 'column' }}>
                         {/* Logo */}
-                        <div style={{ padding: '3rem 1rem 1rem', display: 'flex', justifyContent: 'center' }}>
-                            <div style={{
-                                width: '100px',
-                                height: '100px',
-                                borderRadius: '50%',
-                                background: '#fff',
-                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                                overflow: 'hidden',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}>
-                                <img
-                                    src={design?.logo?.url}
-                                    alt="Logo"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                />
+                        {design?.logo?.url && (
+                            <div style={{ padding: '3rem 1rem 1rem', display: 'flex', justifyContent: 'center' }}>
+                                <div style={{
+                                    width: '100px',
+                                    height: '100px',
+                                    borderRadius: '50%',
+                                    background: '#fff',
+                                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                                    overflow: 'hidden',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    <img
+                                        src={design.logo.url}
+                                        alt="Logo"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* Business Name */}
                         <div style={{ textAlign: 'center', padding: '1rem 1.5rem 0.5rem' }}>
@@ -1460,24 +1464,26 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 {surveyStep === 'thankYou' && (
                     <div style={{ height: '100%', overflowY: 'auto', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem 1.5rem' }}>
                         {/* Logo */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <div style={{
-                                width: '100px',
-                                height: '100px',
-                                borderRadius: '50%',
-                                background: '#5b8fd9',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                overflow: 'hidden'
-                            }}>
-                                <img
-                                    src={design?.logo?.url}
-                                    alt="Logo"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                />
+                        {design?.logo?.url && (
+                            <div style={{ marginBottom: '2rem' }}>
+                                <div style={{
+                                    width: '100px',
+                                    height: '100px',
+                                    borderRadius: '50%',
+                                    background: '#5b8fd9',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    overflow: 'hidden'
+                                }}>
+                                    <img
+                                        src={design.logo.url}
+                                        alt="Logo"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* Thank You Message */}
                         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
@@ -1628,19 +1634,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         }}>
                             {/* Logo and Business Name */}
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                                <div style={{
-                                    width: '40px',
-                                    height: '40px',
-                                    borderRadius: '50%',
-                                    overflow: 'hidden',
-                                    background: '#fff'
-                                }}>
-                                    <img
-                                        src={design?.logo?.url}
-                                        alt="Logo"
-                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                    />
-                                </div>
+                                {design?.logo?.url && (
+                                    <div style={{
+                                        width: '40px',
+                                        height: '40px',
+                                        borderRadius: '50%',
+                                        overflow: 'hidden',
+                                        background: '#fff'
+                                    }}>
+                                        <img
+                                            src={design.logo.url}
+                                            alt="Logo"
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        />
+                                    </div>
+                                )}
                                 <h2 style={{
                                     fontSize: '1.1rem',
                                     fontWeight: 'bold',
@@ -2014,22 +2022,24 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 }}>
                                     {basicInfo?.name || businessInfo?.title}
                                 </h2>
-                                <div style={{
-                                    width: '45px',
-                                    height: '45px',
-                                    borderRadius: '50%',
-                                    background: '#fff',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    overflow: 'hidden'
-                                }}>
-                                    <img
-                                        src={design?.logo?.url}
-                                        alt="Logo"
-                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                    />
-                                </div>
+                                {design?.logo?.url && (
+                                    <div style={{
+                                        width: '45px',
+                                        height: '45px',
+                                        borderRadius: '50%',
+                                        background: '#fff',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        overflow: 'hidden'
+                                    }}>
+                                        <img
+                                            src={design.logo.url}
+                                            alt="Logo"
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        />
+                                    </div>
+                                )}
                             </div>
 
                             {/* Header Image */}
@@ -2279,22 +2289,24 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             <h2 style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#fff', margin: 0 }}>
                                 {businessInfo?.title}
                             </h2>
-                            <div style={{
-                                width: '45px',
-                                height: '45px',
-                                borderRadius: '50%',
-                                background: '#fff',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                overflow: 'hidden'
-                            }}>
-                                <img
-                                    src={design?.logo?.url}
-                                    alt="Logo"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                />
-                            </div>
+                            {design?.logo?.url && (
+                                <div style={{
+                                    width: '45px',
+                                    height: '45px',
+                                    borderRadius: '50%',
+                                    background: '#fff',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    overflow: 'hidden'
+                                }}>
+                                    <img
+                                        src={design.logo.url}
+                                        alt="Logo"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         {/* Thank You Card */}
@@ -2437,7 +2449,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     if (isSocial) {
         // Default values for social media preview
         const defaultBg = "https://img.freepik.com/free-vector/social-media-doodle-set-vector-illustration_53876-155819.jpg?size=626&ext=jpg";
-        const defaultLogo = "https://img.freepik.com/free-vector/red-heart-with-crossed-spoon-fork_1284-42631.jpg?size=338&ext=jpg"; // Heart/Food logo from image
+        const defaultLogo = "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop"; // Avatar placeholder
         const primaryColor = design?.color?.header || '#0B2D86'; // Deep Blue
 
         return (
@@ -2473,25 +2485,27 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     </div>
 
                     {/* Overlapping Logo - Moved OUTSIDE the clipped container */}
-                    <div style={{
-                        width: '100px',
-                        height: '100px',
-                        borderRadius: '50%',
-                        background: '#fff',
-                        position: 'absolute',
-                        top: '170px', // Header is 220px, Logo is 100px. Centered at line: 220 - 50 = 170px
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        zIndex: 50, // High z-index to sit on top of everything
-                        padding: '5px',
-                        boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
-                    }}>
-                        <img
-                            src={design?.logo?.url || defaultLogo}
-                            alt="Logo"
-                            style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
-                        />
-                    </div>
+                    {(design?.logo?.url || defaultLogo) && (
+                        <div style={{
+                            width: '100px',
+                            height: '100px',
+                            borderRadius: '50%',
+                            background: '#fff',
+                            position: 'absolute',
+                            top: '170px', // Header is 220px, Logo is 100px. Centered at line: 220 - 50 = 170px
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            zIndex: 50, // High z-index to sit on top of everything
+                            padding: '5px',
+                            boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+                        }}>
+                            <img
+                                src={design?.logo?.url || defaultLogo}
+                                alt="Logo"
+                                style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                            />
+                        </div>
+                    )}
 
                     {/* Curved Blue Section */}
                     <div style={{
@@ -2564,7 +2578,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: MessageCircle, color: '#25d366' },
                                     { id: 'snapchat', urlKey: 'snapchatUrl', textKey: 'snapchatText', name: 'Snapchat', icon: Ghost, color: '#fffc00' },
                                     { id: 'tiktok', urlKey: 'tiktokUrl', textKey: 'tiktokText', name: 'TikTok', icon: Music, color: '#000000' },
-                                    { id: 'tumblr', urlKey: 'tumblrUrl', textKey: 'tumblrText', name: 'Tumblr', icon: ({ size }) => <span style={{ fontSize: size, fontWeight: 'bold' }}>t</span>, color: '#35465c' },
+                                    { id: 'tumblr', urlKey: 'tumblrText', textKey: 'tumblrText', name: 'Tumblr', icon: ({ size }) => <span style={{ fontSize: size, fontWeight: 'bold' }}>t</span>, color: '#35465c' },
                                     { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: Headphones, color: '#1db954' },
                                     { id: 'telegram', urlKey: 'telegramUrl', textKey: 'telegramText', name: 'Telegram', icon: Send, color: '#0088cc' },
                                     { id: 'behance', urlKey: 'behanceUrl', textKey: 'behanceText', name: 'Behance', icon: ({ size }) => <span style={{ fontSize: Math.max(10, size - 4), fontWeight: 'bold' }}>Bē</span>, color: '#1769ff' },
@@ -2688,18 +2702,20 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0, color: businessInfo?.companyNameColor || '#fff' }}>
                             {businessInfo?.companyName || "Royal's Cafe"}
                         </h2>
-                        <div style={{
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '50%',
-                            background: '#fff',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            padding: '5px'
-                        }}>
-                            <img src={design?.picture?.url} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-                        </div>
+                        {design?.logo?.url && (
+                            <div style={{
+                                width: '40px',
+                                height: '40px',
+                                borderRadius: '50%',
+                                background: '#fff',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                padding: '5px'
+                            }}>
+                                <img src={design.logo.url} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                            </div>
+                        )}
                     </div>
 
                     {/* Hero Image */}
@@ -2736,7 +2752,15 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            {Array.isArray(businessInfo?.timings) && businessInfo.timings.map((dayInfo) => (
+                            {(Array.isArray(businessInfo?.timings) && businessInfo.timings.length > 0 ? businessInfo.timings : [
+                                { day: 'Monday', isOpen: true, start: '09:00', end: '22:00' },
+                                { day: 'Tuesday', isOpen: true, start: '09:00', end: '22:00' },
+                                { day: 'Wednesday', isOpen: true, start: '09:00', end: '22:00' },
+                                { day: 'Thursday', isOpen: true, start: '09:00', end: '22:00' },
+                                { day: 'Friday', isOpen: true, start: '09:00', end: '23:00' },
+                                { day: 'Saturday', isOpen: true, start: '10:00', end: '23:00' },
+                                { day: 'Sunday', isOpen: true, start: '10:00', end: '23:00' }
+                            ]).map((dayInfo) => (
                                 <div key={dayInfo.day} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem' }}>
                                     <span style={{ fontWeight: '500', color: '#64748b' }}>{dayInfo.day}</span>
                                     <span style={{
@@ -2757,19 +2781,19 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     <div style={{ padding: '1.5rem' }}>
                         <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: headerColor, margin: '0 0 1.5rem 0' }}>FACILITIES</h3>
                         <div style={{ display: 'flex', gap: '2rem' }}>
-                            {facilities?.wifi && (
+                            {(facilities?.wifi || (!facilities && true)) && (
                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', color: '#64748b' }}>
                                     <Wifi size={24} color="#3b82f6" />
                                     <span style={{ fontSize: '0.8rem' }}>wifi</span>
                                 </div>
                             )}
-                            {facilities?.sofa && (
+                            {(facilities?.sofa || (!facilities && true)) && (
                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', color: '#64748b' }}>
                                     <Armchair size={24} color="#3b82f6" />
                                     <span style={{ fontSize: '0.8rem' }}>sofa</span>
                                 </div>
                             )}
-                            {facilities?.handicap && (
+                            {(facilities?.handicap || (!facilities && true)) && (
                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', color: '#64748b' }}>
                                     <Accessibility size={24} color="#3b82f6" />
                                     <span style={{ fontSize: '0.8rem' }}>handicap</span>
@@ -2784,110 +2808,118 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     {/* Contact Info */}
                     <div style={{ padding: '1.5rem' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                            {contact?.location && contact.location.trim().length > 0 && (
+                            {(contact?.location || !contact) && (
                                 <>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                         <MapPin size={24} color={headerColor} />
-                                        <span style={{ fontSize: '1rem', color: '#1e293b' }}>{contact.location}</span>
+                                        <span style={{ fontSize: '1rem', color: '#1e293b' }}>
+                                            {contact?.location || '123 Restaurant Street, City'}
+                                        </span>
                                     </div>
-                                    {(contact?.phone?.trim() || contact?.email?.trim() || contact?.website?.trim()) && (
-                                        <div style={{ width: '100%', height: '1px', background: '#e2e8f0' }}></div>
-                                    )}
+                                    <div style={{ width: '100%', height: '1px', background: '#e2e8f0' }}></div>
                                 </>
                             )}
 
-                            {contact?.phone && contact.phone.trim().length > 0 && (
+                            {(contact?.phone || !contact) && (
                                 <>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                         <Phone size={24} color={headerColor} />
-                                        <span style={{ fontSize: '1rem', color: '#1e293b' }}>{contact.phone}</span>
+                                        <span style={{ fontSize: '1rem', color: '#1e293b' }}>
+                                            {contact?.phone || '+1 234 567 890'}
+                                        </span>
                                     </div>
-                                    {(contact?.email?.trim() || contact?.website?.trim()) && (
-                                        <div style={{ width: '100%', height: '1px', background: '#e2e8f0' }}></div>
-                                    )}
+                                    <div style={{ width: '100%', height: '1px', background: '#e2e8f0' }}></div>
                                 </>
                             )}
 
-                            {contact?.email && contact.email.trim().length > 0 && (
+                            {(contact?.email || !contact) && (
                                 <>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                         <Mail size={24} color={headerColor} />
-                                        <span style={{ fontSize: '1rem', color: '#1e293b' }}>{contact.email}</span>
+                                        <span style={{ fontSize: '1rem', color: '#1e293b' }}>
+                                            {contact?.email || 'hello@restaurant.com'}
+                                        </span>
                                     </div>
-                                    {(contact?.website?.trim()) && (
-                                        <div style={{ width: '100%', height: '1px', background: '#e2e8f0' }}></div>
-                                    )}
+                                    <div style={{ width: '100%', height: '1px', background: '#e2e8f0' }}></div>
                                 </>
                             )}
 
-                            {contact?.website && contact.website.trim().length > 0 && (
+                            {(contact?.website || !contact) && (
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                     <Globe size={24} color={headerColor} />
-                                    <span style={{ fontSize: '1rem', color: '#1e293b' }}>{contact.website}</span>
+                                    <span style={{ fontSize: '1rem', color: '#1e293b' }}>
+                                        {contact?.website || 'www.restaurant.com'}
+                                    </span>
                                 </div>
                             )}
                         </div>
                     </div>
 
                     {/* Social Media Footer */}
-                    {(social && Object.values(social).some(v => v && v.trim() !== '')) && (
-                        <div style={{
-                            background: '#0B2D86',
-                            borderRadius: '50% 50% 0 0 / 20px 20px 0 0',
-                            padding: '3rem 1.5rem 2rem',
-                            marginTop: 'auto',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            flexWrap: 'wrap',
-                            gap: '1rem'
-                        }}>
-                            {(() => {
-                                const platforms = [
-                                    { id: 'website', icon: Globe, color: '#6366f1' },
-                                    { id: 'facebook', icon: Facebook, color: '#1877f2' },
-                                    { id: 'instagram', icon: Instagram, color: '#E1306C' },
-                                    { id: 'twitter', icon: Twitter, color: '#000000' },
-                                    { id: 'linkedin', icon: Linkedin, color: '#0077b5' },
-                                    { id: 'discord', icon: Gamepad2, color: '#5865f2' },
-                                    { id: 'twitch', icon: Twitch, color: '#9146ff' },
-                                    { id: 'youtube', icon: Youtube, color: '#ff0000' },
-                                    { id: 'whatsapp', icon: MessageCircle, color: '#25d366' },
-                                    { id: 'snapchat', icon: Ghost, color: '#fffc00', textColor: '#000' },
-                                    { id: 'tiktok', icon: Music, color: '#000000' },
-                                    { id: 'pinterest', icon: Github, color: '#e60023' },
-                                    { id: 'dribbble', icon: Dribbble, color: '#ea4c89' },
-                                    { id: 'telegram', icon: MessageSquare, color: '#0088cc' },
-                                    { id: 'reddit', icon: Github, color: '#ff4500' },
-                                    { id: 'spotify', icon: Music, color: '#1DB954' },
-                                ];
-                                return platforms.map(p => {
-                                    if (social?.[p.id] && social[p.id].trim() !== '') {
-                                        return (
-                                            <a key={p.id} href={social[p.id]} target="_blank" rel="noopener noreferrer" style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                width: '40px',
-                                                height: '40px',
-                                                background: p.color,
-                                                borderRadius: '8px',
-                                                color: p.textColor || '#fff',
-                                                textDecoration: 'none'
-                                            }}>
-                                                <p.icon size={20} />
-                                            </a>
-                                        );
-                                    }
-                                    return null;
-                                });
-                            })()}
-                        </div>
-                    )}
+                    <div style={{
+                        background: '#0B2D86',
+                        borderRadius: '50% 50% 0 0 / 20px 20px 0 0',
+                        padding: '3rem 1.5rem 2rem',
+                        marginTop: 'auto',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        flexWrap: 'wrap',
+                        gap: '1rem'
+                    }}>
+                        {(() => {
+                            const platforms = [
+                                { id: 'website', icon: Globe, color: '#6366f1' },
+                                { id: 'facebook', icon: Facebook, color: '#1877f2' },
+                                { id: 'instagram', icon: Instagram, color: '#E1306C' },
+                                { id: 'twitter', icon: Twitter, color: '#000000' },
+                                { id: 'linkedin', icon: Linkedin, color: '#0077b5' },
+                                { id: 'discord', icon: Gamepad2, color: '#5865f2' },
+                                { id: 'twitch', icon: Twitch, color: '#9146ff' },
+                                { id: 'youtube', icon: Youtube, color: '#ff0000' },
+                                { id: 'whatsapp', icon: MessageCircle, color: '#25d366' },
+                                { id: 'snapchat', icon: Ghost, color: '#fffc00', textColor: '#000' },
+                                { id: 'tiktok', icon: Music, color: '#000000' },
+                                { id: 'pinterest', icon: Github, color: '#e60023' },
+                                { id: 'dribbble', icon: Dribbble, color: '#ea4c89' },
+                                { id: 'telegram', icon: MessageSquare, color: '#0088cc' },
+                                { id: 'reddit', icon: Github, color: '#ff4500' },
+                                { id: 'spotify', icon: Music, color: '#1DB954' },
+                            ];
+
+                            const socialLinks = (social && Object.values(social).some(v => v && v.trim() !== ''))
+                                ? social
+                                : {
+                                    facebook: 'https://facebook.com',
+                                    instagram: 'https://instagram.com',
+                                    twitter: 'https://twitter.com',
+                                    whatsapp: 'https://whatsapp.com'
+                                };
+
+                            return platforms.map(p => {
+                                if (socialLinks[p.id]) {
+                                    return (
+                                        <a key={p.id} href={socialLinks[p.id]} target="_blank" rel="noopener noreferrer" style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            width: '40px',
+                                            height: '40px',
+                                            background: p.color,
+                                            borderRadius: '8px',
+                                            color: p.textColor || '#fff',
+                                            textDecoration: 'none'
+                                        }}>
+                                            <p.icon size={20} />
+                                        </a>
+                                    );
+                                }
+                                return null;
+                            });
+                        })()}
+                    </div>
 
                     {/* Bottom Curve */}
-                    {(!social || !Object.values(social).some(v => v && v.trim() !== '')) && (
-                        <div style={{ height: '60px', background: headerColor, borderTopLeftRadius: '50% 100%', borderTopRightRadius: '50% 100%', marginTop: 'auto' }}></div>
-                    )}
+                    <div style={{ height: '60px', background: headerColor, borderTopLeftRadius: '50% 100%', borderTopRightRadius: '50% 100%', marginTop: 'auto', display: 'none' }}></div>
                 </div>
             </div>
         );
@@ -3087,27 +3119,30 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             borderBottomLeftRadius: '50% 20%',
                             borderBottomRightRadius: '50% 20%',
                             position: 'relative',
-                            marginBottom: '60px'
+                            marginBottom: design?.profile?.url ? '60px' : '2rem'
                         }}>
                             {/* Profile Image */}
-                            <div style={{
-                                width: '110px',
-                                height: '110px',
-                                borderRadius: '50%',
-                                background: '#fff',
-                                padding: '3px',
-                                position: 'absolute',
-                                bottom: '-55px',
-                                left: '50%',
-                                transform: 'translateX(-50%)',
-                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                            }}>
-                                <img
-                                    src={design?.profile?.url}
-                                    alt="Profile"
-                                    style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
-                                />
-                            </div>
+                            {/* Profile Image */}
+                            {design?.profile?.url && (
+                                <div style={{
+                                    width: '110px',
+                                    height: '110px',
+                                    borderRadius: '50%',
+                                    background: '#fff',
+                                    padding: '3px',
+                                    position: 'absolute',
+                                    bottom: '-55px',
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                }}>
+                                    <img
+                                        src={design.profile.url}
+                                        alt="Profile"
+                                        style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         {/* Name and Title */}
@@ -3314,18 +3349,20 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             gap: '1rem',
                             color: '#fff'
                         }}>
-                            <div style={{
-                                width: '50px',
-                                height: '50px',
-                                borderRadius: '50%',
-                                background: '#fff',
-                                padding: '2px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}>
-                                <img src={design?.logo?.url} alt="Logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
-                            </div>
+                            {design?.logo?.url && (
+                                <div style={{
+                                    width: '50px',
+                                    height: '50px',
+                                    borderRadius: '50%',
+                                    background: '#fff',
+                                    padding: '2px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    <img src={design.logo.url} alt="Logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                                </div>
+                            )}
                             <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0, color: businessInfo?.titleColor || '#fff' }}>{businessInfo?.title}</h2>
                         </div>
 
@@ -3541,22 +3578,24 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 }}>
                                     {config?.basicInfo?.organizationName || businessInfo?.title || 'LUXURY HOTELS'}
                                 </h2>
-                                <div style={{
-                                    width: '45px',
-                                    height: '45px',
-                                    borderRadius: '50%',
-                                    background: '#fff',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    overflow: 'hidden'
-                                }}>
-                                    <img
-                                        src={design?.logo?.url}
-                                        alt="Logo"
-                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                    />
-                                </div>
+                                {design?.logo?.url && (
+                                    <div style={{
+                                        width: '45px',
+                                        height: '45px',
+                                        borderRadius: '50%',
+                                        background: '#fff',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        overflow: 'hidden'
+                                    }}>
+                                        <img
+                                            src={design.logo.url}
+                                            alt="Logo"
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        />
+                                    </div>
+                                )}
                             </div>
 
                             {/* Header Image */}
@@ -4118,23 +4157,25 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     }}>
                         {/* Logo and Company Name */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                            <div style={{
-                                width: '50px',
-                                height: '50px',
-                                borderRadius: '50%',
-                                background: design?.color?.light || '#FFA800',
-                                border: `3px solid ${design?.color?.light || '#FFA800'}`,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                overflow: 'hidden'
-                            }}>
-                                <img
-                                    src={design?.logo?.url || 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg'}
-                                    alt="Logo"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                />
-                            </div>
+                            {design?.logo?.url && (
+                                <div style={{
+                                    width: '50px',
+                                    height: '50px',
+                                    borderRadius: '50%',
+                                    background: design?.color?.light || '#FFA800',
+                                    border: `3px solid ${design?.color?.light || '#FFA800'}`,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    overflow: 'hidden'
+                                }}>
+                                    <img
+                                        src={design.logo.url}
+                                        alt="Logo"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                </div>
+                            )}
                             <h2 style={{
                                 fontSize: '1.1rem',
                                 fontWeight: 'bold',
@@ -4251,7 +4292,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     if (type === 'multiple-links') {
         const headerBg = design?.color?.header || '#4db8a8';
         const footerBg = design?.color?.light || '#3730a3';
-        const logoUrl = design?.logo?.url;
+        const logoUrl = design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop';
 
         return (
             <div style={{
@@ -4282,19 +4323,19 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         position: 'relative'
                     }}>
                         {/* Logo/Icon */}
-                        <div style={{
-                            width: '80px',
-                            height: '80px',
-                            margin: '0 auto 1rem',
-                            background: '#fff',
-                            borderRadius: '12px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                            overflow: 'hidden'
-                        }}>
-                            {logoUrl ? (
+                        {logoUrl && (
+                            <div style={{
+                                width: '80px',
+                                height: '80px',
+                                margin: '0 auto 1rem',
+                                background: '#fff',
+                                borderRadius: '12px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                                overflow: 'hidden'
+                            }}>
                                 <img
                                     src={logoUrl}
                                     alt="Logo"
@@ -4304,16 +4345,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         objectFit: 'cover'
                                     }}
                                 />
-                            ) : (
-                                <svg width="50" height="50" viewBox="0 0 100 100" fill="none">
-                                    <path d="M30 20 L50 10 L70 20 L70 50 L50 60 L30 50 Z" stroke="#3730a3" strokeWidth="4" fill="none" />
-                                    <path d="M50 10 L50 60" stroke="#3730a3" strokeWidth="4" />
-                                    <path d="M30 50 L70 50" stroke="#3730a3" strokeWidth="4" />
-                                    <path d="M30 20 L70 50" stroke="#3730a3" strokeWidth="4" />
-                                    <path d="M70 20 L30 50" stroke="#3730a3" strokeWidth="4" />
-                                </svg>
-                            )}
-                        </div>
+                            </div>
+                        )}
 
                         {/* Title */}
                         <h1 style={{
@@ -4653,7 +4686,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
         const description = config.businessInfo?.description || 'We aim to provide fresh and healthy snacks people on the go.';
 
-        const logoUrl = design?.logo?.url;
+        const logoUrl = design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop';
 
         // Helper to format date
         const formatEventDate = (dateLocal) => {
@@ -5025,14 +5058,14 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         alignItems: 'center',
                         gap: '0.75rem'
                     }}>
-                        {basicInfo?.logo && (
+                        {design?.logo?.url && (
                             <div style={{
                                 background: '#000',
                                 padding: '0.5rem 0.75rem',
                                 borderRadius: '8px',
                                 overflow: 'hidden'
                             }}>
-                                <img src={basicInfo.logo} alt="Logo" style={{ height: '24px', width: 'auto', objectFit: 'contain' }} />
+                                <img src={design.logo.url} alt="Logo" style={{ height: '24px', width: 'auto', objectFit: 'contain' }} />
                             </div>
                         )}
                         <h1 style={{
@@ -5981,72 +6014,81 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 {personalInfo?.name || businessInfo?.title}
                             </h2>
                             <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.9rem', opacity: 0.8 }}>
-                                <span style={{ color: personalInfo?.titleColor || businessInfo?.subtitleColor || '#fff' }}>
-                                    {personalInfo?.title}
-                                </span>
-                                {personalInfo?.title && personalInfo?.company && (
-                                    <span style={{ color: personalInfo?.titleColor || businessInfo?.subtitleColor || '#fff' }}> at </span>
-                                )}
-                                <span style={{ color: personalInfo?.companyColor || personalInfo?.titleColor || '#fff' }}>
-                                    {personalInfo?.company}
+                                <span style={{ color: businessInfo?.subtitleColor || '#fff' }}>
+                                    {businessInfo?.subtitle || 'Technician name'}
                                 </span>
                             </p>
                         </div>
                     </div>
 
-                    {design?.logo?.url && (
-                        <div style={{ marginTop: '80px', textAlign: 'center', padding: '0 1.5rem' }}>
-                            <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.25rem', fontWeight: '800', color: businessInfo?.ctaColor || '#1e293b' }}>DOWNLOAD NOW</h3>
-                            <p style={{ fontSize: '0.9rem', color: '#64748b', lineHeight: '1.5', margin: 0 }}>
-                                {businessInfo?.description}
-                            </p>
+                    <div style={{ marginTop: design?.logo?.url ? '80px' : '2rem', textAlign: 'center', padding: '0 1.5rem' }}>
+                        <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.25rem', fontWeight: '800', color: businessInfo?.ctaColor || '#1e293b' }}>DOWNLOAD NOW</h3>
+                        <p style={{ fontSize: '0.9rem', color: '#64748b', lineHeight: '1.5', margin: 0 }}>
+                            {businessInfo?.description}
+                        </p>
 
-                            {/* Store Buttons */}
-                            <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                {appLinks?.buttonType === 'circular' ? (
-                                    <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
-                                        {appLinks?.google && (
-                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                                                <div style={{
-                                                    width: '60px',
-                                                    height: '60px',
-                                                    borderRadius: '50%',
-                                                    background: secondaryColor,
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                                                }}>
-                                                    <svg viewBox="0 0 24 24" fill="#fff" style={{ width: '32px', height: '32px' }}>
-                                                        <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.92 20.16,13.19L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
-                                                    </svg>
-                                                </div>
-                                                <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1e293b' }}>Google Play</span>
+                        {/* Store Buttons */}
+                        <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            {appLinks?.buttonType === 'circular' ? (
+                                <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
+                                    {appLinks?.google && (
+                                        <a
+                                            href={appLinks.google}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}
+                                        >
+                                            <div style={{
+                                                width: '60px',
+                                                height: '60px',
+                                                borderRadius: '50%',
+                                                background: secondaryColor,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                            }}>
+                                                <svg viewBox="0 0 24 24" fill="#fff" style={{ width: '32px', height: '32px' }}>
+                                                    <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.92 20.16,13.19L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                                                </svg>
                                             </div>
-                                        )}
-                                        {appLinks?.apple && (
-                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                                                <div style={{
-                                                    width: '60px',
-                                                    height: '60px',
-                                                    borderRadius: '50%',
-                                                    background: secondaryColor,
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                                                }}>
-                                                    <svg viewBox="0 0 24 24" fill="#fff" style={{ width: '32px', height: '32px' }}>
-                                                        <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.9,7.75 14.37,6.65 15.97,6.84C16.63,6.87 18.5,7.1 19.72,8.9C19.66,8.94 17.55,10.18 17.59,12.73C17.63,15.32 19.81,16.26 19.82,16.26C19.81,16.28 19.46,17.5 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.37 12.36,4.26 13,3.5Z" />
-                                                    </svg>
-                                                </div>
-                                                <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1e293b' }}>App Store</span>
+                                            <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1e293b' }}>Google Play</span>
+                                        </a>
+                                    )}
+                                    {appLinks?.apple && (
+                                        <a
+                                            href={appLinks.apple}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}
+                                        >
+                                            <div style={{
+                                                width: '60px',
+                                                height: '60px',
+                                                borderRadius: '50%',
+                                                background: secondaryColor,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                            }}>
+                                                <svg viewBox="0 0 24 24" fill="#fff" style={{ width: '32px', height: '32px' }}>
+                                                    <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.9,7.75 14.37,6.65 15.97,6.84C16.63,6.87 18.5,7.1 19.72,8.9C19.66,8.94 17.55,10.18 17.59,12.73C17.63,15.32 19.81,16.26 19.82,16.26C19.81,16.28 19.46,17.5 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.37 12.36,4.26 13,3.5Z" />
+                                                </svg>
                                             </div>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <>
-                                        {appLinks?.google && (
+                                            <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1e293b' }}>App Store</span>
+                                        </a>
+                                    )}
+                                </div>
+                            ) : (
+                                <>
+                                    {appLinks?.google && (
+                                        <a
+                                            href={appLinks.google}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ textDecoration: 'none' }}
+                                        >
                                             <div style={{
                                                 background: secondaryColor,
                                                 borderRadius: '12px',
@@ -6069,8 +6111,15 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                     <div style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Google Play</div>
                                                 </div>
                                             </div>
-                                        )}
-                                        {appLinks?.apple && (
+                                        </a>
+                                    )}
+                                    {appLinks?.apple && (
+                                        <a
+                                            href={appLinks.apple}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ textDecoration: 'none' }}
+                                        >
                                             <div style={{
                                                 background: secondaryColor,
                                                 borderRadius: '12px',
@@ -6093,119 +6142,119 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                     <div style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>App Store</div>
                                                 </div>
                                             </div>
-                                        )}
-                                    </>
-                                )}
-                            </div>
-
-                            {/* App Status Media (Image/Video) */}
-                            {config.appStatus?.fileUrl && (
-                                <div style={{ marginTop: '2rem', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-                                    {config.appStatus.type === 'video' ? (
-                                        <video
-                                            controls
-                                            src={config.appStatus.fileUrl}
-                                            style={{ width: '100%', height: 'auto', display: 'block' }}
-                                        />
-                                    ) : (
-                                        <img
-                                            src={config.appStatus.fileUrl}
-                                            alt="App Screenshot"
-                                            style={{ width: '100%', height: 'auto', display: 'block' }}
-                                        />
+                                        </a>
                                     )}
-                                    {config.appStatus.launchDate && (
-                                        <div style={{
-                                            padding: '0.75rem',
-                                            background: '#f1f5f9',
-                                            fontSize: '0.85rem',
-                                            color: '#64748b',
-                                            textAlign: 'center',
-                                            fontWeight: '500'
-                                        }}>
-                                            Launching: {config.appStatus.launchDate}
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-
-                            {/* Social Networks */}
-                            {social && Object.entries(social).some(([key, val]) => val && typeof val === 'string' && val.trim() !== '') && (
-                                <div style={{ marginTop: '2rem' }}>
-                                    <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '1rem' }}>Social Networks</h3>
-                                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', maxHeight: '200px', overflowY: 'auto', paddingBottom: '0.5rem', scrollbarWidth: 'thin' }}>
-                                        {[
-                                            { key: 'facebook', bg: '#1877F2', icon: <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>f</span> },
-                                            { key: 'instagram', bg: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)', icon: <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>📷</span> },
-                                            { key: 'twitter', bg: '#000', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>𝕏</span> },
-                                            { key: 'linkedin', bg: '#0A66C2', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>in</span> },
-                                            { key: 'discord', bg: '#5865F2', icon: <span style={{ color: '#fff', fontSize: '16px' }}>💬</span> },
-                                            { key: 'twitch', bg: '#9146FF', icon: <span style={{ color: '#fff', fontSize: '16px' }}>📺</span> },
-                                            { key: 'line', bg: '#00B900', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>💬</span> },
-                                            { key: 'youtube', bg: '#FF0000', icon: <span style={{ color: '#fff', fontSize: '16px' }}>▶</span> },
-                                            { key: 'whatsapp', bg: '#25D366', icon: <Phone size={18} color="#fff" /> },
-                                            { key: 'snapchat', bg: '#FFFC00', icon: <span style={{ fontSize: '18px' }}>👻</span> },
-                                            { key: 'tiktok', bg: '#000', icon: <span style={{ color: '#fff', fontSize: '18px' }}>♪</span> },
-                                            { key: 'tumblr', bg: '#35465C', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>t</span> },
-                                            { key: 'spotify', bg: '#1DB954', icon: <span style={{ color: '#fff', fontSize: '16px' }}>🎵</span> },
-                                            { key: 'dribbble', bg: '#EA4C89', icon: <span style={{ color: '#fff', fontSize: '16px' }}>🏀</span> },
-                                            { key: 'pinterest', bg: '#E60023', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>P</span> },
-                                            { key: 'telegram', bg: '#0088cc', icon: <span style={{ color: '#fff', fontSize: '16px' }}>✈️</span> },
-                                            { key: 'behance', bg: '#1769FF', icon: <span style={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>Be</span> },
-                                            { key: 'reddit', bg: '#FF4500', icon: <span style={{ color: '#fff', fontSize: '16px' }}>👽</span> },
-                                            { key: 'website', bg: '#6366f1', icon: <Globe size={18} color="#fff" /> },
-                                        ].map(platform => {
-                                            const url = social[platform.key];
-                                            if (!url || typeof url !== 'string' || url.trim() === '') return null;
-
-                                            // Handle special case for whatsapp where input might be number only, but link usually requires protocol or just number for API
-                                            // For now assume user enters what they want.
-
-                                            // Fix link protocol if missing
-                                            let href = url.trim();
-                                            if (!href.startsWith('http') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
-                                                // Don't auto-add https for everything, but for social links usually safe. 
-                                                // Keeping it as is if user wants just text, but usually these are links.
-                                                // For preview visual, we just need the item.
-                                            }
-
-                                            return (
-                                                <a
-                                                    key={platform.key}
-                                                    href={href}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    style={{
-                                                        width: '40px',
-                                                        height: '40px',
-                                                        background: platform.bg,
-                                                        borderRadius: '8px',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        textDecoration: 'none',
-                                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                                                        flexShrink: 0
-                                                    }}
-                                                >
-                                                    {platform.icon}
-                                                </a>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Website Footer */}
-                            {businessInfo?.website && (
-                                <div style={{ marginTop: '2rem', textAlign: 'center', paddingBottom: '1rem' }}>
-                                    <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0, wordBreak: 'break-all' }}>
-                                        {businessInfo.website}
-                                    </p>
-                                </div>
+                                </>
                             )}
                         </div>
-                    )}
+
+                        {/* App Status Media (Image/Video) */}
+                        {config.appStatus?.fileUrl && (
+                            <div style={{ marginTop: '2rem', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+                                {config.appStatus.type === 'video' ? (
+                                    <video
+                                        controls
+                                        src={config.appStatus.fileUrl}
+                                        style={{ width: '100%', height: 'auto', display: 'block' }}
+                                    />
+                                ) : (
+                                    <img
+                                        src={config.appStatus.fileUrl}
+                                        alt="App Screenshot"
+                                        style={{ width: '100%', height: 'auto', display: 'block' }}
+                                    />
+                                )}
+                                {config.appStatus.launchDate && (
+                                    <div style={{
+                                        padding: '0.75rem',
+                                        background: '#f1f5f9',
+                                        fontSize: '0.85rem',
+                                        color: '#64748b',
+                                        textAlign: 'center',
+                                        fontWeight: '500'
+                                    }}>
+                                        Launching: {config.appStatus.launchDate}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Social Networks */}
+                        {social && Object.entries(social).some(([key, val]) => val && typeof val === 'string' && val.trim() !== '') && (
+                            <div style={{ marginTop: '2rem' }}>
+                                <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '1rem' }}>Social Networks</h3>
+                                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', maxHeight: '200px', overflowY: 'auto', paddingBottom: '0.5rem', scrollbarWidth: 'thin' }}>
+                                    {[
+                                        { key: 'facebook', bg: '#1877F2', icon: <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>f</span> },
+                                        { key: 'instagram', bg: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)', icon: <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>📷</span> },
+                                        { key: 'twitter', bg: '#000', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>𝕏</span> },
+                                        { key: 'linkedin', bg: '#0A66C2', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>in</span> },
+                                        { key: 'discord', bg: '#5865F2', icon: <span style={{ color: '#fff', fontSize: '16px' }}>💬</span> },
+                                        { key: 'twitch', bg: '#9146FF', icon: <span style={{ color: '#fff', fontSize: '16px' }}>📺</span> },
+                                        { key: 'line', bg: '#00B900', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>💬</span> },
+                                        { key: 'youtube', bg: '#FF0000', icon: <span style={{ color: '#fff', fontSize: '16px' }}>▶</span> },
+                                        { key: 'whatsapp', bg: '#25D366', icon: <Phone size={18} color="#fff" /> },
+                                        { key: 'snapchat', bg: '#FFFC00', icon: <span style={{ fontSize: '18px' }}>👻</span> },
+                                        { key: 'tiktok', bg: '#000', icon: <span style={{ color: '#fff', fontSize: '18px' }}>♪</span> },
+                                        { key: 'tumblr', bg: '#35465C', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>t</span> },
+                                        { key: 'spotify', bg: '#1DB954', icon: <span style={{ color: '#fff', fontSize: '16px' }}>🎵</span> },
+                                        { key: 'dribbble', bg: '#EA4C89', icon: <span style={{ color: '#fff', fontSize: '16px' }}>🏀</span> },
+                                        { key: 'pinterest', bg: '#E60023', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>P</span> },
+                                        { key: 'telegram', bg: '#0088cc', icon: <span style={{ color: '#fff', fontSize: '16px' }}>✈️</span> },
+                                        { key: 'behance', bg: '#1769FF', icon: <span style={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>Be</span> },
+                                        { key: 'reddit', bg: '#FF4500', icon: <span style={{ color: '#fff', fontSize: '16px' }}>👽</span> },
+                                        { key: 'website', bg: '#6366f1', icon: <Globe size={18} color="#fff" /> },
+                                    ].map(platform => {
+                                        const url = social[platform.key];
+                                        if (!url || typeof url !== 'string' || url.trim() === '') return null;
+
+                                        // Handle special case for whatsapp where input might be number only, but link usually requires protocol or just number for API
+                                        // For now assume user enters what they want.
+
+                                        // Fix link protocol if missing
+                                        let href = url.trim();
+                                        if (!href.startsWith('http') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+                                            // Don't auto-add https for everything, but for social links usually safe. 
+                                            // Keeping it as is if user wants just text, but usually these are links.
+                                            // For preview visual, we just need the item.
+                                        }
+
+                                        return (
+                                            <a
+                                                key={platform.key}
+                                                href={href}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                style={{
+                                                    width: '40px',
+                                                    height: '40px',
+                                                    background: platform.bg,
+                                                    borderRadius: '8px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    textDecoration: 'none',
+                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                                                    flexShrink: 0
+                                                }}
+                                            >
+                                                {platform.icon}
+                                            </a>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Website Footer */}
+                        {businessInfo?.website && (
+                            <div style={{ marginTop: '2rem', textAlign: 'center', paddingBottom: '1rem' }}>
+                                <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0, wordBreak: 'break-all' }}>
+                                    {businessInfo.website}
+                                </p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         );
@@ -6264,18 +6313,26 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         )}
                     </div>
 
-                    <div style={{
-                        marginTop: '0.9rem',
-                        borderRadius: '14px',
-                        overflow: 'hidden',
-                        boxShadow: '0 10px 20px rgba(0,0,0,0.18)'
-                    }}>
-                        <img
-                            src={design?.backgroundImage || businessInfo?.coverImage || businessInfo?.image || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=500&fit=crop'}
-                            alt={businessInfo?.title || 'Cafe'}
-                            style={{ width: '100%', height: '150px', objectFit: 'cover' }}
-                        />
-                    </div>
+                    {(() => {
+                        const heroImage = design?.backgroundImage === '' ? null : (design?.backgroundImage || businessInfo?.coverImage || businessInfo?.image || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=500&fit=crop');
+
+                        if (!heroImage) return null;
+
+                        return (
+                            <div style={{
+                                marginTop: '0.9rem',
+                                borderRadius: '14px',
+                                overflow: 'hidden',
+                                boxShadow: '0 10px 20px rgba(0,0,0,0.18)'
+                            }}>
+                                <img
+                                    src={heroImage}
+                                    alt={businessInfo?.title || 'Cafe'}
+                                    style={{ width: '100%', height: '150px', objectFit: 'cover' }}
+                                />
+                            </div>
+                        );
+                    })()}
 
                     <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                         <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', letterSpacing: '-0.01em' }}>
@@ -6440,7 +6497,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     <h3 style={{
                         fontSize: '0.8rem',
                         fontWeight: '800',
-                        color: '#8b5cf6', // Purple
+                        color: headerColor || '#7f1d1d',
                         margin: '0 0 1rem 0',
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em'
@@ -6449,24 +6506,33 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     </h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         {(() => {
-                            const availableTimings = businessInfo?.timings?.filter(t => t.isOpen) || [];
-                            if (availableTimings.length === 0) {
-                                return (
-                                    <div style={{ padding: '0.5rem', textAlign: 'center', color: '#64748b' }}>
-                                        Closed
-                                    </div>
-                                );
-                            }
+                            const availableTimings = businessInfo?.timings?.filter(t => t.isOpen);
+                            // Use default if no timings (or empty array)
+                            const displayTimings = (availableTimings && availableTimings.length > 0) ? availableTimings : [
+                                { day: 'Monday', isOpen: true, start: '08:00 AM', end: '08:00 AM' },
+                                { day: 'Saturday', isOpen: true, start: '08:00 AM', end: '08:00 AM' }
+                            ];
 
-                            const firstDay = availableTimings[0];
-                            const lastDay = availableTimings[availableTimings.length - 1];
-                            const timeString = firstDay.start && firstDay.end ? `${firstDay.start} - ${firstDay.end}` : '';
-                            const dayRange = availableTimings.length === 1 ? firstDay.day.toUpperCase() : `${firstDay.day.toUpperCase()} - ${lastDay.day.toUpperCase()}`;
+                            // If we are using defaults, we want to simulate Monday-Saturday
+                            const isDefault = (!availableTimings || availableTimings.length === 0);
+
+                            let dayRange = '';
+                            let timeString = '';
+
+                            if (isDefault) {
+                                dayRange = 'MONDAY - SATURDAY';
+                                timeString = '08:00 AM - 08:00 AM';
+                            } else {
+                                const firstDay = displayTimings[0];
+                                const lastDay = displayTimings[displayTimings.length - 1];
+                                timeString = firstDay.start && firstDay.end ? `${firstDay.start} - ${firstDay.end}` : '';
+                                dayRange = displayTimings.length === 1 ? firstDay.day.toUpperCase() : `${firstDay.day.toUpperCase()} - ${lastDay.day.toUpperCase()}`;
+                            }
 
                             return (
                                 <>
                                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-                                        <Calendar size={20} color="#8b5cf6" />
+                                        <Calendar size={20} color={headerColor || '#7f1d1d'} />
                                         <div>
                                             <span style={{ display: 'block', fontSize: '0.9rem', color: '#1e293b', fontWeight: '700' }}>
                                                 {dayRange}
@@ -6475,7 +6541,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     </div>
                                     {timeString && (
                                         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-                                            <Clock size={20} color="#8b5cf6" />
+                                            <Clock size={20} color={headerColor || '#7f1d1d'} />
                                             <div>
                                                 <span style={{ display: 'block', fontSize: '0.9rem', color: '#1e293b', fontWeight: '600' }}>
                                                     {timeString} (GMT +5)
@@ -6502,36 +6568,35 @@ const MobilePreview = ({ config, isLiveView = false }) => {
             </div>
 
             {/* Website Footer */}
-            {
-                businessInfo?.website && (
-                    <div style={{
-                        padding: '3rem 1rem 2rem 1rem',
-                        textAlign: 'center',
-                        background: '#8b5cf6',
-                        borderRadius: '50% 50% 0 0',
-                        marginTop: '2rem',
-                        marginBottom: '-2rem', // Pull it down slightly if needed or just let it sit
-                        position: 'relative',
-                        zIndex: 1
-                    }}>
-                        <a
-                            href={businessInfo.website}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                                fontSize: '0.9rem',
-                                color: '#fff',
-                                textDecoration: 'none',
-                                fontWeight: '500',
-                                wordBreak: 'break-all',
-                                opacity: 0.9
-                            }}
-                        >
-                            {businessInfo.website.replace(/^https?:\/\//, '')}
-                        </a>
-                    </div>
-                )
-            }
+            <div style={{
+                padding: '3rem 1rem 2rem 1rem',
+                textAlign: 'center',
+                background: headerColor || '#7f1d1d',
+                borderRadius: '50% 50% 0 0',
+                marginTop: '2rem',
+                marginBottom: '-2rem',
+                position: 'relative',
+                zIndex: 1
+            }}>
+                <a
+                    href={businessInfo?.website || 'https://www.bobscafe.com'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                        fontSize: '0.9rem',
+                        color: '#fff',
+                        textDecoration: 'none',
+                        fontWeight: '500',
+                        wordBreak: 'break-all',
+                        display: 'inline-block',
+                        padding: '0.5rem 1rem',
+                        border: '1px solid rgba(255,255,255,0.3)',
+                        borderRadius: '50px'
+                    }}
+                >
+                    {businessInfo?.website || 'https://www.bobscafe.com'}
+                </a>
+            </div>
 
         </div >
 

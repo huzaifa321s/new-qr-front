@@ -316,7 +316,8 @@ const EventConfig = ({ config, onChange }) => {
                 onToggle={() => setIsDesignOpen(!isDesignOpen)}
                 colorKeys={{ primary: 'color.header', secondary: 'color.light' }}
                 palettes={palettes}
-                showLogo={false}
+                logoKey="logo.url"
+                logoOptions={logoOptions}
             >
                 {/* HEADER IMAGE SECTION */}
                 <div style={{ marginBottom: '2rem' }}>
@@ -402,93 +403,9 @@ const EventConfig = ({ config, onChange }) => {
                             alignItems: 'center',
                             justifyContent: 'center',
                             cursor: 'pointer'
-                        }}>
-                            <UploadCloud size={24} color="#94a3b8" />
-                        </div>
-                    </div>
-                </div>
-
-                {/* LOGO SECTION */}
-                <div style={{ marginBottom: '0' }}>
-                    <div style={{ marginBottom: '1.5rem' }}>
-                        <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                            LOGO
-                        </div>
-                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.5rem' }}>
-                            128x128px, 1:1 Ratio
-                        </div>
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                        {/* Remove/Clear Option */}
-                        <div
-                            onClick={() => handleLogoUpdate('')}
-                            style={{
-                                width: '72px',
-                                height: '72px',
-                                borderRadius: '50%',
-                                border: '1px solid #e2e8f0',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                background: '#fff'
-                            }}
+                        }}
+                        // TODO: Implement Upload Logic for Header Image if needed
                         >
-                            <X size={32} color="#e2e8f0" strokeWidth={1} />
-                        </div>
-
-                        {/* Logo Options */}
-                        {logoOptions.map(logo => (
-                            <div
-                                key={logo.id}
-                                onClick={() => handleLogoUpdate(logo.url)}
-                                style={{
-                                    position: 'relative',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                <div style={{
-                                    width: '72px',
-                                    height: '72px',
-                                    borderRadius: '50%',
-                                    overflow: 'hidden',
-                                    border: design.logo?.url === logo.url ? '2px solid #8b5cf6' : 'none'
-                                }}>
-                                    <img src={logo.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                </div>
-                                {design.logo?.url === logo.url && (
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: '0',
-                                        right: '0',
-                                        width: '20px',
-                                        height: '20px',
-                                        background: '#8b5cf6',
-                                        borderRadius: '50%',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        zIndex: 10,
-                                        border: '2px solid #fff'
-                                    }}>
-                                        <Check size={12} color="#fff" />
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-
-                        {/* Upload Option */}
-                        <div style={{
-                            width: '72px',
-                            height: '72px',
-                            borderRadius: '50%',
-                            border: '1px dashed #cbd5e1',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer'
-                        }}>
                             <UploadCloud size={24} color="#94a3b8" />
                         </div>
                     </div>

@@ -188,7 +188,8 @@ const SocialMediaConfig = ({ config, onChange }) => {
                 onToggle={() => setIsDesignOpen(!isDesignOpen)}
                 colorKeys={{ primary: 'color.header', secondary: 'color.light' }}
                 palettes={palettes}
-                showLogo={false}
+                logoKey="logo.url"
+                logoOptions={logoOptions}
             >
                 {/* BACKGROUND IMAGE SECTION */}
                 <div style={{ marginBottom: '2rem' }}>
@@ -273,86 +274,6 @@ const SocialMediaConfig = ({ config, onChange }) => {
                 </div>
 
                 {/* LOGO SECTION */}
-                <div style={{ marginBottom: '0' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
-                            LOGO
-                        </span>
-                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-                            128x128px, 1:1 Ratio
-                        </span>
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                        {/* Remove/Clear Option */}
-                        <div
-                            onClick={() => handleLogoUpdate('')}
-                            style={{
-                                width: '64px',
-                                height: '64px',
-                                borderRadius: '50%',
-                                border: '1px solid #e2e8f0',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                background: '#fff'
-                            }}
-                        >
-                            <X size={24} color="#cbd5e1" />
-                        </div>
-
-                        {/* Logo Options */}
-                        {logoOptions.map(img => (
-                            <div
-                                key={img.id}
-                                onClick={() => handleLogoUpdate(img.url)}
-                                style={{
-                                    width: '64px',
-                                    height: '64px',
-                                    borderRadius: '50%',
-                                    overflow: 'hidden',
-                                    border: design.logo?.url === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
-                                    cursor: 'pointer',
-                                    position: 'relative'
-                                }}
-                            >
-                                <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                {design.logo?.url === img.url && (
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        right: 0,
-                                        width: '20px',
-                                        height: '20px',
-                                        background: '#8b5cf6',
-                                        borderRadius: '50%',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        border: '1px solid #fff'
-                                    }}>
-                                        <Check size={12} color="#fff" />
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-
-                        {/* Upload Option */}
-                        <div style={{
-                            width: '64px',
-                            height: '64px',
-                            borderRadius: '50%',
-                            border: '1px dashed #cbd5e1',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer'
-                        }}>
-                            <UploadCloud size={20} color="#94a3b8" />
-                        </div>
-                    </div>
-                </div>
             </ReusableDesignAccordion>
 
             {/* BASIC INFORMATION ACCORDION */}
@@ -375,146 +296,148 @@ const SocialMediaConfig = ({ config, onChange }) => {
                     {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
 
-                {isBasicInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                {
+                    isBasicInfoOpen && (
+                        <div style={{ padding: '2rem', background: '#fff' }}>
 
-                        {/* HEADLINE FIELD */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                HEADLINE*
-                            </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
-                                {/* Headline Input */}
-                                <input
-                                    type="text"
-                                    value={basicInfo.headline || ''}
-                                    onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
-                                    placeholder="Connect with us on social media"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
-
-                                {/* Text Color */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Text Color
-                                    </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
-                                    }}>
-                                        <input
-                                            type="text"
-                                            value={basicInfo.headlineColor || '#FFFFFF'}
-                                            onChange={(e) => handleBasicInfoUpdate('headlineColor', e.target.value)}
-                                            style={{
-                                                border: 'none',
-                                                outline: 'none',
-                                                width: '100%',
-                                                fontSize: '0.85rem',
-                                                color: '#000',
-                                                fontWeight: '500',
-                                                textTransform: 'uppercase'
-                                            }}
-                                        />
-                                        <div style={{
-                                            width: '24px',
-                                            height: '24px',
-                                            background: basicInfo.headlineColor || '#FFFFFF',
-                                            borderRadius: '2px',
-                                            flexShrink: 0,
-                                            border: '1px solid #e2e8f0',
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            cursor: 'pointer'
-                                        }}>
-                                            <input
-                                                type="color"
-                                                value={basicInfo.headlineColor || '#FFFFFF'}
-                                                onChange={(e) => handleBasicInfoUpdate('headlineColor', e.target.value)}
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: '-50%',
-                                                    left: '-50%',
-                                                    width: '200%',
-                                                    height: '200%',
-                                                    cursor: 'pointer',
-                                                    opacity: 0,
-                                                    padding: 0,
-                                                    margin: 0
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Font */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Font
-                                    </label>
-                                    <select
-                                        value={basicInfo.headlineFont || 'Lato'}
-                                        onChange={(e) => handleBasicInfoUpdate('headlineFont', e.target.value)}
+                            {/* HEADLINE FIELD */}
+                            <div style={{ marginBottom: '2rem' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    HEADLINE*
+                                </label>
+                                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                                    {/* Headline Input */}
+                                    <input
+                                        type="text"
+                                        value={basicInfo.headline || ''}
+                                        onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
+                                        placeholder="Connect with us on social media"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
                                             border: '1px solid #1e293b',
                                             fontSize: '0.9rem',
-                                            outline: 'none',
-                                            cursor: 'pointer',
-                                            background: '#fff'
+                                            outline: 'none'
                                         }}
-                                    >
-                                        <option value="Lato">Lato</option>
-                                        <option value="Roboto">Roboto</option>
-                                        <option value="Open Sans">Open Sans</option>
-                                        <option value="Montserrat">Montserrat</option>
-                                    </select>
+                                    />
+
+                                    {/* Text Color */}
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                            Text Color
+                                        </label>
+                                        <div style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            border: '1px solid #1e293b',
+                                            borderRadius: '4px',
+                                            padding: '0.5rem',
+                                            height: '44px'
+                                        }}>
+                                            <input
+                                                type="text"
+                                                value={basicInfo.headlineColor || '#FFFFFF'}
+                                                onChange={(e) => handleBasicInfoUpdate('headlineColor', e.target.value)}
+                                                style={{
+                                                    border: 'none',
+                                                    outline: 'none',
+                                                    width: '100%',
+                                                    fontSize: '0.85rem',
+                                                    color: '#000',
+                                                    fontWeight: '500',
+                                                    textTransform: 'uppercase'
+                                                }}
+                                            />
+                                            <div style={{
+                                                width: '24px',
+                                                height: '24px',
+                                                background: basicInfo.headlineColor || '#FFFFFF',
+                                                borderRadius: '2px',
+                                                flexShrink: 0,
+                                                border: '1px solid #e2e8f0',
+                                                position: 'relative',
+                                                overflow: 'hidden',
+                                                cursor: 'pointer'
+                                            }}>
+                                                <input
+                                                    type="color"
+                                                    value={basicInfo.headlineColor || '#FFFFFF'}
+                                                    onChange={(e) => handleBasicInfoUpdate('headlineColor', e.target.value)}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '-50%',
+                                                        left: '-50%',
+                                                        width: '200%',
+                                                        height: '200%',
+                                                        cursor: 'pointer',
+                                                        opacity: 0,
+                                                        padding: 0,
+                                                        margin: 0
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Font */}
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                            Font
+                                        </label>
+                                        <select
+                                            value={basicInfo.headlineFont || 'Lato'}
+                                            onChange={(e) => handleBasicInfoUpdate('headlineFont', e.target.value)}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                borderRadius: '4px',
+                                                border: '1px solid #1e293b',
+                                                fontSize: '0.9rem',
+                                                outline: 'none',
+                                                cursor: 'pointer',
+                                                background: '#fff'
+                                            }}
+                                        >
+                                            <option value="Lato">Lato</option>
+                                            <option value="Roboto">Roboto</option>
+                                            <option value="Open Sans">Open Sans</option>
+                                            <option value="Montserrat">Montserrat</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* ABOUT US FIELD */}
-                        <div style={{ marginBottom: '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                ABOUT US
-                            </label>
-                            <textarea
-                                value={basicInfo.aboutUs || ''}
-                                onChange={(e) => handleBasicInfoUpdate('aboutUs', e.target.value)}
-                                placeholder="Follow us and get updates delivered to your favorite social media channel."
-                                rows={3}
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
-                                    fontSize: '0.9rem',
-                                    outline: 'none',
-                                    resize: 'vertical',
-                                    fontFamily: 'inherit'
-                                }}
-                            />
-                        </div>
+                            {/* ABOUT US FIELD */}
+                            <div style={{ marginBottom: '0' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    ABOUT US
+                                </label>
+                                <textarea
+                                    value={basicInfo.aboutUs || ''}
+                                    onChange={(e) => handleBasicInfoUpdate('aboutUs', e.target.value)}
+                                    placeholder="Follow us and get updates delivered to your favorite social media channel."
+                                    rows={3}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: '1px solid #1e293b',
+                                        fontSize: '0.9rem',
+                                        outline: 'none',
+                                        resize: 'vertical',
+                                        fontFamily: 'inherit'
+                                    }}
+                                />
+                            </div>
 
-                    </div>
-                )}
-            </div>
+                        </div>
+                    )
+                }
+            </div >
 
             {/* SOCIAL MEDIA CHANNELS ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
                 <div
                     onClick={() => setIsSocialOpen(!isSocialOpen)}
                     style={{
@@ -533,154 +456,156 @@ const SocialMediaConfig = ({ config, onChange }) => {
                     {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
 
-                {isSocialOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                {
+                    isSocialOpen && (
+                        <div style={{ padding: '2rem', background: '#fff' }}>
 
-                        {/* Dynamic Render of Active Platforms */}
-                        {platformConfig.filter(p => social[p.urlKey] !== undefined).map(platform => {
-                            const Icon = platform.icon;
-                            const isUrlInvalid = social[platform.urlKey] && !social[platform.urlKey].startsWith('http');
+                            {/* Dynamic Render of Active Platforms */}
+                            {platformConfig.filter(p => social[p.urlKey] !== undefined).map(platform => {
+                                const Icon = platform.icon;
+                                const isUrlInvalid = social[platform.urlKey] && !social[platform.urlKey].startsWith('http');
 
-                            return (
-                                <div key={platform.id} style={{ marginBottom: '2rem' }}>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                                        {/* URL Input */}
-                                        <div>
-                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                                {platform.name.toUpperCase()}
-                                            </label>
-                                            <div style={{ marginBottom: '0.25rem' }}>
-                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                                    URL
+                                return (
+                                    <div key={platform.id} style={{ marginBottom: '2rem' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                                            {/* URL Input */}
+                                            <div>
+                                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                    {platform.name.toUpperCase()}
+                                                </label>
+                                                <div style={{ marginBottom: '0.25rem' }}>
+                                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                                        URL
+                                                    </label>
+                                                    <div style={{ position: 'relative' }}>
+                                                        <div style={{
+                                                            position: 'absolute',
+                                                            left: '12px',
+                                                            top: '50%',
+                                                            transform: 'translateY(-50%)',
+                                                            width: '24px',
+                                                            height: '24px',
+                                                            background: platform.color,
+                                                            borderRadius: '4px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            fontSize: '0.9rem',
+                                                            color: platform.color === '#fffc00' ? '#000' : '#fff'
+                                                        }}>
+                                                            <Icon size={14} />
+                                                        </div>
+                                                        <input
+                                                            type="text"
+                                                            value={social[platform.urlKey] || ''}
+                                                            onChange={(e) => handleSocialUpdate(platform.urlKey, e.target.value)}
+                                                            placeholder={platform.placeholder}
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem 0.75rem 0.75rem 3rem',
+                                                                borderRadius: '4px',
+                                                                border: isUrlInvalid ? '1px solid #ef4444' : '1px solid #e2e8f0', // Only erroneous if invalid
+                                                                fontSize: '0.9rem',
+                                                                outline: 'none'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                {isUrlInvalid && (
+                                                    <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.25rem' }}>
+                                                        Please enter a valid URL (starting with http/https).
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Text Input */}
+                                            <div>
+                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem', marginTop: '1.7rem' }}>
+                                                    Text
                                                 </label>
                                                 <div style={{ position: 'relative' }}>
-                                                    <div style={{
-                                                        position: 'absolute',
-                                                        left: '12px',
-                                                        top: '50%',
-                                                        transform: 'translateY(-50%)',
-                                                        width: '24px',
-                                                        height: '24px',
-                                                        background: platform.color,
-                                                        borderRadius: '4px',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        fontSize: '0.9rem',
-                                                        color: platform.color === '#fffc00' ? '#000' : '#fff'
-                                                    }}>
-                                                        <Icon size={14} />
-                                                    </div>
                                                     <input
                                                         type="text"
-                                                        value={social[platform.urlKey] || ''}
-                                                        onChange={(e) => handleSocialUpdate(platform.urlKey, e.target.value)}
-                                                        placeholder={platform.placeholder}
+                                                        value={social[platform.textKey] || ''}
+                                                        onChange={(e) => handleSocialUpdate(platform.textKey, e.target.value)}
+                                                        placeholder={platform.name}
                                                         style={{
                                                             width: '100%',
-                                                            padding: '0.75rem 0.75rem 0.75rem 3rem',
+                                                            padding: '0.75rem',
+                                                            paddingRight: '3rem',
                                                             borderRadius: '4px',
-                                                            border: isUrlInvalid ? '1px solid #ef4444' : '1px solid #e2e8f0', // Only erroneous if invalid
+                                                            border: '1px solid #1e293b',
                                                             fontSize: '0.9rem',
                                                             outline: 'none'
                                                         }}
                                                     />
-                                                </div>
-                                            </div>
-                                            {isUrlInvalid && (
-                                                <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.25rem' }}>
-                                                    Please enter a valid URL (starting with http/https).
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Text Input */}
-                                        <div>
-                                            <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem', marginTop: '1.7rem' }}>
-                                                Text
-                                            </label>
-                                            <div style={{ position: 'relative' }}>
-                                                <input
-                                                    type="text"
-                                                    value={social[platform.textKey] || ''}
-                                                    onChange={(e) => handleSocialUpdate(platform.textKey, e.target.value)}
-                                                    placeholder={platform.name}
-                                                    style={{
-                                                        width: '100%',
-                                                        padding: '0.75rem',
-                                                        paddingRight: '3rem',
-                                                        borderRadius: '4px',
-                                                        border: '1px solid #1e293b',
-                                                        fontSize: '0.9rem',
-                                                        outline: 'none'
-                                                    }}
-                                                />
-                                                <div
-                                                    onClick={() => handleDeleteSocial(platform.urlKey, platform.textKey)}
-                                                    style={{
-                                                        position: 'absolute',
-                                                        right: '12px',
-                                                        top: '50%',
-                                                        transform: 'translateY(-50%)',
-                                                        cursor: 'pointer',
-                                                        color: '#ef4444'
-                                                    }}
-                                                    title="Remove Platform"
-                                                >
-                                                    <X size={20} />
+                                                    <div
+                                                        onClick={() => handleDeleteSocial(platform.urlKey, platform.textKey)}
+                                                        style={{
+                                                            position: 'absolute',
+                                                            right: '12px',
+                                                            top: '50%',
+                                                            transform: 'translateY(-50%)',
+                                                            cursor: 'pointer',
+                                                            color: '#ef4444'
+                                                        }}
+                                                        title="Remove Platform"
+                                                    >
+                                                        <X size={20} />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                );
+                            })}
+
+                            {/* ADD MORE Section */}
+                            <div>
+                                <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    ADD MORE
                                 </div>
-                            );
-                        })}
+                                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                                    Click on the icon to add a social media profile.
+                                </div>
 
-                        {/* ADD MORE Section */}
-                        <div>
-                            <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                ADD MORE
-                            </div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
-                                Click on the icon to add a social media profile.
+                                {/* Social Media Icons Grid */}
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(48px, 1fr))', gap: '0.75rem' }}>
+                                    {platformConfig.map(platform => {
+                                        const Icon = platform.icon;
+                                        const isActive = social[platform.urlKey] !== undefined;
+                                        return (
+                                            <div
+                                                key={platform.id}
+                                                onClick={() => handleAddSocial(platform.urlKey, platform.textKey)}
+                                                style={{
+                                                    width: '48px',
+                                                    height: '48px',
+                                                    background: platform.color,
+                                                    borderRadius: '8px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    cursor: isActive ? 'default' : 'pointer',
+                                                    opacity: isActive ? 0.5 : 1, // Dim if active
+                                                    color: platform.color === '#fffc00' ? '#000' : '#fff'
+                                                }}
+                                                title={isActive ? "Already added" : `Add ${platform.name}`}
+                                            >
+                                                <Icon size={24} />
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
 
-                            {/* Social Media Icons Grid */}
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(48px, 1fr))', gap: '0.75rem' }}>
-                                {platformConfig.map(platform => {
-                                    const Icon = platform.icon;
-                                    const isActive = social[platform.urlKey] !== undefined;
-                                    return (
-                                        <div
-                                            key={platform.id}
-                                            onClick={() => handleAddSocial(platform.urlKey, platform.textKey)}
-                                            style={{
-                                                width: '48px',
-                                                height: '48px',
-                                                background: platform.color,
-                                                borderRadius: '8px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                cursor: isActive ? 'default' : 'pointer',
-                                                opacity: isActive ? 0.5 : 1, // Dim if active
-                                                color: platform.color === '#fffc00' ? '#000' : '#fff'
-                                            }}
-                                            title={isActive ? "Already added" : `Add ${platform.name}`}
-                                        >
-                                            <Icon size={24} />
-                                        </div>
-                                    );
-                                })}
-                            </div>
                         </div>
-
-                    </div>
-                )}
-            </div>
+                    )
+                }
+            </div >
 
             {/* SHARE OPTION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
                 <div
                     onClick={() => setIsShareOptionOpen(!isShareOptionOpen)}
                     style={{
@@ -699,34 +624,36 @@ const SocialMediaConfig = ({ config, onChange }) => {
                     {isShareOptionOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
 
-                {isShareOptionOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                {
+                    isShareOptionOpen && (
+                        <div style={{ padding: '2rem', background: '#fff' }}>
 
-                        {/* SHARE MESSAGE FIELD */}
-                        <div style={{ marginBottom: '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                SHARE MESSAGE
-                            </label>
-                            <input
-                                type="text"
-                                value={shareOption.shareMessage || ''}
-                                onChange={(e) => handleShareOptionUpdate('shareMessage', e.target.value)}
-                                placeholder="ssss"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
-                                    fontSize: '0.9rem',
-                                    outline: 'none'
-                                }}
-                            />
+                            {/* SHARE MESSAGE FIELD */}
+                            <div style={{ marginBottom: '0' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    SHARE MESSAGE
+                                </label>
+                                <input
+                                    type="text"
+                                    value={shareOption.shareMessage || ''}
+                                    onChange={(e) => handleShareOptionUpdate('shareMessage', e.target.value)}
+                                    placeholder="ssss"
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: '1px solid #1e293b',
+                                        fontSize: '0.9rem',
+                                        outline: 'none'
+                                    }}
+                                />
+                            </div>
+
                         </div>
-
-                    </div>
-                )}
-            </div>
-        </div>
+                    )
+                }
+            </div >
+        </div >
     );
 };
 
