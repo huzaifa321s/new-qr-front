@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import QRRenderer from '../components/QRRenderer';
+import Sidebar from '../components/Sidebar';
 import { toPng, toJpeg, toSvg } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import DatePicker from "react-datepicker";
@@ -90,6 +91,12 @@ const Dashboard = () => {
     const [selectedTypeFilter, setSelectedTypeFilter] = useState('All types');
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageLimit, setPageLimit] = useState(20);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalQRs, setTotalQRs] = useState(0);
 
     const baseUrl = window.location.origin;
 
@@ -327,8 +334,38 @@ const Dashboard = () => {
             const apiUrl = window.location.hostname === 'localhost'
                 ? 'http://localhost:3000/api/qr/list'
                 : '/api/qr/list';
-            const res = await axios.get(apiUrl);
-            setQrs(res.data);
+
+            const params = {
+                page: currentPage,
+                limit: pageLimit
+            };
+
+            // Add filter parameters
+            if (selectedTypeFilter && selectedTypeFilter !== 'All types') {
+                params.type = selectedTypeFilter;
+            }
+            if (activeTab && activeTab !== 'All') {
+                params.tab = activeTab;
+            }
+            if (searchTerm) {
+                params.search = searchTerm;
+            }
+            if (startDate) {
+                params.startDate = startDate.toISOString();
+            }
+            if (endDate) {
+                params.endDate = endDate.toISOString();
+            }
+            if (sortOption) {
+                params.sort = sortOption;
+            }
+
+            const res = await axios.get(apiUrl, { params });
+            setQrs(res.data.qrs || res.data);
+            if (res.data.pagination) {
+                setTotalPages(res.data.pagination.totalPages);
+                setTotalQRs(res.data.pagination.total);
+            }
             setLastUpdated(Date.now());
             setLoading(false);
         } catch (err) {
@@ -356,6 +393,20 @@ const Dashboard = () => {
             socket.disconnect();
         };
     }, []);
+
+    // Fetch QRs when pagination changes
+    useEffect(() => {
+        fetchQRs();
+    }, [currentPage, pageLimit]);
+
+    // Reset to page 1 when filters change
+    useEffect(() => {
+        if (currentPage !== 1) {
+            setCurrentPage(1);
+        } else {
+            fetchQRs();
+        }
+    }, [selectedTypeFilter, activeTab, searchTerm, startDate, endDate, sortOption]);
 
     const handleDownloadQR = (qr) => {
         try {
@@ -473,123 +524,11 @@ const Dashboard = () => {
     ].sort((a, b) => a.label.localeCompare(b.label));
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f5f7' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f7fa', fontFamily: 'sans-serif' }}>
+            <Toaster position="top-right" />
+
             {/* Sidebar */}
-            <div style={{
-                width: '210px',
-                background: '#ffffff',
-                borderRight: '1px solid #e5e5e5',
-                padding: '1.5rem 0',
-                display: 'flex',
-                flexDirection: 'column'
-            }}>
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    marginBottom: '2rem',
-                    padding: '0 1.5rem'
-                }}>
-                    <div style={{
-                        width: '32px',
-                        height: '32px',
-                        background: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)',
-                        borderRadius: '8px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#fff',
-                        fontWeight: 'bold',
-                        fontSize: '1.1rem'
-                    }}>
-                        Q
-                    </div>
-                    <div>
-                        <div style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#000', lineHeight: 1 }}>QR</div>
-                        <div style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#000', lineHeight: 1 }}>INSIGHT</div>
-                    </div>
-                </div>
-
-                <nav style={{ flex: 1, padding: '0 0.75rem' }}>
-                    <button
-                        onClick={() => navigate('/select-template')}
-                        style={{
-                            width: '100%',
-                            background: '#000',
-                            color: '#ffffff',
-                            border: 'none',
-                            padding: '0.625rem',
-                            borderRadius: '6px',
-                            fontWeight: '500',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '0.5rem',
-                            marginBottom: '1rem',
-                            fontSize: '0.875rem'
-                        }}
-                    >
-                        <Plus size={16} /> Create New QR
-                    </button>
-
-                    <div style={{
-                        padding: '0.625rem 1rem',
-                        background: '#7c3aed',
-                        color: '#fff',
-                        borderRadius: '6px',
-                        marginBottom: '0.5rem',
-                        cursor: 'pointer',
-                        fontWeight: '500',
-                        fontSize: '0.875rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                    }}>
-                        <div style={{ width: '4px', height: '4px', background: '#fff', borderRadius: '50%' }}></div>
-                        My QR Codes
-                    </div>
-                    <div style={{
-                        padding: '0.625rem 1rem',
-                        borderRadius: '6px',
-                        marginBottom: '0.5rem',
-                        cursor: 'pointer',
-                        color: '#666',
-                        fontSize: '0.875rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                    }}>
-                        <BarChart size={16} />
-                        Statistics
-                    </div>
-                    <div style={{
-                        padding: '0.625rem 1rem',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        color: '#666',
-                        fontSize: '0.875rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                    }}>
-                        <FileText size={16} />
-                        Billing & Plans
-                    </div>
-                </nav>
-
-                <div style={{ borderTop: '1px solid #e5e5e5', paddingTop: '1rem', padding: '1rem 1.5rem' }}>
-                    <div style={{ fontSize: '0.7rem', fontWeight: '700', color: '#999', marginBottom: '0.75rem', textTransform: 'uppercase' }}>Support</div>
-                    <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '0.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <div style={{ fontSize: '1rem' }}>?</div>
-                        Help Center
-                    </div>
-                    <div style={{ fontSize: '0.875rem', color: '#666', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <div style={{ fontSize: '1rem' }}>💬</div>
-                        Contact Us
-                    </div>
-                </div>
-            </div>
+            <Sidebar />
 
             {/* Main Content */}
             <div style={{ flex: 1, padding: '1.5rem 2rem', overflowY: 'auto' }}>
@@ -1257,9 +1196,71 @@ const Dashboard = () => {
                             </div>
                         </div>
 
+                        {/* Pagination Controls */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', padding: '1rem', background: '#f9fafb', borderRadius: '8px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                <span style={{ fontSize: '0.875rem', color: '#666' }}>Show:</span>
+                                <select
+                                    value={pageLimit}
+                                    onChange={(e) => {
+                                        setPageLimit(Number(e.target.value));
+                                        setCurrentPage(1);
+                                    }}
+                                    style={{
+                                        padding: '0.5rem',
+                                        border: '1px solid #ddd',
+                                        borderRadius: '6px',
+                                        fontSize: '0.875rem',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    <option value={10}>10</option>
+                                    <option value={20}>20</option>
+                                    <option value={50}>50</option>
+                                    <option value={100}>100</option>
+                                </select>
+                                <span style={{ fontSize: '0.875rem', color: '#666' }}>per page</span>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                <span style={{ fontSize: '0.875rem', color: '#666' }}>
+                                    Page {currentPage} of {totalPages} ({totalQRs} total)
+                                </span>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    <button
+                                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                                        disabled={currentPage === 1}
+                                        style={{
+                                            padding: '0.5rem 0.75rem',
+                                            border: '1px solid #ddd',
+                                            borderRadius: '6px',
+                                            background: currentPage === 1 ? '#f5f5f5' : '#fff',
+                                            cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                                            fontSize: '0.875rem'
+                                        }}
+                                    >
+                                        Previous
+                                    </button>
+                                    <button
+                                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                                        disabled={currentPage === totalPages}
+                                        style={{
+                                            padding: '0.5rem 0.75rem',
+                                            border: '1px solid #ddd',
+                                            borderRadius: '6px',
+                                            background: currentPage === totalPages ? '#f5f5f5' : '#fff',
+                                            cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                                            fontSize: '0.875rem'
+                                        }}
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                         {/* Tabs */}
                         <div style={{ display: 'flex', gap: '2rem', borderBottom: '2px solid #e5e5e5', marginBottom: '1.5rem' }}>
-                            {['All', 'Dynamic', 'Static', 'Favourite'].map(tab => (
+                            {['All', 'Dynamic', 'Static'].map(tab => (
                                 <div
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
@@ -1636,8 +1637,6 @@ const Dashboard = () => {
                                                                 <div style={{ padding: '0.5rem 0' }}>
                                                                     {[
                                                                         { icon: Edit, label: 'Edit', color: '#666', action: () => handleEditQR(qr) },
-                                                                        { icon: Star, label: 'Add to favourites', color: '#666' },
-                                                                        { icon: Folder, label: 'Move to folder', color: '#666' },
                                                                         { icon: BarChart, label: 'Statistics', color: '#666', action: () => navigate(`/statistics/${qr._id}`) },
                                                                         { icon: Trash2, label: 'Delete', color: '#ef4444', action: () => handleDeleteClick(qr._id) }
                                                                     ].map((item, idx) => (
@@ -1680,55 +1679,7 @@ const Dashboard = () => {
                                     })}
                                 </div>
 
-                                {/* Pagination */}
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '1rem', marginTop: '2rem' }}>
-                                    <button style={{
-                                        width: '28px',
-                                        height: '28px',
-                                        borderRadius: '4px',
-                                        border: '1px solid #e5e5e5',
-                                        background: '#fff',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        color: '#666'
-                                    }}>
-                                        <ChevronLeft size={16} />
-                                    </button>
-                                    <span style={{ fontSize: '0.875rem', color: '#666' }}>1 of 1</span>
-                                    <button style={{
-                                        width: '28px',
-                                        height: '28px',
-                                        borderRadius: '4px',
-                                        border: '1px solid #e5e5e5',
-                                        background: '#fff',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        color: '#666'
-                                    }}>
-                                        <ChevronRight size={16} />
-                                    </button>
-                                    <div style={{ position: 'relative' }}>
-                                        <select style={{
-                                            padding: '0.375rem 1.75rem 0.375rem 0.625rem',
-                                            border: '1px solid #e5e5e5',
-                                            borderRadius: '4px',
-                                            fontSize: '0.875rem',
-                                            color: '#666',
-                                            background: '#fff',
-                                            cursor: 'pointer',
-                                            appearance: 'none'
-                                        }}>
-                                            <option>20</option>
-                                            <option>50</option>
-                                            <option>100</option>
-                                        </select>
-                                        <ChevronDown size={12} style={{ position: 'absolute', right: '6px', top: '50%', transform: 'translateY(-50%)', color: '#666', pointerEvents: 'none' }} />
-                                    </div>
-                                </div>
+
                             </>
                         )}
                     </>

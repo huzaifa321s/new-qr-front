@@ -49,7 +49,7 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
     ];
 
     return (
-        <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ padding: '2rem', width: '100%' }}>
 
             {/* QR NAME */}
             <div style={{ marginBottom: '2rem' }}>

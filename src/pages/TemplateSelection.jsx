@@ -281,33 +281,44 @@ const TemplateSelection = () => {
                         onClick={handleContinue}
                         disabled={!selectedType}
                         style={{
-                            background: selectedType ? '#8b5cf6' : '#cbd5e1',
-                            color: '#ffffff',
+                            background: 'transparent',
                             border: 'none',
-                            padding: '0.75rem 3rem',
-                            borderRadius: '8px',
-                            fontSize: '1rem',
-                            fontWeight: '600',
+                            padding: 0,
                             cursor: selectedType ? 'pointer' : 'not-allowed',
-                            display: 'flex',
+                            display: 'inline-flex',
                             alignItems: 'center',
-                            gap: '0.5rem',
                             transition: 'all 0.2s ease',
-                            boxShadow: selectedType ? '0 4px 12px rgba(139, 92, 246, 0.3)' : 'none'
-                        }}
-                        onMouseEnter={(e) => {
-                            if (selectedType) {
-                                e.currentTarget.style.background = '#7c3aed';
-                            }
-                        }}
-                        onMouseLeave={(e) => {
-                            if (selectedType) {
-                                e.currentTarget.style.background = '#8b5cf6';
-                            }
+                            opacity: selectedType ? 1 : 0.5
                         }}
                     >
-                        Continue
-                        <ArrowRight size={20} />
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            borderRadius: '50px',
+                            overflow: 'hidden',
+
+                        }}>
+                            <div style={{
+                                background: '#8b5cf6',
+                                color: '#ffffff',
+                                padding: '0.75rem 2rem',
+                                fontSize: '1rem',
+                                fontWeight: '600'
+                            }}>
+                                Continue
+                            </div>
+                            <div style={{
+                                background: '#c4b5fd',
+                                width: '48px',
+                                height: '48px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: '#8b5cf6'
+                            }}>
+                                <ArrowRight size={20} />
+                            </div>
+                        </div>
                     </button>
                 </div>
             </div>

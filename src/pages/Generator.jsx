@@ -26,6 +26,7 @@ import ProductPageConfig from '../components/ProductPageConfig';
 import { qrTypes } from '../utils/qrTypes';
 import { getPreviewConfig } from '../utils/previewConfigs';
 import axios from 'axios';
+import { ArrowRight } from 'lucide-react';
 
 const Generator = () => {
     const location = useLocation();
@@ -492,18 +493,43 @@ const Generator = () => {
                                 <button
                                     onClick={() => setActiveStep('design')}
                                     style={{
-                                        background: '#8b5cf6',
-                                        color: '#fff',
+                                        background: 'transparent',
                                         border: 'none',
-                                        padding: '0.75rem 3rem',
-                                        borderRadius: '8px',
-                                        fontSize: '1rem',
-                                        fontWeight: '600',
+                                        padding: 0,
                                         cursor: 'pointer',
-                                        boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        transition: 'all 0.2s ease'
                                     }}
                                 >
-                                    Continue
+                                    <div style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        borderRadius: '50px',
+                                        overflow: 'hidden',
+
+                                    }}>
+                                        <div style={{
+                                            background: '#8b5cf6',
+                                            color: '#ffffff',
+                                            padding: '0.75rem 2rem',
+                                            fontSize: '1rem',
+                                            fontWeight: '600'
+                                        }}>
+                                            Continue
+                                        </div>
+                                        <div style={{
+                                            background: '#c4b5fd',
+                                            width: '48px',
+                                            height: '48px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: '#8b5cf6'
+                                        }}>
+                                            <ArrowRight size={20} />
+                                        </div>
+                                    </div>
                                 </button>
                             </div>
                         </>

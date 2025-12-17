@@ -10,6 +10,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { io } from 'socket.io-client';
 import MobilePreview from '../components/MobilePreview';
 import QRRenderer from '../components/QRRenderer';
+import Sidebar from '../components/Sidebar';
 import { toPng, toJpeg, toSvg } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import {
@@ -195,25 +196,7 @@ const Statistics = () => {
             <Toaster position="top-right" />
 
             {/* Sidebar */}
-            <div style={{ width: '240px', background: '#fff', borderRight: '1px solid #e5e5e5', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh', flexShrink: 0 }}>
-                <div style={{ padding: '2rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>Q</div>
-                    <div><div style={{ fontWeight: 'bold', fontSize: '1rem', color: '#1f2937' }}>QR</div><div style={{ fontWeight: 'bold', fontSize: '1rem', color: '#1f2937' }}>INSIGHT</div></div>
-                </div>
-                <div style={{ flex: 1, padding: '0 1rem' }}>
-                    <button onClick={() => navigate('/select-template')} style={{ width: '100%', padding: '0.75rem', background: '#fff', border: '1px solid #e5e5e5', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '1.5rem' }}><Plus size={16} /> Create New QR</button>
-                    {[{ icon: Home, label: 'My QR Codes', path: '/dashboard' }, { icon: BarChart, label: 'Statistics', active: true, path: '#' }, { icon: FileText, label: 'Billing & Plans', path: '/plans' }].map((item, i) => (
-                        <div key={i} onClick={() => item.path !== '#' && navigate(item.path)} style={{ padding: '0.75rem 1rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.75rem', background: item.active ? '#fff' : 'transparent', color: item.active ? '#1f2937' : '#4b5563', fontWeight: item.active ? '500' : 'normal', marginBottom: '0.5rem' }}>
-                            {i === 0 ? <div style={{ width: 4, height: 4, background: '#9ca3af', borderRadius: '50%' }} /> : <item.icon size={18} />} {item.label}
-                        </div>
-                    ))}
-                </div>
-                <div style={{ padding: '1.5rem', borderTop: '1px solid #e5e5e5' }}>
-                    <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '1rem' }}>Support</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.875rem', color: '#4b5563', marginBottom: '0.75rem', cursor: 'pointer' }}><span>?</span> Help Center</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.875rem', color: '#4b5563', cursor: 'pointer' }}><span>💬</span> Contact Us</div>
-                </div>
-            </div>
+            <Sidebar />
 
             {/* Main Content */}
             <div style={{ flex: 1, padding: '2rem 3rem', overflowY: 'auto' }}>
