@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import MobilePreview from '../components/MobilePreview';
 
@@ -11,8 +11,15 @@ const LandingPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                // Fetch QR Data
                 const res = await axios.get(`http://localhost:3000/api/qr/${shortId}`);
                 setQrData(res.data);
+
+                // Track Scan if not redirected (no ?scanned=true)
+                const searchParams = new URLSearchParams(location.search);
+                if (!searchParams.get('scanned')) {
+                    await axios.post(`http://localhost:3000/api/qr/scan/${shortId}`);
+                }
             } catch (err) {
                 console.error(err);
             } finally {
@@ -20,7 +27,7 @@ const LandingPage = () => {
             }
         };
         fetchData();
-    }, [shortId]);
+    }, [shortId, location.search]);
 
     if (loading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Loading...</div>;
     if (!qrData) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>QR Code Not Found</div>;

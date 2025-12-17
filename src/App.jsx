@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import LandingPage from './pages/LandingPage';
 import TemplateSelection from './pages/TemplateSelection';
 import AppStoreLanding from './pages/AppStoreLanding';
+import Statistics from './pages/Statistics';
 import './styles/global.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/generator" element={<Generator />} />
                 <Route path="/view/:shortId" element={<LandingPage />} />
                 <Route path="/app/:shortId" element={<AppStoreLanding />} />
+                <Route path="/statistics/:id" element={<Statistics />} />
             </Routes>
         </Router>
     );
