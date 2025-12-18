@@ -1,5 +1,5 @@
-import { ChevronDown, ChevronUp, UploadCloud, X, Check, ArrowRightLeft, Clock, Plus, Wifi, Plug, Accessibility, Users, Baby, PawPrint, Bus, Car, Bed, Coffee, Martini, Utensils, ParkingCircle, Phone, Mail, Globe, RotateCcw, Facebook, Instagram, Twitter, Linkedin, Youtube, Twitch, Music, MessageCircle, Send, LayoutGrid } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronDown, ChevronUp, UploadCloud, X, Check, ArrowRightLeft, Clock, Plus, Wifi, Plug, Accessibility, Users, Baby, PawPrint, Bus, Car, Bed, Coffee, Martini, Utensils, ParkingCircle, Phone, Mail, Globe, RotateCcw, Facebook, Instagram, Twitter, Linkedin, Youtube, Twitch, Music, MessageCircle, Send, LayoutGrid, Eye } from 'lucide-react';
+import { useState, useRef } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const EventConfig = ({ config, onChange }) => {
@@ -10,6 +10,9 @@ const EventConfig = ({ config, onChange }) => {
     const [isFacilitiesOpen, setIsFacilitiesOpen] = useState(true);
     const [isContactOpen, setIsContactOpen] = useState(true);
     const [isSocialOpen, setIsSocialOpen] = useState(true);
+    const [isHeaderModalOpen, setIsHeaderModalOpen] = useState(false);
+    const [isHeaderHovered, setIsHeaderHovered] = useState(false);
+    const headerFileInputRef = useRef(null);
 
     const design = config.design || {};
     const businessInfo = config.businessInfo || {};
@@ -87,6 +90,23 @@ const EventConfig = ({ config, onChange }) => {
                 headerImage: { url }
             }
         }));
+    };
+
+    const handleHeaderFileUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            handleHeaderImageUpdate(reader.result);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const triggerHeaderFileUpload = () => {
+        if (headerFileInputRef.current) {
+            headerFileInputRef.current.click();
+        }
     };
 
     const handleLogoUpdate = (url) => {
@@ -393,19 +413,81 @@ const EventConfig = ({ config, onChange }) => {
                             </div>
                         ))}
 
+                        {/* Custom Uploaded Image */}
+                        {design.headerImage?.url && !headerOptions.some(opt => opt.url === design.headerImage.url) && (
+                            <div
+                                style={{
+                                    width: '80px',
+                                    height: '80px',
+                                    borderRadius: '4px',
+                                    position: 'relative',
+                                    cursor: 'pointer',
+                                    border: '2px solid #8b5cf6',
+                                    overflow: 'hidden'
+                                }}
+                                onMouseEnter={() => setIsHeaderHovered(true)}
+                                onMouseLeave={() => setIsHeaderHovered(false)}
+                                onClick={() => setIsHeaderModalOpen(true)}
+                            >
+                                <img src={design.headerImage.url} alt="Custom Header" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '-4px',
+                                    right: '-4px',
+                                    width: '18px',
+                                    height: '18px',
+                                    background: '#8b5cf6',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    zIndex: 2,
+                                    border: '2px solid #fff'
+                                }}>
+                                    <Check size={10} color="#fff" />
+                                </div>
+                                {isHeaderHovered && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        background: 'rgba(0,0,0,0.5)',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        zIndex: 3
+                                    }}>
+                                        <Eye size={24} color="#fff" />
+                                        <span style={{ color: '#fff', fontSize: '10px', marginTop: '2px' }}>Preview</span>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         {/* Upload Option */}
-                        <div style={{
-                            width: '80px',
-                            height: '80px',
-                            borderRadius: '4px',
-                            border: '1px dashed #cbd5e1',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer'
-                        }}
-                        // TODO: Implement Upload Logic for Header Image if needed
+                        <div
+                            onClick={triggerHeaderFileUpload}
+                            style={{
+                                width: '80px',
+                                height: '80px',
+                                borderRadius: '4px',
+                                border: '1px dashed #cbd5e1',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer'
+                            }}
                         >
+                            <input
+                                type="file"
+                                ref={headerFileInputRef}
+                                onChange={handleHeaderFileUpload}
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                            />
                             <UploadCloud size={24} color="#94a3b8" />
                         </div>
                     </div>
@@ -1347,6 +1429,45 @@ const EventConfig = ({ config, onChange }) => {
                 )}
             </div>
 
+            {/* Modal for Header Image Preview */}
+            {isHeaderModalOpen && design.headerImage?.url && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: 9999,
+                    background: 'rgba(0,0,0,0.8)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '2rem'
+                }} onClick={() => setIsHeaderModalOpen(false)}>
+                    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={e => e.stopPropagation()}>
+                        <img src={design.headerImage.url} alt="Header Preview" style={{ maxWidth: '100%', maxHeight: '90vh', borderRadius: '8px' }} />
+                        <button
+                            onClick={() => setIsHeaderModalOpen(false)}
+                            style={{
+                                position: 'absolute',
+                                top: '-40px',
+                                right: '-40px',
+                                background: 'white',
+                                border: 'none',
+                                borderRadius: '50%',
+                                width: '40px',
+                                height: '40px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <X size={24} color="#000" />
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

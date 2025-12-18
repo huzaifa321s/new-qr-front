@@ -469,21 +469,29 @@ const CouponConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.75rem',
-                                        height: '44px',
-                                        cursor: 'pointer'
-                                    }}>
-                                        <span style={{ fontSize: '0.9rem', color: '#000' }}>
-                                            {businessInfo.titleFont || 'Lato'}
-                                        </span>
-                                        <ChevronDown size={14} color="#94a3b8" />
-                                    </div>
+                                    <select
+                                        value={businessInfo.titleFont || 'Lato'}
+                                        onChange={(e) => handleBusinessInfoUpdate('titleFont', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            height: '44px',
+                                            cursor: 'pointer',
+                                            appearance: 'none',
+                                            background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 0.75rem center`,
+                                            backgroundColor: '#fff'
+                                        }}
+                                    >
+                                        <option value="Lato">Lato</option>
+                                        <option value="Inter">Inter</option>
+                                        <option value="Roboto">Roboto</option>
+                                        <option value="Open Sans">Open Sans</option>
+                                        <option value="Work Sans">Work Sans</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -570,21 +578,29 @@ const CouponConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.75rem',
-                                        height: '44px',
-                                        cursor: 'pointer'
-                                    }}>
-                                        <span style={{ fontSize: '0.9rem', color: '#000' }}>
-                                            {coupon.titleFont || 'Lato'}
-                                        </span>
-                                        <ChevronDown size={14} color="#94a3b8" />
-                                    </div>
+                                    <select
+                                        value={coupon.titleFont || 'Lato'}
+                                        onChange={(e) => handleCouponUpdate('titleFont', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            height: '44px',
+                                            cursor: 'pointer',
+                                            appearance: 'none',
+                                            background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 0.75rem center`,
+                                            backgroundColor: '#fff'
+                                        }}
+                                    >
+                                        <option value="Lato">Lato</option>
+                                        <option value="Inter">Inter</option>
+                                        <option value="Roboto">Roboto</option>
+                                        <option value="Open Sans">Open Sans</option>
+                                        <option value="Work Sans">Work Sans</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -687,9 +703,8 @@ const CouponConfig = ({ config, onChange }) => {
                                 TERMS & CONDITIONS
                             </label>
                             <textarea
-                                value={coupon.terms || ''}
+                                value={coupon.terms || 'This coupon is only valid for online purchases.'}
                                 onChange={(e) => handleCouponUpdate('terms', e.target.value)}
-                                placeholder="This coupon is only valid for online purchases."
                                 rows={3}
                                 style={{
                                     width: '100%',
@@ -711,9 +726,8 @@ const CouponConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={coupon.buttonTitle || ''}
+                                value={coupon.buttonTitle || 'GET COUPON'}
                                 onChange={(e) => handleCouponUpdate('buttonTitle', e.target.value)}
-                                placeholder="GET COUPON"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
@@ -732,9 +746,8 @@ const CouponConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={coupon.callToAction || ''}
+                                value={coupon.callToAction || 'https://www.abcbotique.com'}
                                 onChange={(e) => handleCouponUpdate('callToAction', e.target.value)}
-                                placeholder="https://www.abcbotique.com"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',

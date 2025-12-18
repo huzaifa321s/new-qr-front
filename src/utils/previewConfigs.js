@@ -7,7 +7,8 @@ export const menuPreviewConfig = {
     businessInfo: {
         title: "Bob's Cafe",
         subtitle: "Eat.Refresh.Go",
-        description: "We aim to provide fresh and healthy snacks people on the go."
+        description: "We aim to provide fresh and healthy snacks people on the go.",
+        website: "https://www.techoid.com"
     },
     menu: [
         {
@@ -40,7 +41,9 @@ export const appStorePreviewConfig = {
     businessInfo: {
         title: "Techoid Bank",
         subtitle: "Technician name",
-        description: "Control all your finances easily and quickly."
+        description: "Control all your finances easily and quickly.",
+        cta: "DOWNLOAD NOW",
+        website: "https://www.techoid.com"
     },
     appLinks: {
         google: 'https://play.google.com/store/apps',
@@ -64,7 +67,10 @@ export const couponPreviewConfig = {
         offer: "Copy the Coupon and get 50% OFF on your next purchase",
         code: "SALE20",
         expiry: "---",
-        location: "1000 Marketplace Ave. NY, 10001"
+        location: "1000 Marketplace Ave. NY, 10001",
+        buttonTitle: "GET COUPON",
+        callToAction: "https://www.abcbotique.com",
+        terms: "This coupon is only valid for online purchases."
     }
 };
 

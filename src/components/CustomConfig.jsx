@@ -2,7 +2,8 @@ import { ChevronDown, ChevronUp, Plus, Type, FileText, MousePointer, Image as Im
 import axios from 'axios';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '../utils/canvasUtils';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
+import { Eye } from 'lucide-react';
 
 const CustomConfig = ({ config, onChange }) => {
     // Accordion States
@@ -22,11 +23,21 @@ const CustomConfig = ({ config, onChange }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [tempImage, setTempImage] = useState(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
+    const [activePdfCompId, setActivePdfCompId] = useState(null);
+    const [activeMenuProduct, setActiveMenuProduct] = useState(null); // { compId, catId, prodId }
     const [zoom, setZoom] = useState(1);
     const [rotation, setRotation] = useState(0);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const [currentSliderId, setCurrentSliderId] = useState(null);
     const [uploading, setUploading] = useState(false);
+    const [isLogoHovered, setIsLogoHovered] = useState(false);
+    const [isImageHovered, setIsImageHovered] = useState(false);
+    const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState(null);
+    const logoFileInputRef = useRef(null);
+    const imageFileInputRef = useRef(null);
+    const pdfFileInputRef = useRef(null);
+    const menuImageInputRef = useRef(null);
 
     // Sync addedComponents with parent config
     useEffect(() => {
@@ -149,11 +160,12 @@ const CustomConfig = ({ config, onChange }) => {
             };
         } else if (type === 'pdf') {
             initialData = {
-                fileName: 'Qr Insight Presentation.pdf',
+                fileName: 'Qr Insight Presentation',
                 url: ''
             };
         } else if (type === 'menu') {
             initialData = {
+                currency: 'USD',
                 categories: [
                     {
                         id: 'burger',
@@ -263,12 +275,14 @@ const CustomConfig = ({ config, onChange }) => {
         else setOpenComponentId(id);
     };
 
-    const updateComponentData = (id, field, value) => {
-        const newComps = addedComponents.map(c => {
+    const updateComponentData = (id, fieldOrObject, value) => {
+        setAddedComponents(prev => prev.map(c => {
             if (c.id !== id) return c;
-            return { ...c, data: { ...c.data, [field]: value } };
-        });
-        setAddedComponents(newComps);
+            if (typeof fieldOrObject === 'object' && fieldOrObject !== null) {
+                return { ...c, data: { ...c.data, ...fieldOrObject } };
+            }
+            return { ...c, data: { ...c.data, [fieldOrObject]: value } };
+        }));
     };
 
     // --- Menu Helpers ---
@@ -519,6 +533,72 @@ const CustomConfig = ({ config, onChange }) => {
         }
     };
 
+    // --- Logo Upload Handler ---
+    const handleLogoUpload = async (e, compId) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            setUploading(true);
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const res = await axios.post(`http://localhost:3000/api/upload/image`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            // Update both fields in one go to avoid race conditions
+            updateComponentData(compId, {
+                url: res.data.url,
+                selectedLogo: 'custom'
+            });
+        } catch (err) {
+            console.error('Logo upload failed:', err);
+            alert('Logo upload failed');
+        } finally {
+            setUploading(false);
+            e.target.value = null;
+        }
+    };
+
+    const triggerLogoUpload = () => {
+        if (logoFileInputRef.current) {
+            logoFileInputRef.current.click();
+        }
+    };
+
+    // --- Image Upload Handlers ---
+    const triggerImageUpload = () => {
+        if (imageFileInputRef.current) imageFileInputRef.current.click();
+    };
+
+    const handleImageUpload = async (e, compId) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            setUploading(true);
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const res = await axios.post(`http://localhost:3000/api/upload/image`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            // Update both fields in one go
+            updateComponentData(compId, {
+                url: res.data.url,
+                selectedImage: 'custom'
+            });
+        } catch (err) {
+            console.error('Image upload failed:', err);
+            alert('Image upload failed');
+        } finally {
+            setUploading(false);
+            e.target.value = null;
+        }
+    };
+
     // --- Video Upload Handler ---
     const handleVideoUpload = async (e, compId) => {
         const file = e.target.files[0];
@@ -539,13 +619,17 @@ const CustomConfig = ({ config, onChange }) => {
             alert('Video upload failed');
         } finally {
             setUploading(false);
+            e.target.value = null;
         }
     };
 
     // --- PDF Upload Handler ---
-    const handlePdfUpload = async (e, compId) => {
+    const handlePdfUpload = async (e, forcedCompId = null) => {
         const file = e.target.files[0];
         if (!file) return;
+
+        const targetId = forcedCompId || activePdfCompId;
+        if (!targetId) return;
 
         try {
             setUploading(true);
@@ -556,20 +640,88 @@ const CustomConfig = ({ config, onChange }) => {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
-            // Update filename and url
-            const newComps = addedComponents.map(c => {
-                if (c.id !== compId) return c;
-                return { ...c, data: { ...c.data, fileName: file.name, url: res.data.url } };
+            updateComponentData(targetId, {
+                url: res.data.url,
+                fileName: file.name
             });
-            setAddedComponents(newComps);
-
         } catch (err) {
             console.error('PDF upload failed:', err);
             alert('PDF upload failed');
         } finally {
             setUploading(false);
-            e.target.value = null; // Reset input
+            e.target.value = null;
+            setActivePdfCompId(null);
         }
+    };
+
+    const triggerPdfUpload = (compId) => {
+        setActivePdfCompId(compId);
+        if (pdfFileInputRef.current) {
+            pdfFileInputRef.current.click();
+        }
+    };
+
+    // --- Menu Product Handlers ---
+    const handleMenuProductImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file || !activeMenuProduct) return;
+
+        try {
+            setUploading(true);
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const res = await axios.post(`http://localhost:3000/api/upload/image`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            const { compId, catId, prodId } = activeMenuProduct;
+
+            setAddedComponents(prev => prev.map(comp => {
+                if (comp.id !== compId) return comp;
+
+                const newCategories = comp.data.categories.map(cat => {
+                    if (cat.id !== catId) return cat;
+
+                    const newProducts = cat.products.map(prod => {
+                        if (prod.id !== prodId) return prod;
+                        return { ...prod, image: res.data.url };
+                    });
+
+                    return { ...cat, products: newProducts };
+                });
+
+                return { ...comp, data: { ...comp.data, categories: newCategories } };
+            }));
+
+        } catch (err) {
+            console.error('Menu product image upload failed:', err);
+            alert('Image upload failed');
+        } finally {
+            setUploading(false);
+            e.target.value = null;
+            setActiveMenuProduct(null);
+        }
+    };
+
+    const triggerMenuProductImageUpload = (compId, catId, prodId) => {
+        setActiveMenuProduct({ compId, catId, prodId });
+        if (menuImageInputRef.current) {
+            menuImageInputRef.current.click();
+        }
+    };
+
+    const removeMenuProduct = (compId, catId, prodId) => {
+        setAddedComponents(prev => prev.map(comp => {
+            if (comp.id !== compId) return comp;
+
+            const newCategories = comp.data.categories.map(cat => {
+                if (cat.id !== catId) return cat;
+                return { ...cat, products: cat.products.filter(p => p.id !== prodId) };
+            });
+
+            return { ...comp, data: { ...comp.data, categories: newCategories } };
+        }));
     };
 
     const primaryColor = design.primaryColor || '#0B2D86';
@@ -667,12 +819,8 @@ const CustomConfig = ({ config, onChange }) => {
             {/* ADDED COMPONENTS LIST */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '1.5rem' }}>
                 {addedComponents.map((comp) => (
-                    <div key={comp.id} style={{ position: 'relative' }}>
-                        <div onClick={() => removeComponent(comp.id)} style={{ position: 'absolute', right: '-40px', top: '20px', cursor: 'pointer', color: '#ef4444' }}>
-                            <Trash2 size={20} />
-                        </div>
-
-                        <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
+                    <div key={comp.id} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                        <div style={{ flex: 1, background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
                             <div onClick={() => toggleComponent(comp.id)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', borderBottom: openComponentId === comp.id ? '1px solid #e2e8f0' : 'none' }}>
                                 <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>{comp.type === 'weekly_schedule' ? 'WEEKLY SCHEDULER' : comp.type.replace(/_/g, ' ').toUpperCase()}</div>
                                 {openComponentId === comp.id ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
@@ -687,7 +835,28 @@ const CustomConfig = ({ config, onChange }) => {
                                             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
                                                 <div><label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>{comp.type}*</label><input type="text" value={comp.data.text} onChange={(e) => updateComponentData(comp.id, 'text', e.target.value)} style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none' }} /></div>
                                                 <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Text Color</label><div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}><input type="text" value={comp.data.color} onChange={(e) => updateComponentData(comp.id, 'color', e.target.value)} style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.9rem', color: '#000', fontWeight: '500' }} /><div style={{ width: '28px', height: '28px', borderRadius: '2px', position: 'relative', overflow: 'hidden', border: '1px solid #e2e8f0' }}><div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: comp.data.color }}></div><input type="color" value={comp.data.color} onChange={(e) => updateComponentData(comp.id, 'color', e.target.value)} style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', cursor: 'pointer', opacity: 0 }} /></div></div></div>
-                                                <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Font</label><div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.75rem', height: '44px', cursor: 'pointer' }}><span style={{ fontSize: '0.9rem', color: '#000' }}>{comp.data.font}</span><ChevronDown size={14} color="#94a3b8" /></div></div>
+                                                <div>
+                                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Font</label>
+                                                    <select
+                                                        value={comp.data.font || 'Inter'}
+                                                        onChange={(e) => updateComponentData(comp.id, 'font', e.target.value)}
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.75rem',
+                                                            borderRadius: '4px',
+                                                            border: '1px solid #1e293b',
+                                                            fontSize: '0.9rem',
+                                                            outline: 'none',
+                                                            cursor: 'pointer',
+                                                            background: '#fff',
+                                                            height: '44px'
+                                                        }}
+                                                    >
+                                                        <option value="Inter">Inter</option>
+                                                        <option value="Lato">Lato</option>
+                                                        <option value="Work Sans">Work Sans</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div style={{ position: 'relative', height: '1px', background: 'none', borderTop: '1px dashed #e2e8f0', margin: '2rem 0' }}><span style={{ position: 'absolute', top: '-10px', left: '2rem', background: '#fff', padding: '0 1rem', fontSize: '0.85rem', fontWeight: '600', color: '#1e293b' }}>Formatting</span></div>
                                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '3rem' }}>
@@ -716,7 +885,28 @@ const CustomConfig = ({ config, onChange }) => {
                                             <div style={{ position: 'relative', height: '1px', background: 'none', borderTop: '1px dashed #e2e8f0', margin: '2rem 0' }}><span style={{ position: 'absolute', top: '-10px', left: '2rem', background: '#fff', padding: '0 1rem', fontSize: '0.85rem', fontWeight: '600', color: '#1e293b' }}>Formatting</span></div>
                                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
                                                 <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Font Size</label><input type="text" value={comp.data.fontSize} onChange={(e) => updateComponentData(comp.id, 'fontSize', e.target.value)} style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none' }} /></div>
-                                                <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Font Family</label><div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.75rem', height: '44px', cursor: 'pointer' }}><span style={{ fontSize: '0.9rem', color: '#000' }}>{comp.data.fontFamily}</span><ChevronDown size={14} color="#94a3b8" /></div></div>
+                                                <div>
+                                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Font Family</label>
+                                                    <select
+                                                        value={comp.data.fontFamily || 'Inter'}
+                                                        onChange={(e) => updateComponentData(comp.id, 'fontFamily', e.target.value)}
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.75rem',
+                                                            borderRadius: '4px',
+                                                            border: '1px solid #1e293b',
+                                                            fontSize: '0.9rem',
+                                                            outline: 'none',
+                                                            cursor: 'pointer',
+                                                            background: '#fff',
+                                                            height: '44px'
+                                                        }}
+                                                    >
+                                                        <option value="Inter">Inter</option>
+                                                        <option value="Lato">Lato</option>
+                                                        <option value="Work Sans">Work Sans</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
                                                 <div><label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Text Color</label><div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}><input type="text" value={comp.data.textColor} onChange={(e) => updateComponentData(comp.id, 'textColor', e.target.value)} style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.9rem', color: '#000', fontWeight: '500' }} /><div style={{ width: '28px', height: '28px', borderRadius: '2px', position: 'relative', overflow: 'hidden', border: '1px solid #e2e8f0' }}><div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: comp.data.textColor }}></div><input type="color" value={comp.data.textColor} onChange={(e) => updateComponentData(comp.id, 'textColor', e.target.value)} style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', cursor: 'pointer', opacity: 0 }} /></div></div></div>
@@ -750,7 +940,41 @@ const CustomConfig = ({ config, onChange }) => {
                                                             {comp.data.selectedLogo === l.id && (<div style={{ position: 'absolute', top: 0, right: 0, width: '20px', height: '20px', background: '#8b5cf6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #fff' }}><Check size={12} color="#fff" /></div>)}
                                                         </div>
                                                     ))}
-                                                    <div style={{ width: '64px', height: '64px', borderRadius: '50%', border: '1px dashed #cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><UploadCloud size={20} color="#94a3b8" /></div>
+                                                    {comp.data.url && (
+                                                        <div
+                                                            onClick={() => {
+                                                                updateComponentData(comp.id, 'selectedLogo', 'custom');
+                                                                setPreviewImage(comp.data.url);
+                                                                setIsPreviewModalOpen(true);
+                                                            }}
+                                                            onMouseEnter={() => setIsLogoHovered(true)}
+                                                            onMouseLeave={() => setIsLogoHovered(false)}
+                                                            style={{
+                                                                width: '64px', height: '64px', borderRadius: '50%', overflow: 'hidden',
+                                                                border: comp.data.selectedLogo === 'custom' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                                                cursor: 'pointer', position: 'relative'
+                                                            }}
+                                                        >
+                                                            <img src={comp.data.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                            {comp.data.selectedLogo === 'custom' && (<div style={{ position: 'absolute', top: 0, right: 0, width: '20px', height: '20px', background: '#8b5cf6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #fff' }}><Check size={12} color="#fff" /></div>)}
+                                                            {isLogoHovered && (
+                                                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
+                                                                    <Eye size={18} color="#fff" />
+                                                                    <span style={{ color: '#fff', fontSize: '8px' }}>Preview</span>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                    <div onClick={triggerLogoUpload} style={{ width: '64px', height: '64px', borderRadius: '50%', border: '1px dashed #cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', position: 'relative' }}>
+                                                        <input
+                                                            type="file"
+                                                            ref={logoFileInputRef}
+                                                            onChange={(e) => handleLogoUpload(e, comp.id)}
+                                                            accept="image/*"
+                                                            style={{ display: 'none' }}
+                                                        />
+                                                        <UploadCloud size={20} color="#94a3b8" />
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div style={{ position: 'relative', height: '1px', background: 'none', borderTop: '1px dashed #e2e8f0', margin: '2rem 0' }}><span style={{ position: 'absolute', top: '-10px', left: '2rem', background: '#fff', padding: '0 1rem', fontSize: '0.85rem', fontWeight: '600', color: '#1e293b' }}>Formatting</span></div>
@@ -782,7 +1006,41 @@ const CustomConfig = ({ config, onChange }) => {
                                                             {comp.data.selectedImage === l.id && (<div style={{ position: 'absolute', top: 0, left: 0, width: '20px', height: '20px', background: '#8b5cf6', borderBottomRightRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Check size={12} color="#fff" /></div>)}
                                                         </div>
                                                     ))}
-                                                    <div style={{ width: '64px', height: '64px', borderRadius: '4px', border: '1px dashed #cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><UploadCloud size={20} color="#94a3b8" /></div>
+                                                    {comp.data.url && (
+                                                        <div
+                                                            onClick={() => {
+                                                                updateComponentData(comp.id, 'selectedImage', 'custom');
+                                                                setPreviewImage(comp.data.url);
+                                                                setIsPreviewModalOpen(true);
+                                                            }}
+                                                            onMouseEnter={() => setIsImageHovered(true)}
+                                                            onMouseLeave={() => setIsImageHovered(false)}
+                                                            style={{
+                                                                width: '64px', height: '64px', borderRadius: '4px', overflow: 'hidden',
+                                                                border: comp.data.selectedImage === 'custom' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                                                cursor: 'pointer', position: 'relative'
+                                                            }}
+                                                        >
+                                                            <img src={comp.data.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                            {comp.data.selectedImage === 'custom' && (<div style={{ position: 'absolute', top: 0, left: 0, width: '20px', height: '20px', background: '#8b5cf6', borderBottomRightRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Check size={12} color="#fff" /></div>)}
+                                                            {isImageHovered && (
+                                                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
+                                                                    <Eye size={18} color="#fff" />
+                                                                    <span style={{ color: '#fff', fontSize: '8px' }}>Preview</span>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                    <div onClick={triggerImageUpload} style={{ width: '64px', height: '64px', borderRadius: '4px', border: '1px dashed #cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', position: 'relative' }}>
+                                                        <input
+                                                            type="file"
+                                                            ref={imageFileInputRef}
+                                                            onChange={(e) => handleImageUpload(e, comp.id)}
+                                                            accept="image/*"
+                                                            style={{ display: 'none' }}
+                                                        />
+                                                        <UploadCloud size={20} color="#94a3b8" />
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div style={{ position: 'relative', height: '1px', background: 'none', borderTop: '1px dashed #e2e8f0', margin: '2rem 0' }}><span style={{ position: 'absolute', top: '-10px', left: '2rem', background: '#fff', padding: '0 1rem', fontSize: '0.85rem', fontWeight: '600', color: '#1e293b' }}>Formatting</span></div>
@@ -871,10 +1129,115 @@ const CustomConfig = ({ config, onChange }) => {
                                         </div>
                                     )}
 
+                                    {/* PDF UI */}
+                                    {comp.type === 'pdf' && (
+                                        <div style={{ maxWidth: '100%' }}>
+                                            <div style={{ marginBottom: '1.5rem' }}>
+                                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>PDF TITLE*</label>
+                                                <input
+                                                    type="text"
+                                                    value={comp.data.fileName}
+                                                    onChange={(e) => updateComponentData(comp.id, 'fileName', e.target.value)}
+                                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none' }}
+                                                />
+                                            </div>
+
+                                            <div style={{ marginBottom: '1rem' }}>
+                                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>UPLOAD PDF*</label>
+                                                <input
+                                                    type="text"
+                                                    value={comp.data.url}
+                                                    onChange={(e) => updateComponentData(comp.id, 'url', e.target.value)}
+                                                    placeholder="https://"
+                                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none' }}
+                                                />
+                                            </div>
+
+                                            <div style={{ textAlign: 'center', margin: '1rem 0', color: '#8b5cf6', fontSize: '0.8rem', fontWeight: 'bold' }}>OR</div>
+
+                                            <label
+                                                onClick={() => setActivePdfCompId(comp.id)}
+                                                style={{
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                                                    width: '100%', padding: '0.75rem', borderRadius: '4px',
+                                                    background: '#f1f5f9', border: '1px solid #e2e8f0',
+                                                    cursor: 'pointer', color: '#94a3b8', fontSize: '0.9rem', fontWeight: '500'
+                                                }}>
+                                                <UploadCloud size={20} color="#94a3b8" />
+                                                Upload/ Choose File from your Computer
+                                                <input
+                                                    type="file"
+                                                    accept="application/pdf"
+                                                    ref={pdfFileInputRef}
+                                                    onChange={(e) => handlePdfUpload(e)}
+                                                    style={{ display: 'none' }}
+                                                />
+                                            </label>
+
+                                            {comp.data.url && (
+                                                <div style={{
+                                                    marginTop: '1.5rem',
+                                                    padding: '1rem',
+                                                    background: '#f8fafc',
+                                                    border: '1px solid #e2e8f0',
+                                                    borderRadius: '8px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'space-between'
+                                                }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', overflow: 'hidden' }}>
+                                                        <div style={{
+                                                            width: '32px', height: '32px', background: '#ef4444', borderRadius: '4px',
+                                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                            color: '#fff', fontSize: '0.6rem', fontWeight: 'bold', flexShrink: 0
+                                                        }}>PDF</div>
+                                                        <span style={{ fontSize: '0.9rem', color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                            {comp.data.fileName}
+                                                        </span>
+                                                    </div>
+                                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                        <div onClick={() => triggerPdfUpload(comp.id)} style={{ cursor: 'pointer', color: '#64748b' }}><PenLine size={18} /></div>
+                                                        <div onClick={() => updateComponentData(comp.id, { url: '', fileName: '' })} style={{ cursor: 'pointer', color: '#ef4444' }}><Trash2 size={18} /></div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
                                     {/* MENU UI */}
                                     {comp.type === 'menu' && (
                                         <div style={{ padding: '0.5rem 0' }}>
                                             <div style={{ borderTop: '1px solid #e2e8f0', margin: '0 0 1rem 0' }}></div>
+
+                                            {/* Currency Radio Group */}
+                                            <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                                                <label style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>Currency:</label>
+                                                <div style={{ display: 'flex', gap: '1.5rem' }}>
+                                                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.9rem', color: '#000' }}>
+                                                        <input
+                                                            type="radio"
+                                                            name={`currency-${comp.id}`}
+                                                            value="PKR"
+                                                            checked={comp.data.currency === 'PKR'}
+                                                            onChange={() => updateComponentData(comp.id, 'currency', 'PKR')}
+                                                            style={{ accentColor: '#8b5cf6' }}
+                                                        />
+                                                        PKR
+                                                    </label>
+                                                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.9rem', color: '#000' }}>
+                                                        <input
+                                                            type="radio"
+                                                            name={`currency-${comp.id}`}
+                                                            value="USD"
+                                                            checked={comp.data.currency !== 'PKR'} // Default to USD
+                                                            onChange={() => updateComponentData(comp.id, 'currency', 'USD')}
+                                                            style={{ accentColor: '#8b5cf6' }}
+                                                        />
+                                                        USD
+                                                    </label>
+                                                </div>
+                                            </div>
+
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
                                                 {comp.data.categories?.map((cat) => (
                                                     <div key={cat.id} style={{ borderRadius: '4px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
@@ -905,28 +1268,104 @@ const CustomConfig = ({ config, onChange }) => {
                                                                     </div>
                                                                 </div>
                                                                 {cat.products.map((prod, idx) => (
-                                                                    <div key={prod.id} style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                                                                    <div key={prod.id} style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', alignItems: 'flex-start' }}>
                                                                         <div style={{ width: '80px', paddingTop: '1rem' }}><span style={{ color: '#8b5cf6', fontWeight: 'bold', fontSize: '0.8rem', textTransform: 'uppercase' }}>PRODUCT {idx + 1}:</span></div>
-                                                                        <div style={{ flex: 1, background: '#f6f5ff', padding: '1.5rem', borderRadius: '8px', position: 'relative' }}>
-                                                                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
-                                                                                <div><label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 'bold', color: '#334155', marginBottom: '0.5rem', textTransform: 'uppercase' }}>PRODUCT NAME*</label><input type="text" value={prod.name} placeholder="Zinger Burger" onChange={(e) => handleMenuProductChange(comp.id, cat.id, prod.id, 'name', e.target.value)} style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', background: '#fff' }} /></div>
-                                                                                <div><label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 'bold', color: '#334155', marginBottom: '0.5rem', textTransform: 'uppercase' }}>PRICE*</label><input type="text" value={prod.price} placeholder="10" onChange={(e) => handleMenuProductChange(comp.id, cat.id, prod.id, 'price', e.target.value)} style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', background: '#fff' }} /></div>
-                                                                            </div>
-                                                                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
-                                                                                <div><label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 'bold', color: '#334155', marginBottom: '0.5rem', textTransform: 'uppercase' }}>DESCRIPTION</label><textarea value={prod.description} placeholder="jalapeno + cheese" onChange={(e) => handleMenuProductChange(comp.id, cat.id, prod.id, 'description', e.target.value)} rows={3} style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', background: '#fff', resize: 'none' }} /></div>
-                                                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                                                                    {prod.image && (<div style={{ width: '50px', height: '50px', borderRadius: '4px', overflow: 'hidden', border: '1px solid #e2e8f0' }}><img src={prod.image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>)}
-                                                                                    <div style={{ width: '50px', height: '50px', borderRadius: '4px', border: '1px dashed #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: '#f8fafc' }}><UploadCloud size={20} color="#94a3b8" /></div>
+                                                                        <div style={{ flex: '0 1 85%', background: '#f6f5ff', padding: '1.5rem', borderRadius: '8px', position: 'relative' }}>
+                                                                            <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+                                                                                <div>
+                                                                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 'bold', color: '#334155', marginBottom: '0.5rem', textTransform: 'uppercase' }}>PRODUCT NAME*</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        value={prod.name}
+                                                                                        placeholder="Zinger Burger"
+                                                                                        onChange={(e) => handleMenuProductChange(comp.id, cat.id, prod.id, 'name', e.target.value)}
+                                                                                        style={{ width: '100%', padding: '0.8rem', borderRadius: '6px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', background: '#fff' }}
+                                                                                    />
+                                                                                </div>
+                                                                                <div>
+                                                                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 'bold', color: '#334155', marginBottom: '0.5rem', textTransform: 'uppercase' }}>PRICE*</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        value={prod.price}
+                                                                                        placeholder="10"
+                                                                                        onChange={(e) => handleMenuProductChange(comp.id, cat.id, prod.id, 'price', e.target.value)}
+                                                                                        style={{ width: '100%', padding: '0.8rem', borderRadius: '6px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', background: '#fff' }}
+                                                                                    />
                                                                                 </div>
                                                                             </div>
-                                                                            <div style={{ position: 'absolute', right: '-40px', top: '0', height: '100%', display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '0.5rem' }}>
-                                                                                <div style={{ width: '28px', height: '28px', borderRadius: '50%', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: '#fff' }}><X size={14} color="#94a3b8" /></div>
-                                                                                <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><ArrowUpDown size={18} color="#cbd5e1" /></div>
+                                                                            <div style={{ display: 'flex', gap: '1rem' }}>
+                                                                                <div style={{ flex: 1 }}>
+                                                                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 'bold', color: '#334155', marginBottom: '0.5rem', textTransform: 'uppercase' }}>DESCRIPTION</label>
+                                                                                    <textarea
+                                                                                        value={prod.description}
+                                                                                        placeholder="jalapeno + cheese"
+                                                                                        onChange={(e) => handleMenuProductChange(comp.id, cat.id, prod.id, 'description', e.target.value)}
+                                                                                        rows={3}
+                                                                                        style={{ width: '100%', padding: '0.8rem', borderRadius: '6px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', background: '#fff', resize: 'none' }}
+                                                                                    />
+                                                                                </div>
+                                                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignSelf: 'flex-end', paddingBottom: '2px' }}>
+                                                                                    <div
+                                                                                        onClick={() => triggerMenuProductImageUpload(comp.id, cat.id, prod.id)}
+                                                                                        style={{
+                                                                                            width: '50px',
+                                                                                            height: '50px',
+                                                                                            borderRadius: '6px',
+                                                                                            border: '1px dashed #cbd5e1',
+                                                                                            display: 'flex',
+                                                                                            alignItems: 'center',
+                                                                                            justifyContent: 'center',
+                                                                                            cursor: 'pointer',
+                                                                                            background: prod.image ? 'none' : '#fff',
+                                                                                            overflow: 'hidden',
+                                                                                            transition: 'all 0.2s'
+                                                                                        }}
+                                                                                    >
+                                                                                        {prod.image ? (
+                                                                                            <img src={prod.image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                                                        ) : (
+                                                                                            <UploadCloud size={20} color="#94a3b8" />
+                                                                                        )}
+                                                                                    </div>
+                                                                                    <label style={{ fontSize: '0.6rem', color: '#64748b', textAlign: 'center', fontWeight: 'bold' }}>IMAGE</label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', padding: '1rem 0', flexShrink: 0 }}>
+                                                                            <div
+                                                                                onClick={() => removeMenuProduct(comp.id, cat.id, prod.id)}
+                                                                                style={{
+                                                                                    width: '32px',
+                                                                                    height: '32px',
+                                                                                    borderRadius: '50%',
+                                                                                    border: '1px solid #fecaca',
+                                                                                    display: 'flex',
+                                                                                    alignItems: 'center',
+                                                                                    justifyContent: 'center',
+                                                                                    cursor: 'pointer',
+                                                                                    background: '#fff',
+                                                                                    transition: 'all 0.2s'
+                                                                                }}
+                                                                                onMouseOver={(e) => { e.currentTarget.style.background = '#fef2f2'; }}
+                                                                                onMouseOut={(e) => { e.currentTarget.style.background = '#fff'; }}
+                                                                            >
+                                                                                <Trash2 size={16} color="#ef4444" />
+                                                                            </div>
+                                                                            <div style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                                                                <ArrowUpDown size={20} color="#cbd5e1" />
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 ))}
                                                                 <button onClick={() => addMenuProduct(comp.id, cat.id)} style={{ background: '#fff', border: '1px solid #8b5cf6', color: '#8b5cf6', padding: '0.75rem 1.5rem', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '600', fontSize: '0.9rem', cursor: 'pointer', marginTop: '1rem' }}><Plus size={16} /> Add More Product</button>
+
+                                                                <input
+                                                                    type="file"
+                                                                    accept="image/*"
+                                                                    ref={menuImageInputRef}
+                                                                    onChange={handleMenuProductImageUpload}
+                                                                    style={{ display: 'none' }}
+                                                                />
                                                             </div>
                                                         )}
                                                     </div>
@@ -1589,6 +2028,9 @@ const CustomConfig = ({ config, onChange }) => {
                                 </div>
                             )}
                         </div>
+                        <div onClick={() => removeComponent(comp.id)} style={{ padding: '1rem 0', cursor: 'pointer', color: '#ef4444', flexShrink: 0 }}>
+                            <Trash2 size={20} />
+                        </div>
                     </div>
                 ))}
             </div>
@@ -1719,6 +2161,25 @@ const CustomConfig = ({ config, onChange }) => {
                                 <button onClick={handleModalSave} style={{ padding: '0.5rem 1.5rem', borderRadius: '6px', border: 'none', background: '#8b5cf6', color: '#fff', fontWeight: '500', cursor: 'pointer' }}>OK</button>
                             </div>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Logo Preview Modal */}
+            {isPreviewModalOpen && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10000,
+                    background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    padding: '2rem'
+                }} onClick={() => setIsPreviewModalOpen(false)}>
+                    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={e => e.stopPropagation()}>
+                        <button
+                            onClick={() => setIsPreviewModalOpen(false)}
+                            style={{ position: 'absolute', top: '-40px', right: '-40px', background: 'none', border: 'none', cursor: 'pointer', color: '#fff' }}
+                        >
+                            <X size={32} />
+                        </button>
+                        <img src={previewImage} alt="Logo Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '8px', boxShadow: '0 0 20px rgba(0,0,0,0.5)' }} />
                     </div>
                 </div>
             )}

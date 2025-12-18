@@ -409,8 +409,14 @@ const AppStoreConfig = ({ config, onChange }) => {
                                     onChange={(e) => updateConfig('businessInfo.titleColor', e.target.value)}
                                     style={{ width: '30px', height: '30px', padding: 0, border: 'none', background: 'none' }}
                                 />
-                                <select className="input" style={{ width: '80px', padding: '0.25rem' }}>
-                                    <option>Lato</option>
+                                <select
+                                    className="input"
+                                    style={{ width: '80px', padding: '0.25rem' }}
+                                    value={getValue('businessInfo.titleFont') || 'Lato'}
+                                    onChange={(e) => updateConfig('businessInfo.titleFont', e.target.value)}
+                                >
+                                    <option value="Lato">Lato</option>
+                                    <option value="Work Sans">Work Sans</option>
                                 </select>
                             </div>
                         </div>
@@ -433,8 +439,14 @@ const AppStoreConfig = ({ config, onChange }) => {
                                     onChange={(e) => updateConfig('businessInfo.subtitleColor', e.target.value)}
                                     style={{ width: '30px', height: '30px', padding: 0, border: 'none', background: 'none' }}
                                 />
-                                <select className="input" style={{ width: '80px', padding: '0.25rem' }}>
-                                    <option>Lato</option>
+                                <select
+                                    className="input"
+                                    style={{ width: '80px', padding: '0.25rem' }}
+                                    value={getValue('businessInfo.subtitleFont') || 'Lato'}
+                                    onChange={(e) => updateConfig('businessInfo.subtitleFont', e.target.value)}
+                                >
+                                    <option value="Lato">Lato</option>
+                                    <option value="Work Sans">Work Sans</option>
                                 </select>
                             </div>
                         </div>
@@ -457,14 +469,20 @@ const AppStoreConfig = ({ config, onChange }) => {
                                     onChange={(e) => updateConfig('businessInfo.ctaColor', e.target.value)}
                                     style={{ width: '30px', height: '30px', padding: 0, border: 'none', background: 'none' }}
                                 />
-                                <select className="input" style={{ width: '80px', padding: '0.25rem' }}>
-                                    <option>Lato</option>
+                                <select
+                                    className="input"
+                                    style={{ width: '80px', padding: '0.25rem' }}
+                                    value={getValue('businessInfo.ctaFont') || 'Lato'}
+                                    onChange={(e) => updateConfig('businessInfo.ctaFont', e.target.value)}
+                                >
+                                    <option value="Lato">Lato</option>
+                                    <option value="Work Sans">Work Sans</option>
                                 </select>
                             </div>
                         </div>
                         <input
                             className="input"
-                            value={getValue('businessInfo.cta')}
+                            value={getValue('businessInfo.cta') || 'DOWNLOAD NOW'}
                             onChange={(e) => updateConfig('businessInfo.cta', e.target.value)}
                             placeholder="Download Now"
                         />
@@ -487,7 +505,7 @@ const AppStoreConfig = ({ config, onChange }) => {
                         <label className="label">WEBSITE</label>
                         <input
                             className="input"
-                            value={getValue('businessInfo.website')}
+                            value={getValue('businessInfo.website') || 'https://www.techoid.com'}
                             onChange={(e) => updateConfig('businessInfo.website', e.target.value)}
                             placeholder="https://www.techoid.com"
                         />

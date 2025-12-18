@@ -14,6 +14,10 @@ const MenuConfig = ({ config, onChange }) => {
     // Sub-accordion state for Menu Categories
     const [openCategoryId, setOpenCategoryId] = useState('juices');
 
+    // Image Preview State
+    const [showImageModal, setShowImageModal] = useState(false);
+    const [isHoveringUpload, setIsHoveringUpload] = useState(false);
+
     const design = config.design || {};
     const businessInfo = config.businessInfo || {};
 
@@ -352,8 +356,32 @@ const MenuConfig = ({ config, onChange }) => {
 
                         {/* Display Uploaded Image if it's not one of the presets */}
                         {design.backgroundImage && !bgImages.find(img => img.url === design.backgroundImage) && (
-                            <div onClick={() => handleDesignSectionUpdate('backgroundImage', design.backgroundImage)} style={{ width: '80px', height: '80px', borderRadius: '4px', overflow: 'hidden', border: '2px solid #8b5cf6', position: 'relative', cursor: 'pointer' }}>
+                            <div
+                                onClick={() => setShowImageModal(true)}
+                                onMouseEnter={() => setIsHoveringUpload(true)}
+                                onMouseLeave={() => setIsHoveringUpload(false)}
+                                style={{ width: '80px', height: '80px', borderRadius: '4px', overflow: 'hidden', border: '2px solid #8b5cf6', position: 'relative', cursor: 'pointer' }}
+                            >
                                 <img src={design.backgroundImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+
+                                {/* Hover Effect */}
+                                {isHoveringUpload && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        background: 'rgba(0,0,0,0.5)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        zIndex: 10
+                                    }}>
+                                        <span style={{ color: '#fff', fontSize: '0.7rem', fontWeight: 'bold' }}>Preview</span>
+                                    </div>
+                                )}
+
                                 <div style={{
                                     position: 'absolute',
                                     top: '4px',
@@ -364,7 +392,8 @@ const MenuConfig = ({ config, onChange }) => {
                                     height: '20px',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    justifyContent: 'center'
+                                    justifyContent: 'center',
+                                    zIndex: 5
                                 }}>
                                     <Check size={12} color="#fff" strokeWidth={3} />
                                 </div>
@@ -403,9 +432,9 @@ const MenuConfig = ({ config, onChange }) => {
                 {isBasicInfoOpen && (
                     <div style={{ padding: '2rem' }}>
                         <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>RESTAURANT NAME*</label><input type="text" value={businessInfo.title || ''} onChange={e => handleBusinessInfoUpdate('title', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
-                        <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>TITLE*</label><input type="text" value={businessInfo.headline || ''} onChange={e => handleBusinessInfoUpdate('headline', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
+                        <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>TITLE*</label><input type="text" value={businessInfo.headline || 'DOWNLOAD NOW'} onChange={e => handleBusinessInfoUpdate('headline', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
                         <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>DESCRIPTION</label><textarea value={businessInfo.description || ''} onChange={e => handleBusinessInfoUpdate('description', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
-                        <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>WEBSITE*</label><input type="text" value={businessInfo.website || ''} onChange={e => handleBusinessInfoUpdate('website', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
+                        <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>WEBSITE*</label><input type="text" value={businessInfo.website || 'https://www.techoid.com'} onChange={e => handleBusinessInfoUpdate('website', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
                         <div style={{ marginBottom: '1.5rem' }}>
                             <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>CURRENCY</label>
                             <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
@@ -687,6 +716,55 @@ const MenuConfig = ({ config, onChange }) => {
                     )
                 }
             </div >
+
+            {/* Image Modal */}
+            {showImageModal && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    background: 'rgba(0,0,0,0.8)',
+                    zIndex: 9999,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '2rem'
+                }} onClick={() => setShowImageModal(false)}>
+                    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={e => e.stopPropagation()}>
+                        <div
+                            onClick={() => setShowImageModal(false)}
+                            style={{
+                                position: 'absolute',
+                                top: '-40px',
+                                right: '-40px',
+                                width: '36px',
+                                height: '36px',
+                                background: '#fff',
+                                borderRadius: '50%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                boxShadow: '0 2px 10px rgba(0,0,0,0.2)'
+                            }}
+                        >
+                            <X size={20} color="#1e293b" />
+                        </div>
+                        <img
+                            src={design.backgroundImage}
+                            alt="Preview"
+                            style={{
+                                maxWidth: '100%',
+                                maxHeight: '85vh',
+                                borderRadius: '8px',
+                                objectFit: 'contain'
+                            }}
+                        />
+                    </div>
+                </div>
+            )}
 
         </div >
     );

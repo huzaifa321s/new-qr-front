@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Phone, MapPin, Clock, Globe, Instagram, Facebook, Twitter, X, Copy, Mail, Linkedin, MessageCircle, Wifi, Armchair, Accessibility, Calendar, User, Heart, Briefcase, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Video, PenTool, Github, Send, Headphones, Pin, Bot, ChevronRight, Users, Baby, PawPrint, Plug, ParkingCircle, Bus, Car, Bed, Coffee, Martini, Utensils } from 'lucide-react';
+import { Phone, MapPin, Clock, Globe, Instagram, Facebook, Twitter, X, Copy, Mail, Linkedin, MessageCircle, Wifi, Armchair, Accessibility, Calendar, User, Heart, Briefcase, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Video, PenTool, Github, Send, Headphones, Pin, Bot, ChevronRight, Users, Baby, PawPrint, Plug, ParkingCircle, Bus, Car, Bed, Coffee, Martini, Utensils, Download, File } from 'lucide-react';
 import { FaWhatsapp, FaDiscord, FaTwitch, FaSnapchat, FaTiktok, FaSpotify, FaPinterest, FaTelegram, FaReddit, FaBehance, FaTumblr } from 'react-icons/fa';
 import { SiKick } from 'react-icons/si';
 
@@ -377,35 +377,72 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     case 'pdf':
                                         if (!comp.data.url) return null;
                                         return (
-                                            <div key={comp.id} style={{ marginBottom: '1rem' }}>
-                                                <a href={comp.data.url} target="_blank" rel="noopener noreferrer" style={{
+                                            <div key={comp.id} style={{
+                                                marginBottom: '1.5rem',
+                                                borderRadius: '12px',
+                                                overflow: 'hidden',
+                                                border: '1px solid #e2e8f0',
+                                                boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                                                background: '#fff'
+                                            }}>
+                                                {/* PDF Preview Area */}
+                                                <div style={{
+                                                    height: '250px',
+                                                    width: '100%',
+                                                    overflow: 'auto',
+                                                    position: 'relative',
+                                                    background: '#f8fafc'
+                                                }}>
+                                                    <iframe
+                                                        src={comp.data.url}
+                                                        style={{
+                                                            width: '100%',
+                                                            height: '100%',
+                                                            border: 'none',
+                                                            display: 'block'
+                                                        }}
+                                                        title="PDF Preview"
+                                                    />
+                                                </div>
+                                                {/* Bottom info section */}
+                                                <div style={{
+                                                    padding: '0.75rem 1rem',
                                                     display: 'flex',
+                                                    justifyContent: 'space-between',
                                                     alignItems: 'center',
-                                                    gap: '1rem',
-                                                    padding: '1rem',
-                                                    background: '#f8fafc',
-                                                    border: '1px solid #e2e8f0',
-                                                    borderRadius: '8px',
-                                                    textDecoration: 'none',
-                                                    color: '#1e293b'
+                                                    background: '#fff'
                                                 }}>
                                                     <div style={{
-                                                        width: '40px',
-                                                        height: '40px',
-                                                        background: '#ef4444',
-                                                        borderRadius: '8px',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        color: '#fff',
-                                                        fontWeight: 'bold',
-                                                        fontSize: '0.8rem'
-                                                    }}>PDF</div>
-                                                    <div style={{ flex: 1, overflow: 'hidden' }}>
-                                                        <div style={{ fontWeight: '600', fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{comp.data.fileName}</div>
-                                                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Click to view</div>
+                                                        fontWeight: '700',
+                                                        fontSize: '1rem',
+                                                        color: '#1e293b',
+                                                        whiteSpace: 'nowrap',
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        maxWidth: '85%'
+                                                    }}>
+                                                        {comp.data.fileName || 'Qr Insight Presentation'}
                                                     </div>
-                                                </a>
+                                                    <a
+                                                        href={comp.data.url}
+                                                        download={comp.data.fileName}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        style={{
+                                                            color: '#475569',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            transition: 'color 0.2s',
+                                                            padding: '4px',
+                                                            textDecoration: 'none'
+                                                        }}
+                                                        onMouseOver={(e) => e.currentTarget.style.color = '#1e293b'}
+                                                        onMouseOut={(e) => e.currentTarget.style.color = '#475569'}
+                                                    >
+                                                        <Download size={20} strokeWidth={2} />
+                                                    </a>
+                                                </div>
                                             </div>
                                         );
                                     case 'menu':
@@ -465,7 +502,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                                 <div style={{ flex: 1 }}>
                                                                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
                                                                         <span style={{ fontWeight: '600', fontSize: '0.9rem', color: '#1e293b' }}>{prod.name}</span>
-                                                                        <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#8b5cf6' }}>{businessInfo?.currency || '$'}{prod.price}</span>
+                                                                        <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#8b5cf6' }}>
+                                                                            {comp.data.currency === 'PKR' ? 'Rs.' : (comp.data.currency === 'USD' ? '$' : (businessInfo?.currency || '$'))}
+                                                                            {prod.price}
+                                                                        </span>
                                                                     </div>
                                                                     <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>{prod.description}</p>
                                                                 </div>
@@ -746,11 +786,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                     </h3>
                                                     <div style={{
                                                         display: 'flex',
+                                                        flexWrap: 'wrap',
+                                                        justifyContent: 'center',
                                                         gap: '1.5rem',
-                                                        overflowX: 'auto',
-                                                        paddingLeft: '1rem',
-                                                        paddingRight: '1rem',
-                                                        paddingBottom: '0.5rem'
+                                                        padding: '0 1rem 1rem'
                                                     }}>
                                                         {comp.data.selectedFacilities.map((facilityName) => (
                                                             <div key={facilityName} style={{
@@ -822,9 +861,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     <div key={comp.id} style={{ marginBottom: '1.5rem' }}>
                                         <div style={{
                                             background: comp.data.bgColor || '#0B2D86',
-                                            borderRadius: '0 0 50% 50% / 0 0 30% 30%',
-                                            padding: '2rem 1.5rem 3rem',
-                                            textAlign: 'center'
+                                            borderRadius: '50% 50% 12px 12px / 25px 25px 0 0',
+                                            padding: '2rem 1.5rem',
+                                            textAlign: 'center',
+                                            marginTop: '2rem'
                                         }}>
                                             <h3 style={{
                                                 color: comp.data.textColor || '#FFFFFF',
@@ -890,36 +930,43 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                 <div style={{ height: '100%', overflowY: 'auto', background: '#fff' }}>
                     {/* Header with Curve */}
-                    <div style={{
-                        height: '140px',
-                        background: headerColor,
-                        borderBottomLeftRadius: '50% 20%',
-                        borderBottomRightRadius: '50% 20%',
-                        position: 'relative',
-                        marginBottom: (design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop') ? '60px' : '2rem'
-                    }}>
-                        {/* Profile Image */}
-                        {(design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop') && (
+                    {(() => {
+                        const isLogoRemoved = design?.logo?.url === null || design?.logo?.url === '';
+                        const logoSource = isLogoRemoved ? null : (design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop');
+
+                        return (
                             <div style={{
-                                width: '110px',
-                                height: '110px',
-                                borderRadius: (design?.pictureFrame === 'rectangular' || design?.profile?.shape === 'rectangular') ? '12px' : '50%',
-                                background: '#fff',
-                                padding: '3px',
-                                position: 'absolute',
-                                bottom: '-55px',
-                                left: '50%',
-                                transform: 'translateX(-50%)',
-                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                height: '140px',
+                                background: headerColor,
+                                borderBottomLeftRadius: '50% 20%',
+                                borderBottomRightRadius: '50% 20%',
+                                position: 'relative',
+                                marginBottom: logoSource ? '60px' : '2rem'
                             }}>
-                                <img
-                                    src={design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop'}
-                                    alt="Profile"
-                                    style={{ width: '100%', height: '100%', borderRadius: (design?.pictureFrame === 'rectangular' || design?.profile?.shape === 'rectangular') ? '12px' : '50%', objectFit: 'cover' }}
-                                />
+                                {/* Profile Image */}
+                                {logoSource && (
+                                    <div style={{
+                                        width: '110px',
+                                        height: '110px',
+                                        borderRadius: (design?.pictureFrame === 'rectangular' || design?.profile?.shape === 'rectangular') ? '12px' : '50%',
+                                        background: '#fff',
+                                        padding: '3px',
+                                        position: 'absolute',
+                                        bottom: '-55px',
+                                        left: '50%',
+                                        transform: 'translateX(-50%)',
+                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                    }}>
+                                        <img
+                                            src={logoSource}
+                                            alt="Profile"
+                                            style={{ width: '100%', height: '100%', borderRadius: (design?.pictureFrame === 'rectangular' || design?.profile?.shape === 'rectangular') ? '12px' : '50%', objectFit: 'cover' }}
+                                        />
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
+                        );
+                    })()}
 
                     {/* Name and Title */}
                     <div style={{ textAlign: 'center', padding: '0 1rem', marginBottom: '1rem' }}>
@@ -2719,9 +2766,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     </div>
 
                     {/* Hero Image */}
-                    <div style={{ width: '100%', height: '200px' }}>
-                        <img src={design?.heroImage || 'https://via.placeholder.com/400x200'} alt="Hero" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    </div>
+                    {design?.heroImage && (
+                        <div style={{ width: '100%', height: '200px' }}>
+                            <img src={design.heroImage} alt="Hero" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        </div>
+                    )}
 
                     {/* Tagline Section */}
                     <div style={{ background: headerColor, padding: '1.5rem', color: '#fff' }}>
@@ -3122,12 +3171,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             marginBottom: design?.profile?.url ? '60px' : '2rem'
                         }}>
                             {/* Profile Image */}
-                            {/* Profile Image */}
                             {design?.profile?.url && (
                                 <div style={{
                                     width: '110px',
                                     height: '110px',
-                                    borderRadius: '50%',
+                                    borderRadius: design?.profile?.shape === 'rectangular' ? '12px' : '50%',
                                     background: '#fff',
                                     padding: '3px',
                                     position: 'absolute',
@@ -3139,7 +3187,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     <img
                                         src={design.profile.url}
                                         alt="Profile"
-                                        style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                                        style={{ width: '100%', height: '100%', borderRadius: design?.profile?.shape === 'rectangular' ? '12px' : '50%', objectFit: 'cover' }}
                                     />
                                 </div>
                             )}
@@ -3147,11 +3195,23 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                         {/* Name and Title */}
                         <div style={{ textAlign: 'center', padding: '0 1rem', marginBottom: '1.5rem' }}>
-                            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1e293b', margin: '0 0 0.5rem 0', textTransform: 'uppercase' }}>
+                            <h2 style={{
+                                fontSize: '1.5rem',
+                                fontWeight: 'bold',
+                                color: personalInfo?.nameColor || '#1e293b',
+                                margin: '0 0 0.5rem 0',
+                                textTransform: 'uppercase',
+                                fontFamily: personalInfo?.nameFont || 'Lato'
+                            }}>
                                 {personalInfo?.name}
                             </h2>
-                            <p style={{ fontSize: '0.95rem', color: '#64748b', margin: 0 }}>
-                                {personalInfo?.title} <span style={{ color: headerColor }}>at</span> {personalInfo?.company}
+                            <p style={{
+                                fontSize: '0.95rem',
+                                color: personalInfo?.titleColor || '#64748b',
+                                margin: 0,
+                                fontFamily: personalInfo?.titleFont || 'Lato'
+                            }}>
+                                {personalInfo?.title} <span style={{ color: headerColor }}>at</span> <span style={{ color: personalInfo?.companyColor || '#64748b', fontFamily: personalInfo?.companyFont || 'Lato' }}>{personalInfo?.company}</span>
                             </p>
                         </div>
 
@@ -3363,7 +3423,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     <img src={design.logo.url} alt="Logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                                 </div>
                             )}
-                            <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0, color: businessInfo?.titleColor || '#fff' }}>{businessInfo?.title}</h2>
+                            <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0, color: businessInfo?.titleColor || '#fff', fontFamily: businessInfo?.titleFont || 'Lato' }}>{businessInfo?.title}</h2>
                         </div>
 
                         {/* Hero Image */}
@@ -3375,7 +3435,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                         {/* Title Section */}
                         <div style={{ padding: '1.5rem 1rem', textAlign: 'center' }}>
-                            <h1 style={{ color: coupon?.titleColor || '#fff', fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>{coupon?.title}</h1>
+                            <h1 style={{ color: coupon?.titleColor || '#fff', fontSize: '2rem', fontWeight: 'bold', margin: 0, fontFamily: coupon?.titleFont || 'Lato' }}>{coupon?.title}</h1>
                         </div>
 
                         {/* Coupon Card */}
@@ -3433,7 +3493,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         cursor: 'pointer'
                                     }}
                                 >
-                                    Redeem Now
+                                    {coupon?.buttonTitle || 'Redeem Now'}
                                 </button>
                             </div>
                         </div>
@@ -3443,7 +3503,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
                         {/* Header */}
                         <div style={{ padding: '3rem 1rem 1rem', textAlign: 'center' }}>
-                            <h2 style={{ color: businessInfo?.titleColor || '#fff', fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>{businessInfo?.title}</h2>
+                            <h2 style={{ color: businessInfo?.titleColor || '#fff', fontSize: '1.5rem', fontWeight: 'bold', margin: 0, fontFamily: businessInfo?.titleFont || 'Lato' }}>{businessInfo?.title}</h2>
                         </div>
 
                         {/* Modal Card */}
@@ -3512,19 +3572,33 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     Copy Code
                                 </button>
 
-                                <button style={{
-                                    width: '100%',
-                                    background: primaryColor,
-                                    border: 'none',
-                                    color: '#fff',
-                                    padding: '1rem',
-                                    borderRadius: '8px',
-                                    fontSize: '1rem',
-                                    fontWeight: 'bold',
-                                    cursor: 'pointer'
-                                }}>
-                                    Redeem Now
+                                <button
+                                    onClick={() => coupon?.callToAction && window.open(coupon.callToAction, '_blank')}
+                                    style={{
+                                        width: '100%',
+                                        background: primaryColor,
+                                        border: 'none',
+                                        color: '#fff',
+                                        padding: '1rem',
+                                        borderRadius: '8px',
+                                        fontSize: '1rem',
+                                        fontWeight: 'bold',
+                                        cursor: 'pointer'
+                                    }}>
+                                    {coupon?.buttonTitle || 'Redeem Now'}
                                 </button>
+                                {coupon?.terms && (
+                                    <div style={{
+                                        marginTop: '1.5rem',
+                                        fontSize: '0.75rem',
+                                        color: '#64748b',
+                                        textAlign: 'center',
+                                        fontStyle: 'italic',
+                                        padding: '0 1rem'
+                                    }}>
+                                        {coupon.terms}
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -4294,7 +4368,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     if (type === 'multiple-links') {
         const headerBg = design?.color?.header || '#4db8a8';
         const footerBg = design?.color?.light || '#3730a3';
-        const logoUrl = design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop';
+        const isLogoRemoved = design?.logo?.url === null || design?.logo?.url === '';
+        const logoSource = isLogoRemoved ? null : (design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop');
 
         return (
             <div style={{
@@ -4325,7 +4400,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         position: 'relative'
                     }}>
                         {/* Logo/Icon */}
-                        {logoUrl && (
+                        {logoSource && (
                             <div style={{
                                 width: '80px',
                                 height: '80px',
@@ -4339,7 +4414,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 overflow: 'hidden'
                             }}>
                                 <img
-                                    src={logoUrl}
+                                    src={logoSource}
                                     alt="Logo"
                                     style={{
                                         width: '100%',
@@ -4675,7 +4750,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     if (type === 'event') {
         const primaryColor = design?.color?.header || '#0d9488';
         const secondaryColor = design?.color?.light || '#0d9488';
-        const headerImageUrl = design?.headerImage?.url || 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&h=150&fit=crop';
+        const isHeaderImageRemoved = design?.headerImage?.url === null || design?.headerImage?.url === '';
+        const headerImageSource = isHeaderImageRemoved ? null : (design?.headerImage?.url || 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&h=150&fit=crop');
 
         // Basic Info
         const companyName = config.businessInfo?.companyName || 'Sterling & Co.';
@@ -4688,7 +4764,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
         const description = config.businessInfo?.description || 'We aim to provide fresh and healthy snacks people on the go.';
 
-        const logoUrl = design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop';
+        const isLogoRemoved = design?.logo?.url === null || design?.logo?.url === '';
+        const logoSource = isLogoRemoved ? null : (design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop');
 
         // Helper to format date
         const formatEventDate = (dateLocal) => {
@@ -4775,7 +4852,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         }}>
                             {companyName}
                         </div>
-                        {logoUrl && (
+                        {logoSource && (
                             <div style={{
                                 width: '40px',
                                 height: '40px',
@@ -4786,26 +4863,28 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}>
-                                <img src={logoUrl} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '50%' }} />
+                                <img src={logoSource} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '50%' }} />
                             </div>
                         )}
                     </div>
 
                     {/* Event Image */}
-                    <div style={{
-                        height: '140px',
-                        overflow: 'hidden'
-                    }}>
-                        <img
-                            src={headerImageUrl}
-                            alt="Event"
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover'
-                            }}
-                        />
-                    </div>
+                    {headerImageSource && (
+                        <div style={{
+                            height: '140px',
+                            overflow: 'hidden'
+                        }}>
+                            <img
+                                src={headerImageSource}
+                                alt="Event"
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover'
+                                }}
+                            />
+                        </div>
+                    )}
 
                     {/* Event Header - Teal */}
                     <div style={{
@@ -6012,10 +6091,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             </div>
                         )}
                         <div style={{ marginTop: '10px' }}>
-                            <h2 style={{ margin: '0', fontSize: '1.5rem', fontWeight: '800', color: personalInfo?.nameColor || businessInfo?.titleColor || '#fff' }}>
+                            <h2 style={{
+                                margin: '0',
+                                fontSize: '1.5rem',
+                                fontWeight: '800',
+                                color: personalInfo?.nameColor || businessInfo?.titleColor || '#fff',
+                                fontFamily: businessInfo?.titleFont || 'Lato'
+                            }}>
                                 {personalInfo?.name || businessInfo?.title}
                             </h2>
-                            <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.9rem', opacity: 0.8 }}>
+                            <p style={{
+                                margin: '0.25rem 0 0 0',
+                                fontSize: '0.9rem',
+                                opacity: 0.8,
+                                fontFamily: businessInfo?.subtitleFont || 'Lato'
+                            }}>
                                 <span style={{ color: businessInfo?.subtitleColor || '#fff' }}>
                                     {businessInfo?.subtitle || 'Technician name'}
                                 </span>
@@ -6024,7 +6114,13 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     </div>
 
                     <div style={{ marginTop: design?.logo?.url ? '80px' : '2rem', textAlign: 'center', padding: '0 1.5rem' }}>
-                        <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.25rem', fontWeight: '800', color: businessInfo?.ctaColor || '#1e293b' }}>DOWNLOAD NOW</h3>
+                        <h3 style={{
+                            margin: '0 0 0.5rem 0',
+                            fontSize: '1.25rem',
+                            fontWeight: '800',
+                            color: businessInfo?.ctaColor || '#1e293b',
+                            fontFamily: businessInfo?.ctaFont || 'Lato'
+                        }}>DOWNLOAD NOW</h3>
                         <p style={{ fontSize: '0.9rem', color: '#64748b', lineHeight: '1.5', margin: 0 }}>
                             {businessInfo?.description}
                         </p>
@@ -6319,7 +6415,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         // Priority: heroImage (from config) -> backgroundImage (legacy) -> businessInfo -> Default
                         // explicitly check for empty string or null (user removed image)
 
-                        const isRemoved = design?.heroImage === '' || design?.heroImage === null;
+                        const isRemoved = (design?.heroImage === '' || design?.heroImage === null) || (design?.backgroundImage === '' || design?.backgroundImage === null);
                         const imageSource = isRemoved ? null : (design?.heroImage || design?.backgroundImage || businessInfo?.coverImage || businessInfo?.image || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=500&fit=crop');
 
                         return (

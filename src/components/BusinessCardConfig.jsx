@@ -265,21 +265,31 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.75rem',
-                                        height: '44px',
-                                        cursor: 'pointer'
-                                    }}>
-                                        <span style={{ fontSize: '0.9rem', color: '#000' }}>
-                                            {personalInfo.nameFont || 'Lato'}
-                                        </span>
-                                        <ChevronDown size={14} color="#94a3b8" />
-                                    </div>
+                                    <select
+                                        value={personalInfo.nameFont || 'Lato'}
+                                        onChange={(e) => handlePersonalInfoUpdate('nameFont', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            height: '44px',
+                                            cursor: 'pointer',
+                                            appearance: 'none',
+                                            backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E")',
+                                            backgroundRepeat: 'no-repeat',
+                                            backgroundPosition: 'right 0.75rem center',
+                                            backgroundSize: '1rem'
+                                        }}
+                                    >
+                                        <option value="Lato">Lato</option>
+                                        <option value="Inter">Inter</option>
+                                        <option value="Roboto">Roboto</option>
+                                        <option value="Open Sans">Open Sans</option>
+                                        <option value="Work Sans">Work Sans</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -389,21 +399,31 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.75rem',
-                                        height: '44px',
-                                        cursor: 'pointer'
-                                    }}>
-                                        <span style={{ fontSize: '0.9rem', color: '#000' }}>
-                                            {personalInfo.titleFont || 'Lato'}
-                                        </span>
-                                        <ChevronDown size={14} color="#94a3b8" />
-                                    </div>
+                                    <select
+                                        value={personalInfo.titleFont || 'Lato'}
+                                        onChange={(e) => handlePersonalInfoUpdate('titleFont', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            height: '44px',
+                                            cursor: 'pointer',
+                                            appearance: 'none',
+                                            backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E")',
+                                            backgroundRepeat: 'no-repeat',
+                                            backgroundPosition: 'right 0.75rem center',
+                                            backgroundSize: '1rem'
+                                        }}
+                                    >
+                                        <option value="Lato">Lato</option>
+                                        <option value="Inter">Inter</option>
+                                        <option value="Roboto">Roboto</option>
+                                        <option value="Open Sans">Open Sans</option>
+                                        <option value="Work Sans">Work Sans</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -490,21 +510,31 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.75rem',
-                                        height: '44px',
-                                        cursor: 'pointer'
-                                    }}>
-                                        <span style={{ fontSize: '0.9rem', color: '#000' }}>
-                                            {personalInfo.companyFont || 'Lato'}
-                                        </span>
-                                        <ChevronDown size={14} color="#94a3b8" />
-                                    </div>
+                                    <select
+                                        value={personalInfo.companyFont || 'Lato'}
+                                        onChange={(e) => handlePersonalInfoUpdate('companyFont', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            height: '44px',
+                                            cursor: 'pointer',
+                                            appearance: 'none',
+                                            backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E")',
+                                            backgroundRepeat: 'no-repeat',
+                                            backgroundPosition: 'right 0.75rem center',
+                                            backgroundSize: '1rem'
+                                        }}
+                                    >
+                                        <option value="Lato">Lato</option>
+                                        <option value="Inter">Inter</option>
+                                        <option value="Roboto">Roboto</option>
+                                        <option value="Open Sans">Open Sans</option>
+                                        <option value="Work Sans">Work Sans</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
