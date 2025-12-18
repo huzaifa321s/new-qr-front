@@ -275,16 +275,17 @@ const EventConfig = ({ config, onChange }) => {
     };
 
     const socialPlatforms = [
-        { id: 'facebook', icon: Facebook, color: '#1877F2' },
-        { id: 'instagram', icon: Instagram, color: '#E4405F' },
-        { id: 'twitter', icon: Twitter, color: '#1DA1F2' }, // X
-        { id: 'linkedin', icon: Linkedin, color: '#0A66C2' },
-        { id: 'youtube', icon: Youtube, color: '#FF0000' },
-        { id: 'twitch', icon: Twitch, color: '#9146FF' },
-        { id: 'whatsapp', icon: MessageCircle, color: '#25D366' },
-        { id: 'spotify', icon: Music, color: '#1DB954' },
-        { id: 'telegram', icon: Send, color: '#0088cc' },
-        { id: 'website', icon: Globe, color: '#4b5563' }
+        { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2' },
+        { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
+        { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#1DA1F2' },
+        { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
+        { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
+        { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
+        { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00' },
+        { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
+        { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954' },
+        { id: 'telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC' },
+        { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563' }
     ];
 
     const getSocialIcon = (platform) => {
@@ -1346,7 +1347,20 @@ const EventConfig = ({ config, onChange }) => {
                                                 justifyContent: 'center',
                                                 flexShrink: 0
                                             }}>
-                                                <Icon size={24} color="#fff" />
+                                                {typeof Icon === 'string' ? (
+                                                    <img
+                                                        src={Icon}
+                                                        alt=""
+                                                        style={{
+                                                            width: '24px',
+                                                            height: '24px',
+                                                            objectFit: 'contain',
+                                                            filter: platform.id === 'snapchat' || platform.color === '#fffc00' ? 'none' : 'brightness(0) invert(1)'
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <Icon size={24} color="#fff" />
+                                                )}
                                             </div>
 
                                             {/* Input */}
@@ -1418,7 +1432,20 @@ const EventConfig = ({ config, onChange }) => {
                                             }}
                                             title={platform.id}
                                         >
-                                            <Icon size={20} color={isAdded ? '#94a3b8' : '#fff'} />
+                                            {typeof Icon === 'string' ? (
+                                                <img
+                                                    src={Icon}
+                                                    alt=""
+                                                    style={{
+                                                        width: '20px',
+                                                        height: '20px',
+                                                        objectFit: 'contain',
+                                                        filter: isAdded ? 'none' : (platform.id === 'snapchat' || platform.color === '#fffc00' ? 'none' : 'brightness(0) invert(1)')
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Icon size={20} color={isAdded ? '#94a3b8' : '#fff'} />
+                                            )}
                                         </div>
                                     );
                                 })}

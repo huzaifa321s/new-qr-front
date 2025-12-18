@@ -39,12 +39,42 @@ const ReviewsConfig = ({ config, onChange }) => {
         });
     };
 
+    const handleColorUpdate = (colorKey, value) => {
+        onChange(prev => ({
+            ...prev,
+            design: {
+                ...prev.design,
+                color: { ...prev.design.color, [colorKey]: value }
+            }
+        }));
+    };
+
+    const handleColorPaletteClick = (primary, secondary) => {
+        onChange(prev => ({
+            ...prev,
+            design: {
+                ...prev.design,
+                color: { header: primary, dark: primary, light: secondary }
+            }
+        }));
+    };
+
     const handleHeaderImageUpdate = (url) => {
         onChange(prev => ({
             ...prev,
             design: {
                 ...prev.design,
                 headerImage: { url }
+            }
+        }));
+    };
+
+    const handleLogoUpdate = (url) => {
+        onChange(prev => ({
+            ...prev,
+            design: {
+                ...prev.design,
+                logo: { url }
             }
         }));
     };

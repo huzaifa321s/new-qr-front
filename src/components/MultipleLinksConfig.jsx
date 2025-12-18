@@ -90,17 +90,17 @@ const MultipleLinksConfig = ({ config, onChange }) => {
     };
 
     const socialPlatforms = [
-        { id: 'facebook', icon: Facebook, color: '#1877F2', name: 'Facebook' },
-        { id: 'instagram', icon: Instagram, color: '#E4405F', name: 'Instagram' },
-        { id: 'twitter', icon: Twitter, color: '#000000', name: 'X' },
-        { id: 'linkedin', icon: Linkedin, color: '#0A66C2', name: 'LinkedIn' },
-        { id: 'discord', icon: Globe, color: '#5865F2', name: 'Discord' }, // Lucide doesn't have Discord, using Globe as placeholder or similar
-        { id: 'youtube', icon: Youtube, color: '#FF0000', name: 'YouTube' },
-        { id: 'whatsapp', icon: Globe, color: '#25D366', name: 'WhatsApp' }, // Placeholder icon
-        { id: 'snapchat', icon: Globe, color: '#FFFC00', name: 'Snapchat' }, // Placeholder icon
-        { id: 'tiktok', icon: Globe, color: '#000000', name: 'TikTok' }, // Placeholder icon
-        { id: 'spotify', icon: Globe, color: '#1DB954', name: 'Spotify' }, // Placeholder icon
-        { id: 'website', icon: Globe, color: '#2B1E99', name: 'Website' }
+        { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2', name: 'Facebook' },
+        { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', name: 'Instagram' },
+        { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#1DA1F2', name: 'X (Twitter)' },
+        { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2', name: 'LinkedIn' },
+        { id: 'discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2', name: 'Discord' },
+        { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000', name: 'YouTube' },
+        { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366', name: 'WhatsApp' },
+        { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00', name: 'Snapchat' },
+        { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000', name: 'TikTok' },
+        { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954', name: 'Spotify' },
+        { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' }
     ];
 
 
@@ -469,7 +469,20 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                                 borderRight: '1px solid #1e293b',
                                                 background: platform.color
                                             }}>
-                                                <Icon size={20} color="#fff" />
+                                                {typeof Icon === 'string' ? (
+                                                    <img
+                                                        src={Icon}
+                                                        alt=""
+                                                        style={{
+                                                            width: '20px',
+                                                            height: '20px',
+                                                            objectFit: 'contain',
+                                                            filter: platform.id === 'snapchat' || platform.color === '#fffc00' ? 'none' : 'brightness(0) invert(1)'
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <Icon size={20} color="#fff" />
+                                                )}
                                             </div>
                                             <input
                                                 type="text"
@@ -541,7 +554,20 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                             }}
                                             title={platform.name}
                                         >
-                                            <Icon size={20} color="#fff" />
+                                            {typeof Icon === 'string' ? (
+                                                <img
+                                                    src={Icon}
+                                                    alt=""
+                                                    style={{
+                                                        width: '20px',
+                                                        height: '20px',
+                                                        objectFit: 'contain',
+                                                        filter: platform.id === 'snapchat' || platform.color === '#fffc00' ? 'none' : 'brightness(0) invert(1)'
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Icon size={20} color="#fff" />
+                                            )}
                                         </div>
                                     );
                                 })}

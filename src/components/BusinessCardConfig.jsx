@@ -3,6 +3,27 @@ import { useState } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const BusinessCardConfig = ({ config, onChange }) => {
+    const socialPlatforms = [
+        { id: 'facebook', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2' },
+        { id: 'instagram', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
+        { id: 'twitter', name: 'X', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000' },
+        { id: 'linkedin', name: 'LinkedIn', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
+        { id: 'discord', name: 'Discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2' },
+        { id: 'youtube', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
+        { id: 'whatsapp', name: 'WhatsApp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
+        { id: 'snapchat', name: 'Snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00' },
+        { id: 'tiktok', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
+        { id: 'spotify', name: 'Spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954' },
+        { id: 'dribbble', name: 'Dribbble', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111388.png', color: '#EA4C89' },
+        { id: 'pinterest', name: 'Pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C' },
+        { id: 'telegram', name: 'Telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC' },
+        { id: 'reddit', name: 'Reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500' },
+        { id: 'website', name: 'Website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563' },
+        { id: 'behance', name: 'Behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF' },
+        { id: 'twitch', name: 'Twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF' },
+        { id: 'line', name: 'Line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900' }
+    ];
+
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isContactOpen, setIsContactOpen] = useState(false);
@@ -116,6 +137,69 @@ const BusinessCardConfig = ({ config, onChange }) => {
     const deleteSocialField = (field) => {
         handleSocialUpdate(field, '');
     };
+
+    // Custom Fields Handlers
+    const handleAddCustomField = () => {
+        const customFields = exchange.customFields || [];
+        const newField = {
+            id: Date.now(),
+            type: 'text',
+            label: '',
+            options: []
+        };
+        handleExchangeUpdate('customFields', [...customFields, newField]);
+    };
+
+    const handleCustomFieldUpdate = (id, key, value) => {
+        const customFields = exchange.customFields || [];
+        const updatedFields = customFields.map(field =>
+            field.id === id ? { ...field, [key]: value } : field
+        );
+        handleExchangeUpdate('customFields', updatedFields);
+    };
+
+    const handleDeleteCustomField = (id) => {
+        const customFields = exchange.customFields || [];
+        const updatedFields = customFields.filter(field => field.id !== id);
+        handleExchangeUpdate('customFields', updatedFields);
+    };
+
+    const handleAddOption = (fieldId) => {
+        const customFields = exchange.customFields || [];
+        const updatedFields = customFields.map(field => {
+            if (field.id === fieldId) {
+                return { ...field, options: [...(field.options || []), ''] };
+            }
+            return field;
+        });
+        handleExchangeUpdate('customFields', updatedFields);
+    };
+
+    const handleDeleteOption = (fieldId, optionIndex) => {
+        const customFields = exchange.customFields || [];
+        const updatedFields = customFields.map(field => {
+            if (field.id === fieldId) {
+                const newOptions = field.options.filter((_, idx) => idx !== optionIndex);
+                return { ...field, options: newOptions };
+            }
+            return field;
+        });
+        handleExchangeUpdate('customFields', updatedFields);
+    };
+
+    const handleOptionUpdate = (fieldId, optionIndex, value) => {
+        const customFields = exchange.customFields || [];
+        const updatedFields = customFields.map(field => {
+            if (field.id === fieldId) {
+                const newOptions = [...(field.options || [])];
+                newOptions[optionIndex] = value;
+                return { ...field, options: newOptions };
+            }
+            return field;
+        });
+        handleExchangeUpdate('customFields', updatedFields);
+    };
+
 
     const palettes = [
         { p: '#0B2D86', s: '#FFA800' },
@@ -1858,82 +1942,36 @@ const BusinessCardConfig = ({ config, onChange }) => {
 
                             {/* Social Media Icons Grid */}
                             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                                {/* Facebook */}
-                                <div onClick={() => handleSocialUpdate('facebook', ' ')} style={{ width: '40px', height: '40px', background: '#1877F2', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '20px', fontWeight: 'bold' }}>f</span>
-                                </div>
-                                {/* Instagram */}
-                                <div onClick={() => handleSocialUpdate('instagram', ' ')} style={{ width: '40px', height: '40px', background: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '20px', fontWeight: 'bold' }}>📷</span>
-                                </div>
-                                {/* X (Twitter) */}
-                                <div onClick={() => handleSocialUpdate('twitter', ' ')} style={{ width: '40px', height: '40px', background: '#000', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>𝕏</span>
-                                </div>
-                                {/* LinkedIn */}
-                                <div onClick={() => handleSocialUpdate('linkedin', ' ')} style={{ width: '40px', height: '40px', background: '#0A66C2', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>in</span>
-                                </div>
-                                {/* Discord */}
-                                <div onClick={() => handleSocialUpdate('discord', ' ')} style={{ width: '40px', height: '40px', background: '#5865F2', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '18px' }}>💬</span>
-                                </div>
-                                {/* Twitch */}
-                                <div onClick={() => handleSocialUpdate('twitch', ' ')} style={{ width: '40px', height: '40px', background: '#9146FF', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '18px' }}>📺</span>
-                                </div>
-                                {/* Line */}
-                                <div onClick={() => handleSocialUpdate('line', ' ')} style={{ width: '40px', height: '40px', background: '#00B900', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>💬</span>
-                                </div>
-                                {/* YouTube */}
-                                <div onClick={() => handleSocialUpdate('youtube', ' ')} style={{ width: '40px', height: '40px', background: '#FF0000', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '18px' }}>▶</span>
-                                </div>
-                                {/* WhatsApp */}
-                                <div onClick={() => handleSocialUpdate('whatsapp', ' ')} style={{ width: '40px', height: '40px', background: '#25D366', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <Phone size={20} color="#fff" />
-                                </div>
-                                {/* Snapchat */}
-                                <div onClick={() => handleSocialUpdate('snapchat', ' ')} style={{ width: '40px', height: '40px', background: '#FFFC00', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ fontSize: '20px' }}>👻</span>
-                                </div>
-                                {/* TikTok */}
-                                <div onClick={() => handleSocialUpdate('tiktok', ' ')} style={{ width: '40px', height: '40px', background: '#000', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '20px' }}>♪</span>
-                                </div>
-                                {/* Tumblr */}
-                                <div onClick={() => handleSocialUpdate('tumblr', ' ')} style={{ width: '40px', height: '40px', background: '#35465C', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>t</span>
-                                </div>
-                                {/* Spotify */}
-                                <div onClick={() => handleSocialUpdate('spotify', ' ')} style={{ width: '40px', height: '40px', background: '#1DB954', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '18px' }}>🎵</span>
-                                </div>
-                                {/* Dribbble */}
-                                <div onClick={() => handleSocialUpdate('dribbble', ' ')} style={{ width: '40px', height: '40px', background: '#EA4C89', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '18px' }}>🏀</span>
-                                </div>
-                                {/* Pinterest */}
-                                <div onClick={() => handleSocialUpdate('pinterest', ' ')} style={{ width: '40px', height: '40px', background: '#E60023', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>P</span>
-                                </div>
-                                {/* Telegram */}
-                                <div onClick={() => handleSocialUpdate('telegram', ' ')} style={{ width: '40px', height: '40px', background: '#0088cc', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '18px' }}>✈️</span>
-                                </div>
-                                {/* Behance */}
-                                <div onClick={() => handleSocialUpdate('behance', ' ')} style={{ width: '40px', height: '40px', background: '#1769FF', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>Be</span>
-                                </div>
-                                {/* Reddit */}
-                                <div onClick={() => handleSocialUpdate('reddit', ' ')} style={{ width: '40px', height: '40px', background: '#FF4500', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <span style={{ color: '#fff', fontSize: '18px' }}>👽</span>
-                                </div>
-                                {/* Website */}
-                                <div onClick={() => handleSocialUpdate('website', ' ')} style={{ width: '40px', height: '40px', background: '#6366f1', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                    <Globe size={20} color="#fff" />
-                                </div>
+                                {socialPlatforms.map((platform) => (
+                                    <div
+                                        key={platform.id}
+                                        onClick={() => handleSocialUpdate(platform.id, ' ')}
+                                        style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            background: platform.color,
+                                            borderRadius: '6px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                            transition: 'transform 0.2s',
+                                        }}
+                                        onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                                        onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                    >
+                                        <img
+                                            src={platform.icon}
+                                            alt={platform.name}
+                                            style={{
+                                                width: '24px',
+                                                height: '24px',
+                                                objectFit: 'contain',
+                                                filter: platform.id === 'snapchat' || platform.id === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                            }}
+                                        />
+                                    </div>
+                                ))}
                             </div>
                         </div>
 
@@ -2114,22 +2152,178 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             </label>
                         </div>
 
+
+                        {/* Custom Fields */}
+                        {exchange.customFields && exchange.customFields.length > 0 && (
+                            <div style={{ marginBottom: '1.5rem' }}>
+                                {exchange.customFields.map((field, index) => (
+                                    <div key={field.id} style={{
+                                        marginBottom: '1.5rem',
+                                        padding: '1.5rem',
+                                        border: '1px solid #e2e8f0',
+                                        borderRadius: '8px',
+                                        background: '#f8fafc'
+                                    }}>
+                                        <div style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'flex-start',
+                                            marginBottom: '1rem'
+                                        }}>
+                                            <div style={{
+                                                fontSize: '0.75rem',
+                                                fontWeight: 'bold',
+                                                color: '#8b5cf6',
+                                                textTransform: 'uppercase'
+                                            }}>
+                                                ASK THEM A PERSONALIZED QUESTION
+                                            </div>
+                                            <button
+                                                onClick={() => handleDeleteCustomField(field.id)}
+                                                style={{
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    cursor: 'pointer',
+                                                    color: '#94a3b8',
+                                                    padding: '0.25rem'
+                                                }}
+                                            >
+                                                <X size={18} />
+                                            </button>
+                                        </div>
+
+                                        <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                                            Type your question and options
+                                        </div>
+
+                                        {/* Type Selector */}
+                                        <div style={{ marginBottom: '1rem' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                                Type
+                                            </label>
+                                            <select
+                                                value={field.type}
+                                                onChange={(e) => handleCustomFieldUpdate(field.id, 'type', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #1e293b',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    background: '#fff',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                <option value="text">Text</option>
+                                                <option value="options">Options</option>
+                                                <option value="radio">Radio</option>
+                                            </select>
+                                        </div>
+
+                                        {/* Label Input */}
+                                        <div style={{ marginBottom: '1rem' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                                Label
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={field.label}
+                                                onChange={(e) => handleCustomFieldUpdate(field.id, 'label', e.target.value)}
+                                                placeholder="Enter question label"
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #1e293b',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none'
+                                                }}
+                                            />
+                                        </div>
+
+                                        {/* Options/Radio Fields */}
+                                        {(field.type === 'options' || field.type === 'radio') && (
+                                            <div>
+                                                {field.options && field.options.map((option, optIndex) => (
+                                                    <div key={optIndex} style={{ marginBottom: '0.75rem' }}>
+                                                        <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                                            {field.type === 'options' ? 'Option' : 'Radio'} {optIndex + 1}
+                                                        </label>
+                                                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                                            <input
+                                                                type="text"
+                                                                value={option}
+                                                                onChange={(e) => handleOptionUpdate(field.id, optIndex, e.target.value)}
+                                                                placeholder={`Enter ${field.type === 'options' ? 'option' : 'radio'} ${optIndex + 1}`}
+                                                                style={{
+                                                                    flex: 1,
+                                                                    padding: '0.75rem',
+                                                                    borderRadius: '4px',
+                                                                    border: '1px solid #1e293b',
+                                                                    fontSize: '0.9rem',
+                                                                    outline: 'none'
+                                                                }}
+                                                            />
+                                                            <button
+                                                                onClick={() => handleDeleteOption(field.id, optIndex)}
+                                                                style={{
+                                                                    background: 'none',
+                                                                    border: 'none',
+                                                                    cursor: 'pointer',
+                                                                    color: '#94a3b8',
+                                                                    padding: '0.5rem'
+                                                                }}
+                                                            >
+                                                                <X size={18} />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                ))}
+
+                                                {/* Add Other Button */}
+                                                <button
+                                                    onClick={() => handleAddOption(field.id)}
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '0.5rem',
+                                                        background: 'none',
+                                                        color: '#8b5cf6',
+                                                        border: 'none',
+                                                        fontSize: '0.85rem',
+                                                        fontWeight: '500',
+                                                        cursor: 'pointer',
+                                                        padding: '0.5rem 0'
+                                                    }}
+                                                >
+                                                    Add Other
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
                         {/* Add Customized Button */}
                         <div>
-                            <button style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                background: '#8b5cf6',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: '4px',
-                                padding: '0.5rem 1rem',
-                                fontSize: '0.85rem',
-                                fontWeight: '500',
-                                cursor: 'pointer',
-                                transition: 'background 0.2s'
-                            }}
+                            <button
+                                onClick={handleAddCustomField}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem',
+                                    background: '#8b5cf6',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    padding: '0.5rem 1rem',
+                                    fontSize: '0.85rem',
+                                    fontWeight: '500',
+                                    cursor: 'pointer',
+                                    transition: 'background 0.2s'
+                                }}
                                 onMouseOver={(e) => e.target.style.background = '#7c3aed'}
                                 onMouseOut={(e) => e.target.style.background = '#8b5cf6'}
                             >
@@ -2137,6 +2331,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                 Add Customized
                             </button>
                         </div>
+
 
                     </div>
                 )}

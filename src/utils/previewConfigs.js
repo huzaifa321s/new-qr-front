@@ -146,9 +146,9 @@ export const bioPagePreviewConfig = {
         bio: "I am a designer & photographer working in International company. I am a designer & photographer working in International company."
     },
     social: {
-        facebook: true,
-        instagram: true,
-        website: true
+        facebook: 'https://facebook.com',
+        instagram: 'https://instagram.com',
+        website: 'https://techoid.com'
     }
 };
 
@@ -169,25 +169,46 @@ export const leadGenerationPreviewConfig = {
     design: {
         color: { header: '#7f1d1d', dark: '#7f1d1d', light: '#ffffff' }, // Dark Red/Maroon
         logo: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' }, // 3D character
-        heroImage: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' // Business meeting
+        headerImage: { url: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=267&fit=crop' } // Default header image
     },
-    businessInfo: {
-        title: "Sterling & Co",
-        formTitle: "Important Document",
-        formDescription: "Download this document today."
+    basicInfo: {
+        companyName: "Sterling & Co",
+        headline: "Important Document",
+        description: "Download this document today."
+    },
+    form: {
+        fullName: true,
+        contactNumber: false,
+        organizationName: false,
+        email: true,
+        jobTitle: false,
+        website: false
+    },
+    thankYou: {
+        message: "Thanks for submitting! You can now download your content, thanks again"
     }
 };
 
 export const ratingPreviewConfig = {
     type: 'rating',
     design: {
-        color: { header: '#5b8fd9', dark: '#5b8fd9', light: '#ffffff' }, // Blue
+        color: { header: '#5b8fd9', dark: '#5b8fd9', light: '#FF5E3B' }, // Blue header, Orange buttons
         logo: { url: 'https://img.freepik.com/premium-vector/heart-with-pulse-icon-healthcare-medical-symbol_116137-7857.jpg' }, // Heart logo
-        heroImage: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' // Food/cafe
+        headerImage: { url: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=267&fit=crop' } // Default header image
     },
-    businessInfo: {
-        title: "Bob's Cafe",
-        question: "How was your rental experience?"
+    socialLinks: [
+        { id: '1', platform: 'facebook', url: 'https://facebook.com' },
+        { id: '2', platform: 'instagram', url: 'https://instagram.com' },
+        { id: '3', platform: 'whatsapp', url: 'https://whatsapp.com' }
+    ],
+    basicInfo: {
+        name: "Bob's Cafe",
+        website: "https://www.bobscafe.com"
+    },
+    rating: {
+        question: "How was your rental experience?",
+        type: 'stars',
+        allowComment: false
     }
 };
 

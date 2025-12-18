@@ -28,9 +28,18 @@ const BusinessPageConfig = ({ config, onChange }) => {
         saturday: { enabled: true, open: '08:00 AM', close: '08:00 AM' },
         sunday: { enabled: false, open: '08:00 AM', close: '08:00 AM' }
     };
-    const facilities = Array.isArray(config.facilities) ? config.facilities : [];
+    const facilities = Array.isArray(config.facilities) && config.facilities.length > 0
+        ? config.facilities
+        : ['wifi', 'parking', 'restaurant'];
     const contact = config.contact || {};
-    const social = config.social || {};
+    const social = (config.social && Object.keys(config.social).length > 0)
+        ? config.social
+        : {
+            facebook: 'https://facebook.com',
+            instagram: 'https://instagram.com',
+            twitter: 'https://twitter.com',
+            whatsapp: 'https://whatsapp.com'
+        };
 
     const primaryColor = design.color?.header || '#0B2D86';
     const secondaryColor = design.color?.light || '#FFA800';
@@ -111,7 +120,9 @@ const BusinessPageConfig = ({ config, onChange }) => {
 
     const handleFacilityToggle = (facility) => {
         onChange(prev => {
-            const currentFacilities = prev.facilities || [];
+            const currentFacilities = Array.isArray(prev.facilities) && prev.facilities.length > 0
+                ? prev.facilities
+                : ['wifi', 'parking', 'restaurant'];
             const isSelected = currentFacilities.includes(facility);
             return {
                 ...prev,
@@ -133,13 +144,23 @@ const BusinessPageConfig = ({ config, onChange }) => {
     };
 
     const handleSocialUpdate = (key, value) => {
-        onChange(prev => ({
-            ...prev,
-            social: {
-                ...prev.social,
-                [key]: value
-            }
-        }));
+        onChange(prev => {
+            const currentSocial = (prev.social && Object.keys(prev.social).length > 0)
+                ? prev.social
+                : {
+                    facebook: 'https://facebook.com',
+                    instagram: 'https://instagram.com',
+                    twitter: 'https://twitter.com',
+                    whatsapp: 'https://whatsapp.com'
+                };
+            return {
+                ...prev,
+                social: {
+                    ...currentSocial,
+                    [key]: value
+                }
+            };
+        });
     };
 
     const handleFileUpload = (e) => {
@@ -440,9 +461,8 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                         </label>
                                         <input
                                             type="text"
-                                            value={businessInfo.companyName || ''}
+                                            value={businessInfo.companyName || "Royal's Cafe"}
                                             onChange={(e) => handleBusinessInfoUpdate('companyName', e.target.value)}
-                                            placeholder="Royal's Cafe"
                                             style={{
                                                 width: '100%',
                                                 padding: '0.75rem',
@@ -466,21 +486,23 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                         <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                             Font
                                         </label>
-                                        <div style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between',
-                                            border: '1px solid #1e293b',
-                                            borderRadius: '4px',
-                                            padding: '0.75rem',
-                                            height: '44px',
-                                            cursor: 'pointer'
-                                        }}>
-                                            <span style={{ fontSize: '0.9rem', color: '#000' }}>
-                                                {businessInfo.companyNameFont || 'Lato'}
-                                            </span>
-                                            <ChevronDown size={14} color="#94a3b8" />
-                                        </div>
+                                        <select
+                                            value={businessInfo.companyNameFont || 'Work Sans'}
+                                            onChange={(e) => handleBusinessInfoUpdate('companyNameFont', e.target.value)}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                borderRadius: '4px',
+                                                border: '1px solid #1e293b',
+                                                fontSize: '0.9rem',
+                                                outline: 'none',
+                                                background: '#fff',
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            <option value="Work Sans">Work Sans</option>
+                                            <option value="Lato">Lato</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -494,9 +516,8 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                         </label>
                                         <input
                                             type="text"
-                                            value={businessInfo.headline || ''}
+                                            value={businessInfo.headline || 'Eat. Refresh. Go.'}
                                             onChange={(e) => handleBusinessInfoUpdate('headline', e.target.value)}
-                                            placeholder="Eat. Refresh. Go."
                                             style={{
                                                 width: '100%',
                                                 padding: '0.75rem',
@@ -520,21 +541,23 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                         <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                             Font
                                         </label>
-                                        <div style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between',
-                                            border: '1px solid #1e293b',
-                                            borderRadius: '4px',
-                                            padding: '0.75rem',
-                                            height: '44px',
-                                            cursor: 'pointer'
-                                        }}>
-                                            <span style={{ fontSize: '0.9rem', color: '#000' }}>
-                                                {businessInfo.headlineFont || 'Lato'}
-                                            </span>
-                                            <ChevronDown size={14} color="#94a3b8" />
-                                        </div>
+                                        <select
+                                            value={businessInfo.headlineFont || 'Work Sans'}
+                                            onChange={(e) => handleBusinessInfoUpdate('headlineFont', e.target.value)}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                borderRadius: '4px',
+                                                border: '1px solid #1e293b',
+                                                fontSize: '0.9rem',
+                                                outline: 'none',
+                                                background: '#fff',
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            <option value="Work Sans">Work Sans</option>
+                                            <option value="Lato">Lato</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -545,9 +568,8 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                     DESCRIPTION
                                 </label>
                                 <textarea
-                                    value={businessInfo.description || ''}
+                                    value={businessInfo.description || 'We aim to provide fresh and healthy snacks people on the go.'}
                                     onChange={(e) => handleBusinessInfoUpdate('description', e.target.value)}
-                                    placeholder="We aim to provide fresh and healthy snacks people on the go."
                                     rows={3}
                                     style={{
                                         width: '100%',
@@ -569,9 +591,8 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                 </label>
                                 <input
                                     type="text"
-                                    value={businessInfo.button || ''}
+                                    value={businessInfo.button || 'Visit Us'}
                                     onChange={(e) => handleBusinessInfoUpdate('button', e.target.value)}
-                                    placeholder="Visit Us"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -590,9 +611,8 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                 </label>
                                 <input
                                     type="text"
-                                    value={businessInfo.website || ''}
+                                    value={businessInfo.website || 'https://www.abcboutique.henerrival.com'}
                                     onChange={(e) => handleBusinessInfoUpdate('website', e.target.value)}
-                                    placeholder="https://www.abcboutique.henerrival.com"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -1305,22 +1325,21 @@ const BusinessPageConfig = ({ config, onChange }) => {
                         <div style={{ padding: '2rem', background: '#fff' }}>
                             {(() => {
                                 const SOCIAL_PLATFORMS = [
-                                    { id: 'website', name: 'Website', icon: Globe, color: '#6366f1' },
-                                    { id: 'facebook', name: 'Facebook', icon: Facebook, color: '#1877f2' },
-                                    { id: 'instagram', name: 'Instagram', icon: Instagram, color: '#E1306C' },
-                                    { id: 'twitter', name: 'X', icon: Twitter, color: '#000000' },
-                                    { id: 'linkedin', name: 'LinkedIn', icon: Linkedin, color: '#0077b5' },
-                                    { id: 'discord', name: 'Discord', icon: Gamepad2, color: '#5865f2' },
-                                    { id: 'twitch', name: 'Twitch', icon: Twitch, color: '#9146ff' },
-                                    { id: 'youtube', name: 'YouTube', icon: Youtube, color: '#ff0000' },
-                                    { id: 'whatsapp', name: 'WhatsApp', icon: MessageCircle, color: '#25d366' },
-                                    { id: 'snapchat', name: 'Snapchat', icon: Ghost, color: '#fffc00', textColor: '#000' },
-                                    { id: 'tiktok', name: 'TikTok', icon: Music, color: '#000000' },
-                                    { id: 'pinterest', name: 'Pinterest', icon: Github, color: '#e60023' }, // Placeholder
-                                    { id: 'dribbble', name: 'Dribbble', icon: Dribbble, color: '#ea4c89' },
-                                    { id: 'telegram', name: 'Telegram', icon: MessageSquare, color: '#0088cc' },
-                                    { id: 'reddit', name: 'Reddit', icon: Github, color: '#ff4500' }, // Placeholder
-                                    { id: 'spotify', name: 'Spotify', icon: Music, color: '#1DB954' },
+                                    { id: 'facebook', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877f2' },
+                                    { id: 'instagram', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
+                                    { id: 'twitter', name: 'X', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#1DA1F2' },
+                                    { id: 'linkedin', name: 'LinkedIn', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
+                                    { id: 'discord', name: 'Discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865f2' },
+                                    { id: 'twitch', name: 'Twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146ff' },
+                                    { id: 'youtube', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#ff0000' },
+                                    { id: 'whatsapp', name: 'WhatsApp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25d366' },
+                                    { id: 'snapchat', name: 'Snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#fffc00' },
+                                    { id: 'tiktok', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
+                                    { id: 'pinterest', name: 'Pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C' },
+                                    { id: 'dribbble', name: 'Dribbble', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111388.png', color: '#ea4c89' },
+                                    { id: 'telegram', name: 'Telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088cc' },
+                                    { id: 'reddit', name: 'Reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#ff4500' },
+                                    { id: 'spotify', name: 'Spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954' },
                                 ];
 
                                 // Helper to get active platforms
@@ -1340,14 +1359,16 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                                         <div style={{
                                                             width: '40px',
                                                             height: '40px',
-                                                            background: platform.color,
+                                                            background: '#fff',
                                                             borderRadius: '8px',
                                                             display: 'flex',
                                                             alignItems: 'center',
                                                             justifyContent: 'center',
-                                                            flexShrink: 0
+                                                            flexShrink: 0,
+                                                            overflow: 'hidden',
+                                                            border: '1px solid #e2e8f0'
                                                         }}>
-                                                            <platform.icon size={20} color={platform.textColor || "#fff"} />
+                                                            <img src={platform.icon} alt={platform.name} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
                                                         </div>
                                                         <input
                                                             type="text"
@@ -1402,21 +1423,21 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                                             width: '40px',
                                                             height: '40px',
                                                             borderRadius: '8px',
-                                                            border: `1px solid ${platform.color}`,
+                                                            border: `1px solid #e2e8f0`,
                                                             display: 'flex',
                                                             alignItems: 'center',
                                                             justifyContent: 'center',
                                                             cursor: 'pointer',
-                                                            color: platform.color,
                                                             transition: 'all 0.2s',
-                                                            background: '#fff'
+                                                            background: '#fff',
+                                                            overflow: 'hidden'
                                                         }}
                                                     >
-                                                        <platform.icon size={20} />
+                                                        <img src={platform.icon} alt={platform.name} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
                                                     </div>
                                                 ))}
                                             </div>
-                                        </div>
+                                        </div >
                                     </>
                                 );
                             })()}
@@ -1424,7 +1445,7 @@ const BusinessPageConfig = ({ config, onChange }) => {
                     )
                 }
             </div>
-        </div>
+        </div >
     );
 };
 

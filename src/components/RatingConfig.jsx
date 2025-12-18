@@ -9,10 +9,13 @@ const RatingConfig = ({ config, onChange }) => {
     const [isSocialOpen, setIsSocialOpen] = useState(false);
 
     const design = config.design || {};
-    const basicInfo = config.basicInfo || {};
+    const basicInfo = config.basicInfo || {
+        name: "Bob's Cafe",
+        website: "https://www.bobscafe.com"
+    };
     const rating = config.rating || {
-        question: '',
-        type: 'thumbs', // thumbs, emoji, stars
+        question: "How was your rental experience?",
+        type: 'stars', // thumbs, emoji, stars
         allowComment: false
     };
     const socialLinks = config.socialLinks || [];
@@ -118,23 +121,24 @@ const RatingConfig = ({ config, onChange }) => {
 
     // Social Media Platforms Configuration
     const socialPlatforms = [
-        { id: 'website', name: 'Website', icon: Globe, color: '#6366f1' },
-        { id: 'facebook', name: 'Facebook', icon: Facebook, color: '#1877f2' },
-        { id: 'instagram', name: 'Instagram', icon: Instagram, color: '#E1306C', gradient: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)' },
-        { id: 'twitter', name: 'X', icon: Twitter, color: '#000000' },
-        { id: 'linkedin', name: 'LinkedIn', icon: Linkedin, color: '#0077b5' },
-        { id: 'discord', name: 'Discord', icon: MessageCircle, color: '#5865f2' },
-        { id: 'youtube', name: 'YouTube', icon: Youtube, color: '#ff0000' },
-        { id: 'whatsapp', name: 'WhatsApp', icon: MessageCircle, color: '#25d366' },
-        { id: 'snapchat', name: 'Snapchat', icon: Ghost, color: '#fffc00', textColor: '#000' },
-        { id: 'tiktok', name: 'TikTok', icon: Music, color: '#000000' },
-        { id: 'spotify', name: 'Spotify', icon: Music, color: '#1db954' },
-        { id: 'behance', name: 'Behance', icon: Dribbble, color: '#1769ff' },
-        { id: 'dribbble', name: 'Dribbble', icon: Dribbble, color: '#ea4c89' },
-        { id: 'pinterest', name: 'Pinterest', icon: Github, color: '#e60023' },
-        { id: 'telegram', name: 'Telegram', icon: Send, color: '#0088cc' },
-        { id: 'reddit', name: 'Reddit', icon: Github, color: '#ff4500' },
-        { id: 'tumblr', name: 'Tumblr', icon: Github, color: '#35465c' },
+        { id: 'website', name: 'Website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563' },
+        { id: 'facebook', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2' },
+        { id: 'instagram', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
+        { id: 'twitter', name: 'X', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000' },
+        { id: 'linkedin', name: 'LinkedIn', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
+        { id: 'discord', name: 'Discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2' },
+        { id: 'twitch', name: 'Twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF' },
+        { id: 'youtube', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
+        { id: 'whatsapp', name: 'WhatsApp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
+        { id: 'snapchat', name: 'Snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00' },
+        { id: 'tiktok', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
+        { id: 'tumblr', name: 'Tumblr', icon: 'https://cdn-icons-png.flaticon.com/512/100/100611.png', color: '#35465C' },
+        { id: 'spotify', name: 'Spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954' },
+        { id: 'telegram', name: 'Telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC' },
+        { id: 'behance', name: 'Behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF' },
+        { id: 'pinterest', name: 'Pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C' },
+        { id: 'reddit', name: 'Reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500' },
+        { id: 'line', name: 'Line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900' }
     ];
 
     const palettes = [
@@ -660,7 +664,20 @@ const RatingConfig = ({ config, onChange }) => {
                                                     justifyContent: 'center',
                                                     zIndex: 1
                                                 }}>
-                                                    <Icon size={16} color={platform.textColor || "#fff"} />
+                                                    {typeof Icon === 'string' ? (
+                                                        <img
+                                                            src={Icon}
+                                                            alt={platform.name}
+                                                            style={{
+                                                                width: '16px',
+                                                                height: '16px',
+                                                                objectFit: 'contain',
+                                                                filter: platform.id === 'snapchat' || platform.id === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <Icon size={16} color={platform.textColor || "#fff"} />
+                                                    )}
                                                 </div>
                                                 <input
                                                     type="text"
@@ -723,7 +740,20 @@ const RatingConfig = ({ config, onChange }) => {
                                                 e.currentTarget.style.transform = 'scale(1)';
                                             }}
                                         >
-                                            <Icon size={24} color={platform.textColor || "#fff"} />
+                                            {typeof Icon === 'string' ? (
+                                                <img
+                                                    src={Icon}
+                                                    alt={platform.name}
+                                                    style={{
+                                                        width: '24px',
+                                                        height: '24px',
+                                                        objectFit: 'contain',
+                                                        filter: platform.id === 'snapchat' || platform.id === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Icon size={24} color={platform.textColor || "#fff"} />
+                                            )}
                                         </div>
                                     );
                                 })}

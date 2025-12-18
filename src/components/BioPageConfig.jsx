@@ -11,7 +11,15 @@ const BioPageConfig = ({ config, onChange }) => {
     const design = config.design || {};
     const basicInfo = config.basicInfo || {};
     const contact = config.contact || {};
-    const social = config.social || {};
+    const social = (config.social && Object.keys(config.social).length > 0)
+        ? Object.fromEntries(
+            Object.entries(config.social).map(([k, v]) => [k, v === true ? '' : v])
+        )
+        : {
+            facebook: 'https://facebook.com',
+            instagram: 'https://instagram.com',
+            website: 'https://techoid.com'
+        };
 
     const primaryColor = design.color?.header || '#7D2AE7';
     const secondaryColor = design.color?.light || '#C291FF';
@@ -98,13 +106,22 @@ const BioPageConfig = ({ config, onChange }) => {
     };
 
     const handleSocialUpdate = (key, value) => {
-        onChange(prev => ({
-            ...prev,
-            social: {
-                ...prev.social,
-                [key]: value
-            }
-        }));
+        onChange(prev => {
+            const currentSocial = (prev.social && Object.keys(prev.social).length > 0)
+                ? prev.social
+                : {
+                    facebook: 'https://facebook.com',
+                    instagram: 'https://instagram.com',
+                    website: 'https://techoid.com'
+                };
+            return {
+                ...prev,
+                social: {
+                    ...currentSocial,
+                    [key]: value
+                }
+            };
+        });
     };
 
     const palettes = [
@@ -827,22 +844,22 @@ const BioPageConfig = ({ config, onChange }) => {
                         {/* Dynamic Social Media Inputs Grid */}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
                             {[
-                                { id: 'facebook', icon: Facebook, label: 'Facebook', color: '#3b82f6', placeholder: 'https://facebook.com/...' },
-                                { id: 'instagram', icon: Instagram, label: 'Instagram', color: '#ec4899', placeholder: 'https://instagram.com/...' },
-                                { id: 'twitter', icon: Twitter, label: 'X (Twitter)', color: '#000000', placeholder: 'https://x.com/...' },
-                                { id: 'linkedin', icon: Linkedin, label: 'LinkedIn', color: '#0a66c2', placeholder: 'https://linkedin.com/in/...' },
-                                { id: 'youtube', icon: Youtube, label: 'YouTube', color: '#ef4444', placeholder: 'https://youtube.com/...' },
-                                { id: 'whatsapp', icon: MessageCircle, label: 'WhatsApp', color: '#22c55e', placeholder: 'https://wa.me/...' },
-                                { id: 'spotify', icon: Music, label: 'Spotify', color: '#1db954', placeholder: 'https://open.spotify.com/...' },
-                                { id: 'website', icon: Globe, label: 'Website', color: '#06b6d4', placeholder: 'https://mysite.com' },
-                                { id: 'twitch', icon: Twitch, label: 'Twitch', color: '#9146ff', placeholder: 'https://twitch.tv/...' },
-                                { id: 'github', icon: Github, label: 'GitHub', color: '#333333', placeholder: 'https://github.com/...' },
-                                { id: 'snapchat', icon: Ghost, label: 'Snapchat', color: '#FFFC00', textColor: '#000', placeholder: 'https://snapchat.com/...' },
-                                { id: 'dribbble', icon: Dribbble, label: 'Dribbble', color: '#ea4c89', placeholder: 'https://dribbble.com/...' },
-                                { id: 'discord', icon: Gamepad2, label: 'Discord', color: '#5865F2', placeholder: 'https://discord.gg/...' },
-                                { id: 'pinterest', icon: Video, label: 'Pinterest', color: '#bd081c', placeholder: 'https://pinterest.com/...' },
-                                { id: 'tiktok', icon: Video, label: 'TikTok', color: '#000000', placeholder: 'https://tiktok.com/...' },
-                                { id: 'reddit', icon: MessageSquare, label: 'Reddit', color: '#ff4500', placeholder: 'https://reddit.com/...' }
+                                { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', label: 'Facebook', color: '#1877F2', placeholder: 'https://facebook.com/...' },
+                                { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', label: 'Instagram', color: '#E4405F', placeholder: 'https://instagram.com/...' },
+                                { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', label: 'X (Twitter)', color: '#1DA1F2', placeholder: 'https://x.com/...' },
+                                { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', label: 'LinkedIn', color: '#0A66C2', placeholder: 'https://linkedin.com/in/...' },
+                                { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', label: 'YouTube', color: '#FF0000', placeholder: 'https://youtube.com/...' },
+                                { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', label: 'WhatsApp', color: '#25D366', placeholder: 'https://wa.me/...' },
+                                { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', label: 'Spotify', color: '#1DB954', placeholder: 'https://open.spotify.com/...' },
+                                { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', label: 'Website', color: '#4B5563', placeholder: 'https://mysite.com' },
+                                { id: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', label: 'Twitch', color: '#9146FF', placeholder: 'https://twitch.tv/...' },
+                                { id: 'github', icon: 'https://cdn-icons-png.flaticon.com/512/733/733553.png', label: 'GitHub', color: '#181717', placeholder: 'https://github.com/...' },
+                                { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', label: 'Snapchat', color: '#FFFC00', textColor: '#000', placeholder: 'https://snapchat.com/...' },
+                                { id: 'dribbble', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111388.png', label: 'Dribbble', color: '#EA4C89', placeholder: 'https://dribbble.com/...' },
+                                { id: 'discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', label: 'Discord', color: '#5865F2', placeholder: 'https://discord.gg/...' },
+                                { id: 'pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', label: 'Pinterest', color: '#BD081C', placeholder: 'https://pinterest.com/...' },
+                                { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', label: 'TikTok', color: '#000000', placeholder: 'https://tiktok.com/...' },
+                                { id: 'reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', label: 'Reddit', color: '#FF4500', placeholder: 'https://reddit.com/...' }
                             ].map((platform) => {
                                 // Only render inputs for active platforms
                                 if (social[platform.id] !== undefined && social[platform.id] !== null) {
@@ -857,14 +874,15 @@ const BioPageConfig = ({ config, onChange }) => {
                                                     width: '42px',
                                                     height: '42px',
                                                     borderRadius: '8px',
-                                                    background: platform.color,
+                                                    background: '#fff',
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
                                                     flexShrink: 0,
-                                                    color: platform.textColor || '#fff'
+                                                    overflow: 'hidden',
+                                                    border: '1px solid #e2e8f0'
                                                 }}>
-                                                    <Icon size={20} />
+                                                    <img src={platform.icon} alt={platform.label} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
                                                 </div>
                                                 <input
                                                     type="text"
@@ -915,26 +933,25 @@ const BioPageConfig = ({ config, onChange }) => {
 
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
                                 {[
-                                    { id: 'facebook', icon: Facebook, color: '#3b82f6' },
-                                    { id: 'instagram', icon: Instagram, color: '#ec4899' },
-                                    { id: 'twitter', icon: Twitter, color: '#000000' },
-                                    { id: 'linkedin', icon: Linkedin, color: '#0a66c2' },
-                                    { id: 'discord', icon: Gamepad2, color: '#5865F2' },
-                                    { id: 'twitch', icon: Twitch, color: '#9146ff' },
-                                    { id: 'youtube', icon: Youtube, color: '#ef4444' },
-                                    { id: 'whatsapp', icon: MessageCircle, color: '#22c55e' },
-                                    { id: 'snapchat', icon: Ghost, color: '#FFFC00', textColor: '#000' },
-                                    { id: 'tiktok', icon: Video, color: '#000000' },
-                                    { id: 'spotify', icon: Music, color: '#1db954' },
-                                    { id: 'dribbble', icon: Dribbble, color: '#ea4c89' },
-                                    { id: 'pinterest', icon: Video, color: '#bd081c' },
-                                    { id: 'reddit', icon: MessageSquare, color: '#ff4500' },
-                                    { id: 'website', icon: Globe, color: '#06b6d4' },
-                                    { id: 'github', icon: Github, color: '#333333' }
+                                    { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2' },
+                                    { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
+                                    { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#1DA1F2' },
+                                    { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
+                                    { id: 'discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2' },
+                                    { id: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF' },
+                                    { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
+                                    { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
+                                    { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00', textColor: '#000' },
+                                    { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
+                                    { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954' },
+                                    { id: 'dribbble', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111388.png', color: '#EA4C89' },
+                                    { id: 'pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C' },
+                                    { id: 'reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500' },
+                                    { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563' },
+                                    { id: 'github', icon: 'https://cdn-icons-png.flaticon.com/512/733/733553.png', color: '#181717' }
                                 ].map((platform) => {
                                     // Only render add buttons for inactive platforms
                                     if (social[platform.id] === undefined || social[platform.id] === null) {
-                                        const Icon = platform.icon;
                                         return (
                                             <div
                                                 key={platform.id}
@@ -943,25 +960,17 @@ const BioPageConfig = ({ config, onChange }) => {
                                                     width: '40px',
                                                     height: '40px',
                                                     borderRadius: '8px',
-                                                    border: `2px solid ${platform.color}`,
+                                                    border: `1px solid #e2e8f0`,
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
                                                     cursor: 'pointer',
-                                                    color: platform.color,
                                                     background: '#fff',
-                                                    transition: 'all 0.2s ease'
-                                                }}
-                                                onMouseOver={(e) => {
-                                                    e.currentTarget.style.background = platform.color;
-                                                    e.currentTarget.style.color = platform.textColor || '#fff';
-                                                }}
-                                                onMouseOut={(e) => {
-                                                    e.currentTarget.style.background = '#fff';
-                                                    e.currentTarget.style.color = platform.color;
+                                                    transition: 'all 0.2s ease',
+                                                    overflow: 'hidden'
                                                 }}
                                             >
-                                                <Icon size={20} />
+                                                <img src={platform.icon} alt={platform.id} style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                             </div>
                                         );
                                     }
@@ -973,7 +982,7 @@ const BioPageConfig = ({ config, onChange }) => {
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 };
 

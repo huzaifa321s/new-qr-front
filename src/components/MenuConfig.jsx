@@ -95,22 +95,22 @@ const MenuConfig = ({ config, onChange }) => {
 
     // Available Social Icons Map
     const availableSocials = [
-        { id: 'facebook', color: '#1877F2', icon: <Facebook size={20} color="#fff" fill="#fff" /> },
-        { id: 'instagram', color: '#E4405F', icon: <Instagram size={20} color="#fff" /> },
-        { id: 'twitter', color: '#000000', icon: <Twitter size={20} color="#fff" fill="#fff" /> },
-        { id: 'linkedin', color: '#0A66C2', icon: <Linkedin size={20} color="#fff" fill="#fff" /> },
-        { id: 'discord', color: '#5865F2', icon: <Hash size={20} color="#fff" /> }, // Simulating Discord
-        { id: 'twitch', color: '#9146FF', icon: <Hash size={20} color="#fff" /> }, // Simulating Twitch
-        { id: 'youtube', color: '#FF0000', icon: <Youtube size={20} color="#fff" fill="#fff" /> },
-        { id: 'whatsapp', color: '#25D366', icon: <MessageCircle size={20} color="#fff" fill="#fff" /> },
-        { id: 'snapchat', color: '#FFFC00', icon: <Hash size={20} color="#fff" /> }, // Simulating Snap
-        { id: 'tiktok', color: '#000000', icon: <Music size={20} color="#fff" /> }, // Simulating TikTok
-        { id: 'tumblr', color: '#36465D', icon: <Hash size={20} color="#fff" /> },
-        { id: 'spotify', color: '#1DB954', icon: <Music size={20} color="#fff" /> },
-        { id: 'pinterest', color: '#BD081C', icon: <Hash size={20} color="#fff" /> },
-        { id: 'telegram', color: '#0088CC', icon: <Send size={20} color="#fff" fill="#fff" /> },
-        { id: 'reddit', color: '#FF4500', icon: <Hash size={20} color="#fff" /> },
-        { id: 'website', color: '#4F46E5', icon: <Globe size={20} color="#fff" /> }
+        { id: 'facebook', color: '#1877F2', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png' },
+        { id: 'instagram', color: '#E4405F', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png' },
+        { id: 'twitter', color: '#000000', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png' },
+        { id: 'linkedin', color: '#0A66C2', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png' },
+        { id: 'discord', color: '#5865F2', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png' },
+        { id: 'twitch', color: '#9146FF', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png' },
+        { id: 'youtube', color: '#FF0000', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png' },
+        { id: 'whatsapp', color: '#25D366', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png' },
+        { id: 'snapchat', color: '#FFFC00', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png' },
+        { id: 'tiktok', color: '#000000', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png' },
+        { id: 'tumblr', color: '#36465D', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968943.png' },
+        { id: 'spotify', color: '#1DB954', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png' },
+        { id: 'pinterest', color: '#BD081C', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png' },
+        { id: 'telegram', color: '#0088CC', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png' },
+        { id: 'reddit', color: '#FF4500', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png' },
+        { id: 'website', color: '#4F46E5', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png' }
     ];
 
     const handleSocialChange = (index, value) => {
@@ -295,7 +295,22 @@ const MenuConfig = ({ config, onChange }) => {
 
     const getSocialIcon = (id) => {
         const item = availableSocials.find(s => s.id === id);
-        return item ? item.icon : <Globe size={20} color="#fff" />;
+        if (!item) return <Globe size={20} color="#fff" />;
+        if (typeof item.icon === 'string') {
+            return (
+                <img
+                    src={item.icon}
+                    alt=""
+                    style={{
+                        width: '20px',
+                        height: '20px',
+                        objectFit: 'contain',
+                        filter: item.id === 'snapchat' || item.color === '#fffc00' ? 'none' : 'brightness(0) invert(1)'
+                    }}
+                />
+            );
+        }
+        return item.icon;
     };
 
     const getSocialColor = (id) => {

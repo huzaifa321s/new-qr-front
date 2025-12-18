@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Phone, MapPin, Clock, Globe, Instagram, Facebook, Twitter, X, Copy, Mail, Linkedin, MessageCircle, Wifi, Armchair, Accessibility, Calendar, User, Heart, Briefcase, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Video, PenTool, Github, Send, Headphones, Pin, Bot, ChevronRight, Users, Baby, PawPrint, Plug, ParkingCircle, Bus, Car, Bed, Coffee, Martini, Utensils, Download, File } from 'lucide-react';
+import { Phone, MapPin, Clock, Globe, Instagram, Facebook, Twitter, X, Copy, Mail, Linkedin, MessageCircle, Wifi, Armchair, Accessibility, Calendar, User, Heart, Briefcase, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Video, PenTool, Github, Send, Headphones, Pin, Bot, ChevronRight, Users, Baby, PawPrint, Plug, ParkingCircle, Bus, Car, Bed, Coffee, Martini, Utensils, Download, File, Wine, Plane, Star, ThumbsUp, ThumbsDown, Frown, Meh, Smile, Laugh } from 'lucide-react';
 import { FaWhatsapp, FaDiscord, FaTwitch, FaSnapchat, FaTiktok, FaSpotify, FaPinterest, FaTelegram, FaReddit, FaBehance, FaTumblr } from 'react-icons/fa';
 import { SiKick } from 'react-icons/si';
 
@@ -46,27 +46,29 @@ const AutoSlider = ({ images }) => {
 };
 
 const socialIconsMap = [
-    { id: 'facebook', icon: <Facebook size={20} />, color: '#1877F2' },
-    { id: 'instagram', icon: <Instagram size={20} />, color: '#E4405F' },
-    { id: 'twitter', icon: <Twitter size={20} />, color: '#1DA1F2' },
-    { id: 'linkedin', icon: <Linkedin size={20} />, color: '#0A66C2' },
-    { id: 'discord', icon: <FaDiscord size={20} />, color: '#5865F2' },
-    { id: 'twitch', icon: <FaTwitch size={20} />, color: '#9146FF' },
-    { id: 'kick', icon: <SiKick size={20} />, color: '#53FC18' },
-    { id: 'youtube', icon: <Youtube size={20} />, color: '#FF0000' },
-    { id: 'whatsapp', icon: <FaWhatsapp size={20} />, color: '#25D366' },
-    { id: 'snapchat', icon: <FaSnapchat size={20} />, color: '#FFFC00' },
-    { id: 'tiktok', icon: <FaTiktok size={20} />, color: '#000000' },
-    { id: 'tumblr', icon: <FaTumblr size={20} />, color: '#36465D' },
-    { id: 'spotify', icon: <FaSpotify size={20} />, color: '#1DB954' },
-    { id: 'dribbble', icon: <Globe size={20} />, color: '#EA4C89' },
-    { id: 'pinterest', icon: <FaPinterest size={20} />, color: '#BD081C' },
-    { id: 'telegram', icon: <FaTelegram size={20} />, color: '#0088cc' },
-    { id: 'behance', icon: <FaBehance size={20} />, color: '#1769ff' },
+    { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
+    { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2', name: 'Facebook' },
+    { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', name: 'Instagram' },
+    { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000', name: 'X' },
+    { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2', name: 'LinkedIn' },
+    { id: 'discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2', name: 'Discord' },
+    { id: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF', name: 'Twitch' },
+    { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000', name: 'YouTube' },
+    { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366', name: 'WhatsApp' },
+    { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00', name: 'Snapchat' },
+    { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000', name: 'TikTok' },
+    { id: 'tumblr', icon: 'https://cdn-icons-png.flaticon.com/512/100/100611.png', color: '#35465C', name: 'Tumblr' },
+    { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954', name: 'Spotify' },
+    { id: 'telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC', name: 'Telegram' },
+    { id: 'behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF', name: 'Behance' },
+    { id: 'pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C', name: 'Pinterest' },
+    { id: 'reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500', name: 'Reddit' },
+    { id: 'line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900', name: 'Line' },
+    { id: 'globe', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
 ];
 
 const MobilePreview = ({ config, isLiveView = false }) => {
-    const { design, businessInfo, menu, timings, social, appLinks, coupon, personalInfo, basicInfo, contact, exchange, type, facilities, socialLinks, form, customFields, thankYou, rating, uploadPdf, content, video, feedback, images } = config;
+    const { design, businessInfo, menu, timings, openingHours, social, appLinks, coupon, personalInfo, basicInfo, contact, exchange, type, facilities, socialLinks, form, customFields, thankYou, rating, uploadPdf, content, video, feedback, images } = config;
     const [showCouponModal, setShowCouponModal] = useState(false);
     const [showExchangeModal, setShowExchangeModal] = useState(false);
     const [ratingStep, setRatingStep] = useState('rating'); // 'rating', 'userInfo', 'thankYou'
@@ -147,6 +149,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     const [feedbackText, setFeedbackText] = useState('');
     const [exchangeFormData, setExchangeFormData] = useState({});
     const [exchangeErrors, setExchangeErrors] = useState({});
+    const [selectedRating, setSelectedRating] = useState(null);
 
     const handleExchangeChange = (e) => {
         const { name, value } = e.target;
@@ -219,6 +222,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
             return () => clearInterval(interval);
         }
     }, [type]);
+
+    // Reset rating selection when type changes
+    useEffect(() => {
+        setSelectedRating(null);
+    }, [rating?.type]);
 
 
     // AFTER – colour independence
@@ -1097,25 +1105,24 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             gap: '1rem'
                         }}>
                             {[
-                                { id: 'facebook', icon: Facebook, color: '#3b82f6' },
-                                { id: 'instagram', icon: Instagram, color: '#ec4899' },
-                                { id: 'twitter', icon: Twitter, color: '#000000' },
-                                { id: 'linkedin', icon: Linkedin, color: '#0a66c2' },
-                                { id: 'youtube', icon: Youtube, color: '#ef4444' },
-                                { id: 'whatsapp', icon: MessageCircle, color: '#22c55e' },
-                                { id: 'spotify', icon: Music, color: '#1db954' },
-                                { id: 'website', icon: Globe, color: '#06b6d4' },
-                                { id: 'twitch', icon: Twitch, color: '#9146ff' },
-                                { id: 'github', icon: Github, color: '#333333' },
-                                { id: 'snapchat', icon: Ghost, color: '#FFFC00', textColor: '#000' },
-                                { id: 'dribbble', icon: Dribbble, color: '#ea4c89' },
-                                { id: 'discord', icon: Gamepad2, color: '#5865F2' },
-                                { id: 'pinterest', icon: Video, color: '#bd081c' },
-                                { id: 'tiktok', icon: Video, color: '#000000' },
-                                { id: 'reddit', icon: MessageSquare, color: '#ff4500' }
+                                { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#3b82f6' },
+                                { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#ec4899' },
+                                { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000' },
+                                { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0a66c2' },
+                                { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#ef4444' },
+                                { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#22c55e' },
+                                { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1db954' },
+                                { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#06b6d4' },
+                                { id: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146ff' },
+                                { id: 'github', icon: 'https://cdn-icons-png.flaticon.com/512/733/733553.png', color: '#333333' },
+                                { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00', textColor: '#000' },
+                                { id: 'dribbble', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111388.png', color: '#ea4c89' },
+                                { id: 'discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2' },
+                                { id: 'pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#bd081c' },
+                                { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
+                                { id: 'reddit', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111589.png', color: '#ff4500' }
                             ].map((platform) => {
                                 if (social?.[platform.id]) {
-                                    const Icon = platform.icon;
                                     return (
                                         <a
                                             key={platform.id}
@@ -1128,19 +1135,20 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                 width: '45px',
                                                 height: '45px',
                                                 borderRadius: '12px',
-                                                background: platform.color,
+                                                background: '#fff',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                color: platform.textColor || '#fff',
                                                 cursor: 'pointer',
                                                 transition: 'transform 0.2s ease',
-                                                boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+                                                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                                                overflow: 'hidden',
+                                                border: '1px solid #e2e8f0'
                                             }}
                                                 onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
                                                 onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                                             >
-                                                <Icon size={22} />
+                                                <img src={platform.icon} alt={platform.id} style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
                                             </div>
                                         </a>
                                     );
@@ -2119,90 +2127,90 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             {rating?.type === 'thumbs' && (
                                 <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '3rem' }}>
                                     {/* Thumbs Up */}
-                                    <div style={{
-                                        width: '70px',
-                                        height: '70px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer'
-                                    }}>
-                                        <svg width="60" height="60" viewBox="0 0 24 24" fill="#cbd5e1" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M7 22V11M2 13V20C2 21.1046 2.89543 22 4 22H16.4262C17.907 22 19.1662 20.9197 19.3914 19.4562L20.4683 12.4562C20.7479 10.6389 19.3418 9 17.5032 9H14C13.4477 9 13 8.55228 13 8V4.46584C13 3.10399 11.896 2 10.5342 2C10.2093 2 9.91498 2.1913 9.78306 2.48812L7.26394 8.40614C7.09895 8.76727 6.74546 9 6.35684 9H4C2.89543 9 2 9.89543 2 11V13Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
+                                    <div
+                                        onClick={() => setSelectedRating('like')}
+                                        style={{
+                                            cursor: 'pointer',
+                                            transition: 'transform 0.2s ease'
+                                        }}
+                                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                    >
+                                        <ThumbsUp
+                                            size={60}
+                                            fill={selectedRating === 'like' ? secondaryColor : '#e2e8f0'}
+                                            color={selectedRating === 'like' ? secondaryColor : '#cbd5e1'}
+                                            strokeWidth={1.5}
+                                        />
                                     </div>
 
                                     {/* Thumbs Down */}
-                                    <div style={{
-                                        width: '70px',
-                                        height: '70px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer'
-                                    }}>
-                                        <svg width="60" height="60" viewBox="0 0 24 24" fill="#cbd5e1" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M17 2V13M22 11V4C22 2.89543 21.1046 2 20 2H7.57377C6.09297 2 4.83379 3.08026 4.60859 4.54377L3.53165 11.5438C3.25211 13.3611 4.65824 15 6.49681 15H10C10.5523 15 11 15.4477 11 16V19.5342C11 20.896 12.104 22 13.4658 22C13.7907 22 14.085 21.8087 14.2169 21.5119L16.7361 15.5939C16.901 15.2327 17.2545 15 17.6432 15H20C21.1046 15 22 14.1046 22 13V11Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
+                                    <div
+                                        onClick={() => setSelectedRating('dislike')}
+                                        style={{
+                                            cursor: 'pointer',
+                                            transition: 'transform 0.2s ease'
+                                        }}
+                                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                    >
+                                        <ThumbsDown
+                                            size={60}
+                                            fill={selectedRating === 'dislike' ? secondaryColor : '#e2e8f0'}
+                                            color={selectedRating === 'dislike' ? secondaryColor : '#cbd5e1'}
+                                            strokeWidth={1.5}
+                                        />
                                     </div>
                                 </div>
                             )}
 
                             {rating?.type === 'emoji' && (
-                                <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginBottom: '3rem' }}>
-                                    <div style={{
-                                        width: '70px',
-                                        height: '70px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '3rem'
-                                    }}>
-                                        ☹️
-                                    </div>
-                                    <div style={{
-                                        width: '70px',
-                                        height: '70px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '3rem'
-                                    }}>
-                                        😐
-                                    </div>
-                                    <div style={{
-                                        width: '70px',
-                                        height: '70px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        fontSize: '3rem'
-                                    }}>
-                                        😊
-                                    </div>
-                                </div>
-                            )}
-
-                            {(!rating?.type || rating?.type === 'stars') && (
-                                <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '3rem' }}>
-                                    {[1, 2, 3, 4, 5].map((star) => (
+                                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '3rem' }}>
+                                    {[Laugh, Smile, Meh, Frown, Frown].map((Icon, index) => (
                                         <div
-                                            key={star}
+                                            key={index}
+                                            onClick={() => setSelectedRating(index)}
                                             style={{
-                                                width: '50px',
-                                                height: '50px',
+                                                width: '54px',
+                                                height: '54px',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
-                                                fontSize: '2.5rem',
-                                                color: '#cbd5e1'
+                                                border: `2px solid ${selectedRating === index ? secondaryColor : '#e2e8f0'}`,
+                                                borderRadius: '50%',
+                                                transition: 'all 0.2s ease',
+                                                transform: selectedRating === index ? 'scale(1.1)' : 'scale(1)'
                                             }}
                                         >
-                                            ⭐
+                                            <Icon
+                                                size={32}
+                                                color={selectedRating === index ? secondaryColor : '#cbd5e1'}
+                                                strokeWidth={2}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {(!rating?.type || rating?.type === 'stars') && (
+                                <div style={{ display: 'flex', justifyContent: 'center', gap: '0.25rem', marginBottom: '3rem' }}>
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <div
+                                            key={star}
+                                            onClick={() => setSelectedRating(star)}
+                                            style={{
+                                                cursor: 'pointer',
+                                                transition: 'all 0.2s ease',
+                                                transform: selectedRating === star ? 'scale(1.2)' : 'scale(1)'
+                                            }}
+                                        >
+                                            <Star
+                                                size={50}
+                                                fill={(selectedRating >= star) ? secondaryColor : '#e2e8f0'}
+                                                color={(selectedRating >= star) ? secondaryColor : '#cbd5e1'}
+                                                strokeWidth={1}
+                                            />
                                         </div>
                                     ))}
                                 </div>
@@ -2426,19 +2434,24 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         .map((link) => {
                                             // Social media platform mapping
                                             const platformConfig = {
-                                                website: { icon: Globe, color: '#6366f1', name: 'Website' },
-                                                facebook: { icon: Facebook, color: '#1877f2', name: 'Facebook' },
-                                                instagram: { icon: Instagram, color: '#E1306C', gradient: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', name: 'Instagram' },
-                                                twitter: { icon: Twitter, color: '#000000', name: 'X' },
-                                                linkedin: { icon: Linkedin, color: '#0077b5', name: 'LinkedIn' },
-                                                youtube: { icon: Youtube, color: '#ff0000', name: 'YouTube' },
-                                                whatsapp: { icon: MessageCircle, color: '#25d366', name: 'WhatsApp' },
-                                                snapchat: { icon: Ghost, color: '#fffc00', name: 'Snapchat', textColor: '#000' },
-                                                tiktok: { icon: Music, color: '#000000', name: 'TikTok' },
-                                                spotify: { icon: Music, color: '#1db954', name: 'Spotify' },
-                                                behance: { icon: Dribbble, color: '#1769ff', name: 'Behance' },
-                                                dribbble: { icon: Dribbble, color: '#ea4c89', name: 'Dribbble' },
-                                                tumblr: { icon: Github, color: '#35465c', name: 'Tumblr' },
+                                                website: { icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
+                                                facebook: { icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2', name: 'Facebook' },
+                                                instagram: { icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', name: 'Instagram' },
+                                                twitter: { icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000', name: 'X' },
+                                                linkedin: { icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2', name: 'LinkedIn' },
+                                                discord: { icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2', name: 'Discord' },
+                                                twitch: { icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF', name: 'Twitch' },
+                                                youtube: { icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000', name: 'YouTube' },
+                                                whatsapp: { icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366', name: 'WhatsApp' },
+                                                snapchat: { icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00', name: 'Snapchat', textColor: '#000' },
+                                                tiktok: { icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000', name: 'TikTok' },
+                                                tumblr: { icon: 'https://cdn-icons-png.flaticon.com/512/100/100611.png', color: '#35465C', name: 'Tumblr' },
+                                                spotify: { icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954', name: 'Spotify' },
+                                                telegram: { icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC', name: 'Telegram' },
+                                                behance: { icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF', name: 'Behance' },
+                                                pinterest: { icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C', name: 'Pinterest' },
+                                                reddit: { icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500', name: 'Reddit' },
+                                                line: { id: 'line', name: 'Line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900' }
                                             };
 
                                             const platform = platformConfig[link.platform];
@@ -2473,7 +2486,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                     }}
                                                     title={platform.name}
                                                 >
-                                                    <Icon size={24} color={platform.textColor || "#fff"} />
+                                                    {typeof platform.icon === 'string' ? (
+                                                        <img src={platform.icon} alt={platform.name} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                                                    ) : (
+                                                        <Icon size={24} color={platform.textColor || "#fff"} />
+                                                    )}
                                                 </div>
                                             );
                                         })}
@@ -2613,24 +2630,24 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 // Platform configuration consistent with SocialMediaConfig.jsx
                                 // Platform configuration consistent with SocialMediaConfig.jsx
                                 const platformConfig = [
-                                    { id: 'website', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Website', icon: Globe, color: '#6366f1' },
-                                    { id: 'facebook', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: Facebook, color: '#1877f2' },
-                                    { id: 'instagram', urlKey: 'instagramUrl', textKey: 'instagramText', name: 'Instagram', icon: Instagram, color: '#E4405F' },
-                                    { id: 'twitter', urlKey: 'twitterUrl', textKey: 'twitterText', name: 'X (Twitter)', icon: Twitter, color: '#000000' },
-                                    { id: 'linkedin', urlKey: 'linkedinUrl', textKey: 'linkedinText', name: 'LinkedIn', icon: Linkedin, color: '#0a66c2' },
-                                    { id: 'discord', urlKey: 'discordUrl', textKey: 'discordText', name: 'Discord', icon: MessageSquare, color: '#5865f2' },
-                                    { id: 'twitch', urlKey: 'twitchUrl', textKey: 'twitchText', name: 'Twitch', icon: Twitch, color: '#9146ff' },
-                                    { id: 'kickstarter', urlKey: 'kickstarterUrl', textKey: 'kickstarterText', name: 'Kickstarter', icon: ({ size }) => <span style={{ fontSize: size, fontWeight: 'bold' }}>K</span>, color: '#05ce78' },
-                                    { id: 'youtube', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'Youtube', icon: Youtube, color: '#ff0000' },
-                                    { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: MessageCircle, color: '#25d366' },
-                                    { id: 'snapchat', urlKey: 'snapchatUrl', textKey: 'snapchatText', name: 'Snapchat', icon: Ghost, color: '#fffc00' },
-                                    { id: 'tiktok', urlKey: 'tiktokUrl', textKey: 'tiktokText', name: 'TikTok', icon: Music, color: '#000000' },
-                                    { id: 'tumblr', urlKey: 'tumblrText', textKey: 'tumblrText', name: 'Tumblr', icon: ({ size }) => <span style={{ fontSize: size, fontWeight: 'bold' }}>t</span>, color: '#35465c' },
-                                    { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: Headphones, color: '#1db954' },
-                                    { id: 'telegram', urlKey: 'telegramUrl', textKey: 'telegramText', name: 'Telegram', icon: Send, color: '#0088cc' },
-                                    { id: 'behance', urlKey: 'behanceUrl', textKey: 'behanceText', name: 'Behance', icon: ({ size }) => <span style={{ fontSize: Math.max(10, size - 4), fontWeight: 'bold' }}>Bē</span>, color: '#1769ff' },
-                                    { id: 'pinterest', urlKey: 'pinterestUrl', textKey: 'pinterestText', name: 'Pinterest', icon: Pin, color: '#e60023' },
-                                    { id: 'reddit', urlKey: 'redditUrl', textKey: 'redditText', name: 'Reddit', icon: Bot, color: '#ff4500' },
+                                    { id: 'website', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563' },
+                                    { id: 'facebook', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2' },
+                                    { id: 'instagram', urlKey: 'instagramUrl', textKey: 'instagramText', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
+                                    { id: 'twitter', urlKey: 'twitterUrl', textKey: 'twitterText', name: 'X', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000' },
+                                    { id: 'linkedin', urlKey: 'linkedinUrl', textKey: 'linkedinText', name: 'LinkedIn', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
+                                    { id: 'discord', urlKey: 'discordUrl', textKey: 'discordText', name: 'Discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2' },
+                                    { id: 'twitch', urlKey: 'twitchUrl', textKey: 'twitchText', name: 'Twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF' },
+                                    { id: 'youtube', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
+                                    { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
+                                    { id: 'snapchat', urlKey: 'snapchatUrl', textKey: 'snapchatText', name: 'Snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00' },
+                                    { id: 'tiktok', urlKey: 'tiktokUrl', textKey: 'tiktokText', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
+                                    { id: 'tumblr', urlKey: 'tumblrUrl', textKey: 'tumblrText', name: 'Tumblr', icon: 'https://cdn-icons-png.flaticon.com/512/100/100611.png', color: '#35465C' },
+                                    { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954' },
+                                    { id: 'telegram', urlKey: 'telegramUrl', textKey: 'telegramText', name: 'Telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC' },
+                                    { id: 'behance', urlKey: 'behanceUrl', textKey: 'behanceText', name: 'Behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF' },
+                                    { id: 'pinterest', urlKey: 'pinterestUrl', textKey: 'pinterestText', name: 'Pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C' },
+                                    { id: 'reddit', urlKey: 'redditUrl', textKey: 'redditText', name: 'Reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500' },
+                                    { id: 'line', urlKey: 'lineUrl', textKey: 'lineText', name: 'Line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900' },
                                 ];
 
                                 // Filter active platforms (present in social config)
@@ -2639,9 +2656,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 // Default Fallback if no platforms configured (User request: show defaults like image)
                                 if (activePlatforms.length === 0) {
                                     activePlatforms = [
-                                        { id: 'default-visit', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Visit Us Online', icon: Globe, color: '#6366f1', isDefault: true },
-                                        { id: 'default-fb', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: Facebook, color: '#1877f2', isDefault: true },
-                                        { id: 'default-yt', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'Youtube', icon: Youtube, color: '#ff0000', isDefault: true }
+                                        { id: 'default-visit', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Visit Us Online', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#6366f1', isDefault: true },
+                                        { id: 'default-fb', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877f2', isDefault: true },
+                                        { id: 'default-yt', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'Youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#ff0000', isDefault: true }
                                     ];
                                 }
 
@@ -2677,7 +2694,20 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                 color: platform.color === '#fffc00' ? '#000' : '#fff', // Handle bright colors
                                                 flexShrink: 0
                                             }}>
-                                                <Icon size={24} color={platform.color === '#fffc00' ? '#000' : '#fff'} />
+                                                {typeof Icon === 'string' ? (
+                                                    <img
+                                                        src={Icon}
+                                                        alt={platform.name}
+                                                        style={{
+                                                            width: '24px',
+                                                            height: '24px',
+                                                            objectFit: 'contain',
+                                                            filter: platform.id === 'snapchat' || platform.color === '#fffc00' ? 'none' : 'brightness(0) invert(1)'
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <Icon size={24} color={platform.color === '#fffc00' ? '#000' : '#fff'} />
+                                                )}
                                             </div>
                                             <span style={{ fontSize: '1rem', color: '#1e293b', fontWeight: '600' }}>{text}</span>
                                         </div>
@@ -2746,7 +2776,13 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         justifyContent: 'space-between',
                         color: '#fff'
                     }}>
-                        <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0, color: businessInfo?.companyNameColor || '#fff' }}>
+                        <h2 style={{
+                            fontSize: '1.2rem',
+                            fontWeight: 'bold',
+                            margin: 0,
+                            color: businessInfo?.companyNameColor || '#fff',
+                            fontFamily: businessInfo?.companyNameFont || 'Work Sans'
+                        }}>
                             {businessInfo?.companyName || "Royal's Cafe"}
                         </h2>
                         {design?.logo?.url && (
@@ -2774,11 +2810,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                     {/* Tagline Section */}
                     <div style={{ background: headerColor, padding: '1.5rem', color: '#fff' }}>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: '0 0 0.5rem 0', color: businessInfo?.headlineColor || '#fff' }}>
+                        <h2 style={{
+                            fontSize: '1.5rem',
+                            fontWeight: 'bold',
+                            margin: '0 0 0.5rem 0',
+                            color: businessInfo?.headlineColor || '#fff',
+                            fontFamily: businessInfo?.headlineFont || 'Work Sans'
+                        }}>
                             {businessInfo?.headline || 'Eat. Refresh. Go.'}
                         </h2>
                         <p style={{ fontSize: '0.9rem', lineHeight: '1.4', margin: '0 0 1.5rem 0', opacity: 0.9 }}>
-                            {businessInfo?.description}
+                            {businessInfo?.description || 'We aim to provide fresh and healthy snacks people on the go.'}
                         </p>
                         <button style={{
                             background: '#fbbf24',
@@ -2801,25 +2843,27 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            {(Array.isArray(businessInfo?.timings) && businessInfo.timings.length > 0 ? businessInfo.timings : [
-                                { day: 'Monday', isOpen: true, start: '09:00', end: '22:00' },
-                                { day: 'Tuesday', isOpen: true, start: '09:00', end: '22:00' },
-                                { day: 'Wednesday', isOpen: true, start: '09:00', end: '22:00' },
-                                { day: 'Thursday', isOpen: true, start: '09:00', end: '22:00' },
-                                { day: 'Friday', isOpen: true, start: '09:00', end: '23:00' },
-                                { day: 'Saturday', isOpen: true, start: '10:00', end: '23:00' },
-                                { day: 'Sunday', isOpen: true, start: '10:00', end: '23:00' }
-                            ]).map((dayInfo) => (
-                                <div key={dayInfo.day} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem' }}>
-                                    <span style={{ fontWeight: '500', color: '#64748b' }}>{dayInfo.day}</span>
-                                    <span style={{
-                                        color: dayInfo.isOpen ? '#64748b' : '#ef4444',
-                                        fontWeight: '400'
-                                    }}>
-                                        {dayInfo.isOpen ? `${dayInfo.start} - ${dayInfo.end}` : 'closed'}
-                                    </span>
-                                </div>
-                            ))}
+                            {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => {
+                                const dayKey = day.toLowerCase();
+                                const info = openingHours?.[dayKey] || {
+                                    enabled: dayKey !== 'sunday',
+                                    open: '08:00 AM',
+                                    close: '08:00 AM'
+                                };
+                                return (
+                                    <div key={day} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem' }}>
+                                        <span style={{ fontWeight: '500', color: '#64748b' }}>{day}</span>
+                                        <span style={{
+                                            color: info.enabled !== false ? '#64748b' : '#ef4444',
+                                            fontWeight: '400'
+                                        }}>
+                                            {info.enabled !== false
+                                                ? `${info.open || '08:00 AM'} - ${info.close || '08:00 AM'}`
+                                                : 'closed'}
+                                        </span>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
 
@@ -2829,25 +2873,43 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     {/* Facilities */}
                     <div style={{ padding: '1.5rem' }}>
                         <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: headerColor, margin: '0 0 1.5rem 0' }}>FACILITIES</h3>
-                        <div style={{ display: 'flex', gap: '2rem' }}>
-                            {(facilities?.wifi || (!facilities && true)) && (
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', color: '#64748b' }}>
-                                    <Wifi size={24} color="#3b82f6" />
-                                    <span style={{ fontSize: '0.8rem' }}>wifi</span>
-                                </div>
-                            )}
-                            {(facilities?.sofa || (!facilities && true)) && (
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', color: '#64748b' }}>
-                                    <Armchair size={24} color="#3b82f6" />
-                                    <span style={{ fontSize: '0.8rem' }}>sofa</span>
-                                </div>
-                            )}
-                            {(facilities?.handicap || (!facilities && true)) && (
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', color: '#64748b' }}>
-                                    <Accessibility size={24} color="#3b82f6" />
-                                    <span style={{ fontSize: '0.8rem' }}>handicap</span>
-                                </div>
-                            )}
+                        <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                            {(() => {
+                                const facilityMap = {
+                                    wifi: { icon: Wifi, label: 'wifi' },
+                                    baby: { icon: Baby, label: 'baby care' },
+                                    wheelchair: { icon: Accessibility, label: 'wheelchair access' },
+                                    restaurant: { icon: Utensils, label: 'restaurant' },
+                                    smoking: { icon: Plane, label: 'smoking area' },
+                                    pets: { icon: PawPrint, label: 'pet friendly' },
+                                    parking: { icon: null, text: 'P', label: 'parking' },
+                                    hotel: { icon: Bed, label: 'hotel' },
+                                    car: { icon: Car, label: 'car' },
+                                    coffee: { icon: Coffee, label: 'coffee' },
+                                    bar: { icon: Wine, label: 'bar' }
+                                };
+
+                                const selectedFacilities = Array.isArray(facilities) && facilities.length > 0
+                                    ? facilities
+                                    : ['wifi', 'parking', 'restaurant']; // Default facilities
+
+                                return selectedFacilities.map(id => {
+                                    const config = facilityMap[id];
+                                    if (!config) return null;
+                                    return (
+                                        <div key={id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', color: '#64748b', minWidth: '60px' }}>
+                                            {config.icon ? (
+                                                <config.icon size={24} color="#3b82f6" />
+                                            ) : (
+                                                <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#3b82f6', height: '24px', display: 'flex', alignItems: 'center' }}>
+                                                    {config.text}
+                                                </div>
+                                            )}
+                                            <span style={{ fontSize: '0.8rem', textAlign: 'center' }}>{config.label}</span>
+                                        </div>
+                                    );
+                                });
+                            })()}
                         </div>
                     </div>
 
@@ -2893,11 +2955,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 </>
                             )}
 
-                            {(contact?.website || !contact) && (
+                            {(contact?.website || businessInfo?.website || !contact) && (
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                     <Globe size={24} color={headerColor} />
                                     <span style={{ fontSize: '1rem', color: '#1e293b' }}>
-                                        {contact?.website || 'www.restaurant.com'}
+                                        {contact?.website || businessInfo?.website || 'https://www.abcboutique.henerrival.com'}
                                     </span>
                                 </div>
                             )}
@@ -2969,8 +3031,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                     {/* Bottom Curve */}
                     <div style={{ height: '60px', background: headerColor, borderTopLeftRadius: '50% 100%', borderTopRightRadius: '50% 100%', marginTop: 'auto', display: 'none' }}></div>
-                </div>
-            </div>
+                </div >
+            </div >
         );
     }
 
@@ -3138,6 +3200,104 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     </div>
                                 )}
 
+                                {/* Custom Fields */}
+                                {exchange?.customFields && exchange.customFields.length > 0 && exchange.customFields.map((field) => {
+                                    if (!field.label) return null;
+
+                                    return (
+                                        <div key={field.id} style={{ marginTop: '1rem' }}>
+                                            {field.type === 'text' && (
+                                                <div>
+                                                    <input
+                                                        type="text"
+                                                        placeholder={field.label}
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.75rem 0',
+                                                            border: 'none',
+                                                            borderBottom: '1px solid #cbd5e1',
+                                                            fontSize: '1rem',
+                                                            outline: 'none'
+                                                        }}
+                                                    />
+                                                </div>
+                                            )}
+
+                                            {field.type === 'options' && field.options && field.options.length > 0 && (
+                                                <div>
+                                                    <label style={{
+                                                        display: 'block',
+                                                        fontSize: '0.85rem',
+                                                        color: '#64748b',
+                                                        marginBottom: '0.5rem',
+                                                        fontWeight: 'bold'
+                                                    }}>
+                                                        {field.label}
+                                                    </label>
+                                                    <select
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.75rem',
+                                                            border: '1px solid #cbd5e1',
+                                                            borderRadius: '4px',
+                                                            fontSize: '1rem',
+                                                            outline: 'none',
+                                                            background: '#fff',
+                                                            cursor: 'pointer'
+                                                        }}
+                                                    >
+                                                        <option value="">Select an option</option>
+                                                        {field.options.filter(opt => opt.trim()).map((option, idx) => (
+                                                            <option key={idx} value={option}>{option}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            )}
+
+                                            {field.type === 'radio' && field.options && field.options.length > 0 && (
+                                                <div>
+                                                    <label style={{
+                                                        display: 'block',
+                                                        fontSize: '0.85rem',
+                                                        color: '#64748b',
+                                                        marginBottom: '0.75rem',
+                                                        fontWeight: 'bold'
+                                                    }}>
+                                                        {field.label}
+                                                    </label>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                                        {field.options.filter(opt => opt.trim()).map((option, idx) => (
+                                                            <label
+                                                                key={idx}
+                                                                style={{
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    gap: '0.75rem',
+                                                                    cursor: 'pointer',
+                                                                    fontSize: '0.95rem'
+                                                                }}
+                                                            >
+                                                                <input
+                                                                    type="radio"
+                                                                    name={`custom_field_${field.id}`}
+                                                                    value={option}
+                                                                    style={{
+                                                                        width: '18px',
+                                                                        height: '18px',
+                                                                        cursor: 'pointer',
+                                                                        accentColor: headerColor
+                                                                    }}
+                                                                />
+                                                                <span style={{ color: '#000' }}>{option}</span>
+                                                            </label>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+
                                 <button
                                     type="button"
                                     onClick={handleExchangeSubmit}
@@ -3260,76 +3420,84 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '1rem' }}>Contact Info</h3>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                                 {/* Phone */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        borderRadius: '50%',
-                                        border: `1px solid ${headerColor}`,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        color: headerColor
-                                    }}>
-                                        <Phone size={20} />
+                                {contact?.phone && contact.phone.trim() && (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        <div style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            borderRadius: '50%',
+                                            border: `1px solid ${headerColor}`,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: headerColor
+                                        }}>
+                                            <Phone size={20} />
+                                        </div>
+                                        <span style={{ fontSize: '1rem', color: '#1e293b' }}>{contact?.phone}</span>
                                     </div>
-                                    <span style={{ fontSize: '1rem', color: '#1e293b' }}>{contact?.phone}</span>
-                                </div>
+                                )}
 
                                 {/* Email */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        borderRadius: '50%',
-                                        border: `1px solid ${headerColor}`,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        color: headerColor
-                                    }}>
-                                        <Mail size={20} />
+                                {contact?.email && contact.email.trim() && (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        <div style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            borderRadius: '50%',
+                                            border: `1px solid ${headerColor}`,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: headerColor
+                                        }}>
+                                            <Mail size={20} />
+                                        </div>
+                                        <span style={{ fontSize: '1rem', color: '#1e293b' }}>{contact?.email}</span>
                                     </div>
-                                    <span style={{ fontSize: '1rem', color: '#1e293b' }}>{contact?.email}</span>
-                                </div>
+                                )}
 
                                 {/* Website */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        borderRadius: '50%',
-                                        border: `1px solid ${headerColor}`,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        color: headerColor
-                                    }}>
-                                        <Globe size={20} />
+                                {contact?.website && contact.website.trim() && (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        <div style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            borderRadius: '50%',
+                                            border: `1px solid ${headerColor}`,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: headerColor
+                                        }}>
+                                            <Globe size={20} />
+                                        </div>
+                                        <span style={{ fontSize: '1rem', color: '#1e293b' }}>{contact?.website}</span>
                                     </div>
-                                    <span style={{ fontSize: '1rem', color: '#1e293b' }}>{contact?.website}</span>
-                                </div>
+                                )}
 
                                 {/* Address */}
-                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-                                    <div style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        borderRadius: '50%',
-                                        border: `1px solid ${headerColor}`,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        color: headerColor,
-                                        flexShrink: 0
-                                    }}>
-                                        <MapPin size={20} />
+                                {contact?.address && contact.address.trim() && (
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                                        <div style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            borderRadius: '50%',
+                                            border: `1px solid ${headerColor}`,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: headerColor,
+                                            flexShrink: 0
+                                        }}>
+                                            <MapPin size={20} />
+                                        </div>
+                                        <div>
+                                            <div style={{ fontSize: '1rem', color: '#1e293b', marginBottom: '0.25rem' }}>{contact?.address}</div>
+                                            <div style={{ color: headerColor, fontWeight: '600', fontSize: '0.9rem', cursor: 'pointer' }}>Go to Map</div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <div style={{ fontSize: '1rem', color: '#1e293b', marginBottom: '0.25rem' }}>{contact?.address}</div>
-                                        <div style={{ color: headerColor, fontWeight: '600', fontSize: '0.9rem', cursor: 'pointer' }}>Go to Map</div>
-                                    </div>
-                                </div>
+                                )}
                             </div>
                         </div>
 
@@ -4115,59 +4283,87 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             </button>
 
                             {/* Social Icons */}
-                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                                <div style={{
-                                    width: '45px',
-                                    height: '45px',
-                                    borderRadius: '8px',
-                                    background: '#2e3192',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    color: '#fff'
-                                }}>
-                                    <Globe size={24} />
-                                </div>
-                                <div style={{
-                                    width: '45px',
-                                    height: '45px',
-                                    borderRadius: '8px',
-                                    background: '#3b82f6',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    color: '#fff'
-                                }}>
-                                    <Facebook size={24} />
-                                </div>
-                                <div style={{
-                                    width: '45px',
-                                    height: '45px',
-                                    borderRadius: '8px',
-                                    background: '#ec4899',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    color: '#fff'
-                                }}>
-                                    <Instagram size={24} />
-                                </div>
+                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                                {(() => {
+                                    const activePlatforms = Object.entries(social || {}).filter(([key, val]) => val && typeof val === 'string' && val.trim() !== '');
+
+                                    if (activePlatforms.length === 0) {
+                                        // Default fallback icons
+                                        return [
+                                            { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
+                                            { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2', name: 'Facebook' },
+                                            { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', name: 'Instagram' }
+                                        ].map(platform => (
+                                            <div key={platform.id} style={{
+                                                width: '45px',
+                                                height: '45px',
+                                                borderRadius: '8px',
+                                                background: platform.color,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                color: '#fff',
+                                                opacity: 0.8
+                                            }}>
+                                                <img
+                                                    src={platform.icon}
+                                                    alt={platform.name}
+                                                    style={{ width: '24px', height: '24px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
+                                                />
+                                            </div>
+                                        ));
+                                    }
+
+                                    return activePlatforms.map(([key, value]) => {
+                                        const platform = socialIconsMap.find(p => p.id === key) || socialIconsMap.find(p => p.id === 'globe');
+                                        if (!platform) return null;
+
+                                        return (
+                                            <div
+                                                key={key}
+                                                onClick={() => window.open(value.startsWith('http') ? value : `https://${value}`, '_blank')}
+                                                style={{
+                                                    width: '45px',
+                                                    height: '45px',
+                                                    borderRadius: '8px',
+                                                    background: platform.color,
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    color: '#fff',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                <img
+                                                    src={platform.icon}
+                                                    alt={platform.name}
+                                                    style={{
+                                                        width: '24px',
+                                                        height: '24px',
+                                                        objectFit: 'contain',
+                                                        filter: platform.id === 'snapchat' || platform.id === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                                    }}
+                                                />
+                                            </div>
+                                        );
+                                    });
+                                })()}
                             </div>
                         </div>
 
                         {/* Footer URL */}
                         <div style={{
-                            background: '#2e3192',
+                            background: headerColor,
                             padding: '1rem 1.5rem 2rem',
                             textAlign: 'center'
                         }}>
-                            <a href="https://www.hotelparadise.com" style={{
+                            <a href={config?.basicInfo?.website || social?.website || "#"} target="_blank" rel="noopener noreferrer" style={{
                                 color: '#fff',
                                 fontSize: '0.9rem',
                                 fontWeight: '600',
                                 textDecoration: 'none'
                             }}>
-                                https://www.hotelparadise.com
+                                {config?.basicInfo?.website || social?.website || 'Visit Us Online'}
                             </a>
                         </div>
                     </div>
@@ -5516,7 +5712,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                     boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
                                                 }}
                                             >
-                                                {React.cloneElement(iconObj.icon, { color: iconObj.color, size: 28 })}
+                                                {typeof iconObj.icon === 'string' ? (
+                                                    <img
+                                                        src={iconObj.icon}
+                                                        alt={iconObj.name}
+                                                        style={{
+                                                            width: '24px',
+                                                            height: '24px',
+                                                            objectFit: 'contain',
+                                                            // Since the background is white (#fff), we don't invert the colored icons from Flaticon
+                                                            // unless it's a specific requirement.
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    React.cloneElement(iconObj.icon, { color: iconObj.color, size: 24 })
+                                                )}
                                             </a>
                                         );
                                     })}
