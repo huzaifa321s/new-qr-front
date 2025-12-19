@@ -4,6 +4,7 @@ import Cropper from 'react-easy-crop';
 import getCroppedImg from '../utils/canvasUtils';
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { Eye } from 'lucide-react';
+import ImageUploadModal from './ImageUploadModal';
 
 const CustomConfig = ({ config, onChange }) => {
     // Accordion States
@@ -38,6 +39,12 @@ const CustomConfig = ({ config, onChange }) => {
     const imageFileInputRef = useRef(null);
     const pdfFileInputRef = useRef(null);
     const menuImageInputRef = useRef(null);
+
+    // Reusable Upload Modal State
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [uploadModalTempImage, setUploadModalTempImage] = useState(null);
+    const [uploadModalFileName, setUploadModalFileName] = useState('');
+    const [uploadModalContext, setUploadModalContext] = useState(null); // { type: 'image' | 'slider', id: number }
 
     // Sync addedComponents with parent config
     useEffect(() => {
@@ -470,14 +477,50 @@ const CustomConfig = ({ config, onChange }) => {
         if (!file) return;
         const reader = new FileReader();
         reader.onload = () => {
-            setTempImage(reader.result);
-            setCurrentSliderId(compId);
-            setIsModalOpen(true);
-            setZoom(1);
-            setRotation(0);
+            setUploadModalTempImage(reader.result);
+            setUploadModalFileName(file.name);
+            setUploadModalContext({ type: 'slider', id: compId });
+            setIsUploadModalOpen(true);
         };
         reader.readAsDataURL(file);
         e.target.value = null;
+    };
+
+    const handleUploadModalSave = (url) => {
+        if (!uploadModalContext) return;
+        const { type, id } = uploadModalContext;
+
+        if (type === 'slider') {
+            const comp = addedComponents.find(c => c.id === id);
+            if (comp) {
+                const newImages = [...comp.data.images, url];
+                updateComponentData(id, 'images', newImages);
+            }
+        } else if (type === 'image') {
+            updateComponentData(id, {
+                url: url,
+                selectedImage: 'custom'
+            });
+        } else if (type === 'menu_product') {
+            const { compId, catId, prodId } = uploadModalContext;
+            setAddedComponents(prev => prev.map(comp => {
+                if (comp.id !== compId) return comp;
+                const newCategories = comp.data.categories.map(cat => {
+                    if (cat.id !== catId) return cat;
+                    const newProducts = cat.products.map(prod => {
+                        if (prod.id !== prodId) return prod;
+                        return { ...prod, image: url };
+                    });
+                    return { ...cat, products: newProducts };
+                });
+                return { ...comp, data: { ...comp.data, categories: newCategories } };
+            }));
+        }
+
+        setIsUploadModalOpen(false);
+        setUploadModalTempImage(null);
+        setUploadModalFileName('');
+        setUploadModalContext(null);
     };
 
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
@@ -572,31 +615,18 @@ const CustomConfig = ({ config, onChange }) => {
         if (imageFileInputRef.current) imageFileInputRef.current.click();
     };
 
-    const handleImageUpload = async (e, compId) => {
+    const handleImageUpload = (e, compId) => {
         const file = e.target.files[0];
         if (!file) return;
-
-        try {
-            setUploading(true);
-            const formData = new FormData();
-            formData.append('image', file);
-
-            const res = await axios.post(`http://localhost:3000/api/upload/image`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-
-            // Update both fields in one go
-            updateComponentData(compId, {
-                url: res.data.url,
-                selectedImage: 'custom'
-            });
-        } catch (err) {
-            console.error('Image upload failed:', err);
-            alert('Image upload failed');
-        } finally {
-            setUploading(false);
-            e.target.value = null;
-        }
+        const reader = new FileReader();
+        reader.onload = () => {
+            setUploadModalTempImage(reader.result);
+            setUploadModalFileName(file.name);
+            setUploadModalContext({ type: 'image', id: compId });
+            setIsUploadModalOpen(true);
+        };
+        reader.readAsDataURL(file);
+        e.target.value = null;
     };
 
     // --- Video Upload Handler ---
@@ -662,46 +692,20 @@ const CustomConfig = ({ config, onChange }) => {
     };
 
     // --- Menu Product Handlers ---
-    const handleMenuProductImageUpload = async (e) => {
+    const handleMenuProductImageUpload = (e) => {
         const file = e.target.files[0];
         if (!file || !activeMenuProduct) return;
 
-        try {
-            setUploading(true);
-            const formData = new FormData();
-            formData.append('image', file);
-
-            const res = await axios.post(`http://localhost:3000/api/upload/image`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-
+        const reader = new FileReader();
+        reader.onload = () => {
             const { compId, catId, prodId } = activeMenuProduct;
-
-            setAddedComponents(prev => prev.map(comp => {
-                if (comp.id !== compId) return comp;
-
-                const newCategories = comp.data.categories.map(cat => {
-                    if (cat.id !== catId) return cat;
-
-                    const newProducts = cat.products.map(prod => {
-                        if (prod.id !== prodId) return prod;
-                        return { ...prod, image: res.data.url };
-                    });
-
-                    return { ...cat, products: newProducts };
-                });
-
-                return { ...comp, data: { ...comp.data, categories: newCategories } };
-            }));
-
-        } catch (err) {
-            console.error('Menu product image upload failed:', err);
-            alert('Image upload failed');
-        } finally {
-            setUploading(false);
-            e.target.value = null;
-            setActiveMenuProduct(null);
-        }
+            setUploadModalTempImage(reader.result);
+            setUploadModalFileName(file.name);
+            setUploadModalContext({ type: 'menu_product', compId, catId, prodId, id: compId });
+            setIsUploadModalOpen(true);
+        };
+        reader.readAsDataURL(file);
+        e.target.value = null;
     };
 
     const triggerMenuProductImageUpload = (compId, catId, prodId) => {
@@ -2183,6 +2187,20 @@ const CustomConfig = ({ config, onChange }) => {
                     </div>
                 </div>
             )}
+
+            {/* Reusable Upload Modal */}
+            <ImageUploadModal
+                isOpen={isUploadModalOpen}
+                onClose={() => {
+                    setIsUploadModalOpen(false);
+                    setUploadModalTempImage(null);
+                    setUploadModalContext(null);
+                }}
+                tempImage={uploadModalTempImage}
+                onSave={handleUploadModalSave}
+                fileName={uploadModalFileName}
+                type="image"
+            />
         </div>
     );
 };

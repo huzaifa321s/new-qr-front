@@ -143,6 +143,16 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     ];
 
     const [productImageIndex, setProductImageIndex] = useState(0);
+
+    useEffect(() => {
+        if (type !== 'product-page') return;
+        const count = (basicInfo?.productImages && basicInfo.productImages.length > 0) ? basicInfo.productImages.length : 3;
+        const interval = setInterval(() => {
+            setProductImageIndex((prev) => (prev + 1) % count);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, [type, basicInfo?.productImages]);
+
     const [openAccordion, setOpenAccordion] = useState(null);
     const [feedbackText, setFeedbackText] = useState('');
     const [exchangeFormData, setExchangeFormData] = useState({});
@@ -5337,57 +5347,66 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     {/* Image Carousel */}
                     <div style={{
                         position: 'relative',
-                        height: '200px',
-                        background: primaryColor,
-                        padding: '0 1.5rem 1.5rem'
+                        height: '240px', // Increased height
+                        background: '#fff', // White background to show images clearly
+                        padding: '1.5rem',
+                        zIndex: 1
                     }}>
                         <div style={{
                             position: 'relative',
                             height: '100%',
                             overflow: 'hidden',
-                            borderRadius: '12px'
+                            borderRadius: '12px',
+                            background: '#f8fafc'
                         }}>
-                            {(basicInfo?.productImages && basicInfo.productImages.length > 0 ? basicInfo.productImages.map(img => img.url) : [
-                                'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743372%2Fitem-1_fr9qst.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE',
-                                'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743370%2Fitem-2_suygda.webp&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE',
-                                'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743370%2Fitem-3_ycglwq.webp&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE'
-                            ]).map((img, index) => (
-                                <img
-                                    key={index}
-                                    src={img}
-                                    alt={`Product ${index + 1}`}
-                                    style={{
-                                        position: 'absolute',
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover',
-                                        opacity: productImageIndex === index ? 1 : 0,
-                                        transition: 'opacity 0.5s ease-in-out'
-                                    }}
-                                />
-                            ))}
+                            {(basicInfo?.productImages && basicInfo.productImages.length > 0 ? basicInfo.productImages : [
+                                { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743372/item-1_fr9qst.png' },
+                                { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-2_suygda.webp' },
+                                { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-3_ycglwq.webp' }
+                            ]).map((img, index) => {
+                                const imgSrc = typeof img === 'string' ? img : img?.url;
+                                return (
+                                    <img
+                                        key={index}
+                                        src={imgSrc}
+                                        alt={`Product ${index + 1}`}
+                                        style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'contain',
+                                            opacity: productImageIndex === index ? 1 : 0,
+                                            transition: 'opacity 0.6s ease-in-out',
+                                            zIndex: productImageIndex === index ? 2 : 1
+                                        }}
+                                    />
+                                );
+                            })}
                         </div>
                         {/* Dots */}
                         <div style={{
                             position: 'absolute',
-                            bottom: '2rem',
+                            bottom: '2.5rem',
                             left: '50%',
                             transform: 'translateX(-50%)',
                             display: 'flex',
-                            gap: '0.5rem'
+                            gap: '0.6rem',
+                            zIndex: 10
                         }}>
                             {(basicInfo?.productImages && basicInfo.productImages.length > 0 ? basicInfo.productImages : [
-                                { url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743372%2Fitem-1_fr9qst.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' },
-                                { url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743370%2Fitem-2_suygda.webp&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' },
-                                { url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743370%2Fitem-3_ycglwq.webp&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' }
+                                { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743372/item-1_fr9qst.png' },
+                                { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-2_suygda.webp' },
+                                { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-3_ycglwq.webp' }
                             ]).map((_, index) => (
                                 <div
                                     key={index}
                                     style={{
-                                        width: index === productImageIndex ? '24px' : '8px',
+                                        width: index === productImageIndex ? '20px' : '8px',
                                         height: '8px',
                                         borderRadius: '4px',
-                                        background: index === productImageIndex ? primaryColor : 'rgba(255,255,255,0.5)',
+                                        background: index === productImageIndex ? secondaryColor : 'rgba(0,0,0,0.2)',
                                         transition: 'all 0.3s'
                                     }}
                                 />
@@ -5515,8 +5534,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     justifyContent: 'center'
                                 }}>
                                     {(content?.certificates && content.certificates.length > 0 ? content.certificates : [
-                                        { id: 'def-cert-1', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759749930%2FODCzvu_imfdi2.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' },
-                                        { id: 'def-cert-2', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759749957%2FKOursE_uedyzk.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' }
+                                        { id: 'def-cert-1', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759749930/ODCzvu_imfdi2.png' },
+                                        { id: 'def-cert-2', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759749957/KOursE_uedyzk.png' }
                                     ]).map((cert, index) => (
                                         <img key={index} src={cert.url} alt="Certificate" style={{ height: '40px', objectFit: 'contain' }} />
                                     ))}
@@ -6478,36 +6497,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             )}
                         </div>
 
-                        {/* App Status Media (Image/Video) */}
-                        {config.appStatus?.fileUrl && (
-                            <div style={{ marginTop: '2rem', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-                                {config.appStatus.type === 'video' ? (
-                                    <video
-                                        controls
-                                        src={config.appStatus.fileUrl}
-                                        style={{ width: '100%', height: 'auto', display: 'block' }}
-                                    />
-                                ) : (
-                                    <img
-                                        src={config.appStatus.fileUrl}
-                                        alt="App Screenshot"
-                                        style={{ width: '100%', height: 'auto', display: 'block' }}
-                                    />
-                                )}
-                                {config.appStatus.launchDate && (
-                                    <div style={{
-                                        padding: '0.75rem',
-                                        background: '#f1f5f9',
-                                        fontSize: '0.85rem',
-                                        color: '#64748b',
-                                        textAlign: 'center',
-                                        fontWeight: '500'
-                                    }}>
-                                        Launching: {config.appStatus.launchDate}
-                                    </div>
-                                )}
-                            </div>
-                        )}
+
 
                         {/* Social Networks */}
                         {social && Object.entries(social).some(([key, val]) => val && typeof val === 'string' && val.trim() !== '') && (
@@ -6579,9 +6569,23 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         {/* Website Footer */}
                         {businessInfo?.website && (
                             <div style={{ marginTop: '2rem', textAlign: 'center', paddingBottom: '1rem' }}>
-                                <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0, wordBreak: 'break-all' }}>
+                                <a
+                                    href={businessInfo.website.startsWith('http') ? businessInfo.website : `https://${businessInfo.website}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                        fontSize: '0.85rem',
+                                        color: '#3b82f6',
+                                        margin: 0,
+                                        wordBreak: 'break-all',
+                                        textDecoration: 'none',
+                                        cursor: 'pointer'
+                                    }}
+                                    onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
+                                    onMouseOut={(e) => e.target.style.textDecoration = 'none'}
+                                >
                                     {businessInfo.website}
-                                </p>
+                                </a>
                             </div>
                         )}
                     </div>

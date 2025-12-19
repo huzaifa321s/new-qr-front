@@ -254,7 +254,7 @@ const BioPageConfig = ({ config, onChange }) => {
                                     type="text"
                                     value={basicInfo.name || ''}
                                     onChange={(e) => handleBasicInfoUpdate('name', e.target.value)}
-                                    placeholder="HARRY TAYLOR"
+                                    placeholder="Hellen Grey"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -348,7 +348,7 @@ const BioPageConfig = ({ config, onChange }) => {
                                     type="text"
                                     value={basicInfo.companyName || ''}
                                     onChange={(e) => handleBasicInfoUpdate('companyName', e.target.value)}
-                                    placeholder="Designer & Photographer"
+                                    placeholder="Sterling & Co."
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -439,7 +439,7 @@ const BioPageConfig = ({ config, onChange }) => {
                             <textarea
                                 value={basicInfo.description || ''}
                                 onChange={(e) => handleBasicInfoUpdate('description', e.target.value)}
-                                placeholder="I am a designer & photographer working in International company. I am a designer & photographer working in International company."
+                                placeholder="We aim to provide fresh and healthy snacks people on the go."
                                 rows={3}
                                 style={{
                                     width: '100%',
@@ -508,7 +508,7 @@ const BioPageConfig = ({ config, onChange }) => {
                                             type="text"
                                             value={contact.phone || ''}
                                             onChange={(e) => handleContactUpdate('phone', e.target.value)}
-                                            placeholder="15555551234"
+                                            placeholder="703-701-9964"
                                             style={{
                                                 width: '100%',
                                                 padding: '0.75rem',
@@ -529,7 +529,7 @@ const BioPageConfig = ({ config, onChange }) => {
                                             type="text"
                                             value={contact.phoneButtonTitle || ''}
                                             onChange={(e) => handleContactUpdate('phoneButtonTitle', e.target.value)}
-                                            placeholder="Talk to Me"
+                                            placeholder="Mobile"
                                             style={{
                                                 width: '100%',
                                                 padding: '0.75rem',
@@ -615,7 +615,7 @@ const BioPageConfig = ({ config, onChange }) => {
                                             type="text"
                                             value={contact.emailButtonTitle || ''}
                                             onChange={(e) => handleContactUpdate('emailButtonTitle', e.target.value)}
-                                            placeholder="Email Me"
+                                            placeholder="Email"
                                             style={{
                                                 width: '100%',
                                                 padding: '0.75rem',
@@ -680,7 +680,7 @@ const BioPageConfig = ({ config, onChange }) => {
                                             type="text"
                                             value={contact.website || ''}
                                             onChange={(e) => handleContactUpdate('website', e.target.value)}
-                                            placeholder="https://Hellengrey.com"
+                                            placeholder="www.sterling.com"
                                             style={{
                                                 width: '100%',
                                                 padding: '0.75rem',
@@ -701,7 +701,7 @@ const BioPageConfig = ({ config, onChange }) => {
                                             type="text"
                                             value={contact.websiteButtonTitle || ''}
                                             onChange={(e) => handleContactUpdate('websiteButtonTitle', e.target.value)}
-                                            placeholder="Visit Us"
+                                            placeholder="Website"
                                             style={{
                                                 width: '100%',
                                                 padding: '0.75rem',

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, ChevronUp, UploadCloud, X, RefreshCw, Check, Image as ImageIcon, Plus, ArrowUpDown, Trash2, Clock, Globe, Facebook, Instagram, Twitter, Linkedin, Youtube, MessageCircle, Music, Send, MapPin, Link as LinkIcon, Hash } from 'lucide-react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
+import ImageUploadModal from './ImageUploadModal';
 import axios from 'axios';
 
 const MenuConfig = ({ config, onChange }) => {
@@ -12,16 +13,26 @@ const MenuConfig = ({ config, onChange }) => {
     const [isSocialOpen, setIsSocialOpen] = useState(true);
 
     // Sub-accordion state for Menu Categories
-    const [openCategoryId, setOpenCategoryId] = useState('juices');
+    const [openCategoryId, setOpenCategoryId] = useState(() => {
+        if (config.menu?.categories && config.menu.categories.length > 0) {
+            return config.menu.categories[0].id;
+        }
+        return 'burger';
+    });
 
-    // Image Preview State
+    // Image Preview State (Existing preview modal)
     const [showImageModal, setShowImageModal] = useState(false);
     const [isHoveringUpload, setIsHoveringUpload] = useState(false);
+
+    // State for background upload modal (New reusable modal)
+    const [isBgModalOpen, setIsBgModalOpen] = useState(false);
+    const [tempBgImage, setTempBgImage] = useState(null);
+    const [bgFileName, setBgFileName] = useState('');
 
     const design = config.design || {};
     const businessInfo = config.businessInfo || {};
 
-    // Initial State handling for Categories - use saved data if available
+    // Initial State handling for Categories
     const [categories, setCategories] = useState(() => {
         if (config.menu?.categories && config.menu.categories.length > 0) {
             return config.menu.categories;
@@ -53,16 +64,6 @@ const MenuConfig = ({ config, onChange }) => {
         ];
     });
 
-    // Sync categories to parent if they are not already set (initial load)
-    useEffect(() => {
-        if (!config.menu?.categories || config.menu.categories.length === 0) {
-            onChange(prev => ({
-                ...prev,
-                menu: { ...prev.menu, categories: categories }
-            }));
-        }
-    }, []);
-
     // Timings State
     const [timeFormat, setTimeFormat] = useState(businessInfo?.timeFormat || 'AM/PM');
     const [timings, setTimings] = useState(businessInfo?.timings || [
@@ -75,19 +76,8 @@ const MenuConfig = ({ config, onChange }) => {
         { day: 'Sunday', isOpen: false, start: '08:00 AM', end: '08:00 AM' },
     ]);
 
-    // Update timings when config changes (for edit mode)
-    useEffect(() => {
-        if (businessInfo?.timings && Array.isArray(businessInfo.timings) && businessInfo.timings.length > 0) {
-            setTimings(businessInfo.timings);
-        }
-        if (businessInfo?.timeFormat) {
-            setTimeFormat(businessInfo.timeFormat);
-        }
-    }, [businessInfo?.timings, businessInfo?.timeFormat]);
-
     // Social Media State
-    // Initializing with Website, Facebook, Instagram as requested
-    const [socials, setSocials] = useState([
+    const [socials, setSocials] = useState(businessInfo?.socials || [
         { id: 'website', name: 'Website', icon: 'globe', placeholder: 'https://', url: '' },
         { id: 'facebook', name: 'Facebook', icon: 'facebook', placeholder: 'https://', url: '' },
         { id: 'instagram', name: 'Instagram', icon: 'instagram', placeholder: 'https://', url: '' }
@@ -113,48 +103,7 @@ const MenuConfig = ({ config, onChange }) => {
         { id: 'website', color: '#4F46E5', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png' }
     ];
 
-    const handleSocialChange = (index, value) => {
-        const newSocials = [...socials];
-        newSocials[index].url = value;
-        setSocials(newSocials);
-        onChange(prev => ({ ...prev, businessInfo: { ...prev.businessInfo, socials: newSocials } }));
-    };
-
-    const handleAddSocial = (id) => {
-        if (socials.find(s => s.id === id)) return; // Already added
-        const newItem = { id, name: id.charAt(0).toUpperCase() + id.slice(1), url: '', placeholder: 'https://' };
-        setSocials([...socials, newItem]);
-    };
-
-    const handleRemoveSocial = (index) => {
-        const newSocials = socials.filter((_, i) => i !== index);
-        setSocials(newSocials);
-    };
-
-    // Standard Handlers
-    const handleTimingChange = (index, field, value) => {
-        const newTimings = [...timings];
-        newTimings[index][field] = value;
-        setTimings(newTimings);
-        onChange(prev => ({ ...prev, businessInfo: { ...prev.businessInfo, timings: newTimings } }));
-    };
-
-    const handleTimeFormatChange = (format) => {
-        setTimeFormat(format);
-        onChange(prev => ({ ...prev, businessInfo: { ...prev.businessInfo, timeFormat: format } }));
-
-        // Remove AM/PM from all timings if switching to 24 hrs
-        if (format === '24 hrs') {
-            const updatedTimings = timings.map(t => ({
-                ...t,
-                start: t.start ? t.start.replace(/\s*(AM|PM|am|pm)/i, '').trim() : t.start,
-                end: t.end ? t.end.replace(/\s*(AM|PM|am|pm)/i, '').trim() : t.end
-            }));
-            setTimings(updatedTimings);
-            onChange(prev => ({ ...prev, businessInfo: { ...prev.businessInfo, timings: updatedTimings, timeFormat: format } }));
-        }
-    };
-
+    // Helper functions
     const updateCategories = (newCategories) => {
         setCategories(newCategories);
         onChange(prev => ({
@@ -186,7 +135,7 @@ const MenuConfig = ({ config, onChange }) => {
             };
         });
         updateCategories(newCats);
-    }
+    };
 
     const handleRemoveProduct = (catId, prodId) => {
         const newCats = categories.map(c => {
@@ -196,12 +145,11 @@ const MenuConfig = ({ config, onChange }) => {
             return c;
         });
         updateCategories(newCats);
-    }
+    };
 
     const handleRemoveCategory = (catId) => {
         const newCategories = categories.filter(c => c.id !== catId);
         updateCategories(newCategories);
-        // If deleted category was open, close it
         if (openCategoryId === catId) {
             setOpenCategoryId(newCategories.length > 0 ? newCategories[0].id : null);
         }
@@ -209,28 +157,14 @@ const MenuConfig = ({ config, onChange }) => {
 
     const handleProductImageUpload = async (catId, prodId, file) => {
         if (!file) return;
-
-        // Check file type
-        if (!file.type.startsWith('image/')) {
-            alert('Please select an image file');
-            return;
-        }
-
-        // Check file size (max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-            alert('File size should be less than 5MB');
-            return;
-        }
-
+        if (!file.type.startsWith('image/')) { alert('Please select an image file'); return; }
+        if (file.size > 5 * 1024 * 1024) { alert('File size should be less than 5MB'); return; }
         try {
             const formData = new FormData();
             formData.append('image', file);
-
             const res = await axios.post('http://localhost:3000/api/upload/image', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
-
-            // Update product image
             handleProductChange(catId, prodId, 'image', res.data.url);
         } catch (err) {
             console.error('Upload failed:', err);
@@ -247,18 +181,7 @@ const MenuConfig = ({ config, onChange }) => {
     };
 
     const toggleCategory = (id) => {
-        if (openCategoryId === id) setOpenCategoryId(null);
-        else setOpenCategoryId(id);
-    };
-
-    const primaryColor = design.primaryColor || '#6F0101';
-    const secondaryColor = design.secondaryColor || '#FFFFFF';
-
-    const handleDesignUpdate = (key, value) => {
-        onChange(prev => ({
-            ...prev,
-            design: { ...prev.design, [key]: value }
-        }));
+        setOpenCategoryId(prev => prev === id ? null : id);
     };
 
     const handleDesignSectionUpdate = (key, value) => {
@@ -282,35 +205,10 @@ const MenuConfig = ({ config, onChange }) => {
         }));
     };
 
-    const handleColorPaletteClick = (primary, secondary) => {
-        onChange(prev => ({
-            ...prev,
-            design: { ...prev.design, primaryColor: primary, secondaryColor: secondary }
-        }));
-    };
-
-    const palettes = [{ p: '#0f296d', s: '#f59e0b' }, { p: '#fef08a', s: '#fffbeb' }, { p: '#8b5cf6', s: '#c4b5fd' }, { p: '#16a34a', s: '#86efac' }, { p: '#06b6d4', s: '#67e8f9' }];
-    const bgImages = [{ id: '1', url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400' }, { id: '2', url: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400' }, { id: '3', url: 'https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=400' }, { id: '4', url: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400' }, { id: '5', url: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=400' }];
-    const logos = [{ id: '1', url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix' }, { id: '2', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Food' }, { id: '3', url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka' }];
-
     const getSocialIcon = (id) => {
         const item = availableSocials.find(s => s.id === id);
         if (!item) return <Globe size={20} color="#fff" />;
-        if (typeof item.icon === 'string') {
-            return (
-                <img
-                    src={item.icon}
-                    alt=""
-                    style={{
-                        width: '20px',
-                        height: '20px',
-                        objectFit: 'contain',
-                        filter: item.id === 'snapchat' || item.color === '#fffc00' ? 'none' : 'brightness(0) invert(1)'
-                    }}
-                />
-            );
-        }
-        return item.icon;
+        return <img src={item.icon} alt="" style={{ width: '20px', height: '20px', objectFit: 'contain', filter: item.id === 'snapchat' || item.color === '#fffc00' ? 'none' : 'brightness(0) invert(1)' }} />;
     };
 
     const getSocialColor = (id) => {
@@ -318,10 +216,66 @@ const MenuConfig = ({ config, onChange }) => {
         return item ? item.color : '#94a3b8';
     };
 
+    const handleSocialChange = (index, value) => {
+        const newSocials = [...socials];
+        newSocials[index].url = value;
+        setSocials(newSocials);
+        onChange(prev => ({ ...prev, businessInfo: { ...prev.businessInfo, socials: newSocials } }));
+    };
+
+    const handleAddSocial = (id) => {
+        if (socials.find(s => s.id === id)) return;
+        const newItem = { id, name: id.charAt(0).toUpperCase() + id.slice(1), url: '', placeholder: 'https://' };
+        const newSocials = [...socials, newItem];
+        setSocials(newSocials);
+        onChange(prev => ({ ...prev, businessInfo: { ...prev.businessInfo, socials: newSocials } }));
+    };
+
+    const handleRemoveSocial = (index) => {
+        const newSocials = socials.filter((_, i) => i !== index);
+        setSocials(newSocials);
+        onChange(prev => ({ ...prev, businessInfo: { ...prev.businessInfo, socials: newSocials } }));
+    };
+
+    const handleTimingChange = (index, field, value) => {
+        const newTimings = [...timings];
+        newTimings[index][field] = value;
+        setTimings(newTimings);
+        onChange(prev => ({ ...prev, businessInfo: { ...prev.businessInfo, timings: newTimings } }));
+    };
+
+    const handleTimeFormatChange = (format) => {
+        setTimeFormat(format);
+        let updatedTimings = [...timings];
+        if (format === '24 hrs') {
+            updatedTimings = timings.map(t => ({
+                ...t,
+                start: t.start ? t.start.replace(/\s*(AM|PM|am|pm)/i, '').trim() : t.start,
+                end: t.end ? t.end.replace(/\s*(AM|PM|am|pm)/i, '').trim() : t.end
+            }));
+            setTimings(updatedTimings);
+        }
+        onChange(prev => ({ ...prev, businessInfo: { ...prev.businessInfo, timings: updatedTimings, timeFormat: format } }));
+    };
+
+    // Effects
+    useEffect(() => {
+        if (!config.menu?.categories || config.menu.categories.length === 0) {
+            onChange(prev => ({ ...prev, menu: { ...prev.menu, categories: categories } }));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (businessInfo?.timings) setTimings(businessInfo.timings);
+        if (businessInfo?.timeFormat) setTimeFormat(businessInfo.timeFormat);
+    }, [businessInfo?.timings, businessInfo?.timeFormat]);
+
+    const palettes = [{ p: '#0f296d', s: '#f59e0b' }, { p: '#fef08a', s: '#fffbeb' }, { p: '#8b5cf6', s: '#c4b5fd' }, { p: '#16a34a', s: '#86efac' }, { p: '#06b6d4', s: '#67e8f9' }];
+    const bgImages = [{ id: '1', url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400' }, { id: '2', url: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400' }, { id: '3', url: 'https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=400' }, { id: '4', url: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400' }, { id: '5', url: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=400' }];
+    const logos = [{ id: '1', url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix' }, { id: '2', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Food' }, { id: '3', url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka' }];
+
     return (
         <div>
-            {/* DESIGN ACCORDION - Compacted */}
-            {/* DESIGN ACCORDION - Compacted */}
             <ReusableDesignAccordion
                 design={{
                     ...design,
@@ -341,106 +295,51 @@ const MenuConfig = ({ config, onChange }) => {
                 <div style={{ marginBottom: '2.5rem' }}>
                     <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>BACKGROUND IMAGE</div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-                        {/* Remove Image Button */}
                         <div onClick={() => handleDesignSectionUpdate('backgroundImage', '')} style={{ width: '80px', height: '80px', borderRadius: '4px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                             <X size={32} color="#e2e8f0" />
                         </div>
-
-                        {/* Preset Images */}
                         {bgImages.map(img => (
                             <div key={img.id} onClick={() => handleDesignSectionUpdate('backgroundImage', img.url)} style={{ width: '80px', height: '80px', borderRadius: '4px', overflow: 'hidden', border: design.backgroundImage === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0', position: 'relative', cursor: 'pointer' }}>
                                 <img src={img.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 {design.backgroundImage === img.url && (
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: '4px',
-                                        right: '4px',
-                                        background: '#8b5cf6',
-                                        borderRadius: '50%',
-                                        width: '20px',
-                                        height: '20px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}>
+                                    <div style={{ position: 'absolute', top: '4px', right: '4px', background: '#8b5cf6', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <Check size={12} color="#fff" strokeWidth={3} />
                                     </div>
                                 )}
                             </div>
                         ))}
-
-                        {/* Display Uploaded Image if it's not one of the presets */}
                         {design.backgroundImage && !bgImages.find(img => img.url === design.backgroundImage) && (
-                            <div
-                                onClick={() => setShowImageModal(true)}
-                                onMouseEnter={() => setIsHoveringUpload(true)}
-                                onMouseLeave={() => setIsHoveringUpload(false)}
-                                style={{ width: '80px', height: '80px', borderRadius: '4px', overflow: 'hidden', border: '2px solid #8b5cf6', position: 'relative', cursor: 'pointer' }}
-                            >
+                            <div onClick={() => setShowImageModal(true)} onMouseEnter={() => setIsHoveringUpload(true)} onMouseLeave={() => setIsHoveringUpload(false)} style={{ width: '80px', height: '80px', borderRadius: '4px', overflow: 'hidden', border: '2px solid #8b5cf6', position: 'relative', cursor: 'pointer' }}>
                                 <img src={design.backgroundImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-
-                                {/* Hover Effect */}
                                 {isHoveringUpload && (
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: 0,
-                                        width: '100%',
-                                        height: '100%',
-                                        background: 'rgba(0,0,0,0.5)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        zIndex: 10
-                                    }}>
+                                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
                                         <span style={{ color: '#fff', fontSize: '0.7rem', fontWeight: 'bold' }}>Preview</span>
                                     </div>
                                 )}
-
-                                <div style={{
-                                    position: 'absolute',
-                                    top: '4px',
-                                    right: '4px',
-                                    background: '#8b5cf6',
-                                    borderRadius: '50%',
-                                    width: '20px',
-                                    height: '20px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    zIndex: 5
-                                }}>
+                                <div style={{ position: 'absolute', top: '4px', right: '4px', background: '#8b5cf6', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 5 }}>
                                     <Check size={12} color="#fff" strokeWidth={3} />
                                 </div>
                             </div>
                         )}
-
-                        {/* Upload Button */}
                         <label style={{ width: '80px', height: '80px', borderRadius: '4px', border: '1px dashed #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                style={{ display: 'none' }}
-                                onChange={(e) => {
-                                    const file = e.target.files[0];
-                                    if (file) {
-                                        const reader = new FileReader();
-                                        reader.onload = () => {
-                                            handleDesignSectionUpdate('backgroundImage', reader.result);
-                                        };
-                                        reader.readAsDataURL(file);
-                                    }
-                                }}
-                            />
+                            <input type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                    setBgFileName(file.name);
+                                    const reader = new FileReader();
+                                    reader.onload = () => { setTempBgImage(reader.result); setIsBgModalOpen(true); };
+                                    reader.readAsDataURL(file);
+                                }
+                                e.target.value = '';
+                            }} />
                             <UploadCloud size={24} color="#94a3b8" />
                         </label>
                     </div>
                 </div>
             </ReusableDesignAccordion>
 
-            {/* BASIC INFORMATION - Compacted */}
             <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', borderBottom: isBasicInfoOpen ? '1px solid #e2e8f0' : 'none' }}>
+                <div onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
                     <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
                     {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
@@ -449,339 +348,119 @@ const MenuConfig = ({ config, onChange }) => {
                         <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>RESTAURANT NAME*</label><input type="text" value={businessInfo.title || ''} onChange={e => handleBusinessInfoUpdate('title', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
                         <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>TITLE*</label><input type="text" value={businessInfo.headline || 'DOWNLOAD NOW'} onChange={e => handleBusinessInfoUpdate('headline', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
                         <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>DESCRIPTION</label><textarea value={businessInfo.description || ''} onChange={e => handleBusinessInfoUpdate('description', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
-                        <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>WEBSITE*</label><input type="text" value={businessInfo.website || 'https://www.techoid.com'} onChange={e => handleBusinessInfoUpdate('website', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
-                        <div style={{ marginBottom: '1.5rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>CURRENCY</label>
-                            <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-                                <div
-                                    onClick={() => handleBusinessInfoUpdate('currency', '$')}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.5rem',
-                                        cursor: 'pointer'
-                                    }}
-                                >
-                                    <div style={{
-                                        width: '20px',
-                                        height: '20px',
-                                        borderRadius: '50%',
-                                        border: '2px solid #8b5cf6',
-                                        background: (businessInfo?.currency || '$') === '$' ? '#8b5cf6' : 'transparent',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}>
-                                        {(businessInfo?.currency || '$') === '$' && (
-                                            <div style={{
-                                                width: '10px',
-                                                height: '10px',
-                                                borderRadius: '50%',
-                                                background: '#fff'
-                                            }}></div>
-                                        )}
-                                    </div>
-                                    <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>$</span>
-                                </div>
-                                <div
-                                    onClick={() => handleBusinessInfoUpdate('currency', 'PKR')}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.5rem',
-                                        cursor: 'pointer'
-                                    }}
-                                >
-                                    <div style={{
-                                        width: '20px',
-                                        height: '20px',
-                                        borderRadius: '50%',
-                                        border: '2px solid #8b5cf6',
-                                        background: businessInfo?.currency === 'PKR' ? '#8b5cf6' : 'transparent',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}>
-                                        {businessInfo?.currency === 'PKR' && (
-                                            <div style={{
-                                                width: '10px',
-                                                height: '10px',
-                                                borderRadius: '50%',
-                                                background: '#fff'
-                                            }}></div>
-                                        )}
-                                    </div>
-                                    <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>PKR</span>
-                                </div>
-                            </div>
-                        </div>
+                        <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>WEBSITE*</label><input type="text" value={businessInfo.website || ''} onChange={e => handleBusinessInfoUpdate('website', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
                         <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>NO OF TABLES*</label><input type="number" value={businessInfo.tables || ''} onChange={e => handleBusinessInfoUpdate('tables', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
                     </div>
                 )}
             </div>
 
-            {/* MENU ACCORDION */}
             <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div onClick={() => setIsMenuOpen(!isMenuOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', borderBottom: isMenuOpen ? '1px solid #e2e8f0' : 'none' }}>
+                <div onClick={() => setIsMenuOpen(!isMenuOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
                     <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>MENU</div>
                     {isMenuOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
-
                 {isMenuOpen && (
-                    <div style={{ padding: '2rem', background: '#faf9fc', minHeight: '200px', display: 'flex', flexDirection: 'column' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+                    <div style={{ padding: '2rem', background: '#faf9fc' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             {categories.map((cat) => (
-                                <div key={cat.id} style={{ borderRadius: '4px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-                                    <div
-                                        onClick={() => toggleCategory(cat.id)}
-                                        style={{
-                                            background: '#fff', padding: '1rem 1.5rem', display: 'flex',
-                                            justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer',
-                                            fontWeight: 'bold', color: '#0f172a', fontSize: '0.9rem',
-                                            textTransform: 'uppercase',
-                                            borderBottom: openCategoryId === cat.id ? '1px solid #f1f5f9' : 'none'
-                                        }}
-                                    >
+                                <div key={cat.id} style={{ borderRadius: '4px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', background: '#fff' }}>
+                                    <div onClick={() => toggleCategory(cat.id)} style={{ padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', fontWeight: 'bold' }}>
                                         {cat.name || 'New Category'}
-                                        {openCategoryId === cat.id ? <ChevronUp size={18} color="#0f172a" /> : <ChevronDown size={18} color="#0f172a" />}
+                                        {openCategoryId === cat.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                                     </div>
-
                                     {openCategoryId === cat.id && (
-                                        <div style={{ background: '#fff', padding: '2rem 1.5rem' }}>
-                                            <div style={{ marginBottom: '2rem', position: 'relative' }}>
-                                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#334155', marginBottom: '0.5rem', textTransform: 'uppercase' }}>CATEGORY NAME*</label>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                                    <input type="text" value={cat.name} onChange={(e) => handleCategoryNameChange(cat.id, e.target.value)} style={{ flex: 1, padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '1rem', outline: 'none' }} />
-                                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                                        <div
-                                                            onClick={() => handleRemoveCategory(cat.id)}
-                                                            style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
-                                                        >
-                                                            <X size={16} color="#94a3b8" />
-                                                        </div>
-                                                        <div style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><ArrowUpDown size={20} color="#cbd5e1" /></div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div style={{ padding: '1.5rem' }}>
+                                            <input type="text" value={cat.name} onChange={(e) => handleCategoryNameChange(cat.id, e.target.value)} placeholder="Category Name" style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
                                             {cat.products.map((prod, idx) => (
-                                                <div key={prod.id} style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.5rem' }}>
-                                                    <div style={{ width: '80px', paddingTop: '1rem' }}><span style={{ color: '#8b5cf6', fontWeight: 'bold', fontSize: '0.8rem', textTransform: 'uppercase' }}>PRODUCT {idx + 1}:</span></div>
-                                                    <div style={{ flex: 1, background: '#f6f5ff', padding: '1.5rem', borderRadius: '8px', position: 'relative' }}>
-                                                        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
-                                                            <div><label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 'bold', color: '#334155', marginBottom: '0.5rem', textTransform: 'uppercase' }}>PRODUCT NAME*</label><input type="text" value={prod.name} placeholder="Zinger Burger" onChange={(e) => handleProductChange(cat.id, prod.id, 'name', e.target.value)} style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', background: '#fff' }} /></div>
-                                                            <div><label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 'bold', color: '#334155', marginBottom: '0.5rem', textTransform: 'uppercase' }}>PRICE*</label><input type="text" value={prod.price} placeholder="10" onChange={(e) => handleProductChange(cat.id, prod.id, 'price', e.target.value)} style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', background: '#fff' }} /></div>
-                                                        </div>
-                                                        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
-                                                            <div><label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 'bold', color: '#334155', marginBottom: '0.5rem', textTransform: 'uppercase' }}>DESCRIPTION</label><textarea value={prod.description} placeholder="jalapeno + cheese" onChange={(e) => handleProductChange(cat.id, prod.id, 'description', e.target.value)} rows={3} style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', background: '#fff', resize: 'none' }} /></div>
-                                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                                                {prod.image && (
-                                                                    <div style={{ position: 'relative', width: '50px', height: '50px', borderRadius: '4px', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
-                                                                        <img
-                                                                            src={prod.image}
-                                                                            style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.3s ease' }}
-                                                                        />
-                                                                    </div>
-                                                                )}
-                                                                <label style={{ width: '50px', height: '50px', borderRadius: '4px', border: '1px dashed #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: '#f8fafc' }}>
-                                                                    <input
-                                                                        type="file"
-                                                                        accept="image/*"
-                                                                        style={{ display: 'none' }}
-                                                                        onChange={(e) => {
-                                                                            const file = e.target.files[0];
-                                                                            if (file) {
-                                                                                handleProductImageUpload(cat.id, prod.id, file);
-                                                                            }
-                                                                            e.target.value = '';
-                                                                        }}
-                                                                    />
-                                                                    <UploadCloud size={20} color="#94a3b8" />
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div style={{ position: 'absolute', right: '-40px', top: '0', height: '100%', display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '0.5rem' }}>
-                                                            <div
-                                                                onClick={() => handleRemoveProduct(cat.id, prod.id)}
-                                                                style={{ width: '28px', height: '28px', borderRadius: '50%', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: '#fff' }}
-                                                            >
-                                                                <X size={14} color="#94a3b8" />
-                                                            </div>
-                                                            <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><ArrowUpDown size={18} color="#cbd5e1" /></div>
-                                                        </div>
+                                                <div key={prod.id} style={{ border: '1px solid #f1f5f9', padding: '1rem', borderRadius: '8px', marginBottom: '1rem', background: '#f8fafc' }}>
+                                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '0.5rem' }}>
+                                                        <input type="text" value={prod.name} placeholder="Product Name" onChange={(e) => handleProductChange(cat.id, prod.id, 'name', e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
+                                                        <input type="text" value={prod.price} placeholder="Price" onChange={(e) => handleProductChange(cat.id, prod.id, 'price', e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
+                                                    </div>
+                                                    <textarea value={prod.description} placeholder="Description" onChange={(e) => handleProductChange(cat.id, prod.id, 'description', e.target.value)} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0', marginBottom: '0.5rem' }} />
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                                        {prod.image && <img src={prod.image} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />}
+                                                        <input type="file" onChange={(e) => handleProductImageUpload(cat.id, prod.id, e.target.files[0])} style={{ fontSize: '0.8rem' }} />
+                                                        <button onClick={() => handleRemoveProduct(cat.id, prod.id)} style={{ color: '#ef4444' }}><Trash2 size={16} /></button>
                                                     </div>
                                                 </div>
                                             ))}
-                                            <button onClick={() => handleAddProduct(cat.id)} style={{ background: '#fff', border: '1px solid #8b5cf6', color: '#8b5cf6', padding: '0.75rem 1.5rem', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '600', fontSize: '0.9rem', cursor: 'pointer', marginTop: '1rem' }}><Plus size={16} /> Add More Product</button>
+                                            <button onClick={() => handleAddProduct(cat.id)} style={{ color: '#8b5cf6', fontWeight: 'bold', fontSize: '0.9rem' }}>+ Add Product</button>
+                                            <button onClick={() => handleRemoveCategory(cat.id)} style={{ color: '#ef4444', float: 'right' }}>Remove Category</button>
                                         </div>
                                     )}
                                 </div>
                             ))}
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
-                            <button onClick={handleAddCategory} style={{ background: '#fff', border: '1px solid #8b5cf6', color: '#8b5cf6', padding: '0.5rem 1rem', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '600', fontSize: '0.9rem', cursor: 'pointer' }}><Plus size={16} /> Add Category</button>
-                        </div>
+                        <button onClick={handleAddCategory} style={{ marginTop: '1rem', background: '#8b5cf6', color: '#fff', padding: '0.5rem 1rem', borderRadius: '4px' }}>+ Add Category</button>
                     </div>
-                )
-                }
-            </div >
+                )}
+            </div>
 
-            {/* TIMINGS ACCORDION */}
-            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div onClick={() => setIsTimingsOpen(!isTimingsOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', borderBottom: isTimingsOpen ? '1px solid #e2e8f0' : 'none' }}>
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+                <div onClick={() => setIsTimingsOpen(!isTimingsOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
                     <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>TIMINGS</div>
                     {isTimingsOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
-
-                {
-                    isTimingsOpen && (
-                        <div style={{ padding: '2rem', background: '#faf9fc' }}>
-                            <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '2rem' }}>
-                                    <button onClick={() => handleTimeFormatChange('24 hrs')} style={{ padding: '0.5rem 1rem', borderRadius: '4px', border: timeFormat === '24 hrs' ? '1px solid #8b5cf6' : '1px solid #e2e8f0', color: timeFormat === '24 hrs' ? '#8b5cf6' : '#94a3b8', background: '#fff', fontWeight: '600', fontSize: '0.8rem', cursor: 'pointer' }}>24 hrs</button>
-                                    <button onClick={() => handleTimeFormatChange('AM/PM')} style={{ padding: '0.5rem 1rem', borderRadius: '4px', border: timeFormat === 'AM/PM' ? '1px solid #8b5cf6' : '1px solid #e2e8f0', color: timeFormat === 'AM/PM' ? '#8b5cf6' : '#94a3b8', background: '#fff', fontWeight: '600', fontSize: '0.8rem', cursor: 'pointer' }}>AM/PM</button>
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                                    {timings.map((day, ix) => (
-                                        <div key={day.day} style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', gap: '1.5rem', alignItems: 'center' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                                                <div onClick={() => handleTimingChange(ix, 'isOpen', !day.isOpen)} style={{ width: '20px', height: '20px', borderRadius: '4px', background: day.isOpen ? '#06b6d4' : '#fff', border: day.isOpen ? 'none' : '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>{day.isOpen && <Check size={14} color="#fff" strokeWidth={3} />}</div>
-                                                <span style={{ color: '#64748b', fontSize: '0.9rem', fontWeight: '500' }}>{day.day}</span>
-                                            </div>
-                                            <div style={{ position: 'relative' }}><input type="text" value={day.start} onChange={(e) => handleTimingChange(ix, 'start', e.target.value)} style={{ width: '100%', padding: '0.75rem', paddingRight: '2.5rem', borderRadius: '4px', border: '1px solid #e2e8f0', fontSize: '0.9rem', outline: 'none', color: '#334155' }} /><div style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}><Clock size={16} color="#cbd5e1" /></div></div>
-                                            <div style={{ position: 'relative' }}><input type="text" value={day.end} onChange={(e) => handleTimingChange(ix, 'end', e.target.value)} style={{ width: '100%', padding: '0.75rem', paddingRight: '2.5rem', borderRadius: '4px', border: '1px solid #e2e8f0', fontSize: '0.9rem', outline: 'none', color: '#334155' }} /><div style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}><Clock size={16} color="#cbd5e1" /></div></div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                {isTimingsOpen && (
+                    <div style={{ padding: '2rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '1rem' }}>
+                            {['24 hrs', 'AM/PM'].map(f => (
+                                <button key={f} onClick={() => handleTimeFormatChange(f)} style={{ padding: '0.4rem 0.8rem', borderRadius: '4px', border: timeFormat === f ? '1px solid #8b5cf6' : '1px solid #e2e8f0', color: timeFormat === f ? '#8b5cf6' : '#64748b' }}>{f}</button>
+                            ))}
                         </div>
-                    )
-                }
-            </div >
+                        {timings.map((day, idx) => (
+                            <div key={day.day} style={{ display: 'grid', gridTemplateColumns: '100px 1fr 1fr', gap: '1rem', alignItems: 'center', marginBottom: '0.8rem' }}>
+                                <span style={{ fontSize: '0.9rem' }}>{day.day}</span>
+                                <input type="text" value={day.start} onChange={(e) => handleTimingChange(idx, 'start', e.target.value)} style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
+                                <input type="text" value={day.end} onChange={(e) => handleTimingChange(idx, 'end', e.target.value)} style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
 
-            {/* SOCIAL MEDIA CHANNELS */}
-            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div onClick={() => setIsSocialOpen(!isSocialOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', borderBottom: isSocialOpen ? '1px solid #e2e8f0' : 'none' }}>
-                    <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+                <div onClick={() => setIsSocialOpen(!isSocialOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
+                    <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SOCIAL MEDIA</div>
                     {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
-
-                {
-                    isSocialOpen && (
-                        <div style={{ padding: '2rem', background: '#fff' }}>
-                            {/* Active Inputs Grid */}
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', marginBottom: '3rem' }}>
-                                {socials.map((social, index) => (
-                                    <div key={index} style={{ width: '45%', position: 'relative' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem', fontWeight: 'bold' }}>{social.name}*</label>
-                                        <div style={{ position: 'relative' }}>
-                                            <div style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', width: '24px', height: '24px', borderRadius: '4px', background: getSocialColor(social.id), display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                {getSocialIcon(social.id)}
-                                            </div>
-                                            <input
-                                                type="text"
-                                                value={social.url}
-                                                placeholder={social.placeholder}
-                                                onChange={(e) => handleSocialChange(index, e.target.value)}
-                                                style={{ width: '100%', padding: '0.75rem', paddingLeft: '3rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none' }}
-                                            />
-                                        </div>
-
-                                        {/* Action Icons Outside */}
-                                        <div style={{ position: 'absolute', right: '-35px', top: '32px', display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-                                            <div onClick={() => handleRemoveSocial(index)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '24px', height: '24px', borderRadius: '50%', border: '1px solid #e2e8f0' }}>
-                                                <X size={12} color="#94a3b8" />
-                                            </div>
-                                            <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '24px', height: '24px' }}>
-                                                <ArrowUpDown size={16} color="#cbd5e1" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
+                {isSocialOpen && (
+                    <div style={{ padding: '2rem' }}>
+                        {socials.map((s, idx) => (
+                            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                                <div style={{ background: getSocialColor(s.id), padding: '0.5rem', borderRadius: '4px' }}>{getSocialIcon(s.id)}</div>
+                                <input type="text" value={s.url} placeholder={s.placeholder} onChange={(e) => handleSocialChange(idx, e.target.value)} style={{ flex: 1, padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
+                                <button onClick={() => handleRemoveSocial(idx)} style={{ color: '#ef4444' }}><X size={16} /></button>
                             </div>
-
-                            {/* ADD MORE */}
-                            <div>
-                                <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.2rem', textTransform: 'uppercase' }}>ADD MORE</div>
-                                <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: '1.5rem' }}>Click on the icon to add a social media profile.</div>
-
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-                                    {availableSocials.map((s) => {
-                                        const isSelected = socials.some(active => active.id === s.id);
-                                        return (
-                                            <div
-                                                key={s.id}
-                                                onClick={() => handleAddSocial(s.id)}
-                                                style={{
-                                                    width: '40px', height: '40px', borderRadius: '8px',
-                                                    background: s.color,
-                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                    cursor: 'pointer',
-                                                    border: isSelected ? '3px solid #8b5cf6' : '2px solid transparent',
-                                                    boxShadow: isSelected ? '0 0 0 2px #fff inset' : 'none',
-                                                    opacity: isSelected ? 0.8 : 1
-                                                }}
-                                            >
-                                                {s.icon}
-                                            </div>
-                                        );
-                                    })}
+                        ))}
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem' }}>
+                            {availableSocials.map(s => (
+                                <div key={s.id} onClick={() => handleAddSocial(s.id)} style={{ width: '30px', height: '30px', borderRadius: '4px', background: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', opacity: socials.find(as => as.id === s.id) ? 0.3 : 1 }}>
+                                    <img src={s.icon} style={{ width: '16px', height: '16px', filter: 'brightness(0) invert(1)' }} />
                                 </div>
-                            </div>
+                            ))}
                         </div>
-                    )
-                }
-            </div >
-
-            {/* Image Modal */}
-            {showImageModal && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100vw',
-                    height: '100vh',
-                    background: 'rgba(0,0,0,0.8)',
-                    zIndex: 9999,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '2rem'
-                }} onClick={() => setShowImageModal(false)}>
-                    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={e => e.stopPropagation()}>
-                        <div
-                            onClick={() => setShowImageModal(false)}
-                            style={{
-                                position: 'absolute',
-                                top: '-40px',
-                                right: '-40px',
-                                width: '36px',
-                                height: '36px',
-                                background: '#fff',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                boxShadow: '0 2px 10px rgba(0,0,0,0.2)'
-                            }}
-                        >
-                            <X size={20} color="#1e293b" />
-                        </div>
-                        <img
-                            src={design.backgroundImage}
-                            alt="Preview"
-                            style={{
-                                maxWidth: '100%',
-                                maxHeight: '85vh',
-                                borderRadius: '8px',
-                                objectFit: 'contain'
-                            }}
-                        />
                     </div>
+                )}
+            </div>
+
+            {/* Modals */}
+            {showImageModal && (
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.8)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setShowImageModal(false)}>
+                    <img src={design.backgroundImage} style={{ maxWidth: '90%', maxHeight: '90%', borderRadius: '8px' }} />
                 </div>
             )}
 
-        </div >
+            <ImageUploadModal
+                isOpen={isBgModalOpen}
+                onClose={() => { setIsBgModalOpen(false); setTempBgImage(null); }}
+                onSave={(url) => handleDesignSectionUpdate('backgroundImage', url)}
+                tempImage={tempBgImage}
+                fileName={bgFileName}
+                type="image"
+            />
+        </div>
     );
 };
 

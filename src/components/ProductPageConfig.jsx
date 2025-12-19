@@ -16,9 +16,9 @@ const ProductPageConfig = ({ config, onChange }) => {
     const design = config.design || {};
     const bInfo = config.basicInfo || {};
     const defaultProductImages = [
-        { id: 'def-1', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743372%2Fitem-1_fr9qst.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' },
-        { id: 'def-2', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743370%2Fitem-2_suygda.webp&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' },
-        { id: 'def-3', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743370%2Fitem-3_ycglwq.webp&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' }
+        { id: 'def-1', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743372/item-1_fr9qst.png' },
+        { id: 'def-2', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-2_suygda.webp' },
+        { id: 'def-3', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-3_ycglwq.webp' }
     ];
     const basicInfo = {
         ...bInfo,
@@ -48,8 +48,8 @@ const ProductPageConfig = ({ config, onChange }) => {
             { id: '2', title: 'Ingredient', text: '• Reduced Fat Milk\n• Milk Solids\nCocoa Powder\n• Sugar\n• Emulsifier: Vegetable Oil Origin (E471)\n• Stabilizer (E470) & Chocolate Flavor' }
         ],
         certificates: (config.content && config.content.certificates && config.content.certificates.length > 0) ? config.content.certificates : [
-            { id: 'def-cert-1', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759749930%2FODCzvu_imfdi2.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' },
-            { id: 'def-cert-2', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759749957%2FKOursE_uedyzk.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' }
+            { id: 'def-cert-1', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759749930/ODCzvu_imfdi2.png' },
+            { id: 'def-cert-2', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759749957/KOursE_uedyzk.png' }
         ],
         buttonText: 'Buy Product',
         buttonLink: 'https://www.dairylandltd.com/'

@@ -140,10 +140,18 @@ export const bioPagePreviewConfig = {
         color: { header: '#8b5cf6', dark: '#8b5cf6', light: '#ffffff' }, // Purple/Violet
         profile: { url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80' } // Professional woman photo
     },
-    personalInfo: {
+    basicInfo: {
         name: "HARRY TAYLOR",
-        title: "Designer & Photographer",
-        bio: "I am a designer & photographer working in International company. I am a designer & photographer working in International company."
+        companyName: "Designer & Photographer",
+        description: "I am a designer & photographer working in International company. I am a designer & photographer working in International company."
+    },
+    contact: {
+        phone: '15555551234',
+        phoneButtonTitle: 'Talk to Me',
+        email: 'Hellen@gmail.com',
+        emailButtonTitle: 'Email Me',
+        website: 'https://Hellengrey.com',
+        websiteButtonTitle: 'Visit Us'
     },
     social: {
         facebook: 'https://facebook.com',
@@ -348,7 +356,55 @@ export const eventPreviewConfig = {
 };
 
 export const productPagePreviewConfig = {
-    type: 'product-page'
+    type: 'product-page',
+    basicInfo: {
+        companyName: 'Dairyland',
+        companyTextColor: '#000000',
+        companyFont: 'Lato',
+        productTitle: 'Chocolate Flavored Milk',
+        titleTextColor: '#000000',
+        titleFont: 'Lato',
+        headline: '325 ml',
+        price: '95',
+        currency: '₨',
+        productImages: [
+            { id: 'def-1', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743372/item-1_fr9qst.png' },
+            { id: 'def-2', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-2_suygda.webp' },
+            { id: 'def-3', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-3_ycglwq.webp' }
+        ]
+    },
+    content: {
+        items: [
+            { id: '1', title: 'Description', text: "The Dark, Smooth, Creaminess Of Chocolate Romances The Wholesome Goodness Of Real Cow's Milk, Reigniting For The Love For A Healthy, Tasty Beverage." },
+            { id: '2', title: 'Ingredient', text: '• Reduced Fat Milk\n• Milk Solids\nCocoa Powder\n• Sugar\n• Emulsifier: Vegetable Oil Origin (E471)\n• Stabilizer (E470) & Chocolate Flavor' }
+        ],
+        certificates: [
+            { id: 'def-cert-1', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759749930/ODCzvu_imfdi2.png' },
+            { id: 'def-cert-2', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759749957/KOursE_uedyzk.png' }
+        ],
+        buttonText: 'Buy Product',
+        buttonLink: 'https://www.dairylandltd.com/'
+    },
+    video: {
+        title: 'Vanilla & Malai...',
+        url: 'https://www.youtube.com/watch?v=kYI9P_pkyEw'
+    },
+    feedback: {
+        title: 'Add Your Feedback',
+        ratingUrl: 'https://www.dairylandltd.com/floveredmilk/rating',
+        textColor: '#000000',
+        font: 'Lato'
+    },
+    design: {
+        color: {
+            header: '#FFB03E',
+            light: '#031D36',
+            dark: '#FFB03E'
+        },
+        logo: {
+            url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743320/comapny-logo_xy3fqg.png'
+        }
+    }
 };
 
 export const dynamicUrlPreviewConfig = {

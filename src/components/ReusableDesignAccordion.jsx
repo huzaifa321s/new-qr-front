@@ -1,6 +1,7 @@
 
 import React, { useRef, useState } from 'react';
 import { ChevronDown, ChevronUp, RefreshCw, Check, UploadCloud, X, Eye } from 'lucide-react';
+import ImageUploadModal from './ImageUploadModal';
 import axios from 'axios';
 
 /**
@@ -66,6 +67,11 @@ const ReusableDesignAccordion = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
 
+    // State for image upload modal
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [tempImage, setTempImage] = useState(null);
+    const [fileName, setFileName] = useState('');
+
     const handleColorPaletteClick = (p, s) => {
         onChange(colorKeys.primary, p);
         onChange(colorKeys.secondary, s);
@@ -87,18 +93,24 @@ const ReusableDesignAccordion = ({
             return;
         }
 
+        setFileName(file.name);
         const reader = new FileReader();
         reader.onload = () => {
-            const result = reader.result;
-            if (logoKey.includes('.')) {
-                const keys = logoKey.split('.');
-                onChange(keys[0], { ...getValue(keys[0]), [keys[1]]: result });
-            } else {
-                // If logoKey is just 'logo', store as object with url property
-                onChange(logoKey, { url: result });
-            }
+            setTempImage(reader.result);
+            setIsUploadModalOpen(true);
         };
         reader.readAsDataURL(file);
+        e.target.value = null; // Clear input
+    };
+
+    const handleSaveLogo = (url) => {
+        if (logoKey.includes('.')) {
+            const keys = logoKey.split('.');
+            onChange(keys[0], { ...getValue(keys[0]), [keys[1]]: url });
+        } else {
+            // If logoKey is just 'logo', store as object with url property
+            onChange(logoKey, { url: url });
+        }
     };
 
     const triggerFileUpload = () => {
@@ -577,6 +589,19 @@ const ReusableDesignAccordion = ({
                     </div>
                 </div>
             )}
+
+            {/* Reusable Upload/Edit Modal */}
+            <ImageUploadModal
+                isOpen={isUploadModalOpen}
+                onClose={() => {
+                    setIsUploadModalOpen(false);
+                    setTempImage(null);
+                }}
+                onSave={handleSaveLogo}
+                tempImage={tempImage}
+                fileName={fileName}
+                type="logo"
+            />
         </div>
     );
 };

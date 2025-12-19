@@ -1,12 +1,20 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Globe, Facebook, Instagram, Twitter, Linkedin, Youtube, Music, Ghost, MessageCircle, Send, Dribbble, Github, GripVertical } from 'lucide-react';
 import { useState } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
+import ImageUploadModal from './ImageUploadModal';
 
 const RatingConfig = ({ config, onChange }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isRatingOpen, setIsRatingOpen] = useState(false);
     const [isSocialOpen, setIsSocialOpen] = useState(false);
+
+    // Reusable Upload Modal State
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [uploadModalTempImage, setUploadModalTempImage] = useState(null);
+    const [uploadModalFileName, setUploadModalFileName] = useState('');
+    const [isHoveringUpload, setIsHoveringUpload] = useState(false);
+    const [showPreviewModal, setShowPreviewModal] = useState(false);
 
     const design = config.design || {};
     const basicInfo = config.basicInfo || {
@@ -52,6 +60,26 @@ const RatingConfig = ({ config, onChange }) => {
                 headerImage: { url }
             }
         }));
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            setUploadModalTempImage(reader.result);
+            setUploadModalFileName(file.name);
+            setIsUploadModalOpen(true);
+        };
+        reader.readAsDataURL(file);
+        e.target.value = null;
+    };
+
+    const handleUploadModalSave = (url) => {
+        handleHeaderImageUpdate(url);
+        setIsUploadModalOpen(false);
+        setUploadModalTempImage(null);
+        setUploadModalFileName('');
     };
 
     const handleBasicInfoUpdate = (key, value) => {
@@ -167,7 +195,6 @@ const RatingConfig = ({ config, onChange }) => {
     return (
         <div>
             {/* DESIGN ACCORDION */}
-            {/* DESIGN ACCORDION */}
             <ReusableDesignAccordion
                 design={{
                     ...design,
@@ -193,13 +220,29 @@ const RatingConfig = ({ config, onChange }) => {
             >
                 {/* HEADER IMAGE SECTION */}
                 <div style={{ marginBottom: '2rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                         <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
                             HEADER IMAGE
                         </span>
-                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-                            Minimum width : 400px, 3:2 Ratio
-                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                                Minimum width : 400px, 3:2 Ratio
+                            </span>
+                            <label style={{
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '4px',
+                                border: '1px solid #cbd5e1',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                background: '#fff'
+                            }}>
+                                <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
+                                <UploadCloud size={16} color="#94a3b8" />
+                            </label>
+                        </div>
                     </div>
 
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -257,19 +300,57 @@ const RatingConfig = ({ config, onChange }) => {
                             </div>
                         ))}
 
-                        {/* Upload Option */}
-                        <div style={{
-                            width: '80px',
-                            height: '53px',
-                            borderRadius: '4px',
-                            border: '1px dashed #cbd5e1',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer'
-                        }}>
-                            <UploadCloud size={20} color="#94a3b8" />
-                        </div>
+                        {/* Custom Uploaded Image */}
+                        {design.headerImage?.url && !headerImageOptions.find(img => img.url === design.headerImage.url) && (
+                            <div
+                                onClick={() => setShowPreviewModal(true)}
+                                onMouseEnter={() => setIsHoveringUpload(true)}
+                                onMouseLeave={() => setIsHoveringUpload(false)}
+                                style={{
+                                    width: '80px',
+                                    height: '53px',
+                                    borderRadius: '4px',
+                                    overflow: 'hidden',
+                                    border: '2px solid #8b5cf6',
+                                    cursor: 'pointer',
+                                    position: 'relative'
+                                }}
+                            >
+                                <img src={design.headerImage.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                {isHoveringUpload && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        background: 'rgba(0,0,0,0.5)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        zIndex: 10
+                                    }}>
+                                        <span style={{ color: '#fff', fontSize: '0.7rem', fontWeight: 'bold' }}>Preview</span>
+                                    </div>
+                                )}
+                                <div style={{
+                                    position: 'absolute',
+                                    top: 2,
+                                    right: 2,
+                                    width: '20px',
+                                    height: '20px',
+                                    background: '#8b5cf6',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    border: '1px solid #fff',
+                                    zIndex: 5
+                                }}>
+                                    <Check size={12} color="#fff" />
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </ReusableDesignAccordion>
@@ -432,11 +513,12 @@ const RatingConfig = ({ config, onChange }) => {
                         </div>
 
                     </div>
-                )}
-            </div>
+                )
+                }
+            </div >
 
             {/* RATING ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
                 <div
                     onClick={() => setIsRatingOpen(!isRatingOpen)}
                     style={{
@@ -455,137 +537,139 @@ const RatingConfig = ({ config, onChange }) => {
                     {isRatingOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
 
-                {isRatingOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                {
+                    isRatingOpen && (
+                        <div style={{ padding: '2rem', background: '#fff' }}>
 
-                        {/* QUESTION FIELD */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                QUESTION*
+                            {/* QUESTION FIELD */}
+                            <div style={{ marginBottom: '2rem' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    QUESTION*
+                                </label>
+                                <input
+                                    type="text"
+                                    value={rating.question || ''}
+                                    onChange={(e) => handleRatingUpdate('question', e.target.value)}
+                                    placeholder="How was your rental experience?"
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: '1px solid #1e293b',
+                                        fontSize: '0.9rem',
+                                        outline: 'none'
+                                    }}
+                                />
+                            </div>
+
+                            {/* RATING TYPE OPTIONS */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+
+                                {/* Thumbs Up/Down Option */}
+                                <div
+                                    onClick={() => handleRatingUpdate('type', 'thumbs')}
+                                    style={{
+                                        padding: '2rem 1rem',
+                                        border: rating.type === 'thumbs' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                        borderRadius: '8px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '1rem',
+                                        cursor: 'pointer',
+                                        background: '#fff'
+                                    }}
+                                >
+                                    <div style={{
+                                        width: '48px',
+                                        height: '48px',
+                                        borderRadius: '50%',
+                                        background: '#8b5cf6',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        fontSize: '1.5rem'
+                                    }}>
+                                        👍
+                                    </div>
+                                    <div style={{
+                                        width: '48px',
+                                        height: '48px',
+                                        borderRadius: '50%',
+                                        background: '#8b5cf6',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        fontSize: '1.5rem'
+                                    }}>
+                                        👎
+                                    </div>
+                                </div>
+
+                                {/* Emoji Faces Option */}
+                                <div
+                                    onClick={() => handleRatingUpdate('type', 'emoji')}
+                                    style={{
+                                        padding: '2rem 1rem',
+                                        border: rating.type === 'emoji' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                        borderRadius: '8px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '0.75rem',
+                                        cursor: 'pointer',
+                                        background: '#fff'
+                                    }}
+                                >
+                                    <div style={{ fontSize: '2rem', color: '#94a3b8' }}>☹️</div>
+                                    <div style={{ fontSize: '2rem', color: '#94a3b8' }}>😐</div>
+                                    <div style={{ fontSize: '2rem', color: '#94a3b8' }}>😊</div>
+                                </div>
+
+                                {/* Stars Option */}
+                                <div
+                                    onClick={() => handleRatingUpdate('type', 'stars')}
+                                    style={{
+                                        padding: '2rem 1rem',
+                                        border: rating.type === 'stars' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                        borderRadius: '8px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '0.5rem',
+                                        cursor: 'pointer',
+                                        background: '#fff'
+                                    }}
+                                >
+                                    <div style={{ fontSize: '2rem', color: '#cbd5e1' }}>⭐</div>
+                                    <div style={{ fontSize: '2rem', color: '#cbd5e1' }}>⭐</div>
+                                    <div style={{ fontSize: '2rem', color: '#cbd5e1' }}>⭐</div>
+                                </div>
+
+                            </div>
+
+                            {/* ADD COMMENT SECTION CHECKBOX */}
+                            <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
+                                <input
+                                    type="checkbox"
+                                    checked={rating.allowComment || false}
+                                    onChange={(e) => handleRatingUpdate('allowComment', e.target.checked)}
+                                    style={{
+                                        width: '18px',
+                                        height: '18px',
+                                        cursor: 'pointer'
+                                    }}
+                                />
+                                <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>Add a comment section for user after rating.</span>
                             </label>
-                            <input
-                                type="text"
-                                value={rating.question || ''}
-                                onChange={(e) => handleRatingUpdate('question', e.target.value)}
-                                placeholder="How was your rental experience?"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
-                                    fontSize: '0.9rem',
-                                    outline: 'none'
-                                }}
-                            />
-                        </div>
-
-                        {/* RATING TYPE OPTIONS */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-
-                            {/* Thumbs Up/Down Option */}
-                            <div
-                                onClick={() => handleRatingUpdate('type', 'thumbs')}
-                                style={{
-                                    padding: '2rem 1rem',
-                                    border: rating.type === 'thumbs' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '1rem',
-                                    cursor: 'pointer',
-                                    background: '#fff'
-                                }}
-                            >
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    borderRadius: '50%',
-                                    background: '#8b5cf6',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '1.5rem'
-                                }}>
-                                    👍
-                                </div>
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    borderRadius: '50%',
-                                    background: '#8b5cf6',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '1.5rem'
-                                }}>
-                                    👎
-                                </div>
-                            </div>
-
-                            {/* Emoji Faces Option */}
-                            <div
-                                onClick={() => handleRatingUpdate('type', 'emoji')}
-                                style={{
-                                    padding: '2rem 1rem',
-                                    border: rating.type === 'emoji' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '0.75rem',
-                                    cursor: 'pointer',
-                                    background: '#fff'
-                                }}
-                            >
-                                <div style={{ fontSize: '2rem', color: '#94a3b8' }}>☹️</div>
-                                <div style={{ fontSize: '2rem', color: '#94a3b8' }}>😐</div>
-                                <div style={{ fontSize: '2rem', color: '#94a3b8' }}>😊</div>
-                            </div>
-
-                            {/* Stars Option */}
-                            <div
-                                onClick={() => handleRatingUpdate('type', 'stars')}
-                                style={{
-                                    padding: '2rem 1rem',
-                                    border: rating.type === 'stars' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '0.5rem',
-                                    cursor: 'pointer',
-                                    background: '#fff'
-                                }}
-                            >
-                                <div style={{ fontSize: '2rem', color: '#cbd5e1' }}>⭐</div>
-                                <div style={{ fontSize: '2rem', color: '#cbd5e1' }}>⭐</div>
-                                <div style={{ fontSize: '2rem', color: '#cbd5e1' }}>⭐</div>
-                            </div>
 
                         </div>
-
-                        {/* ADD COMMENT SECTION CHECKBOX */}
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
-                            <input
-                                type="checkbox"
-                                checked={rating.allowComment || false}
-                                onChange={(e) => handleRatingUpdate('allowComment', e.target.checked)}
-                                style={{
-                                    width: '18px',
-                                    height: '18px',
-                                    cursor: 'pointer'
-                                }}
-                            />
-                            <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>Add a comment section for user after rating.</span>
-                        </label>
-
-                    </div>
-                )}
-            </div>
+                    )
+                }
+            </div >
 
             {/* SOCIAL MEDIA CHANNELS ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
                 <div
                     onClick={() => setIsSocialOpen(!isSocialOpen)}
                     style={{
@@ -604,165 +688,225 @@ const RatingConfig = ({ config, onChange }) => {
                     {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
 
-                {isSocialOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                {
+                    isSocialOpen && (
+                        <div style={{ padding: '2rem', background: '#fff' }}>
 
-                        {/* Selected Social Media Inputs Grid */}
-                        {socialLinks.length > 0 && (
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
-                                {socialLinks.map((link) => {
-                                    const platform = socialPlatforms.find(p => p.id === link.platform);
-                                    if (!platform) return null;
-                                    const Icon = platform.icon;
+                            {/* Selected Social Media Inputs Grid */}
+                            {socialLinks.length > 0 && (
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                                    {socialLinks.map((link) => {
+                                        const platform = socialPlatforms.find(p => p.id === link.platform);
+                                        if (!platform) return null;
+                                        const Icon = platform.icon;
 
-                                    return (
-                                        <div key={link.id} style={{ position: 'relative' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                                <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6' }}>
-                                                    {platform.name}*
-                                                </label>
-                                                <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
-                                                    <div
-                                                        style={{
-                                                            cursor: 'pointer',
-                                                            padding: '0.25rem',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center'
-                                                        }}
-                                                        onClick={() => handleSocialLinkUnselect(link.id)}
-                                                        title="Unselect"
-                                                    >
-                                                        <X size={16} color="#cbd5e1" />
-                                                    </div>
-                                                    <div
-                                                        style={{
-                                                            cursor: 'grab',
-                                                            padding: '0.25rem',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center'
-                                                        }}
-                                                        title="Drag to reorder"
-                                                    >
-                                                        <GripVertical size={16} color="#cbd5e1" />
+                                        return (
+                                            <div key={link.id} style={{ position: 'relative' }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                                    <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6' }}>
+                                                        {platform.name}*
+                                                    </label>
+                                                    <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+                                                        <div
+                                                            style={{
+                                                                cursor: 'pointer',
+                                                                padding: '0.25rem',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center'
+                                                            }}
+                                                            onClick={() => handleSocialLinkUnselect(link.id)}
+                                                            title="Unselect"
+                                                        >
+                                                            <X size={16} color="#cbd5e1" />
+                                                        </div>
+                                                        <div
+                                                            style={{
+                                                                cursor: 'grab',
+                                                                padding: '0.25rem',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center'
+                                                            }}
+                                                            title="Drag to reorder"
+                                                        >
+                                                            <GripVertical size={16} color="#cbd5e1" />
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <div style={{ position: 'relative' }}>
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        left: '12px',
+                                                        top: '50%',
+                                                        transform: 'translateY(-50%)',
+                                                        width: '24px',
+                                                        height: '24px',
+                                                        background: platform.gradient || platform.color,
+                                                        borderRadius: '4px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        zIndex: 1
+                                                    }}>
+                                                        {typeof Icon === 'string' ? (
+                                                            <img
+                                                                src={Icon}
+                                                                alt={platform.name}
+                                                                style={{
+                                                                    width: '16px',
+                                                                    height: '16px',
+                                                                    objectFit: 'contain',
+                                                                    filter: platform.id === 'snapchat' || platform.id === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <Icon size={16} color={platform.textColor || "#fff"} />
+                                                        )}
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        value={link.url || ''}
+                                                        onChange={(e) => handleSocialLinkUpdate(link.id, e.target.value)}
+                                                        placeholder="https://"
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.75rem 0.75rem 0.75rem 3rem',
+                                                            borderRadius: '4px',
+                                                            border: '1px solid #1e293b',
+                                                            fontSize: '0.9rem',
+                                                            outline: 'none'
+                                                        }}
+                                                    />
+                                                </div>
                                             </div>
-                                            <div style={{ position: 'relative' }}>
-                                                <div style={{
-                                                    position: 'absolute',
-                                                    left: '12px',
-                                                    top: '50%',
-                                                    transform: 'translateY(-50%)',
-                                                    width: '24px',
-                                                    height: '24px',
+                                        );
+                                    })}
+                                </div>
+                            )}
+
+                            {/* ADD MORE Section */}
+                            <div>
+                                <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    ADD MORE
+                                </div>
+                                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                                    Click on the icon to add a social media profile.
+                                </div>
+
+                                {/* Social Media Icons Grid */}
+                                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                                    {socialPlatforms.map((platform) => {
+                                        const Icon = platform.icon;
+                                        const isAdded = socialLinks.some(link => link.platform === platform.id);
+
+                                        return (
+                                            <div
+                                                key={platform.id}
+                                                onClick={() => !isAdded && handleSocialLinkAdd(platform.id)}
+                                                style={{
+                                                    width: '48px',
+                                                    height: '48px',
                                                     background: platform.gradient || platform.color,
-                                                    borderRadius: '4px',
+                                                    borderRadius: '8px',
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
-                                                    zIndex: 1
-                                                }}>
-                                                    {typeof Icon === 'string' ? (
-                                                        <img
-                                                            src={Icon}
-                                                            alt={platform.name}
-                                                            style={{
-                                                                width: '16px',
-                                                                height: '16px',
-                                                                objectFit: 'contain',
-                                                                filter: platform.id === 'snapchat' || platform.id === 'line' ? 'none' : 'brightness(0) invert(1)'
-                                                            }}
-                                                        />
-                                                    ) : (
-                                                        <Icon size={16} color={platform.textColor || "#fff"} />
-                                                    )}
-                                                </div>
-                                                <input
-                                                    type="text"
-                                                    value={link.url || ''}
-                                                    onChange={(e) => handleSocialLinkUpdate(link.id, e.target.value)}
-                                                    placeholder="https://"
-                                                    style={{
-                                                        width: '100%',
-                                                        padding: '0.75rem 0.75rem 0.75rem 3rem',
-                                                        borderRadius: '4px',
-                                                        border: '1px solid #1e293b',
-                                                        fontSize: '0.9rem',
-                                                        outline: 'none'
-                                                    }}
-                                                />
+                                                    cursor: isAdded ? 'not-allowed' : 'pointer',
+                                                    opacity: isAdded ? 0.5 : 1,
+                                                    transition: 'transform 0.1s',
+                                                    border: isAdded ? '2px solid #cbd5e1' : 'none'
+                                                }}
+                                                title={isAdded ? `${platform.name} already added` : `Add ${platform.name}`}
+                                                onMouseEnter={(e) => {
+                                                    if (!isAdded) e.currentTarget.style.transform = 'scale(1.1)';
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.currentTarget.style.transform = 'scale(1)';
+                                                }}
+                                            >
+                                                {typeof Icon === 'string' ? (
+                                                    <img
+                                                        src={Icon}
+                                                        alt={platform.name}
+                                                        style={{
+                                                            width: '24px',
+                                                            height: '24px',
+                                                            objectFit: 'contain',
+                                                            filter: platform.id === 'snapchat' || platform.id === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <Icon size={24} color={platform.textColor || "#fff"} />
+                                                )}
                                             </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        )}
-
-                        {/* ADD MORE Section */}
-                        <div>
-                            <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                ADD MORE
-                            </div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
-                                Click on the icon to add a social media profile.
-                            </div>
-
-                            {/* Social Media Icons Grid */}
-                            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                                {socialPlatforms.map((platform) => {
-                                    const Icon = platform.icon;
-                                    const isAdded = socialLinks.some(link => link.platform === platform.id);
-
-                                    return (
-                                        <div
-                                            key={platform.id}
-                                            onClick={() => !isAdded && handleSocialLinkAdd(platform.id)}
-                                            style={{
-                                                width: '48px',
-                                                height: '48px',
-                                                background: platform.gradient || platform.color,
-                                                borderRadius: '8px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                cursor: isAdded ? 'not-allowed' : 'pointer',
-                                                opacity: isAdded ? 0.5 : 1,
-                                                transition: 'transform 0.1s',
-                                                border: isAdded ? '2px solid #cbd5e1' : 'none'
-                                            }}
-                                            title={isAdded ? `${platform.name} already added` : `Add ${platform.name}`}
-                                            onMouseEnter={(e) => {
-                                                if (!isAdded) e.currentTarget.style.transform = 'scale(1.1)';
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.transform = 'scale(1)';
-                                            }}
-                                        >
-                                            {typeof Icon === 'string' ? (
-                                                <img
-                                                    src={Icon}
-                                                    alt={platform.name}
-                                                    style={{
-                                                        width: '24px',
-                                                        height: '24px',
-                                                        objectFit: 'contain',
-                                                        filter: platform.id === 'snapchat' || platform.id === 'line' ? 'none' : 'brightness(0) invert(1)'
-                                                    }}
-                                                />
-                                            ) : (
-                                                <Icon size={24} color={platform.textColor || "#fff"} />
-                                            )}
-                                        </div>
-                                    );
-                                })}
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
-
-                    </div>
-                )}
+                    )}
             </div>
+
+            <ImageUploadModal
+                isOpen={isUploadModalOpen}
+                onClose={() => {
+                    setIsUploadModalOpen(false);
+                    setUploadModalTempImage(null);
+                }}
+                tempImage={uploadModalTempImage}
+                onSave={handleUploadModalSave}
+                fileName={uploadModalFileName}
+                type="image"
+            />
+
+            {/* Simple Preview Modal */}
+            {showPreviewModal && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        zIndex: 10000,
+                        background: 'rgba(0,0,0,0.8)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '2rem'
+                    }}
+                    onClick={() => setShowPreviewModal(false)}
+                >
+                    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={e => e.stopPropagation()}>
+                        <button
+                            onClick={() => setShowPreviewModal(false)}
+                            style={{
+                                position: 'absolute',
+                                top: '-40px',
+                                right: '-40px',
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                color: '#fff'
+                            }}
+                        >
+                            <X size={32} />
+                        </button>
+                        <img
+                            src={design.headerImage?.url}
+                            alt="Header Preview"
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'contain',
+                                borderRadius: '8px',
+                                boxShadow: '0 0 20px rgba(0,0,0,0.5)'
+                            }}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

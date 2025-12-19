@@ -2,12 +2,19 @@ import React, { useState, useEffect } from 'react';
 import FormSection from './FormSection';
 import ColorPicker from './ColorPicker';
 import FileUploader from './FileUploader';
+import ImageUploadModal from './ImageUploadModal';
 import { ChevronDown, ChevronUp, Upload, Calendar, Image as ImageIcon, Video, UploadCloud, X, Check, Eye } from 'lucide-react';
 import axios from 'axios';
 
 const AppStoreConfig = ({ config, onChange }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+
+    // State for logo upload modal
+    const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
+    const [tempLogoImage, setTempLogoImage] = useState(null);
+    const [logoFileName, setLogoFileName] = useState('');
+
     // Helper to update nested state
     const updateConfig = (path, value) => {
         const keys = path.split('.');
@@ -149,7 +156,7 @@ const AppStoreConfig = ({ config, onChange }) => {
                         </div>
                     </div>
 
-                    {/* Logo */}
+                    {/* Logo Section */}
                     <div>
                         <label className="label" style={{ marginBottom: '0.5rem', display: 'block' }}>LOGO</label>
                         <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '1rem' }}>128x128px, 1:1 Ratio</div>
@@ -234,7 +241,7 @@ const AppStoreConfig = ({ config, onChange }) => {
                                         );
                                     })}
 
-                                    {/* 3. Custom Selection (if active and not preset) */}
+                                    {/* 3. Custom Selection */}
                                     {currentUrl && !isPreset && (
                                         <div
                                             style={{
@@ -310,12 +317,15 @@ const AppStoreConfig = ({ config, onChange }) => {
                                             onChange={(e) => {
                                                 const file = e.target.files?.[0];
                                                 if (file) {
+                                                    setLogoFileName(file.name);
                                                     const reader = new FileReader();
                                                     reader.onload = (event) => {
-                                                        updateConfig('design.logo.url', event.target?.result);
+                                                        setTempLogoImage(event.target?.result);
+                                                        setIsLogoModalOpen(true);
                                                     };
                                                     reader.readAsDataURL(file);
                                                 }
+                                                e.target.value = null;
                                             }}
                                             style={{ display: 'none' }}
                                         />
@@ -325,7 +335,20 @@ const AppStoreConfig = ({ config, onChange }) => {
                             );
                         })()}
 
-                        {/* Modal for Custom Logo */}
+                        {/* Logo Upload/Edit Modal */}
+                        <ImageUploadModal
+                            isOpen={isLogoModalOpen}
+                            onClose={() => {
+                                setIsLogoModalOpen(false);
+                                setTempLogoImage(null);
+                            }}
+                            onSave={(url) => updateConfig('design.logo.url', url)}
+                            tempImage={tempLogoImage}
+                            fileName={logoFileName}
+                            type="logo"
+                        />
+
+                        {/* Modal for Custom Logo Preview */}
                         {isModalOpen && getValue('design.logo.url') && (
                             <div
                                 style={{
