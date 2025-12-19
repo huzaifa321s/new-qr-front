@@ -88,7 +88,7 @@ const PasswordProtectedConfig = ({ config, onChange }) => {
         { id: 'h2', url: 'https://images.unsplash.com/photo-1550684847-75bdda21cc95?w=150&h=100&fit=crop' }, // Pattern dots
         { id: 'h3', url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&h=100&fit=crop' }, // Sketch/Cartoon
         { id: 'h4', url: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=150&h=100&fit=crop' }, // Red pattern
-        { id: 'h5', url: 'https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?w=150&h=100&fit=crop' }, // Hand holding card (Selected)
+        { id: 'h5', url: 'https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?w=400&h=200&fit=crop' }, // Hand holding card (Selected)
         { id: 'h6', url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=150&h=100&fit=crop' }  // Digital art
     ];
 

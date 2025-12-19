@@ -106,16 +106,20 @@ const SocialMediaConfig = ({ config, onChange }) => {
         });
     };
 
-    const handleAddSocial = (urlKey, textKey) => {
-        if (social[urlKey] !== undefined) return; // Already active
-        onChange(prev => ({
-            ...prev,
-            social: {
-                ...prev.social,
-                [urlKey]: '',
-                [textKey]: ''
+    const handleToggleSocial = (urlKey, textKey) => {
+        onChange(prev => {
+            const newSocial = { ...prev.social };
+            if (newSocial[urlKey] !== undefined) {
+                // Unselect
+                delete newSocial[urlKey];
+                delete newSocial[textKey];
+            } else {
+                // Select
+                newSocial[urlKey] = '';
+                newSocial[textKey] = '';
             }
-        }));
+            return { ...prev, social: newSocial };
+        });
     };
 
     const handleShareOptionUpdate = (key, value) => {
@@ -129,24 +133,24 @@ const SocialMediaConfig = ({ config, onChange }) => {
     };
 
     const platformConfig = [
-        { id: 'website', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Website', icon: Globe, color: '#6366f1', placeholder: 'https://' },
-        { id: 'facebook', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: Facebook, color: '#1877f2', placeholder: 'https://facebook.com/...' },
-        { id: 'instagram', urlKey: 'instagramUrl', textKey: 'instagramText', name: 'Instagram', icon: Instagram, color: '#E4405F', placeholder: 'https://instagram.com/...' },
-        { id: 'twitter', urlKey: 'twitterUrl', textKey: 'twitterText', name: 'X (Twitter)', icon: Twitter, color: '#000000', placeholder: 'https://x.com/...' },
-        { id: 'linkedin', urlKey: 'linkedinUrl', textKey: 'linkedinText', name: 'LinkedIn', icon: Linkedin, color: '#0a66c2', placeholder: 'https://linkedin.com/in/...' },
-        { id: 'discord', urlKey: 'discordUrl', textKey: 'discordText', name: 'Discord', icon: MessageSquare, color: '#5865f2', placeholder: 'https://discord.gg/...' },
-        { id: 'twitch', urlKey: 'twitchUrl', textKey: 'twitchText', name: 'Twitch', icon: Twitch, color: '#9146ff', placeholder: 'https://twitch.tv/...' },
-        { id: 'kickstarter', urlKey: 'kickstarterUrl', textKey: 'kickstarterText', name: 'Kickstarter', icon: ({ size }) => <span style={{ fontSize: size, fontWeight: 'bold' }}>K</span>, color: '#05ce78', placeholder: 'https://kickstarter.com/...' },
-        { id: 'youtube', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'YouTube', icon: Youtube, color: '#ff0000', placeholder: 'https://youtube.com/...' },
-        { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: MessageCircle, color: '#25d366', placeholder: 'https://wa.me/...' },
-        { id: 'snapchat', urlKey: 'snapchatUrl', textKey: 'snapchatText', name: 'Snapchat', icon: Ghost, color: '#fffc00', placeholder: 'https://snapchat.com/add/...' },
-        { id: 'tiktok', urlKey: 'tiktokUrl', textKey: 'tiktokText', name: 'TikTok', icon: Music, color: '#000000', placeholder: 'https://tiktok.com/@...' },
-        { id: 'tumblr', urlKey: 'tumblrUrl', textKey: 'tumblrText', name: 'Tumblr', icon: ({ size }) => <span style={{ fontSize: size, fontWeight: 'bold' }}>t</span>, color: '#35465c', placeholder: 'https://tumblr.com/...' },
-        { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: Headphones, color: '#1db954', placeholder: 'https://open.spotify.com/...' },
-        { id: 'telegram', urlKey: 'telegramUrl', textKey: 'telegramText', name: 'Telegram', icon: Send, color: '#0088cc', placeholder: 'https://t.me/...' },
-        { id: 'behance', urlKey: 'behanceUrl', textKey: 'behanceText', name: 'Behance', icon: ({ size }) => <span style={{ fontSize: Math.max(10, size - 4), fontWeight: 'bold' }}>Bē</span>, color: '#1769ff', placeholder: 'https://behance.net/...' },
-        { id: 'pinterest', urlKey: 'pinterestUrl', textKey: 'pinterestText', name: 'Pinterest', icon: Pin, color: '#e60023', placeholder: 'https://pinterest.com/...' },
-        { id: 'reddit', urlKey: 'redditUrl', textKey: 'redditText', name: 'Reddit', icon: Bot, color: '#ff4500', placeholder: 'https://reddit.com/user/...' },
+        { id: 'website', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#6366f1', placeholder: 'https://' },
+        { id: 'facebook', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877f2', placeholder: 'https://facebook.com/...' },
+        { id: 'instagram', urlKey: 'instagramUrl', textKey: 'instagramText', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', placeholder: 'https://instagram.com/...' },
+        { id: 'twitter', urlKey: 'twitterUrl', textKey: 'twitterText', name: 'X (Twitter)', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000', placeholder: 'https://x.com/...' },
+        { id: 'linkedin', urlKey: 'linkedinUrl', textKey: 'linkedinText', name: 'LinkedIn', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0a66c2', placeholder: 'https://linkedin.com/in/...' },
+        { id: 'discord', urlKey: 'discordUrl', textKey: 'discordText', name: 'Discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865f2', placeholder: 'https://discord.gg/...' },
+        { id: 'twitch', urlKey: 'twitchUrl', textKey: 'twitchText', name: 'Twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146ff', placeholder: 'https://twitch.tv/...' },
+        { id: 'youtube', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#ff0000', placeholder: 'https://youtube.com/...' },
+        { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25d366', placeholder: 'https://wa.me/...' },
+        { id: 'snapchat', urlKey: 'snapchatUrl', textKey: 'snapchatText', name: 'Snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#fffc00', placeholder: 'https://snapchat.com/add/...' },
+        { id: 'tiktok', urlKey: 'tiktokUrl', textKey: 'tiktokText', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000', placeholder: 'https://tiktok.com/@...' },
+        { id: 'tumblr', urlKey: 'tumblrUrl', textKey: 'tumblrText', name: 'Tumblr', icon: 'https://cdn-icons-png.flaticon.com/512/100/100611.png', color: '#35465c', placeholder: 'https://tumblr.com/...' },
+        { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1db954', placeholder: 'https://open.spotify.com/...' },
+        { id: 'telegram', urlKey: 'telegramUrl', textKey: 'telegramText', name: 'Telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088cc', placeholder: 'https://t.me/...' },
+        { id: 'behance', urlKey: 'behanceUrl', textKey: 'behanceText', name: 'Behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769ff', placeholder: 'https://behance.net/...' },
+        { id: 'pinterest', urlKey: 'pinterestUrl', textKey: 'pinterestText', name: 'Pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#e60023', placeholder: 'https://pinterest.com/...' },
+        { id: 'reddit', urlKey: 'redditUrl', textKey: 'redditText', name: 'Reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#ff4500', placeholder: 'https://reddit.com/user/...' },
+        { id: 'line', urlKey: 'lineUrl', textKey: 'lineText', name: 'Line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900', placeholder: 'https://line.me/...' },
     ];
 
     const palettes = [
@@ -309,9 +313,8 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                     {/* Headline Input */}
                                     <input
                                         type="text"
-                                        value={basicInfo.headline || ''}
+                                        value={basicInfo.headline || "Connect With Us On Social Media"}
                                         onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
-                                        placeholder="Connect with us on social media"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
@@ -414,9 +417,8 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                     ABOUT US
                                 </label>
                                 <textarea
-                                    value={basicInfo.aboutUs || ''}
+                                    value={basicInfo.aboutUs || "Follow us and get updates delivered to your favorite social media channel."}
                                     onChange={(e) => handleBasicInfoUpdate('aboutUs', e.target.value)}
-                                    placeholder="Follow us and get updates delivered to your favorite social media channel."
                                     rows={3}
                                     style={{
                                         width: '100%',
@@ -493,7 +495,7 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                                             fontSize: '0.9rem',
                                                             color: platform.color === '#fffc00' ? '#000' : '#fff'
                                                         }}>
-                                                            <Icon size={14} />
+                                                            <img src={platform.icon} alt="" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
                                                         </div>
                                                         <input
                                                             type="text"
@@ -572,12 +574,11 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                 {/* Social Media Icons Grid */}
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(48px, 1fr))', gap: '0.75rem' }}>
                                     {platformConfig.map(platform => {
-                                        const Icon = platform.icon;
                                         const isActive = social[platform.urlKey] !== undefined;
                                         return (
                                             <div
                                                 key={platform.id}
-                                                onClick={() => handleAddSocial(platform.urlKey, platform.textKey)}
+                                                onClick={() => handleToggleSocial(platform.urlKey, platform.textKey)}
                                                 style={{
                                                     width: '48px',
                                                     height: '48px',
@@ -586,13 +587,40 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
-                                                    cursor: isActive ? 'default' : 'pointer',
-                                                    opacity: isActive ? 0.5 : 1, // Dim if active
-                                                    color: platform.color === '#fffc00' ? '#000' : '#fff'
+                                                    cursor: 'pointer',
+                                                    position: 'relative',
+                                                    transition: 'all 0.2s',
+                                                    transform: isActive ? 'scale(0.95)' : 'scale(1)',
+                                                    boxShadow: isActive ? 'inset 0 2px 4px rgba(0,0,0,0.2)' : '0 2px 4px rgba(0,0,0,0.1)'
                                                 }}
-                                                title={isActive ? "Already added" : `Add ${platform.name}`}
+                                                title={isActive ? `Remove ${platform.name}` : `Add ${platform.name}`}
                                             >
-                                                <Icon size={24} />
+                                                <img
+                                                    src={platform.icon}
+                                                    alt={platform.name}
+                                                    style={{
+                                                        width: '24px',
+                                                        height: '24px',
+                                                        objectFit: 'contain'
+                                                    }}
+                                                />
+                                                {isActive && (
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        top: '-5px',
+                                                        right: '-5px',
+                                                        width: '20px',
+                                                        height: '20px',
+                                                        background: '#10b981',
+                                                        borderRadius: '50%',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        border: '2px solid #fff'
+                                                    }}>
+                                                        <Check size={12} color="#fff" strokeWidth={3} />
+                                                    </div>
+                                                )}
                                             </div>
                                         );
                                     })}

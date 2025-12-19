@@ -51,20 +51,18 @@ const socialIconsMap = [
     { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', name: 'Instagram' },
     { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000', name: 'X' },
     { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2', name: 'LinkedIn' },
-    { id: 'discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2', name: 'Discord' },
-    { id: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF', name: 'Twitch' },
+    { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000', name: 'TikTok' },
     { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000', name: 'YouTube' },
     { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366', name: 'WhatsApp' },
     { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00', name: 'Snapchat' },
-    { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000', name: 'TikTok' },
-    { id: 'tumblr', icon: 'https://cdn-icons-png.flaticon.com/512/100/100611.png', color: '#35465C', name: 'Tumblr' },
-    { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954', name: 'Spotify' },
+    { id: 'discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2', name: 'Discord' },
+    { id: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF', name: 'Twitch' },
     { id: 'telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC', name: 'Telegram' },
-    { id: 'behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF', name: 'Behance' },
     { id: 'pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C', name: 'Pinterest' },
     { id: 'reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500', name: 'Reddit' },
-    { id: 'line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900', name: 'Line' },
-    { id: 'globe', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
+    { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954', name: 'Spotify' },
+    { id: 'behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF', name: 'Behance' },
+    { id: 'line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900', name: 'Line' }
 ];
 
 const MobilePreview = ({ config, isLiveView = false }) => {
@@ -150,6 +148,16 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     const [exchangeFormData, setExchangeFormData] = useState({});
     const [exchangeErrors, setExchangeErrors] = useState({});
     const [selectedRating, setSelectedRating] = useState(null);
+    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+    const selectedBaseCategory = (config?.categories || []).find(cat => cat.id === selectedCategoryId);
+
+    // Sync: if the currently selected category is deleted, go back to main
+    useEffect(() => {
+        if (reviewStep === 'subcategories' && selectedCategoryId && !selectedBaseCategory) {
+            setReviewStep('main');
+            setSelectedCategoryId(null);
+        }
+    }, [config?.categories, selectedCategoryId, selectedBaseCategory, reviewStep]);
 
     const handleExchangeChange = (e) => {
         const { name, value } = e.target;
@@ -2512,9 +2520,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
     if (isSocial) {
         // Default values for social media preview
-        const defaultBg = "https://img.freepik.com/free-vector/social-media-doodle-set-vector-illustration_53876-155819.jpg?size=626&ext=jpg";
-        const defaultLogo = "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop"; // Avatar placeholder
         const primaryColor = design?.color?.header || '#0B2D86'; // Deep Blue
+        const hasBg = !!design?.backgroundImage?.url;
+        const hasLogo = !!design?.logo?.url;
 
         return (
             <div style={{
@@ -2537,26 +2545,28 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 <div style={{ height: '100%', overflowY: 'auto', background: '#fff', display: 'flex', flexDirection: 'column' }}>
 
                     {/* Header Image Section */}
-                    <div style={{
-                        height: '220px',
-                        position: 'relative',
-                        backgroundImage: `url(${design?.backgroundImage?.url || defaultBg})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        zIndex: 0 // Ensure it stays behind
-                    }}>
+                    {hasBg && (
+                        <div style={{
+                            height: '220px',
+                            position: 'relative',
+                            backgroundImage: `url(${design.backgroundImage.url})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            zIndex: 0 // Ensure it stays behind
+                        }}>
 
-                    </div>
+                        </div>
+                    )}
 
                     {/* Overlapping Logo - Moved OUTSIDE the clipped container */}
-                    {(design?.logo?.url || defaultLogo) && (
+                    {hasLogo && (
                         <div style={{
                             width: '100px',
                             height: '100px',
                             borderRadius: '50%',
                             background: '#fff',
                             position: 'absolute',
-                            top: '170px', // Header is 220px, Logo is 100px. Centered at line: 220 - 50 = 170px
+                            top: hasBg ? '170px' : '20px', // Adjust top if no header image
                             left: '50%',
                             transform: 'translateX(-50%)',
                             zIndex: 50, // High z-index to sit on top of everything
@@ -2564,7 +2574,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
                         }}>
                             <img
-                                src={design?.logo?.url || defaultLogo}
+                                src={design?.logo?.url}
                                 alt="Logo"
                                 style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
                             />
@@ -2576,11 +2586,13 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         flex: 1,
                         background: primaryColor,
                         position: 'relative',
-                        padding: '4rem 1.5rem 2rem',
+                        padding: hasLogo
+                            ? (hasBg ? '4rem 1.5rem 2rem' : '8rem 1.5rem 2rem')
+                            : '2rem 1.5rem 2rem',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        marginTop: '-40px',
+                        marginTop: hasBg ? '-40px' : '0px',
                         clipPath: 'ellipse(150% 100% at 50% 100%)', // Bottom curve
                         zIndex: 10 // Ensure content stays on top of header image
                     }}>
@@ -2630,23 +2642,23 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 // Platform configuration consistent with SocialMediaConfig.jsx
                                 // Platform configuration consistent with SocialMediaConfig.jsx
                                 const platformConfig = [
-                                    { id: 'website', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563' },
-                                    { id: 'facebook', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2' },
+                                    { id: 'website', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#6366f1' },
+                                    { id: 'facebook', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877f2' },
                                     { id: 'instagram', urlKey: 'instagramUrl', textKey: 'instagramText', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
-                                    { id: 'twitter', urlKey: 'twitterUrl', textKey: 'twitterText', name: 'X', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000' },
-                                    { id: 'linkedin', urlKey: 'linkedinUrl', textKey: 'linkedinText', name: 'LinkedIn', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
-                                    { id: 'discord', urlKey: 'discordUrl', textKey: 'discordText', name: 'Discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2' },
-                                    { id: 'twitch', urlKey: 'twitchUrl', textKey: 'twitchText', name: 'Twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF' },
-                                    { id: 'youtube', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
-                                    { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
-                                    { id: 'snapchat', urlKey: 'snapchatUrl', textKey: 'snapchatText', name: 'Snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00' },
+                                    { id: 'twitter', urlKey: 'twitterUrl', textKey: 'twitterText', name: 'X (Twitter)', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000' },
+                                    { id: 'linkedin', urlKey: 'linkedinUrl', textKey: 'linkedinText', name: 'LinkedIn', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0a66c2' },
+                                    { id: 'discord', urlKey: 'discordUrl', textKey: 'discordText', name: 'Discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865f2' },
+                                    { id: 'twitch', urlKey: 'twitchUrl', textKey: 'twitchText', name: 'Twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146ff' },
+                                    { id: 'youtube', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#ff0000' },
+                                    { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25d366' },
+                                    { id: 'snapchat', urlKey: 'snapchatUrl', textKey: 'snapchatText', name: 'Snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#fffc00' },
                                     { id: 'tiktok', urlKey: 'tiktokUrl', textKey: 'tiktokText', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
-                                    { id: 'tumblr', urlKey: 'tumblrUrl', textKey: 'tumblrText', name: 'Tumblr', icon: 'https://cdn-icons-png.flaticon.com/512/100/100611.png', color: '#35465C' },
-                                    { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954' },
-                                    { id: 'telegram', urlKey: 'telegramUrl', textKey: 'telegramText', name: 'Telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC' },
-                                    { id: 'behance', urlKey: 'behanceUrl', textKey: 'behanceText', name: 'Behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF' },
-                                    { id: 'pinterest', urlKey: 'pinterestUrl', textKey: 'pinterestText', name: 'Pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C' },
-                                    { id: 'reddit', urlKey: 'redditUrl', textKey: 'redditText', name: 'Reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500' },
+                                    { id: 'tumblr', urlKey: 'tumblrUrl', textKey: 'tumblrText', name: 'Tumblr', icon: 'https://cdn-icons-png.flaticon.com/512/100/100611.png', color: '#35465c' },
+                                    { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1db954' },
+                                    { id: 'telegram', urlKey: 'telegramUrl', textKey: 'telegramText', name: 'Telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088cc' },
+                                    { id: 'behance', urlKey: 'behanceUrl', textKey: 'behanceText', name: 'Behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769ff' },
+                                    { id: 'pinterest', urlKey: 'pinterestUrl', textKey: 'pinterestText', name: 'Pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#e60023' },
+                                    { id: 'reddit', urlKey: 'redditUrl', textKey: 'redditText', name: 'Reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#ff4500' },
                                     { id: 'line', urlKey: 'lineUrl', textKey: 'lineText', name: 'Line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900' },
                                 ];
 
@@ -2694,20 +2706,15 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                 color: platform.color === '#fffc00' ? '#000' : '#fff', // Handle bright colors
                                                 flexShrink: 0
                                             }}>
-                                                {typeof Icon === 'string' ? (
-                                                    <img
-                                                        src={Icon}
-                                                        alt={platform.name}
-                                                        style={{
-                                                            width: '24px',
-                                                            height: '24px',
-                                                            objectFit: 'contain',
-                                                            filter: platform.id === 'snapchat' || platform.color === '#fffc00' ? 'none' : 'brightness(0) invert(1)'
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <Icon size={24} color={platform.color === '#fffc00' ? '#000' : '#fff'} />
-                                                )}
+                                                <img
+                                                    src={platform.icon}
+                                                    alt={platform.name}
+                                                    style={{
+                                                        width: '24px',
+                                                        height: '24px',
+                                                        objectFit: 'contain'
+                                                    }}
+                                                />
                                             </div>
                                             <span style={{ fontSize: '1rem', color: '#1e293b', fontWeight: '600' }}>{text}</span>
                                         </div>
@@ -3843,7 +3850,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             </div>
 
                             {/* Header Image */}
-                            {design?.headerImage?.url && (
+                            {(design?.headerImage?.url !== '' && (design?.headerImage?.url || 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=267&fit=crop')) && (
                                 <div style={{
                                     width: '100%',
                                     height: '140px',
@@ -3852,7 +3859,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     marginBottom: '1rem'
                                 }}>
                                     <img
-                                        src={design.headerImage.url}
+                                        src={design?.headerImage?.url || 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=267&fit=crop'}
                                         alt="Header"
                                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />
@@ -3888,72 +3895,36 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                             {/* Category Buttons */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                <button
-                                    onClick={() => setReviewStep('food')}
-                                    style={{
-                                        background: '#bfdbdb',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        padding: '1rem 1.5rem',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s'
-                                    }}
-                                >
-                                    <span style={{ fontSize: '1rem', fontWeight: '700', color: '#2e3192' }}>Food</span>
-                                    <span style={{ fontSize: '1.2rem', color: '#2e3192' }}>›</span>
-                                </button>
-
-                                <button
-                                    onClick={() => {
-                                        setSelectedReviewCategory('Drink');
-                                        setReviewStep('review');
-                                    }}
-                                    style={{
-                                        background: '#bfdbdb',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        padding: '1rem 1.5rem',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s'
-                                    }}
-                                >
-                                    <span style={{ fontSize: '1rem', fontWeight: '700', color: '#2e3192' }}>Drink</span>
-                                    <span style={{ fontSize: '1.2rem', color: '#2e3192' }}>›</span>
-                                </button>
-
-                                <button
-                                    onClick={() => {
-                                        setSelectedReviewCategory('Parking');
-                                        setReviewStep('review');
-                                    }}
-                                    style={{
-                                        background: '#bfdbdb',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        padding: '1rem 1.5rem',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s'
-                                    }}
-                                >
-                                    <span style={{ fontSize: '1rem', fontWeight: '700', color: '#2e3192' }}>Parking</span>
-                                    <span style={{ fontSize: '1.2rem', color: '#2e3192' }}>›</span>
-                                </button>
+                                {(config?.categories || []).map((cat) => (
+                                    <button
+                                        key={cat.id}
+                                        onClick={() => {
+                                            setSelectedCategoryId(cat.id);
+                                            setReviewStep('subcategories');
+                                        }}
+                                        style={{
+                                            background: '#bfdbdb',
+                                            border: 'none',
+                                            borderRadius: '8px',
+                                            padding: '1rem 1.5rem',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s'
+                                        }}
+                                    >
+                                        <span style={{ fontSize: '1rem', fontWeight: '700', color: '#2e3192' }}>{cat.name}</span>
+                                        <span style={{ fontSize: '1.2rem', color: '#2e3192' }}>›</span>
+                                    </button>
+                                ))}
                             </div>
                         </div>
                     </div>
                 )}
 
-                {/* Food Subcategories Page */}
-                {reviewStep === 'food' && (
+                {/* Subcategories Page */}
+                {reviewStep === 'subcategories' && selectedBaseCategory && (
                     <div style={{ height: '100%', overflowY: 'auto' }}>
                         {/* Header */}
                         <div style={{
@@ -3998,7 +3969,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         <div style={{ padding: '1.5rem' }}>
                             {/* Title */}
                             <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#2e3192', margin: '0 0 0.5rem 0', textAlign: 'center' }}>
-                                Food
+                                {selectedBaseCategory.name}
                             </h3>
                             <p style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 1.5rem 0', textAlign: 'center' }}>
                                 Please select to review a category.
@@ -4006,65 +3977,28 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                             {/* Subcategory Buttons */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                <button
-                                    onClick={() => {
-                                        setSelectedReviewCategory('Staff');
-                                        setReviewStep('review');
-                                    }}
-                                    style={{
-                                        background: '#bfdbdb',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        padding: '1rem 1.5rem',
-                                        fontSize: '1rem',
-                                        fontWeight: '700',
-                                        color: '#2e3192',
-                                        cursor: 'pointer',
-                                        textAlign: 'left'
-                                    }}
-                                >
-                                    Staff
-                                </button>
-
-                                <button
-                                    onClick={() => {
-                                        setSelectedReviewCategory('Quantity');
-                                        setReviewStep('review');
-                                    }}
-                                    style={{
-                                        background: '#bfdbdb',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        padding: '1rem 1.5rem',
-                                        fontSize: '1rem',
-                                        fontWeight: '700',
-                                        color: '#2e3192',
-                                        cursor: 'pointer',
-                                        textAlign: 'left'
-                                    }}
-                                >
-                                    Quantity
-                                </button>
-
-                                <button
-                                    onClick={() => {
-                                        setSelectedReviewCategory('Taste');
-                                        setReviewStep('review');
-                                    }}
-                                    style={{
-                                        background: '#bfdbdb',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        padding: '1rem 1.5rem',
-                                        fontSize: '1rem',
-                                        fontWeight: '700',
-                                        color: '#2e3192',
-                                        cursor: 'pointer',
-                                        textAlign: 'left'
-                                    }}
-                                >
-                                    Taste
-                                </button>
+                                {(selectedBaseCategory.subcategories || []).map((sub, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => {
+                                            setSelectedReviewCategory(sub);
+                                            setReviewStep('review');
+                                        }}
+                                        style={{
+                                            background: '#bfdbdb',
+                                            border: 'none',
+                                            borderRadius: '8px',
+                                            padding: '1rem 1.5rem',
+                                            fontSize: '1rem',
+                                            fontWeight: '700',
+                                            color: '#2e3192',
+                                            cursor: 'pointer',
+                                            textAlign: 'left'
+                                        }}
+                                    >
+                                        {sub}
+                                    </button>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -4283,39 +4217,47 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             </button>
 
                             {/* Social Icons */}
-                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                            <div style={{
+                                display: 'flex',
+                                gap: '1rem',
+                                marginBottom: '1rem',
+                                flexWrap: 'wrap',
+                                justifyContent: 'center',
+                                width: '100%',
+                                padding: '0 1rem'
+                            }}>
                                 {(() => {
                                     const activePlatforms = Object.entries(social || {}).filter(([key, val]) => val && typeof val === 'string' && val.trim() !== '');
 
                                     if (activePlatforms.length === 0) {
-                                        // Default fallback icons
+                                        // Default fallback icons - 3 per line
                                         return [
                                             { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
                                             { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2', name: 'Facebook' },
                                             { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', name: 'Instagram' }
                                         ].map(platform => (
                                             <div key={platform.id} style={{
-                                                width: '45px',
-                                                height: '45px',
-                                                borderRadius: '8px',
-                                                background: platform.color,
+                                                width: 'calc(33.33% - 0.75rem)',
+                                                aspectRatio: '1',
+                                                borderRadius: '12px',
+                                                background: '#fff',
+                                                border: '1px solid #e2e8f0',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                color: '#fff',
-                                                opacity: 0.8
+                                                boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
                                             }}>
                                                 <img
                                                     src={platform.icon}
                                                     alt={platform.name}
-                                                    style={{ width: '24px', height: '24px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
+                                                    style={{ width: '28px', height: '28px', objectFit: 'contain' }}
                                                 />
                                             </div>
                                         ));
                                     }
 
                                     return activePlatforms.map(([key, value]) => {
-                                        const platform = socialIconsMap.find(p => p.id === key) || socialIconsMap.find(p => p.id === 'globe');
+                                        const platform = socialIconsMap.find(p => p.id === key) || socialIconsMap.find(p => p.id === 'website');
                                         if (!platform) return null;
 
                                         return (
@@ -4323,25 +4265,25 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                 key={key}
                                                 onClick={() => window.open(value.startsWith('http') ? value : `https://${value}`, '_blank')}
                                                 style={{
-                                                    width: '45px',
-                                                    height: '45px',
-                                                    borderRadius: '8px',
-                                                    background: platform.color,
+                                                    width: 'calc(33.33% - 0.75rem)',
+                                                    aspectRatio: '1',
+                                                    borderRadius: '12px',
+                                                    background: '#fff',
+                                                    border: '1px solid #e2e8f0',
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
-                                                    color: '#fff',
-                                                    cursor: 'pointer'
+                                                    cursor: 'pointer',
+                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
                                                 }}
                                             >
                                                 <img
                                                     src={platform.icon}
                                                     alt={platform.name}
                                                     style={{
-                                                        width: '24px',
-                                                        height: '24px',
-                                                        objectFit: 'contain',
-                                                        filter: platform.id === 'snapchat' || platform.id === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                                        width: '28px',
+                                                        height: '28px',
+                                                        objectFit: 'contain'
                                                     }}
                                                 />
                                             </div>
@@ -4666,22 +4608,31 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             const validLinks = linksToRender.filter(link => link.title && link.title.trim() !== '');
 
                             return validLinks.map((link, index) => (
-                                <button key={link.id || index} style={{
-                                    width: '100%',
-                                    background: '#3730a3',
-                                    border: 'none',
-                                    borderRadius: '25px',
-                                    padding: '1rem 1.5rem',
-                                    fontSize: '1rem',
-                                    fontWeight: '600',
-                                    color: '#fff',
-                                    cursor: 'pointer',
-                                    boxShadow: '0 4px 12px rgba(55, 48, 163, 0.3)',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    transition: 'all 0.2s'
-                                }}>
+                                <button
+                                    key={link.id || index}
+                                    onClick={() => {
+                                        const url = link.url;
+                                        if (url && url !== '#' && url.trim() !== '') {
+                                            window.open(url.startsWith('http') ? url : `https://${url}`, '_blank');
+                                        }
+                                    }}
+                                    style={{
+                                        width: '100%',
+                                        background: '#3730a3',
+                                        border: 'none',
+                                        borderRadius: '25px',
+                                        padding: '1rem 1.5rem',
+                                        fontSize: '1rem',
+                                        fontWeight: '600',
+                                        color: '#fff',
+                                        cursor: 'pointer',
+                                        boxShadow: '0 4px 12px rgba(55, 48, 163, 0.3)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        transition: 'all 0.2s'
+                                    }}
+                                >
                                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                                         <Globe size={20} />
                                         {link.title}
@@ -4707,40 +4658,40 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         }}>
                             {socialLinks.map((link) => {
                                 const platformId = link.platform;
-                                // Mapping logic to get icon and color
-                                // You might need to import these icons or reuse the mapping logic if it's not passed down.
-                                // Since icons are Lucide icons imported at the top, we need to map them here or pass the icon components.
-                                // Re-creating the mapping map inside render or reusing a helper is fine.
-
-                                const socialPlatformsMap = {
-                                    'facebook': { icon: Facebook, color: '#1877F2' },
-                                    'instagram': { icon: Instagram, color: '#E4405F' },
-                                    'twitter': { icon: Twitter, color: '#000000' },
-                                    'linkedin': { icon: Linkedin, color: '#0A66C2' },
-                                    'discord': { icon: Globe, color: '#5865F2' },
-                                    'youtube': { icon: Youtube, color: '#FF0000' },
-                                    'whatsapp': { icon: Globe, color: '#25D366' },
-                                    'snapchat': { icon: Globe, color: '#FFFC00' },
-                                    'tiktok': { icon: Globe, color: '#000000' },
-                                    'spotify': { icon: Globe, color: '#1DB954' },
-                                    'website': { icon: Globe, color: '#2B1E99' }
-                                };
-
-                                const platform = socialPlatformsMap[platformId] || { icon: Globe, color: '#3730a3' };
+                                const platform = socialIconsMap.find(p => p.id === platformId) || socialIconsMap[0];
                                 const Icon = platform.icon;
 
                                 return (
-                                    <div key={link.id} style={{
-                                        width: '50px',
-                                        height: '50px',
-                                        borderRadius: '12px',
-                                        background: platform.color,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer'
-                                    }}>
-                                        <Icon size={24} color="#fff" />
+                                    <div
+                                        key={link.id}
+                                        onClick={() => {
+                                            const url = link.url;
+                                            if (url && url.trim() !== '') {
+                                                window.open(url.startsWith('http') ? url : `https://${url}`, '_blank');
+                                            }
+                                        }}
+                                        style={{
+                                            width: '50px',
+                                            height: '50px',
+                                            borderRadius: '12px',
+                                            background: '#fff',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                                            border: '1px solid #e2e8f0'
+                                        }}
+                                    >
+                                        <img
+                                            src={Icon}
+                                            alt={platform.name}
+                                            style={{
+                                                width: '28px',
+                                                height: '28px',
+                                                objectFit: 'contain'
+                                            }}
+                                        />
                                     </div>
                                 );
                             })}
@@ -4754,50 +4705,32 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             padding: '1.5rem',
                             display: 'flex',
                             justifyContent: 'center',
-                            gap: '1.5rem',
+                            gap: '1rem',
                             marginTop: 'auto'
                         }}>
-                            {/* Globe Icon */}
-                            <div style={{
-                                width: '50px',
-                                height: '50px',
-                                borderRadius: '12px',
-                                background: '#3730a3',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer'
-                            }}>
-                                <Globe size={24} color="#fff" />
-                            </div>
-
-                            {/* Instagram Icon */}
-                            <div style={{
-                                width: '50px',
-                                height: '50px',
-                                borderRadius: '12px',
-                                background: '#e1306c',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer'
-                            }}>
-                                <Instagram size={24} color="#fff" />
-                            </div>
-
-                            {/* Facebook Icon */}
-                            <div style={{
-                                width: '50px',
-                                height: '50px',
-                                borderRadius: '12px',
-                                background: '#1877f2',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer'
-                            }}>
-                                <Facebook size={24} color="#fff" />
-                            </div>
+                            {[
+                                { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
+                                { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2', name: 'Facebook' },
+                                { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', name: 'Instagram' }
+                            ].map(platform => (
+                                <div key={platform.id} style={{
+                                    width: '50px',
+                                    height: '50px',
+                                    borderRadius: '12px',
+                                    background: '#fff',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                                    border: '1px solid #e2e8f0'
+                                }}>
+                                    <img
+                                        src={platform.icon}
+                                        alt={platform.name}
+                                        style={{ width: '28px', height: '28px', objectFit: 'contain' }}
+                                    />
+                                </div>
+                            ))}
                         </div>
                     )}
 
@@ -4837,7 +4770,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
     if (type === 'password-protected') {
         const primaryColor = design?.color?.header || '#0a3d3d';
-        const headerImageUrl = design?.headerImage?.url || 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&h=200&fit=crop';
+        const headerImageUrl = design?.headerImage?.url;
 
         return (
             <div style={{
@@ -4865,21 +4798,23 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     flexDirection: 'column'
                 }}>
                     {/* Hero Image */}
-                    <div style={{
-                        position: 'relative',
-                        height: '180px',
-                        overflow: 'hidden'
-                    }}>
-                        <img
-                            src={headerImageUrl}
-                            alt="Security"
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover'
-                            }}
-                        />
-                    </div>
+                    {headerImageUrl && (
+                        <div style={{
+                            position: 'relative',
+                            height: '180px',
+                            overflow: 'hidden'
+                        }}>
+                            <img
+                                src={headerImageUrl}
+                                alt="Security"
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover'
+                                }}
+                            />
+                        </div>
+                    )}
 
                     {/* Information Cards */}
                     <div style={{
@@ -4920,7 +4855,6 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 </div>
                             </div>
                         ))}
-
                     </div>
 
                     {/* Password Protected Notice */}
@@ -4938,8 +4872,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             This information is password-protected
                         </div>
                     </div>
-                </div >
-            </div >
+                </div>
+            </div>
         );
     }
 
@@ -5000,16 +4934,18 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
         // Social Platform Icons Map
         const socialPlatforms = [
-            { id: 'facebook', icon: Facebook, color: '#1877F2' },
-            { id: 'instagram', icon: Instagram, color: '#E4405F' },
-            { id: 'twitter', icon: Twitter, color: '#1DA1F2' },
-            { id: 'linkedin', icon: Linkedin, color: '#0A66C2' },
-            { id: 'youtube', icon: Youtube, color: '#FF0000' },
-            { id: 'twitch', icon: Twitch, color: '#9146FF' },
-            { id: 'whatsapp', icon: MessageCircle, color: '#25D366' },
-            { id: 'spotify', icon: Music, color: '#1DB954' },
-            { id: 'telegram', icon: Send, color: '#0088cc' },
-            { id: 'website', icon: Globe, color: '#4b5563' }
+            { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2' },
+            { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
+            { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968830.png', color: '#1DA1F2' },
+            { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
+            { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
+            { id: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968819.png', color: '#9146FF' },
+            { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
+            { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/1051/1051330.png', color: '#FFFC00' },
+            { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
+            { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174872.png', color: '#1DB954' },
+            { id: 'telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC' },
+            { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563' }
         ];
 
         return (
@@ -5037,8 +4973,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         padding: '1rem 1.5rem',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'space-between',
-                        borderBottomLeftRadius: '24px',
+                        justifyContent: 'space-between'
                     }}>
                         <div style={{
                             color: companyNameColor,
@@ -5103,14 +5038,43 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             fontSize: '0.875rem',
                             margin: 0,
                             lineHeight: '1.5',
-                            opacity: 0.95
+                            opacity: 0.95,
+                            marginBottom: '1.5rem'
                         }}>
                             {description}
                         </p>
+
+                        {/* Get Tickets Button */}
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <button
+                                onClick={() => {
+                                    if (config.businessInfo?.website) {
+                                        window.open(config.businessInfo.website.startsWith('http') ? config.businessInfo.website : `https://${config.businessInfo.website}`, '_blank');
+                                    }
+                                }}
+                                style={{
+                                    background: secondaryColor,
+                                    color: primaryColor,
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    padding: '0.75rem 2rem',
+                                    fontSize: '1rem',
+                                    fontWeight: '700',
+                                    cursor: 'pointer',
+                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                                    transition: 'all 0.2s',
+                                    marginBottom: '-3rem',
+                                    position: 'relative',
+                                    zIndex: 5
+                                }}
+                            >
+                                {config.businessInfo?.button || 'Get Tickets'}
+                            </button>
+                        </div>
                     </div>
 
                     {/* Event Details */}
-                    <div style={{ padding: '1.5rem' }}>
+                    <div style={{ padding: '1.5rem', paddingTop: '3rem' }}>
                         {(config.eventSchedule?.days || [
                             { id: 1, date: '2023-03-03', begins: '04:00 AM', ends: '08:00 AM' },
                             { id: 2, date: '2023-03-04', begins: '04:00 AM', ends: '08:00 AM' }
@@ -5275,26 +5239,33 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             gap: '1rem',
                             flexWrap: 'wrap'
                         }}>
-                            {(config.socialLinks || [
-                                { id: 1, platform: 'website', url: '' },
-                                { id: 2, platform: 'instagram', url: '' },
-                                { id: 3, platform: 'facebook', url: '' }
-                            ]).map((link) => {
+                            {(config.socialLinks && config.socialLinks.length > 0 ? config.socialLinks : []).filter(link => link.url && link.url.trim() !== '').map((link) => {
                                 const platform = socialPlatforms.find(p => p.id === link.platform);
                                 if (!platform) return null;
-                                const Icon = platform.icon;
                                 return (
-                                    <div key={link.id} style={{
-                                        width: '48px',
-                                        height: '48px',
-                                        borderRadius: '12px',
-                                        background: platform.color,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}>
-                                        <Icon size={24} color="#fff" />
-                                    </div>
+                                    <a
+                                        key={link.id}
+                                        href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ textDecoration: 'none' }}
+                                    >
+                                        <div style={{
+                                            width: '48px',
+                                            height: '48px',
+                                            borderRadius: '12px',
+                                            background: platform.color,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            {typeof platform.icon === 'string' ? (
+                                                <img src={platform.icon} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+                                            ) : (
+                                                <platform.icon size={24} color="#fff" />
+                                            )}
+                                        </div>
+                                    </a>
                                 );
                             })}
                         </div>
@@ -5326,7 +5297,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 {/* Notch */}
                 {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
-                <div style={{ height: '100%', overflowY: 'auto', background: primaryColor }}>
+                <div style={{ height: '100%', overflowY: 'auto', background: primaryColor, display: 'flex', flexDirection: 'column' }}>
                     {/* Header */}
                     <div style={{
                         background: primaryColor,
@@ -5335,16 +5306,23 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         alignItems: 'center',
                         gap: '0.75rem'
                     }}>
-                        {design?.logo?.url && (
-                            <div style={{
-                                background: '#000',
-                                padding: '0.5rem 0.75rem',
-                                borderRadius: '8px',
-                                overflow: 'hidden'
-                            }}>
-                                <img src={design.logo.url} alt="Logo" style={{ height: '24px', width: 'auto', objectFit: 'contain' }} />
-                            </div>
-                        )}
+                        {(() => {
+                            const isLogoRemoved = design?.logo?.url === null || design?.logo?.url === '';
+                            const logoSource = isLogoRemoved ? null : (design?.logo?.url || 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743320/comapny-logo_xy3fqg.png');
+
+                            if (!logoSource) return null;
+
+                            return (
+                                <div style={{
+                                    background: '#000',
+                                    padding: '0.5rem 0.75rem',
+                                    borderRadius: '8px',
+                                    overflow: 'hidden'
+                                }}>
+                                    <img src={logoSource} alt="Logo" style={{ height: '24px', width: 'auto', objectFit: 'contain' }} />
+                                </div>
+                            );
+                        })()}
                         <h1 style={{
                             fontSize: '1.5rem',
                             fontWeight: 'bold',
@@ -5370,8 +5348,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             borderRadius: '12px'
                         }}>
                             {(basicInfo?.productImages && basicInfo.productImages.length > 0 ? basicInfo.productImages.map(img => img.url) : [
-                                'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400',
-                                'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400'
+                                'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743372%2Fitem-1_fr9qst.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE',
+                                'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743370%2Fitem-2_suygda.webp&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE',
+                                'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743370%2Fitem-3_ycglwq.webp&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE'
                             ]).map((img, index) => (
                                 <img
                                     key={index}
@@ -5398,8 +5377,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             gap: '0.5rem'
                         }}>
                             {(basicInfo?.productImages && basicInfo.productImages.length > 0 ? basicInfo.productImages : [
-                                { url: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400' },
-                                { url: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400' }
+                                { url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743372%2Fitem-1_fr9qst.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' },
+                                { url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743370%2Fitem-2_suygda.webp&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' },
+                                { url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743370%2Fitem-3_ycglwq.webp&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' }
                             ]).map((_, index) => (
                                 <div
                                     key={index}
@@ -5504,37 +5484,70 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         {/* Certificates */}
                         <div style={{ marginBottom: '1rem' }}>
                             <button
+                                onClick={() => toggleAccordion('certificates')}
                                 style={{
                                     width: '100%',
                                     background: secondaryColor,
                                     border: 'none',
                                     borderRadius: '8px',
                                     padding: '1rem',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    cursor: 'pointer',
                                     color: '#fff',
                                     fontWeight: '600',
-                                    fontSize: '1rem',
-                                    cursor: 'pointer'
+                                    fontSize: '1rem'
                                 }}
                             >
                                 Certificates
+                                <span style={{ transform: openAccordion === 'certificates' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>▼</span>
                             </button>
+                            {openAccordion === 'certificates' && (
+                                <div style={{
+                                    background: '#fcd34d', // Using the same yellow background as other accordions
+                                    padding: '1rem',
+                                    borderBottomLeftRadius: '8px',
+                                    borderBottomRightRadius: '8px',
+                                    display: 'flex',
+                                    gap: '1rem',
+                                    flexWrap: 'wrap',
+                                    justifyContent: 'center'
+                                }}>
+                                    {(content?.certificates && content.certificates.length > 0 ? content.certificates : [
+                                        { id: 'def-cert-1', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759749930%2FODCzvu_imfdi2.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' },
+                                        { id: 'def-cert-2', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759749957%2FKOursE_uedyzk.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' }
+                                    ]).map((cert, index) => (
+                                        <img key={index} src={cert.url} alt="Certificate" style={{ height: '40px', objectFit: 'contain' }} />
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         {/* Buy Product Button */}
-                        <button style={{
-                            width: '100%',
-                            background: secondaryColor,
-                            border: 'none',
-                            borderRadius: '8px',
-                            padding: '1rem',
-                            color: '#fff',
-                            fontWeight: 'bold',
-                            fontSize: '1.1rem',
-                            cursor: 'pointer',
-                            marginBottom: '1rem'
-                        }}>
-                            Buy Product
-                        </button>
+                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+                            <a
+                                href={content?.buttonLink ? (content.buttonLink.startsWith('http') ? content.buttonLink : `https://${content.buttonLink}`) : 'https://www.dairylandltd.com/'}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    width: 'fit-content',
+                                    minWidth: '200px',
+                                    background: secondaryColor,
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    padding: '0.875rem 1.5rem',
+                                    color: '#fff',
+                                    fontWeight: 'bold',
+                                    fontSize: '1.1rem',
+                                    cursor: 'pointer',
+                                    textDecoration: 'none',
+                                    textAlign: 'center'
+                                }}
+                            >
+                                {content?.buttonText || 'Buy Product'}
+                            </a>
+                        </div>
                     </div>
 
                     {/* Video Section */}
@@ -5735,21 +5748,30 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         </div>
                     </div>
 
-                    {/* See Product Rating Button */}
-                    <div style={{ padding: '0 1.5rem 1.5rem' }}>
-                        <button style={{
-                            width: '100%',
-                            background: 'secondaryColor',
-                            border: 'none',
-                            borderRadius: '8px',
-                            padding: '1rem',
-                            color: '#fff',
-                            fontWeight: 'bold',
-                            fontSize: '1.1rem',
-                            cursor: 'pointer'
-                        }}>
+                    {/* See Product Rating Footer */}
+                    <div style={{
+                        background: primaryColor,
+                        borderTop: `14px solid ${secondaryColor}`,
+                        padding: '1.25rem',
+                        textAlign: 'center',
+                        borderBottomLeftRadius: isLiveView ? '0' : '30px',
+                        borderBottomRightRadius: isLiveView ? '0' : '30px',
+                        marginTop: 'auto'
+                    }}>
+                        <a
+                            href={feedback?.ratingUrl ? (feedback.ratingUrl.startsWith('http') ? feedback.ratingUrl : `https://${feedback.ratingUrl}`) : '#'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                color: '#fff',
+                                fontWeight: 'bold',
+                                fontSize: '0.9rem', // Smaller text size as requested
+                                textDecoration: 'none',
+                                display: 'block'
+                            }}
+                        >
                             See Product Rating
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>

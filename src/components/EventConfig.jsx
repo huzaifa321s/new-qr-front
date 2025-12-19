@@ -24,7 +24,7 @@ const EventConfig = ({ config, onChange }) => {
         ]
     };
     const venue = config.venue || {};
-    const facilities = config.facilities || [];
+    const facilities = config.facilities || ['wifi', 'plug', 'wheelchair'];
     const contactInfo = config.contactInfo || {
         personName: 'Hellen Grey',
         designation: 'Event Manager',
@@ -33,7 +33,11 @@ const EventConfig = ({ config, onChange }) => {
             { id: 2, type: 'email', value: 'Hellen@gmail.com' }
         ]
     };
-    const socialLinks = config.socialLinks || [];
+    const socialLinks = config.socialLinks || [
+        { id: 1, platform: 'website', url: '' },
+        { id: 2, platform: 'instagram', url: '' },
+        { id: 3, platform: 'facebook', url: '' }
+    ];
 
     // Default colors from screenshot
     const primaryColor = design.color?.header || '#097D6A';
@@ -277,13 +281,14 @@ const EventConfig = ({ config, onChange }) => {
     const socialPlatforms = [
         { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2' },
         { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
-        { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#1DA1F2' },
+        { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968830.png', color: '#1DA1F2' },
         { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
         { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
+        { id: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968819.png', color: '#9146FF' },
         { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
-        { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00' },
+        { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/1051/1051330.png', color: '#FFFC00' },
         { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
-        { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954' },
+        { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174872.png', color: '#1DB954' },
         { id: 'telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC' },
         { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563' }
     ];
@@ -527,9 +532,8 @@ const EventConfig = ({ config, onChange }) => {
                                     </label>
                                     <input
                                         type="text"
-                                        value={businessInfo.companyName || ''}
+                                        value={businessInfo.companyName || 'Sterling & Co.'}
                                         onChange={(e) => handleBusinessInfoUpdate('companyName', e.target.value)}
-                                        placeholder="Sterling & Co."
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
@@ -637,9 +641,8 @@ const EventConfig = ({ config, onChange }) => {
                                     </label>
                                     <input
                                         type="text"
-                                        value={businessInfo.headline || ''}
+                                        value={businessInfo.headline || '4th Annual Company Meetup'}
                                         onChange={(e) => handleBusinessInfoUpdate('headline', e.target.value)}
-                                        placeholder="4th Annual Company Meetup"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
@@ -744,9 +747,8 @@ const EventConfig = ({ config, onChange }) => {
                                 DESCRIPTION
                             </label>
                             <textarea
-                                value={businessInfo.description || ''}
+                                value={businessInfo.description || 'We aim to provide fresh and healthy snacks people on the go.'}
                                 onChange={(e) => handleBusinessInfoUpdate('description', e.target.value)}
-                                placeholder="We aim to provide fresh and healthy snacks people on the go."
                                 rows={4}
                                 style={{
                                     width: '100%',
@@ -771,9 +773,8 @@ const EventConfig = ({ config, onChange }) => {
                                 </label>
                                 <input
                                     type="text"
-                                    value={businessInfo.button || ''}
+                                    value={businessInfo.button || 'Get Tickets'}
                                     onChange={(e) => handleBusinessInfoUpdate('button', e.target.value)}
-                                    placeholder="Get Tickets"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -793,9 +794,8 @@ const EventConfig = ({ config, onChange }) => {
                                 </label>
                                 <input
                                     type="text"
-                                    value={businessInfo.website || ''}
+                                    value={businessInfo.website || 'http://www.sterlingco.com/tickets'}
                                     onChange={(e) => handleBusinessInfoUpdate('website', e.target.value)}
-                                    placeholder="http://www.sterlingco.com/tickets"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -1019,9 +1019,8 @@ const EventConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={venue.location || ''}
+                                value={venue.location || '1000 Marketplace Ave. NY, 10001, United States'}
                                 onChange={(e) => handleVenueUpdate('location', e.target.value)}
-                                placeholder="1000 Marketplace Ave. NY, 10001, United States"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
@@ -1122,9 +1121,8 @@ const EventConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={contactInfo.personName || ''}
+                                value={contactInfo.personName || 'Hellen Grey'}
                                 onChange={(e) => handleContactUpdate('personName', e.target.value)}
-                                placeholder="Hellen Grey"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
@@ -1144,9 +1142,8 @@ const EventConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={contactInfo.designation || ''}
+                                value={contactInfo.designation || 'Event Manager'}
                                 onChange={(e) => handleContactUpdate('designation', e.target.value)}
-                                placeholder="Event Manager"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
@@ -1186,8 +1183,7 @@ const EventConfig = ({ config, onChange }) => {
                                             style={{
                                                 width: '100%',
                                                 padding: '0.75rem',
-                                                paddingLeft: '3rem', // Add space for internal icon if needed, but styling seems to be external icon
-                                                paddingLeft: '1rem',
+                                                paddingLeft: '2.5rem',
                                                 borderRadius: '4px',
                                                 border: '1px solid #1e293b',
                                                 fontSize: '0.9rem',
@@ -1328,7 +1324,8 @@ const EventConfig = ({ config, onChange }) => {
                         {/* Active Inputs */}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
                             {socialLinks.map(link => {
-                                const platform = socialPlatforms.find(p => p.id === link.platform) || { color: '#64748b', icon: Globe };
+                                const platform = socialPlatforms.find(p => p.id === link.platform);
+                                if (!platform) return null;
                                 const Icon = platform.icon;
                                 return (
                                     <div key={link.id}>
@@ -1354,8 +1351,7 @@ const EventConfig = ({ config, onChange }) => {
                                                         style={{
                                                             width: '24px',
                                                             height: '24px',
-                                                            objectFit: 'contain',
-                                                            filter: platform.id === 'snapchat' || platform.color === '#fffc00' ? 'none' : 'brightness(0) invert(1)'
+                                                            objectFit: 'contain'
                                                         }}
                                                     />
                                                 ) : (
@@ -1439,8 +1435,7 @@ const EventConfig = ({ config, onChange }) => {
                                                     style={{
                                                         width: '20px',
                                                         height: '20px',
-                                                        objectFit: 'contain',
-                                                        filter: isAdded ? 'none' : (platform.id === 'snapchat' || platform.color === '#fffc00' ? 'none' : 'brightness(0) invert(1)')
+                                                        objectFit: 'contain'
                                                     }}
                                                 />
                                             ) : (

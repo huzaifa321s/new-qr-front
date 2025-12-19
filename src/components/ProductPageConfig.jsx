@@ -14,16 +14,43 @@ const ProductPageConfig = ({ config, onChange }) => {
     const [isSocialsOpen, setIsSocialsOpen] = useState(true);
 
     const design = config.design || {};
-    const basicInfo = config.basicInfo || {};
-    const video = config.video || {};
-    const feedback = config.feedback || {};
+    const bInfo = config.basicInfo || {};
+    const defaultProductImages = [
+        { id: 'def-1', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743372%2Fitem-1_fr9qst.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' },
+        { id: 'def-2', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743370%2Fitem-2_suygda.webp&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' },
+        { id: 'def-3', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759743370%2Fitem-3_ycglwq.webp&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' }
+    ];
+    const basicInfo = {
+        ...bInfo,
+        companyName: bInfo.companyName || 'Dairyland',
+        productTitle: bInfo.productTitle || 'Chocolate Flavored Milk',
+        headline: bInfo.headline || '325 ml',
+        price: bInfo.price || '95',
+        currency: bInfo.currency || '₨',
+        productImages: (bInfo.productImages && bInfo.productImages.length > 0) ? bInfo.productImages : defaultProductImages,
+    };
+    const video = {
+        title: 'Vanilla & Malai...',
+        url: 'https://www.youtube.com/watch?v=kYI9P_pkyEw',
+        ...(config.video || {})
+    };
+    const feedback = {
+        title: 'Add Your Feedback',
+        ratingUrl: 'https://www.dairylandltd.com/floveredmilk/rating',
+        textColor: '#000000',
+        font: 'Lato',
+        ...(config.feedback || {})
+    };
     const contact = config.contact || {};
     const content = config.content || {
         items: [
             { id: '1', title: 'Description', text: 'The Dark, Smooth, Creaminess Of Chocolate Romances The Wholesome Goodness Of Real Cow\'S Milk, Reigniting For The Love For A Healthy, Tasty Beverage.' },
             { id: '2', title: 'Ingredient', text: '• Reduced Fat Milk\n• Milk Solids\nCocoa Powder\n• Sugar\n• Emulsifier: Vegetable Oil Origin (E471)\n• Stabilizer (E470) & Chocolate Flavor' }
         ],
-        certificates: [],
+        certificates: (config.content && config.content.certificates && config.content.certificates.length > 0) ? config.content.certificates : [
+            { id: 'def-cert-1', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759749930%2FODCzvu_imfdi2.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' },
+            { id: 'def-cert-2', url: 'https://www.qrinsight.co/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdate1bmhd%2Fimage%2Fupload%2Fv1759749957%2FKOursE_uedyzk.png&w=1920&q=75&dpl=dpl_AGRmLYtXR9cScu34SYHsBQCorxCE' }
+        ],
         buttonText: 'Buy Product',
         buttonLink: 'https://www.dairylandltd.com/'
     };
@@ -319,7 +346,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                                 </label>
                                 <input
                                     type="text"
-                                    value={basicInfo.companyName || ''}
+                                    value={basicInfo.companyName}
                                     onChange={(e) => handleBasicInfoUpdate('companyName', e.target.value)}
                                     placeholder="Dairyland"
                                     style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
@@ -398,7 +425,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                                 </label>
                                 <input
                                     type="text"
-                                    value={basicInfo.productTitle || ''}
+                                    value={basicInfo.productTitle}
                                     onChange={(e) => handleBasicInfoUpdate('productTitle', e.target.value)}
                                     placeholder="Chocolate Flavored Milk"
                                     style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
@@ -441,7 +468,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={basicInfo.headline || ''}
+                                value={basicInfo.headline}
                                 onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
                                 placeholder="325 ml"
                                 style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
@@ -455,13 +482,63 @@ const ProductPageConfig = ({ config, onChange }) => {
                                     CURRENCY*
                                 </label>
                                 <select
-                                    value={basicInfo.currency || 'PKR'}
+                                    value={basicInfo.currency}
                                     onChange={(e) => handleBasicInfoUpdate('currency', e.target.value)}
                                     style={{ width: '100%', height: '42px', borderRadius: '4px', border: '1px solid #1e293b', padding: '0 0.5rem', outline: 'none', fontSize: '0.9rem', color: '#000' }}
                                 >
-                                    <option value="PKR">PKR</option>
-                                    <option value="USD">USD</option>
-                                    <option value="EUR">EUR</option>
+                                    {[
+                                        { code: 'AFN', symbol: '؋' }, { code: 'ALL', symbol: 'L' }, { code: 'DZD', symbol: 'د.ج' },
+                                        { code: 'AOA', symbol: 'Kz' }, { code: 'ARS', symbol: '$' }, { code: 'AMD', symbol: '֏' },
+                                        { code: 'AWG', symbol: 'ƒ' }, { code: 'AUD', symbol: '$' }, { code: 'AZN', symbol: '₼' },
+                                        { code: 'BSD', symbol: '$' }, { code: 'BHD', symbol: '.د.ب' }, { code: 'BDT', symbol: '৳' },
+                                        { code: 'BBD', symbol: '$' }, { code: 'BYN', symbol: 'Br' }, { code: 'BZD', symbol: 'BZ$' },
+                                        { code: 'BMD', symbol: '$' }, { code: 'BTN', symbol: 'Nu.' }, { code: 'BOB', symbol: 'Bs.' },
+                                        { code: 'BAM', symbol: 'KM' }, { code: 'BWP', symbol: 'P' }, { code: 'BRL', symbol: 'R$' },
+                                        { code: 'BND', symbol: '$' }, { code: 'BGN', symbol: 'лв' }, { code: 'BIF', symbol: 'FBu' },
+                                        { code: 'KHR', symbol: '៛' }, { code: 'CAD', symbol: '$' }, { code: 'CVE', symbol: '$' },
+                                        { code: 'KYD', symbol: '$' }, { code: 'XAF', symbol: 'FCFA' }, { code: 'XPF', symbol: '₣' },
+                                        { code: 'CLP', symbol: '$' }, { code: 'CNY', symbol: '¥' }, { code: 'COP', symbol: '$' },
+                                        { code: 'KMF', symbol: 'CF' }, { code: 'CDF', symbol: 'FC' }, { code: 'CRC', symbol: '₡' },
+                                        { code: 'HRK', symbol: 'kn' }, { code: 'CUP', symbol: '₱' }, { code: 'CZK', symbol: 'Kč' },
+                                        { code: 'DKK', symbol: 'kr' }, { code: 'DJF', symbol: 'Fdj' }, { code: 'DOP', symbol: 'RD$' },
+                                        { code: 'EGP', symbol: '£' }, { code: 'ETB', symbol: 'Br' }, { code: 'EUR', symbol: '€' },
+                                        { code: 'FJD', symbol: '$' }, { code: 'GMD', symbol: 'D' }, { code: 'GEL', symbol: '₾' },
+                                        { code: 'GHS', symbol: 'GH₵' }, { code: 'GIP', symbol: '£' }, { code: 'GTQ', symbol: 'Q' },
+                                        { code: 'GNF', symbol: 'FG' }, { code: 'GYD', symbol: '$' }, { code: 'HTG', symbol: 'G' },
+                                        { code: 'HNL', symbol: 'L' }, { code: 'HKD', symbol: '$' }, { code: 'HUF', symbol: 'Ft' },
+                                        { code: 'ISK', symbol: 'kr' }, { code: 'INR', symbol: '₹' }, { code: 'IDR', symbol: 'Rp' },
+                                        { code: 'IRR', symbol: '﷼' }, { code: 'IQD', symbol: 'ع.د' }, { code: 'ILS', symbol: '₪' },
+                                        { code: 'JMD', symbol: 'J$' }, { code: 'JPY', symbol: '¥' }, { code: 'JOD', symbol: 'د.ا' },
+                                        { code: 'KZT', symbol: '₸' }, { code: 'KES', symbol: 'KSh' }, { code: 'KWD', symbol: 'د.ك' },
+                                        { code: 'KGS', symbol: 'лв' }, { code: 'LAK', symbol: '₭' }, { code: 'LBP', symbol: '£' },
+                                        { code: 'LSL', symbol: 'L' }, { code: 'LRD', symbol: '$' }, { code: 'LYD', symbol: 'ل.د' },
+                                        { code: 'MOP', symbol: 'MOP$' }, { code: 'MKD', symbol: 'ден' }, { code: 'MGA', symbol: 'Ar' },
+                                        { code: 'MWK', symbol: 'MK' }, { code: 'MYR', symbol: 'RM' }, { code: 'MVR', symbol: 'Rf' },
+                                        { code: 'MRU', symbol: 'UM' }, { code: 'MUR', symbol: '₨' }, { code: 'MXN', symbol: '$' },
+                                        { code: 'MDL', symbol: 'L' }, { code: 'MNT', symbol: '₮' }, { code: 'MAD', symbol: 'د.م.' },
+                                        { code: 'MZN', symbol: 'MT' }, { code: 'MMK', symbol: 'K' }, { code: 'NAD', symbol: '$' },
+                                        { code: 'NPR', symbol: '₨' }, { code: 'NZD', symbol: '$' }, { code: 'NIO', symbol: 'C$' },
+                                        { code: 'NGN', symbol: '₦' }, { code: 'NOK', symbol: 'kr' }, { code: 'OMR', symbol: '﷼' },
+                                        { code: 'PKR', symbol: '₨' }, { code: 'PAB', symbol: 'B/.' }, { code: 'PGK', symbol: 'K' },
+                                        { code: 'PYG', symbol: 'Gs' }, { code: 'PEN', symbol: 'S/.' }, { code: 'PHP', symbol: '₱' },
+                                        { code: 'PLN', symbol: 'zł' }, { code: 'QAR', symbol: '﷼' }, { code: 'RON', symbol: 'lei' },
+                                        { code: 'RUB', symbol: '₽' }, { code: 'RWF', symbol: 'FRw' }, { code: 'SAR', symbol: '﷼' },
+                                        { code: 'RSD', symbol: 'Дин.' }, { code: 'SCR', symbol: '₨' }, { code: 'SLL', symbol: 'Le' },
+                                        { code: 'SGD', symbol: '$' }, { code: 'SBD', symbol: '$' }, { code: 'SOS', symbol: 'S' },
+                                        { code: 'ZAR', symbol: 'R' }, { code: 'KRW', symbol: '₩' }, { code: 'LKR', symbol: '₨' },
+                                        { code: 'SDG', symbol: 'ج.س.' }, { code: 'SRD', symbol: '$' }, { code: 'SZL', symbol: 'E' },
+                                        { code: 'SEK', symbol: 'kr' }, { code: 'CHF', symbol: 'CHf' }, { code: 'SYP', symbol: '£' },
+                                        { code: 'TWD', symbol: 'NT$' }, { code: 'TJS', symbol: 'SM' }, { code: 'TZS', symbol: 'TSh' },
+                                        { code: 'THB', symbol: '฿' }, { code: 'TOP', symbol: 'T$' }, { code: 'TTD', symbol: 'TT$' },
+                                        { code: 'TND', symbol: 'د.ت' }, { code: 'TRY', symbol: '₺' }, { code: 'TMT', symbol: 'm' },
+                                        { code: 'UGX', symbol: 'USh' }, { code: 'UAH', symbol: '₴' }, { code: 'AED', symbol: 'د.إ' },
+                                        { code: 'GBP', symbol: '£' }, { code: 'USD', symbol: '$' }, { code: 'UYU', symbol: '$U' },
+                                        { code: 'UZS', symbol: 'лв' }, { code: 'VUV', symbol: 'VT' }, { code: 'VEF', symbol: 'Bs' },
+                                        { code: 'VND', symbol: '₫' }, { code: 'YER', symbol: '﷼' }, { code: 'ZMW', symbol: 'ZK' },
+                                        { code: 'ZWL', symbol: '$' }
+                                    ].map(curr => (
+                                        <option key={curr.code} value={curr.symbol}>{curr.code} - {curr.symbol}</option>
+                                    ))}
                                 </select>
                             </div>
                             <div>
@@ -470,7 +547,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                                 </label>
                                 <input
                                     type="text"
-                                    value={basicInfo.price || ''}
+                                    value={basicInfo.price}
                                     onChange={(e) => handleBasicInfoUpdate('price', e.target.value)}
                                     placeholder="95"
                                     style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}

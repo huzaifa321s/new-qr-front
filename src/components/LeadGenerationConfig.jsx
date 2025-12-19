@@ -290,9 +290,8 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                 {/* Company Name Input */}
                                 <input
                                     type="text"
-                                    value={basicInfo.companyName || ''}
+                                    value={basicInfo.companyName || 'Sterling & Co'}
                                     onChange={(e) => handleBasicInfoUpdate('companyName', e.target.value)}
-                                    placeholder="Sterling & Co"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -403,9 +402,8 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                 {/* Headline Input */}
                                 <input
                                     type="text"
-                                    value={basicInfo.headline || ''}
+                                    value={basicInfo.headline || 'Important Document'}
                                     onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
-                                    placeholder="Important Document"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -513,9 +511,8 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                 DESCRIPTION
                             </label>
                             <textarea
-                                value={basicInfo.description || ''}
+                                value={basicInfo.description || 'Download this document today.'}
                                 onChange={(e) => handleBasicInfoUpdate('description', e.target.value)}
-                                placeholder="Download this document today."
                                 rows={3}
                                 style={{
                                     width: '100%',

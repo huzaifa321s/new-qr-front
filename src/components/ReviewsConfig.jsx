@@ -2,6 +2,26 @@ import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check } from 'lucide
 import { useState } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
+const socialIconsMap = [
+    { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
+    { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2', name: 'Facebook' },
+    { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', name: 'Instagram' },
+    { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000', name: 'X' },
+    { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2', name: 'LinkedIn' },
+    { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000', name: 'TikTok' },
+    { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000', name: 'YouTube' },
+    { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366', name: 'WhatsApp' },
+    { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00', name: 'Snapchat' },
+    { id: 'discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2', name: 'Discord' },
+    { id: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF', name: 'Twitch' },
+    { id: 'telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC', name: 'Telegram' },
+    { id: 'pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C', name: 'Pinterest' },
+    { id: 'reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500', name: 'Reddit' },
+    { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954', name: 'Spotify' },
+    { id: 'behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF', name: 'Behance' },
+    { id: 'line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900', name: 'Line' }
+];
+
 const ReviewsConfig = ({ config, onChange }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
@@ -164,6 +184,21 @@ const ReviewsConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+    };
+
+    const handleToggleSocial = (platformId) => {
+        onChange(prev => {
+            const newSocial = { ...prev.social };
+            if (newSocial[platformId] !== undefined) {
+                delete newSocial[platformId];
+            } else {
+                newSocial[platformId] = '';
+            }
+            return {
+                ...prev,
+                social: newSocial
+            };
+        });
     };
 
     const palettes = [
@@ -332,9 +367,8 @@ const ReviewsConfig = ({ config, onChange }) => {
                                 {/* Organization Name Input */}
                                 <input
                                     type="text"
-                                    value={basicInfo.organizationName || ''}
+                                    value={basicInfo.organizationName || 'LUXURY HOTELS'}
                                     onChange={(e) => handleBasicInfoUpdate('organizationName', e.target.value)}
-                                    placeholder="Luxury Hotels"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -427,9 +461,8 @@ const ReviewsConfig = ({ config, onChange }) => {
                                 {/* Title Input */}
                                 <input
                                     type="text"
-                                    value={basicInfo.title || ''}
+                                    value={basicInfo.title || 'Give us your feedback'}
                                     onChange={(e) => handleBasicInfoUpdate('title', e.target.value)}
-                                    placeholder="Give us your feedback"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -519,9 +552,8 @@ const ReviewsConfig = ({ config, onChange }) => {
                                 DESCRIPTION
                             </label>
                             <textarea
-                                value={basicInfo.description || ''}
+                                value={basicInfo.description || 'We aim to provide fresh and healthy snacks people on the go.'}
                                 onChange={(e) => handleBasicInfoUpdate('description', e.target.value)}
-                                placeholder="We aim to provide fresh and healthy snacks people on the go."
                                 rows={3}
                                 style={{
                                     width: '100%',
@@ -543,9 +575,8 @@ const ReviewsConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={basicInfo.website || ''}
+                                value={basicInfo.website || 'https://www.hotelparadise.com'}
                                 onChange={(e) => handleBasicInfoUpdate('website', e.target.value)}
-                                placeholder="https://www.hotelparadise.com"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
@@ -593,16 +624,15 @@ const ReviewsConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         CATEGORY NAME*
                                     </label>
-                                    <div style={{ position: 'relative' }}>
+                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                                         <input
                                             type="text"
                                             value={category.name || ''}
                                             onChange={(e) => handleCategoryUpdate(category.id, 'name', e.target.value)}
                                             placeholder="Food"
                                             style={{
-                                                width: '100%',
+                                                flex: 1,
                                                 padding: '0.75rem',
-                                                paddingRight: '3rem',
                                                 borderRadius: '4px',
                                                 border: '1px solid #1e293b',
                                                 fontSize: '0.9rem',
@@ -610,24 +640,26 @@ const ReviewsConfig = ({ config, onChange }) => {
                                             }}
                                         />
                                         {/* Delete Category Icon */}
-                                        {categories.length > 1 && (
-                                            <div
-                                                onClick={() => handleDeleteCategory(category.id)}
-                                                style={{
-                                                    position: 'absolute',
-                                                    right: '12px',
-                                                    top: '50%',
-                                                    transform: 'translateY(-50%)',
-                                                    cursor: 'pointer',
-                                                    color: '#cbd5e1',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center'
-                                                }}
-                                            >
-                                                <X size={20} />
-                                            </div>
-                                        )}
+                                        <div
+                                            onClick={() => handleDeleteCategory(category.id)}
+                                            style={{
+                                                width: '32px',
+                                                height: '32px',
+                                                borderRadius: '50%',
+                                                background: '#fee2e2',
+                                                color: '#dc2626',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.2s',
+                                                flexShrink: 0
+                                            }}
+                                            onMouseOver={(e) => e.currentTarget.style.background = '#fecaca'}
+                                            onMouseOut={(e) => e.currentTarget.style.background = '#fee2e2'}
+                                        >
+                                            <X size={18} />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -639,16 +671,15 @@ const ReviewsConfig = ({ config, onChange }) => {
                                         </label>
 
                                         {category.subcategories.map((subcategory, subIndex) => (
-                                            <div key={subIndex} style={{ marginBottom: '0.75rem', position: 'relative' }}>
+                                            <div key={subIndex} style={{ marginBottom: '0.75rem', display: 'flex', gap: '8px', alignItems: 'center' }}>
                                                 <input
                                                     type="text"
                                                     value={subcategory || ''}
                                                     onChange={(e) => handleSubcategoryUpdate(category.id, subIndex, e.target.value)}
                                                     placeholder="Staff"
                                                     style={{
-                                                        width: '100%',
+                                                        flex: 1,
                                                         padding: '0.75rem',
-                                                        paddingRight: '3rem',
                                                         borderRadius: '4px',
                                                         border: '1px solid #1e293b',
                                                         fontSize: '0.9rem',
@@ -656,24 +687,26 @@ const ReviewsConfig = ({ config, onChange }) => {
                                                     }}
                                                 />
                                                 {/* Delete Subcategory Icon */}
-                                                {category.subcategories.length > 1 && (
-                                                    <div
-                                                        onClick={() => handleDeleteSubcategory(category.id, subIndex)}
-                                                        style={{
-                                                            position: 'absolute',
-                                                            right: '12px',
-                                                            top: '50%',
-                                                            transform: 'translateY(-50%)',
-                                                            cursor: 'pointer',
-                                                            color: '#cbd5e1',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center'
-                                                        }}
-                                                    >
-                                                        <X size={20} />
-                                                    </div>
-                                                )}
+                                                <div
+                                                    onClick={() => handleDeleteSubcategory(category.id, subIndex)}
+                                                    style={{
+                                                        width: '28px',
+                                                        height: '28px',
+                                                        borderRadius: '50%',
+                                                        background: '#f1f5f9',
+                                                        color: '#64748b',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.2s',
+                                                        flexShrink: 0
+                                                    }}
+                                                    onMouseOver={(e) => e.currentTarget.style.background = '#e2e8f0'}
+                                                    onMouseOut={(e) => e.currentTarget.style.background = '#f1f5f9'}
+                                                >
+                                                    <X size={16} />
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
@@ -755,194 +788,137 @@ const ReviewsConfig = ({ config, onChange }) => {
 
                         {/* Social Media Input Fields - 2 Column Grid */}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
-
-                            {/* Website */}
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    Website*
-                                </label>
-                                <div style={{ position: 'relative' }}>
-                                    <div style={{
-                                        position: 'absolute',
-                                        left: '12px',
-                                        top: '50%',
-                                        transform: 'translateY(-50%)',
-                                        width: '24px',
-                                        height: '24px',
-                                        background: '#6366f1',
-                                        borderRadius: '4px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        fontSize: '0.9rem',
-                                        color: '#fff'
-                                    }}>
-                                        🌐
+                            {Object.keys(social).map((platformId) => {
+                                const platform = socialIconsMap.find(p => p.id === platformId);
+                                if (!platform) return null;
+                                return (
+                                    <div key={platformId}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                            {platform.name}*
+                                        </label>
+                                        <div style={{ position: 'relative', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                            <div style={{ position: 'relative', flex: 1 }}>
+                                                <div style={{
+                                                    position: 'absolute',
+                                                    left: '12px',
+                                                    top: '50%',
+                                                    transform: 'translateY(-50%)',
+                                                    width: '24px',
+                                                    height: '24px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    zIndex: 1
+                                                }}>
+                                                    <img src={platform.icon} alt={platform.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    value={social[platformId] || ''}
+                                                    onChange={(e) => handleSocialUpdate(platformId, e.target.value)}
+                                                    placeholder="https://"
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.75rem 0.75rem 0.75rem 3rem',
+                                                        borderRadius: '4px',
+                                                        border: '1px solid #1e293b',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none'
+                                                    }}
+                                                />
+                                            </div>
+                                            <div
+                                                onClick={() => handleToggleSocial(platformId)}
+                                                style={{
+                                                    width: '32px',
+                                                    height: '32px',
+                                                    borderRadius: '50%',
+                                                    background: '#fee2e2',
+                                                    color: '#dc2626',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    cursor: 'pointer',
+                                                    flexShrink: 0
+                                                }}
+                                            >
+                                                <X size={16} />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <input
-                                        type="text"
-                                        value={social.website || ''}
-                                        onChange={(e) => handleSocialUpdate('website', e.target.value)}
-                                        placeholder="https://"
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem 0.75rem 0.75rem 3rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
-                                            fontSize: '0.9rem',
-                                            outline: 'none'
-                                        }}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Facebook */}
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    Facebook*
-                                </label>
-                                <div style={{ position: 'relative' }}>
-                                    <div style={{
-                                        position: 'absolute',
-                                        left: '12px',
-                                        top: '50%',
-                                        transform: 'translateY(-50%)',
-                                        width: '24px',
-                                        height: '24px',
-                                        background: '#1877f2',
-                                        borderRadius: '4px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        fontSize: '0.75rem',
-                                        color: '#fff',
-                                        fontWeight: 'bold'
-                                    }}>
-                                        f
-                                    </div>
-                                    <input
-                                        type="text"
-                                        value={social.facebook || ''}
-                                        onChange={(e) => handleSocialUpdate('facebook', e.target.value)}
-                                        placeholder="https://"
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem 0.75rem 0.75rem 3rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
-                                            fontSize: '0.9rem',
-                                            outline: 'none'
-                                        }}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Instagram */}
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    Instagram*
-                                </label>
-                                <div style={{ position: 'relative' }}>
-                                    <div style={{
-                                        position: 'absolute',
-                                        left: '12px',
-                                        top: '50%',
-                                        transform: 'translateY(-50%)',
-                                        width: '24px',
-                                        height: '24px',
-                                        background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
-                                        borderRadius: '4px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        fontSize: '0.9rem',
-                                        color: '#fff'
-                                    }}>
-                                        📷
-                                    </div>
-                                    <input
-                                        type="text"
-                                        value={social.instagram || ''}
-                                        onChange={(e) => handleSocialUpdate('instagram', e.target.value)}
-                                        placeholder="https://"
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem 0.75rem 0.75rem 3rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
-                                            fontSize: '0.9rem',
-                                            outline: 'none'
-                                        }}
-                                    />
-                                </div>
-                            </div>
-
+                                );
+                            })}
                         </div>
 
                         {/* ADD MORE Section */}
-                        <div>
+                        <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '1.5rem' }}>
                             <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 ADD MORE
                             </div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1.25rem' }}>
                                 Click on the icon to add a social media profile.
                             </div>
 
                             {/* Social Media Icons Grid */}
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(48px, 1fr))', gap: '0.75rem' }}>
-                                {/* Facebook */}
-                                <div style={{ width: '48px', height: '48px', background: '#1877f2', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.5rem', color: '#fff' }}>f</div>
-
-                                {/* Instagram */}
-                                <div style={{ width: '48px', height: '48px', background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>📷</div>
-
-                                {/* X (Twitter) */}
-                                <div style={{ width: '48px', height: '48px', background: '#000', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>𝕏</div>
-
-                                {/* LinkedIn */}
-                                <div style={{ width: '48px', height: '48px', background: '#0a66c2', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>in</div>
-
-                                {/* Discord */}
-                                <div style={{ width: '48px', height: '48px', background: '#5865f2', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>💬</div>
-
-                                {/* Twitch */}
-                                <div style={{ width: '48px', height: '48px', background: '#9146ff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>📺</div>
-
-                                {/* Kickstarter */}
-                                <div style={{ width: '48px', height: '48px', background: '#05ce78', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>K</div>
-
-                                {/* YouTube */}
-                                <div style={{ width: '48px', height: '48px', background: '#ff0000', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>▶</div>
-
-                                {/* WhatsApp */}
-                                <div style={{ width: '48px', height: '48px', background: '#25d366', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>💬</div>
-
-                                {/* Snapchat */}
-                                <div style={{ width: '48px', height: '48px', background: '#fffc00', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#000' }}>👻</div>
-
-                                {/* TikTok */}
-                                <div style={{ width: '48px', height: '48px', background: '#000', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>🎵</div>
-
-                                {/* Tumblr */}
-                                <div style={{ width: '48px', height: '48px', background: '#35465c', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>t</div>
-
-                                {/* Spotify */}
-                                <div style={{ width: '48px', height: '48px', background: '#1db954', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>🎵</div>
-
-                                {/* Telegram */}
-                                <div style={{ width: '48px', height: '48px', background: '#0088cc', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>✈️</div>
-
-                                {/* Behance */}
-                                <div style={{ width: '48px', height: '48px', background: '#1769ff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>Bē</div>
-
-                                {/* Pinterest */}
-                                <div style={{ width: '48px', height: '48px', background: '#e60023', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>📌</div>
-
-                                {/* Reddit */}
-                                <div style={{ width: '48px', height: '48px', background: '#ff4500', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>🤖</div>
-
-                                {/* Website */}
-                                <div style={{ width: '48px', height: '48px', background: '#6366f1', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.2rem', color: '#fff' }}>🌐</div>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(50px, 1fr))', gap: '1rem' }}>
+                                {socialIconsMap.map((platform) => {
+                                    const isSelected = social[platform.id] !== undefined;
+                                    return (
+                                        <div
+                                            key={platform.id}
+                                            onClick={() => handleToggleSocial(platform.id)}
+                                            style={{
+                                                width: '50px',
+                                                height: '50px',
+                                                background: '#fff',
+                                                borderRadius: '12px',
+                                                border: `2px solid ${isSelected ? '#8b5cf6' : '#f1f5f9'}`,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                position: 'relative',
+                                                transition: 'all 0.2s',
+                                                boxShadow: isSelected ? '0 4px 12px rgba(139, 92, 246, 0.15)' : 'none'
+                                            }}
+                                            onMouseOver={(e) => {
+                                                if (!isSelected) e.currentTarget.style.borderColor = '#e2e8f0';
+                                            }}
+                                            onMouseOut={(e) => {
+                                                if (!isSelected) e.currentTarget.style.borderColor = '#f1f5f9';
+                                            }}
+                                        >
+                                            <img
+                                                src={platform.icon}
+                                                alt={platform.name}
+                                                style={{
+                                                    width: '28px',
+                                                    height: '28px',
+                                                    objectFit: 'contain',
+                                                    filter: isSelected ? 'none' : 'grayscale(100%) opacity(0.5)'
+                                                }}
+                                            />
+                                            {isSelected && (
+                                                <div style={{
+                                                    position: 'absolute',
+                                                    top: '-6px',
+                                                    right: '-6px',
+                                                    width: '18px',
+                                                    height: '18px',
+                                                    background: '#8b5cf6',
+                                                    borderRadius: '50%',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    color: '#fff',
+                                                    border: '2px solid #fff'
+                                                }}>
+                                                    <Check size={10} strokeWidth={4} />
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
 

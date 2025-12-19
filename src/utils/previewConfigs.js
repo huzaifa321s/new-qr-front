@@ -217,43 +217,134 @@ export const reviewsPreviewConfig = {
     design: {
         color: { header: '#2e3192', dark: '#2e3192', light: '#ffffff' },
         logo: { url: 'https://img.freepik.com/premium-vector/luxury-hotel-logo-design-template_7492-63.jpg' },
-        heroImage: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop'
+        headerImage: { url: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=267&fit=crop' }
     },
-    businessInfo: {
-        title: "Luxury Hotels"
+    basicInfo: {
+        organizationName: "LUXURY HOTELS",
+        title: "Give us your feedback",
+        description: "We aim to provide fresh and healthy snacks people on the go.",
+        website: "https://www.hotelparadise.com",
+        organizationNameColor: "#FFFFFF",
+        organizationNameFont: "Lato",
+        titleColor: "#1e293b",
+        titleFont: "Lato"
+    },
+    categories: [
+        { id: 1, name: 'Food', subcategories: ['Staff', 'Quantity', 'Taste'] },
+        { id: 2, name: 'Drink', subcategories: ['Quality', 'Variety'] },
+        { id: 3, name: 'Parking', subcategories: ['Availability', 'Security'] }
+    ],
+    social: {
+        website: "https://www.hotelparadise.com",
+        facebook: "https://facebook.com/hotelparadise",
+        instagram: "https://instagram.com/hotelparadise"
     }
 };
 
 export const socialMediaPreviewConfig = {
     type: 'social-media',
     design: {
-        profile: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' }
+        logo: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' },
+        backgroundImage: { url: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=267&fit=crop' }
+    },
+    basicInfo: {
+        headline: "Connect With Us On Social Media",
+        aboutUs: "Follow us and get updates delivered to your favorite social media channel."
     }
 };
 
 export const pdfPreviewConfig = {
     type: 'pdf',
     design: {
-        logo: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' }
+        logo: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' },
+        color: { header: '#0B2D86', light: '#FFA800' }
     },
-    businessInfo: {
-        title: 'Software Company'
+    basicInfo: {
+        companyName: 'Software Company',
+        pdfTitle: 'See Our Company Profile',
+        description: 'We aim to provide fresh and healthy snacks people on the go.',
+        companyNameColor: '#FFFFFF',
+        companyNameFont: 'Lato',
+        pdfTitleColor: '#FFA800',
+        pdfTitleFont: 'Lato'
+    },
+    uploadPdf: {
+        pdfTitle: 'Qr Insight Presentation',
+        pdfUrl: 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf',
+        buttonTitle: 'Download Now'
     }
 };
 
 export const multipleLinksPreviewConfig = {
     type: 'multiple-links',
-    businessInfo: {
-        title: 'Techoid'
-    }
+    design: {
+        logo: { url: 'https://images.unsplash.com/photo-1568213816046-0ee1c42bd559?w=150&h=150&fit=crop' },
+        color: { header: '#52BDA3', light: '#2B1E99' }
+    },
+    basicInfo: {
+        headline: 'Techoid',
+        aboutUs: 'Follow us and get updates delivered to your favorite social media channel.',
+        headlineColor: '#2B1E99',
+        headlineFont: 'Lato'
+    },
+    links: [
+        { id: '1', url: '', title: 'Visit Us Online' },
+        { id: '2', url: '', title: 'Talk to Us' },
+        { id: '3', url: '', title: 'Instagram' },
+        { id: '4', url: '', title: 'Youtube' }
+    ],
+    socialLinks: [
+        { id: 's1', platform: 'website', url: '' },
+        { id: 's2', platform: 'facebook', url: '' },
+        { id: 's3', platform: 'instagram', url: '' }
+    ]
 };
 
 export const passwordProtectedPreviewConfig = {
-    type: 'password-protected'
+    type: 'password-protected',
+    design: {
+        headerImage: {
+            url: 'https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?w=400&h=200&fit=crop'
+        }
+    }
 };
 
 export const eventPreviewConfig = {
-    type: 'event'
+    type: 'event',
+    businessInfo: {
+        companyName: 'Sterling & Co.',
+        companyNameColor: '#FFC700',
+        companyNameFont: 'Lato',
+        headline: '4th Annual Company Meetup',
+        headlineColor: '#FFFFFF',
+        headlineFont: 'Lato',
+        description: 'We aim to provide fresh and healthy snacks people on the go.',
+        button: 'Get Tickets',
+        website: 'http://www.sterlingco.com/tickets'
+    },
+    socialLinks: [
+        { id: 1, platform: 'website', url: '' },
+        { id: 2, platform: 'instagram', url: '' },
+        { id: 3, platform: 'facebook', url: '' }
+    ],
+    venue: {
+        location: '1000 Marketplace Ave. NY, 10001, United States'
+    },
+    contactInfo: {
+        personName: 'Hellen Grey',
+        designation: 'Event Manager',
+        channels: [
+            { id: 1, type: 'phone', value: '15555551234' },
+            { id: 2, type: 'email', value: 'Hellen@gmail.com' }
+        ]
+    },
+    facilities: ['wifi', 'plug', 'wheelchair'],
+    design: {
+        color: {
+            header: '#097D6A',
+            light: '#FFC700'
+        }
+    }
 };
 
 export const productPagePreviewConfig = {

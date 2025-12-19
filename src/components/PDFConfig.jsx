@@ -180,9 +180,8 @@ const PDFConfig = ({ config, onChange }) => {
                                 {/* Company Name Input */}
                                 <input
                                     type="text"
-                                    value={basicInfo.companyName || ''}
+                                    value={basicInfo.companyName || 'Software Company'}
                                     onChange={(e) => handleBasicInfoUpdate('companyName', e.target.value)}
-                                    placeholder="Software Company"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -286,9 +285,8 @@ const PDFConfig = ({ config, onChange }) => {
                                 {/* PDF Title Input */}
                                 <input
                                     type="text"
-                                    value={basicInfo.pdfTitle || ''}
+                                    value={basicInfo.pdfTitle || 'See Our Company Profile'}
                                     onChange={(e) => handleBasicInfoUpdate('pdfTitle', e.target.value)}
-                                    placeholder="See Our Company Profile"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -389,9 +387,8 @@ const PDFConfig = ({ config, onChange }) => {
                                 DESCRIPTION
                             </label>
                             <textarea
-                                value={basicInfo.description || ''}
+                                value={basicInfo.description || 'We aim to provide fresh and healthy snacks people on the go.'}
                                 onChange={(e) => handleBasicInfoUpdate('description', e.target.value)}
-                                placeholder="We aim to provide fresh and healthy snacks people on the go."
                                 rows={3}
                                 style={{
                                     width: '100%',
@@ -440,9 +437,8 @@ const PDFConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={uploadPdf.pdfTitle || ''}
+                                value={uploadPdf.pdfTitle || 'Qr Insight Presentation'}
                                 onChange={(e) => handleUploadPdfUpdate('pdfTitle', e.target.value)}
-                                placeholder="Qr Insight Presentation"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
@@ -463,9 +459,8 @@ const PDFConfig = ({ config, onChange }) => {
                             {/* URL Input */}
                             <input
                                 type="text"
-                                value={uploadPdf.pdfUrl || ''}
+                                value={uploadPdf.pdfUrl || 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf'}
                                 onChange={(e) => handleUploadPdfUpdate('pdfUrl', e.target.value)}
-                                placeholder="https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
@@ -544,9 +539,8 @@ const PDFConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={uploadPdf.buttonTitle || ''}
+                                value={uploadPdf.buttonTitle || 'Download Now'}
                                 onChange={(e) => handleUploadPdfUpdate('buttonTitle', e.target.value)}
-                                placeholder="Download Now"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',

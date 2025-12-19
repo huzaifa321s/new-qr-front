@@ -17,7 +17,11 @@ const MultipleLinksConfig = ({ config, onChange }) => {
         { id: '3', url: '', title: 'Instagram' },
         { id: '4', url: '', title: 'Youtube' }
     ];
-    const socialLinks = config.socialLinks || [];
+    const socialLinks = config.socialLinks || [
+        { id: 's1', platform: 'website', url: '' },
+        { id: 's2', platform: 'facebook', url: '' },
+        { id: 's3', platform: 'instagram', url: '' }
+    ];
 
     const primaryColor = design.color?.header || '#52BDA3'; // Matching screenshot approx
     const secondaryColor = design.color?.light || '#2B1E99'; // Matching screenshot approx
@@ -90,17 +94,19 @@ const MultipleLinksConfig = ({ config, onChange }) => {
     };
 
     const socialPlatforms = [
+        { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
         { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2', name: 'Facebook' },
         { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', name: 'Instagram' },
-        { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#1DA1F2', name: 'X (Twitter)' },
+        { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000', name: 'X (Twitter)' },
         { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2', name: 'LinkedIn' },
-        { id: 'discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2', name: 'Discord' },
         { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000', name: 'YouTube' },
         { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366', name: 'WhatsApp' },
         { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00', name: 'Snapchat' },
         { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000', name: 'TikTok' },
         { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954', name: 'Spotify' },
-        { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' }
+        { id: 'pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C', name: 'Pinterest' },
+        { id: 'telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC', name: 'Telegram' },
+        { id: 'line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900', name: 'Line' }
     ];
 
 
@@ -179,9 +185,8 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                 {/* Headline Input */}
                                 <input
                                     type="text"
-                                    value={basicInfo.headline || ''}
+                                    value={basicInfo.headline || 'Techoid'}
                                     onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
-                                    placeholder="Techoid"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -282,9 +287,8 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                 ABOUT US
                             </label>
                             <textarea
-                                value={basicInfo.aboutUs || ''}
+                                value={basicInfo.aboutUs || 'Follow us and get updates delivered to your favorite social media channel.'}
                                 onChange={(e) => handleBasicInfoUpdate('aboutUs', e.target.value)}
-                                placeholder="Follow us and get updates delivered to your favorite social media channel."
                                 rows={3}
                                 style={{
                                     width: '100%',
@@ -476,8 +480,7 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                                         style={{
                                                             width: '20px',
                                                             height: '20px',
-                                                            objectFit: 'contain',
-                                                            filter: platform.id === 'snapchat' || platform.color === '#fffc00' ? 'none' : 'brightness(0) invert(1)'
+                                                            objectFit: 'contain'
                                                         }}
                                                     />
                                                 ) : (
@@ -561,8 +564,7 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                                     style={{
                                                         width: '20px',
                                                         height: '20px',
-                                                        objectFit: 'contain',
-                                                        filter: platform.id === 'snapchat' || platform.color === '#fffc00' ? 'none' : 'brightness(0) invert(1)'
+                                                        objectFit: 'contain'
                                                     }}
                                                 />
                                             ) : (
