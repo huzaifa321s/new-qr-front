@@ -4,7 +4,7 @@ import axios from 'axios';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '../utils/canvasUtils';
 
-const ImageUploadModal = ({ isOpen, onClose, onSave, tempImage, fileName, type = 'logo' }) => {
+const ImageUploadModal = ({ isOpen, onClose, onSave, tempImage, fileName, type = 'logo', aspect = 1 }) => {
     const [uploading, setUploading] = useState(false);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
@@ -91,7 +91,7 @@ const ImageUploadModal = ({ isOpen, onClose, onSave, tempImage, fileName, type =
                         crop={crop}
                         zoom={zoom}
                         rotation={rotation}
-                        aspect={1}
+                        aspect={aspect}
                         onCropChange={setCrop}
                         onCropComplete={onCropComplete}
                         onZoomChange={setZoom}

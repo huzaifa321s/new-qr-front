@@ -307,7 +307,6 @@ const Generator = () => {
                 infoFields: pageConfig.infoFields,
                 eventSchedule: pageConfig.eventSchedule,
                 venue: pageConfig.venue,
-                facilities: pageConfig.facilities,
                 contactInfo: pageConfig.contactInfo,
                 productContent: pageConfig.content,
                 video: pageConfig.video,
@@ -843,7 +842,7 @@ const Generator = () => {
                                 <button
                                     onClick={() => {
                                         setShowUnsavedModal(false);
-                                        navigate(-1);
+                                        navigate('/select-template');
                                     }}
                                     style={{
                                         padding: '0.75rem 2.5rem',

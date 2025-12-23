@@ -119,6 +119,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     }, [activeCategories, selectedMenuTab]); // 'Burger', 'Coffee', 'Juices'
     const [reviewStep, setReviewStep] = useState('main'); // 'main', 'food', 'review', 'thankYou'
     const [selectedReviewCategory, setSelectedReviewCategory] = useState('');
+
+    // User Information Form State
+    const [userFormData, setUserFormData] = useState({ name: '', email: '', phone: '' });
+    const [userFormErrors, setUserFormErrors] = useState({ name: '', email: '', phone: '' });
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [showImageModal, setShowImageModal] = useState(false);
     const [customMenuOpenCat, setCustomMenuOpenCat] = useState(null);
@@ -2253,8 +2257,6 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
-                                                border: `2px solid ${selectedRating === index ? secondaryColor : '#e2e8f0'}`,
-                                                borderRadius: '50%',
                                                 transition: 'all 0.2s ease',
                                                 transform: selectedRating === index ? 'scale(1.1)' : 'scale(1)'
                                             }}
@@ -2331,6 +2333,25 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             >
                                 Send Rating
                             </button>
+
+                            {/* Website URL */}
+                            {basicInfo?.website && (
+                                <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                                    <a
+                                        href={basicInfo.website.startsWith('http') ? basicInfo.website : `https://${basicInfo.website}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{
+                                            color: '#3b82f6',
+                                            fontSize: '0.9rem',
+                                            textDecoration: 'underline',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        {basicInfo.website}
+                                    </a>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}
@@ -2343,57 +2364,134 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         </h2>
 
                         {/* Form */}
-                        <form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                const errors = { name: '', email: '', phone: '' };
+                                let hasError = false;
+
+                                // Name validation
+                                if (!userFormData.name.trim()) {
+                                    errors.name = 'Name is required';
+                                    hasError = true;
+                                }
+
+                                // Email validation
+                                if (!userFormData.email.trim()) {
+                                    errors.email = 'Email is required';
+                                    hasError = true;
+                                } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userFormData.email)) {
+                                    errors.email = 'Please enter a valid email';
+                                    hasError = true;
+                                }
+
+                                // Phone validation
+                                if (!userFormData.phone.trim()) {
+                                    errors.phone = 'Phone number is required';
+                                    hasError = true;
+                                }
+
+                                setUserFormErrors(errors);
+
+                                if (!hasError) {
+                                    setRatingStep('thankYou');
+                                    setUserFormData({ name: '', email: '', phone: '' });
+                                    setUserFormErrors({ name: '', email: '', phone: '' });
+                                }
+                            }}
+                            style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+                        >
                             {/* Name Field */}
-                            <input
-                                type="text"
-                                placeholder="Your name"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.875rem',
-                                    border: '1px solid #cbd5e1',
-                                    borderRadius: '8px',
-                                    fontSize: '1rem',
-                                    outline: 'none',
-                                    color: '#1e293b'
-                                }}
-                            />
+                            <div>
+                                <input
+                                    type="text"
+                                    placeholder="Your name"
+                                    value={userFormData.name}
+                                    onChange={(e) => {
+                                        setUserFormData({ ...userFormData, name: e.target.value });
+                                        if (userFormErrors.name) {
+                                            setUserFormErrors({ ...userFormErrors, name: '' });
+                                        }
+                                    }}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.875rem',
+                                        border: `1px solid ${userFormErrors.name ? '#ef4444' : '#cbd5e1'}`,
+                                        borderRadius: '8px',
+                                        fontSize: '1rem',
+                                        outline: 'none',
+                                        color: '#1e293b'
+                                    }}
+                                />
+                                {userFormErrors.name && (
+                                    <p style={{ color: '#ef4444', fontSize: '0.875rem', marginTop: '0.25rem', marginBottom: 0 }}>
+                                        {userFormErrors.name}
+                                    </p>
+                                )}
+                            </div>
 
                             {/* Email Field */}
-                            <input
-                                type="email"
-                                placeholder="Your email"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.875rem',
-                                    border: '1px solid #cbd5e1',
-                                    borderRadius: '8px',
-                                    fontSize: '1rem',
-                                    outline: 'none',
-                                    color: '#1e293b'
-                                }}
-                            />
+                            <div>
+                                <input
+                                    type="email"
+                                    placeholder="Your email"
+                                    value={userFormData.email}
+                                    onChange={(e) => {
+                                        setUserFormData({ ...userFormData, email: e.target.value });
+                                        if (userFormErrors.email) {
+                                            setUserFormErrors({ ...userFormErrors, email: '' });
+                                        }
+                                    }}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.875rem',
+                                        border: `1px solid ${userFormErrors.email ? '#ef4444' : '#cbd5e1'}`,
+                                        borderRadius: '8px',
+                                        fontSize: '1rem',
+                                        outline: 'none',
+                                        color: '#1e293b'
+                                    }}
+                                />
+                                {userFormErrors.email && (
+                                    <p style={{ color: '#ef4444', fontSize: '0.875rem', marginTop: '0.25rem', marginBottom: 0 }}>
+                                        {userFormErrors.email}
+                                    </p>
+                                )}
+                            </div>
 
-                            {/* Number Field */}
-                            <input
-                                type="tel"
-                                placeholder="Your number"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.875rem',
-                                    border: '1px solid #cbd5e1',
-                                    borderRadius: '8px',
-                                    fontSize: '1rem',
-                                    outline: 'none',
-                                    color: '#1e293b'
-                                }}
-                            />
+                            {/* Phone Field */}
+                            <div>
+                                <input
+                                    type="number"
+                                    placeholder="Your number"
+                                    value={userFormData.phone}
+                                    onChange={(e) => {
+                                        setUserFormData({ ...userFormData, phone: e.target.value });
+                                        if (userFormErrors.phone) {
+                                            setUserFormErrors({ ...userFormErrors, phone: '' });
+                                        }
+                                    }}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.875rem',
+                                        border: `1px solid ${userFormErrors.phone ? '#ef4444' : '#cbd5e1'}`,
+                                        borderRadius: '8px',
+                                        fontSize: '1rem',
+                                        outline: 'none',
+                                        color: '#1e293b'
+                                    }}
+                                />
+                                {userFormErrors.phone && (
+                                    <p style={{ color: '#ef4444', fontSize: '0.875rem', marginTop: '0.25rem', marginBottom: 0 }}>
+                                        {userFormErrors.phone}
+                                    </p>
+                                )}
+                            </div>
 
                             {/* Submit Button */}
                             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
                                 <button
-                                    type="button"
-                                    onClick={() => setRatingStep('thankYou')}
+                                    type="submit"
                                     style={{
                                         background: '#9333ea',
                                         border: 'none',
@@ -2576,8 +2674,19 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                         {/* Footer URL */}
                         {basicInfo?.website && (
-                            <div style={{ padding: '1rem', textAlign: 'center', color: '#fff', fontSize: '0.9rem' }}>
-                                {basicInfo.website}
+                            <div style={{ padding: '1rem', textAlign: 'center', fontSize: '0.9rem' }}>
+                                <a
+                                    href={basicInfo.website.startsWith('http') ? basicInfo.website : `https://${basicInfo.website}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                        color: '#fff',
+                                        textDecoration: 'underline',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    {basicInfo.website}
+                                </a>
                             </div>
                         )}
                     </div>
@@ -2948,7 +3057,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     {/* Facilities */}
                     <div style={{ padding: '1.5rem' }}>
                         <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: headerColor, margin: '0 0 1.5rem 0' }}>FACILITIES</h3>
-                        <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
                             {(() => {
                                 const facilityMap = {
                                     wifi: { icon: Wifi, label: 'wifi' },
@@ -2972,7 +3081,15 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     const config = facilityMap[id];
                                     if (!config) return null;
                                     return (
-                                        <div key={id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', color: '#64748b', minWidth: '60px' }}>
+                                        <div key={id} style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            gap: '0.5rem',
+                                            color: '#64748b',
+                                            width: 'calc(33.33% - 0.7rem)',
+                                            flexShrink: 0
+                                        }}>
                                             {config.icon ? (
                                                 <config.icon size={24} color="#3b82f6" />
                                             ) : (
@@ -3991,7 +4108,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             setReviewStep('subcategories');
                                         }}
                                         style={{
-                                            background: '#bfdbdb',
+                                            background: design?.color?.light || '#C0E1DD',
                                             border: 'none',
                                             borderRadius: '8px',
                                             padding: '1rem 1.5rem',
@@ -4073,7 +4190,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             setReviewStep('review');
                                         }}
                                         style={{
-                                            background: '#bfdbdb',
+                                            background: design?.color?.light || '#C0E1DD',
                                             border: 'none',
                                             borderRadius: '8px',
                                             padding: '1rem 1.5rem',
@@ -4137,7 +4254,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         {/* Content Section */}
                         <div style={{ padding: '1.5rem' }}>
                             {/* Title */}
-                            <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#2e3192', margin: '0 0 0.5rem 0', textAlign: 'center' }}>
+                            <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: design?.color?.header || '#2131AE', margin: '0 0 0.5rem 0', textAlign: 'center' }}>
                                 {selectedReviewCategory}
                             </h3>
                             <p style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 1.5rem 0', textAlign: 'center' }}>
@@ -4147,7 +4264,15 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             {/* Star Rating */}
                             <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '2rem' }}>
                                 {[1, 2, 3, 4, 5].map((star) => (
-                                    <svg key={star} width="40" height="40" viewBox="0 0 24 24" fill="#cbd5e1" style={{ cursor: 'pointer' }}>
+                                    <svg
+                                        key={star}
+                                        onClick={() => setSelectedRating(star)}
+                                        width="40"
+                                        height="40"
+                                        viewBox="0 0 24 24"
+                                        fill={star <= (selectedRating || 0) ? (design?.color?.header || '#2131AE') : '#cbd5e1'}
+                                        style={{ cursor: 'pointer' }}
+                                    >
                                         <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
                                     </svg>
                                 ))}
@@ -4174,13 +4299,13 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 <button
                                     onClick={() => setReviewStep('main')}
                                     style={{
-                                        background: '#bfdbdb',
+                                        background: design?.color?.light || '#C0E1DD',
                                         border: 'none',
                                         borderRadius: '8px',
                                         padding: '1rem',
                                         fontSize: '1rem',
                                         fontWeight: '700',
-                                        color: '#2e3192',
+                                        color: design?.color?.header || '#2131AE',
                                         cursor: 'pointer',
                                         textTransform: 'uppercase'
                                     }}
@@ -4191,7 +4316,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 <button
                                     onClick={() => setReviewStep('thankYou')}
                                     style={{
-                                        background: '#2e3192',
+                                        background: design?.color?.header || '#2131AE',
                                         border: 'none',
                                         borderRadius: '8px',
                                         padding: '1rem',
@@ -4592,8 +4717,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     }
 
     if (type === 'multiple-links') {
-        const headerBg = design?.color?.header || '#4db8a8';
-        const footerBg = design?.color?.light || '#3730a3';
+        const headerBg = design?.color?.header || primaryColor;
+        const footerBg = design?.color?.header || primaryColor;
         const isLogoRemoved = design?.logo?.url === null || design?.logo?.url === '';
         const logoSource = isLogoRemoved ? null : (design?.logo?.url || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop');
 
@@ -4706,7 +4831,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     }}
                                     style={{
                                         width: '100%',
-                                        background: '#3730a3',
+                                        background: design?.color?.light || secondaryColor,
                                         border: 'none',
                                         borderRadius: '25px',
                                         padding: '1rem 1.5rem',
@@ -4762,13 +4887,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             width: '50px',
                                             height: '50px',
                                             borderRadius: '12px',
-                                            background: '#fff',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            cursor: 'pointer',
-                                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                                            border: '1px solid #e2e8f0'
+                                            cursor: 'pointer'
                                         }}
                                     >
                                         <img
@@ -4805,12 +4927,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     width: '50px',
                                     height: '50px',
                                     borderRadius: '12px',
-                                    background: '#fff',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    justifyContent: 'center',
-                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                                    border: '1px solid #e2e8f0'
+                                    justifyContent: 'center'
                                 }}>
                                     <img
                                         src={platform.icon}
@@ -4824,16 +4943,16 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                     {/* Share Button */}
                     <div style={{
-                        position: 'fixed',
-                        bottom: '7rem',
-                        right: '2rem',
-                        zIndex: 10
+                        position: 'absolute',
+                        bottom: (socialLinks && socialLinks.length > 0) ? '120px' : '80px',
+                        right: '20px',
+                        zIndex: 20
                     }}>
                         <button style={{
                             width: '56px',
                             height: '56px',
                             borderRadius: '50%',
-                            background: '#3730a3',
+                            background: headerBg,
                             border: 'none',
                             display: 'flex',
                             alignItems: 'center',
@@ -5307,9 +5426,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         </div>
                     </div>
 
-                    {/* Footer - Teal */}
                     <div style={{
-                        background: secondaryColor,
+                        background: primaryColor,
                         padding: '1.5rem',
                         textAlign: 'center',
                         color: '#fff'

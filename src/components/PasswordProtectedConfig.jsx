@@ -1,10 +1,19 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import ImageUploadModal from './ImageUploadModal';
 
 const PasswordProtectedConfig = ({ config, onChange }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
 
     const [isInfoOpen, setIsInfoOpen] = useState(false);
+
+    // Upload Modal State
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [uploadModalTempImage, setUploadModalTempImage] = useState(null);
+    const [uploadModalFileName, setUploadModalFileName] = useState('');
+    const [isHoveringUpload, setIsHoveringUpload] = useState(false);
+    const [showPreviewModal, setShowPreviewModal] = useState(false);
+    const fileInputRef = useRef(null);
 
     const design = config.design || {};
     const infoFields = config.infoFields || [
@@ -72,6 +81,30 @@ const PasswordProtectedConfig = ({ config, onChange }) => {
                 headerImage: { url }
             }
         }));
+    };
+
+    const handleImageUpload = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleImageSelect = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setUploadModalFileName(file.name);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setUploadModalTempImage(reader.result);
+                setIsUploadModalOpen(true);
+            };
+            reader.readAsDataURL(file);
+        }
+        event.target.value = null;
+    };
+
+    const handleCropComplete = (croppedImageUrl) => {
+        handleHeaderImageUpdate(croppedImageUrl);
+        setIsUploadModalOpen(false);
+        setUploadModalTempImage(croppedImageUrl);
     };
 
     const palettes = [
@@ -379,17 +412,59 @@ const PasswordProtectedConfig = ({ config, onChange }) => {
                                 ))}
 
                                 {/* Upload Option */}
-                                <div style={{
-                                    width: '80px',
-                                    height: '60px',
-                                    borderRadius: '4px',
-                                    border: '1px dashed #cbd5e1',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer'
-                                }}>
-                                    <UploadCloud size={20} color="#94a3b8" />
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    style={{ display: 'none' }}
+                                    accept="image/*"
+                                    onChange={handleImageSelect}
+                                />
+                                <div
+                                    onMouseEnter={() => setIsHoveringUpload(true)}
+                                    onMouseLeave={() => setIsHoveringUpload(false)}
+                                    onClick={handleImageUpload}
+                                    style={{
+                                        width: '80px',
+                                        height: '60px',
+                                        borderRadius: '4px',
+                                        border: design.headerImage?.url && !headerOptions.some(opt => opt.url === design.headerImage?.url) ? '2px solid #8b5cf6' : '1px dashed #cbd5e1',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        position: 'relative',
+                                        background: '#fff',
+                                        overflow: 'hidden'
+                                    }}
+                                >
+                                    {design.headerImage?.url && !headerOptions.some(opt => opt.url === design.headerImage?.url) ? (
+                                        <>
+                                            <img src={design.headerImage.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            {isHoveringUpload && (
+                                                <div
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setShowPreviewModal(true);
+                                                    }}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        inset: 0,
+                                                        background: 'rgba(0,0,0,0.4)',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        color: '#fff',
+                                                        fontSize: '0.7rem',
+                                                        fontWeight: 'bold'
+                                                    }}
+                                                >
+                                                    VIEW
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <UploadCloud size={20} color="#94a3b8" />
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -514,6 +589,56 @@ const PasswordProtectedConfig = ({ config, onChange }) => {
                     </div>
                 )}
             </div>
+
+            {/* Image Upload Modal */}
+            <ImageUploadModal
+                isOpen={isUploadModalOpen}
+                onClose={() => setIsUploadModalOpen(false)}
+                tempImage={uploadModalTempImage}
+                onSave={handleCropComplete}
+                aspect={3 / 2}
+                type="image"
+                fileName={uploadModalFileName}
+            />
+
+            {/* Full Image Preview Modal */}
+            {showPreviewModal && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        inset: 0,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 1000,
+                        padding: '2rem'
+                    }}
+                    onClick={() => setShowPreviewModal(false)}
+                >
+                    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }}>
+                        <button
+                            onClick={() => setShowPreviewModal(false)}
+                            style={{
+                                position: 'absolute',
+                                top: '-2rem',
+                                right: '-2rem',
+                                background: 'transparent',
+                                border: 'none',
+                                color: '#fff',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            <X size={24} />
+                        </button>
+                        <img
+                            src={design.headerImage?.url}
+                            alt="Preview"
+                            style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '8px' }}
+                        />
+                    </div>
+                </div>
+            )}
 
         </div>
     );

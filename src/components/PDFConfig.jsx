@@ -90,11 +90,17 @@ const PDFConfig = ({ config, onChange }) => {
         const file = event.target.files[0];
         if (file) {
             const url = URL.createObjectURL(file);
-            handleUploadPdfUpdate('pdfUrl', url);
-            handleUploadPdfUpdate('uploadedFile', {
-                name: file.name,
-                size: (file.size / (1024 * 1024)).toFixed(2) + ' MB'
-            });
+            onChange(prev => ({
+                ...prev,
+                uploadPdf: {
+                    ...prev.uploadPdf,
+                    pdfUrl: url,
+                    uploadedFile: {
+                        name: file.name,
+                        size: (file.size / (1024 * 1024)).toFixed(2) + ' MB'
+                    }
+                }
+            }));
         }
     };
 
@@ -103,8 +109,14 @@ const PDFConfig = ({ config, onChange }) => {
     };
 
     const handleFileDelete = () => {
-        handleUploadPdfUpdate('uploadedFile', null);
-        handleUploadPdfUpdate('pdfUrl', '');
+        onChange(prev => ({
+            ...prev,
+            uploadPdf: {
+                ...prev.uploadPdf,
+                uploadedFile: null,
+                pdfUrl: ''
+            }
+        }));
     };
 
     const palettes = [
@@ -493,8 +505,8 @@ const PDFConfig = ({ config, onChange }) => {
                                     padding: '0.75rem',
                                     borderRadius: '4px',
                                     border: '1px solid #e2e8f0',
-                                    background: '#f1f5f9',
-                                    color: uploadPdf.pdfUrl ? '#cbd5e1' : '#94a3b8',
+                                    background: uploadPdf.pdfUrl ? '#f1f5f9' : (primaryColor || '#0B2D86'),
+                                    color: uploadPdf.pdfUrl ? '#cbd5e1' : '#ffffff',
                                     fontSize: '0.9rem',
                                     cursor: uploadPdf.pdfUrl ? 'not-allowed' : 'pointer',
                                     display: 'flex',
@@ -509,7 +521,7 @@ const PDFConfig = ({ config, onChange }) => {
                             <div style={{ textAlign: 'right', fontSize: '0.7rem', color: '#64748b', marginTop: '0.5rem' }}>10MB max file size</div>
 
                             {/* Uploaded File Display */}
-                            {uploadPdf.uploadedFile && (
+                            {(uploadPdf.uploadedFile || uploadPdf.pdfUrl) && (
                                 <div style={{
                                     marginTop: '1.5rem',
                                     display: 'flex',
@@ -521,12 +533,35 @@ const PDFConfig = ({ config, onChange }) => {
                                     <div style={{ width: '32px', height: '32px', background: '#8b5cf6', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <FileText size={20} color="#fff" />
                                     </div>
-                                    <div style={{ flex: 1, fontWeight: 'bold', fontSize: '0.9rem', color: '#1e293b' }}>
-                                        {uploadPdf.uploadedFile.name}
+                                    <div style={{ flex: 1, fontWeight: 'bold', fontSize: '0.9rem', color: '#1e293b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                        {uploadPdf.uploadedFile ? uploadPdf.uploadedFile.name : 'Custom PDF URL'}
                                     </div>
-                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                        <div style={{ cursor: 'pointer', color: '#cbd5e1' }}><Edit2 size={20} /></div>
-                                        <div onClick={handleFileDelete} style={{ cursor: 'pointer', color: '#cbd5e1' }}><Trash2 size={20} /></div>
+                                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleFileDelete();
+                                            }}
+                                            style={{
+                                                background: '#ef4444',
+                                                border: 'none',
+                                                borderRadius: '4px',
+                                                padding: '0.5rem 1rem',
+                                                cursor: 'pointer',
+                                                color: '#fff',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '0.5rem',
+                                                fontSize: '0.85rem',
+                                                fontWeight: '600',
+                                                transition: 'background 0.2s'
+                                            }}
+                                            onMouseEnter={(e) => e.target.style.background = '#dc2626'}
+                                            onMouseLeave={(e) => e.target.style.background = '#ef4444'}
+                                        >
+                                            <Trash2 size={16} />
+                                            Delete PDF
+                                        </button>
                                     </div>
                                 </div>
                             )}

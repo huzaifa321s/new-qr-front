@@ -1,6 +1,7 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check } from 'lucide-react';
 import { useState } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
+import ImageUploadModal from './ImageUploadModal';
 
 const socialIconsMap = [
     { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
@@ -27,6 +28,13 @@ const ReviewsConfig = ({ config, onChange }) => {
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
     const [isSocialOpen, setIsSocialOpen] = useState(false);
+
+    // Upload Modal State
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [uploadModalTempImage, setUploadModalTempImage] = useState(null);
+    const [uploadModalFileName, setUploadModalFileName] = useState('');
+    const [isHoveringUpload, setIsHoveringUpload] = useState(false);
+    const [showPreviewModal, setShowPreviewModal] = useState(false);
 
     const design = config.design || {};
     const basicInfo = config.basicInfo || {};
@@ -319,7 +327,7 @@ const ReviewsConfig = ({ config, onChange }) => {
                         ))}
 
                         {/* Upload Option */}
-                        <div style={{
+                        <label style={{
                             width: '80px',
                             height: '53px',
                             borderRadius: '4px',
@@ -329,8 +337,77 @@ const ReviewsConfig = ({ config, onChange }) => {
                             justifyContent: 'center',
                             cursor: 'pointer'
                         }}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (!file) return;
+                                    const reader = new FileReader();
+                                    reader.onload = () => {
+                                        setUploadModalTempImage(reader.result);
+                                        setUploadModalFileName(file.name);
+                                        setIsUploadModalOpen(true);
+                                    };
+                                    reader.readAsDataURL(file);
+                                    e.target.value = null;
+                                }}
+                            />
                             <UploadCloud size={20} color="#94a3b8" />
-                        </div>
+                        </label>
+
+                        {/* Custom Uploaded Header Image */}
+                        {design.headerImage?.url && !headerImageOptions.find(img => img.url === design.headerImage.url) && (
+                            <div
+                                onClick={() => setShowPreviewModal(true)}
+                                onMouseEnter={() => setIsHoveringUpload(true)}
+                                onMouseLeave={() => setIsHoveringUpload(false)}
+                                style={{
+                                    width: '80px',
+                                    height: '53px',
+                                    borderRadius: '4px',
+                                    overflow: 'hidden',
+                                    border: '2px solid #8b5cf6',
+                                    cursor: 'pointer',
+                                    position: 'relative'
+                                }}
+                            >
+                                <img src={design.headerImage.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                {isHoveringUpload && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        background: 'rgba(0,0,0,0.5)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        zIndex: 10
+                                    }}>
+                                        <span style={{ color: '#fff', fontSize: '0.7rem', fontWeight: 'bold' }}>Preview</span>
+                                    </div>
+                                )}
+                                <div style={{
+                                    position: 'absolute',
+                                    top: 2,
+                                    right: 2,
+                                    width: '20px',
+                                    height: '20px',
+                                    background: '#8b5cf6',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    border: '1px solid #fff',
+                                    zIndex: 5
+                                }}>
+                                    <Check size={12} color="#fff" />
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </ReusableDesignAccordion>
@@ -925,6 +1002,80 @@ const ReviewsConfig = ({ config, onChange }) => {
                     </div>
                 )}
             </div>
+
+            {/* Image Upload Modal */}
+            <ImageUploadModal
+                isOpen={isUploadModalOpen}
+                onClose={() => {
+                    setIsUploadModalOpen(false);
+                    setUploadModalTempImage(null);
+                    setUploadModalFileName('');
+                }}
+                tempImage={uploadModalTempImage}
+                fileName={uploadModalFileName}
+                onSave={(url) => {
+                    handleHeaderImageUpdate(url);
+                    setIsUploadModalOpen(false);
+                    setUploadModalTempImage(null);
+                    setUploadModalFileName('');
+                }}
+            />
+
+            {/* Preview Modal for Uploaded Header Image */}
+            {showPreviewModal && design.headerImage?.url && (
+                <div
+                    onClick={() => setShowPreviewModal(false)}
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        background: 'rgba(0,0,0,0.8)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 9999,
+                        padding: '2rem'
+                    }}
+                >
+                    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }}>
+                        <img
+                            src={design.headerImage.url}
+                            alt="Header Preview"
+                            style={{
+                                maxWidth: '100%',
+                                maxHeight: '90vh',
+                                objectFit: 'contain',
+                                borderRadius: '8px'
+                            }}
+                        />
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setShowPreviewModal(false);
+                            }}
+                            style={{
+                                position: 'absolute',
+                                top: '-40px',
+                                right: '0',
+                                background: '#fff',
+                                border: 'none',
+                                borderRadius: '50%',
+                                width: '32px',
+                                height: '32px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                            }}
+                        >
+                            <X size={20} color="#000" />
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

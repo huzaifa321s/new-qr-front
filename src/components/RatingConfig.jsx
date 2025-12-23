@@ -220,29 +220,13 @@ const RatingConfig = ({ config, onChange }) => {
             >
                 {/* HEADER IMAGE SECTION */}
                 <div style={{ marginBottom: '2rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
                         <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
                             HEADER IMAGE
                         </span>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-                                Minimum width : 400px, 3:2 Ratio
-                            </span>
-                            <label style={{
-                                width: '32px',
-                                height: '32px',
-                                borderRadius: '4px',
-                                border: '1px solid #cbd5e1',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                background: '#fff'
-                            }}>
-                                <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
-                                <UploadCloud size={16} color="#94a3b8" />
-                            </label>
-                        </div>
+                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                            Minimum width : 400px, 3:2 Ratio
+                        </span>
                     </div>
 
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -263,6 +247,21 @@ const RatingConfig = ({ config, onChange }) => {
                         >
                             <X size={24} color="#cbd5e1" />
                         </div>
+
+                        {/* Upload Option */}
+                        <label style={{
+                            width: '80px',
+                            height: '53px',
+                            borderRadius: '4px',
+                            border: '1px dashed #cbd5e1',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer'
+                        }}>
+                            <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
+                            <UploadCloud size={20} color="#94a3b8" />
+                        </label>
 
                         {/* Header Image Options */}
                         {headerImageOptions.map(img => (
