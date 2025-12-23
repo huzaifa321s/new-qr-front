@@ -499,7 +499,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                                 padding: '0.5rem 0',
                                                                 fontSize: '0.9rem',
                                                                 fontWeight: activeTab === cat.id ? 'bold' : '500',
-                                                                color: activeTab === cat.id ? '#8b5cf6' : '#64748b',
+                                                                color: activeTab === cat.id ? primaryColor : '#64748b',
                                                                 cursor: 'pointer',
                                                                 position: 'relative',
                                                                 whiteSpace: 'nowrap'
@@ -512,8 +512,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                                     bottom: '-1px',
                                                                     left: 0,
                                                                     width: '100%',
-                                                                    height: '2px',
-                                                                    background: '#8b5cf6'
+                                                                    height: '3px',
+                                                                    background: primaryColor
                                                                 }} />
                                                             )}
                                                         </button>
@@ -524,26 +524,83 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                                     {activeCategory.products && activeCategory.products.length > 0 ? (
                                                         activeCategory.products.map((prod) => (
-                                                            <div key={prod.id} style={{ display: 'flex', gap: '1rem', paddingBottom: '1rem', borderBottom: '1px dashed #e2e8f0' }}>
+                                                            <div key={prod.id} style={{
+                                                                display: 'flex',
+                                                                justifyContent: 'space-between',
+                                                                alignItems: 'flex-start',
+                                                                padding: '0.75rem 0',
+                                                                borderBottom: '1px solid #f1f5f9'
+                                                            }}>
                                                                 <div style={{ flex: 1 }}>
-                                                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                                                                        <span style={{ fontWeight: '600', fontSize: '0.9rem', color: '#1e293b' }}>{prod.name}</span>
-                                                                        <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#8b5cf6' }}>
-                                                                            {comp.data.currency === 'PKR' ? 'Rs.' : (comp.data.currency === 'USD' ? '$' : (businessInfo?.currency || '$'))}
-                                                                            {prod.price}
-                                                                        </span>
-                                                                    </div>
-                                                                    <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>{prod.description}</p>
+                                                                    <h4 style={{
+                                                                        fontSize: '1rem',
+                                                                        fontWeight: '700',
+                                                                        color: '#1e293b',
+                                                                        margin: '0 0 0.25rem 0',
+                                                                        textTransform: 'uppercase'
+                                                                    }}>
+                                                                        {prod.name}
+                                                                    </h4>
+                                                                    <p style={{
+                                                                        fontSize: '0.8rem',
+                                                                        color: '#64748b',
+                                                                        margin: '0 0 0.5rem 0',
+                                                                        lineHeight: '1.3'
+                                                                    }}>
+                                                                        {prod.description}
+                                                                    </p>
+                                                                    <p style={{
+                                                                        fontSize: '1rem',
+                                                                        fontWeight: '700',
+                                                                        color: primaryColor,
+                                                                        margin: 0
+                                                                    }}>
+                                                                        {comp.data.currency === 'PKR' ? 'Rs.' : (comp.data.currency === 'USD' ? '$' : (businessInfo?.currency || '$'))}
+                                                                        {prod.price}
+                                                                    </p>
                                                                 </div>
-                                                                {prod.image && (
-                                                                    <div style={{ width: '60px', height: '60px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
-                                                                        <img src={prod.image} alt={prod.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                                                    </div>
-                                                                )}
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: '1rem' }}>
+                                                                    <button style={{
+                                                                        width: '35px',
+                                                                        height: '35px',
+                                                                        borderRadius: '50%',
+                                                                        background: primaryColor,
+                                                                        border: 'none',
+                                                                        color: '#fff',
+                                                                        fontSize: '1.25rem',
+                                                                        cursor: 'pointer',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        justifyContent: 'center',
+                                                                        fontWeight: 'bold'
+                                                                    }}>
+                                                                        +
+                                                                    </button>
+                                                                    {prod.image && (
+                                                                        <div style={{
+                                                                            width: '60px',
+                                                                            height: '60px',
+                                                                            borderRadius: '8px',
+                                                                            overflow: 'hidden',
+                                                                            flexShrink: 0,
+                                                                            position: 'relative'
+                                                                        }}>
+                                                                            <img
+                                                                                src={prod.image}
+                                                                                alt={prod.name}
+                                                                                style={{
+                                                                                    width: '100%',
+                                                                                    height: '100%',
+                                                                                    objectFit: 'cover'
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             </div>
                                                         ))
                                                     ) : (
-                                                        <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8', fontSize: '0.9rem' }}>No products in this category</div>
+                                                        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: primaryColor, fontWeight: '700', fontSize: '1rem' }}>No Item available in this category</div>
                                                     )}
                                                 </div>
                                             </div>
@@ -554,13 +611,13 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         return (
                                             <div key={comp.id} style={{ marginBottom: '1.5rem' }}>
                                                 <div style={{ marginBottom: '1rem' }}>
-                                                    <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#1e3a8a', margin: 0 }}>OPENING HOURS</h3>
+                                                    <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: secondaryColor, margin: 0 }}>OPENING HOURS</h3>
                                                 </div>
 
                                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                                     {comp.data.timings.map((dayInfo) => (
                                                         <div key={dayInfo.day} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem' }}>
-                                                            <span style={{ fontWeight: '500', color: '#64748b' }}>{dayInfo.day}</span>
+                                                            <span style={{ fontWeight: '600', color: primaryColor }}>{dayInfo.day}</span>
                                                             <span style={{
                                                                 color: dayInfo.isOpen ? '#64748b' : '#ef4444',
                                                                 fontWeight: '400'
@@ -580,17 +637,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                                                     {comp.data.days.map((dayItem, index) => (
                                                         <div key={dayItem.id} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                                            <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#fbbf24', marginBottom: '0.25rem' }}>
+                                                            <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: secondaryColor, marginBottom: '0.25rem' }}>
                                                                 DAY {index + 1}
                                                             </div>
                                                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                                                <Calendar size={18} color="#64748b" />
+                                                                <Calendar size={18} color={secondaryColor} />
                                                                 <span style={{ fontSize: '0.9rem', fontWeight: '500', color: '#1e293b' }}>
                                                                     {new Date(dayItem.date).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' })}
                                                                 </span>
                                                             </div>
                                                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                                                <Clock size={18} color="#64748b" />
+                                                                <Clock size={18} color={secondaryColor} />
                                                                 <span style={{ fontSize: '0.9rem', color: '#64748b' }}>
                                                                     {dayItem.beginsAt} - {dayItem.endsAt} (GMT+5)
                                                                 </span>
@@ -611,13 +668,13 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                                     width: '40px',
                                                                     height: '40px',
                                                                     borderRadius: '50%',
-                                                                    border: '2px solid #3b82f6',
+                                                                    border: `2px solid ${primaryColor}`,
                                                                     display: 'flex',
                                                                     alignItems: 'center',
                                                                     justifyContent: 'center',
                                                                     flexShrink: 0
                                                                 }}>
-                                                                    <Phone size={20} color="#ef4444" />
+                                                                    <Phone size={20} color={primaryColor} />
                                                                 </div>
                                                                 <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '400' }}>
                                                                     {comp.data.phone}
@@ -633,13 +690,13 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                                     width: '40px',
                                                                     height: '40px',
                                                                     borderRadius: '50%',
-                                                                    border: '2px solid #3b82f6',
+                                                                    border: `2px solid ${primaryColor}`,
                                                                     display: 'flex',
                                                                     alignItems: 'center',
                                                                     justifyContent: 'center',
                                                                     flexShrink: 0
                                                                 }}>
-                                                                    <Mail size={20} color="#3b82f6" />
+                                                                    <Mail size={20} color={primaryColor} />
                                                                 </div>
                                                                 <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '400' }}>
                                                                     {comp.data.email}
@@ -655,13 +712,13 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                                     width: '40px',
                                                                     height: '40px',
                                                                     borderRadius: '50%',
-                                                                    border: '2px solid #3b82f6',
+                                                                    border: `2px solid ${primaryColor}`,
                                                                     display: 'flex',
                                                                     alignItems: 'center',
                                                                     justifyContent: 'center',
                                                                     flexShrink: 0
                                                                 }}>
-                                                                    <Globe size={20} color="#3b82f6" />
+                                                                    <Globe size={20} color={primaryColor} />
                                                                 </div>
                                                                 <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '400' }}>
                                                                     {comp.data.website}
@@ -676,13 +733,13 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                                 width: '40px',
                                                                 height: '40px',
                                                                 borderRadius: '50%',
-                                                                border: '2px solid #3b82f6',
+                                                                border: `2px solid ${primaryColor}`,
                                                                 display: 'flex',
                                                                 alignItems: 'center',
                                                                 justifyContent: 'center',
                                                                 flexShrink: 0
                                                             }}>
-                                                                <MapPin size={20} color="#3b82f6" />
+                                                                <MapPin size={20} color={primaryColor} />
                                                             </div>
                                                             <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '400' }}>
                                                                 {comp.data.address}
@@ -705,13 +762,13 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                                     width: '40px',
                                                                     height: '40px',
                                                                     borderRadius: '50%',
-                                                                    border: '2px solid #fbbf24',
+                                                                    border: `2px solid ${secondaryColor}`,
                                                                     display: 'flex',
                                                                     alignItems: 'center',
                                                                     justifyContent: 'center',
                                                                     flexShrink: 0
                                                                 }}>
-                                                                    <Briefcase size={20} color="#fbbf24" />
+                                                                    <Briefcase size={20} color={secondaryColor} />
                                                                 </div>
                                                                 <div style={{ flex: 1 }}>
                                                                     <div style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: '500' }}>
@@ -744,7 +801,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                             rel="noopener noreferrer"
                                                             style={{
                                                                 display: 'block',
-                                                                background: '#fbbf24',
+                                                                background: secondaryColor,
                                                                 color: '#fff',
                                                                 padding: '1rem',
                                                                 borderRadius: '24px',
@@ -813,8 +870,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                     <div style={{
                                                         display: 'flex',
                                                         flexWrap: 'wrap',
-                                                        justifyContent: 'center',
-                                                        gap: '1.5rem',
+                                                        justifyContent: 'flex-start',
+                                                        gap: '1rem',
                                                         padding: '0 1rem 1rem'
                                                     }}>
                                                         {comp.data.selectedFacilities.map((facilityName) => (
@@ -823,14 +880,15 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                                 flexDirection: 'column',
                                                                 alignItems: 'center',
                                                                 gap: '0.5rem',
-                                                                minWidth: '60px'
+                                                                width: 'calc(33.33% - 0.7rem)',
+                                                                flexShrink: 0
                                                             }}>
                                                                 <div style={{
                                                                     width: '50px',
                                                                     height: '50px',
                                                                     borderRadius: '8px',
-                                                                    background: '#fff',
-                                                                    border: '2px solid #3b82f6',
+                                                                    background: '#f8fafc',
+                                                                    border: 'none',
                                                                     display: 'flex',
                                                                     alignItems: 'center',
                                                                     justifyContent: 'center',
@@ -2840,8 +2898,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             {businessInfo?.description || 'We aim to provide fresh and healthy snacks people on the go.'}
                         </p>
                         <button style={{
-                            background: '#fbbf24',
-                            color: '#1e293b',
+                            background: secondaryColor,
+                            color: primaryColor,
                             border: 'none',
                             padding: '0.75rem 2rem',
                             borderRadius: '8px',
@@ -2885,7 +2943,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     </div>
 
                     {/* Divider */}
-                    <div style={{ height: '4px', background: '#fbbf24', margin: '0 1.5rem' }}></div>
+                    <div style={{ height: '4px', background: secondaryColor, margin: '0 1.5rem' }}></div>
 
                     {/* Facilities */}
                     <div style={{ padding: '1.5rem' }}>
@@ -2931,7 +2989,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     </div>
 
                     {/* Divider */}
-                    <div style={{ height: '4px', background: '#fbbf24', margin: '0 1.5rem' }}></div>
+                    <div style={{ height: '4px', background: secondaryColor, margin: '0 1.5rem' }}></div>
 
                     {/* Contact Info */}
                     <div style={{ padding: '1.5rem' }}>
@@ -3682,6 +3740,18 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 </button>
                             </div>
                         </div>
+                        {coupon?.location && (
+                            <div style={{
+                                textAlign: 'center',
+                                color: '#fff',
+                                fontSize: '0.85rem',
+                                fontWeight: '500',
+                                marginBottom: '2rem',
+                                padding: '0 1rem'
+                            }}>
+                                {coupon.location}
+                            </div>
+                        )}
                     </div>
                 ) : (
                     /* Redeemed View (Modal) */
@@ -3721,11 +3791,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                             <div style={{ marginTop: '2rem', textAlign: 'center', width: '100%' }}>
                                 <div style={{ fontSize: '1rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>Coupon Code</div>
-                                <div style={{ fontSize: '2.5rem', fontWeight: '800', color: '#06b6d4', marginBottom: '1.5rem' }}>{coupon?.code}</div>
+                                <div style={{ fontSize: '2.5rem', fontWeight: '800', color: secondaryColor, marginBottom: '1.5rem' }}>{coupon?.code}</div>
 
                                 <div style={{
                                     display: 'inline-block',
-                                    background: '#06b6d4',
+                                    background: secondaryColor,
                                     color: '#fff',
                                     padding: '0.5rem 1rem',
                                     borderRadius: '50px',
@@ -3737,22 +3807,30 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     Expires {coupon?.expiry}
                                 </div>
 
-                                <button style={{
-                                    width: '100%',
-                                    background: '#fff',
-                                    border: `2px solid ${primaryColor}`,
-                                    color: primaryColor,
-                                    padding: '0.75rem',
-                                    borderRadius: '50px',
-                                    fontSize: '1rem',
-                                    fontWeight: 'bold',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '0.5rem',
-                                    marginBottom: '1rem',
-                                    cursor: 'pointer'
-                                }}>
+                                <button
+                                    onClick={() => {
+                                        if (coupon?.code) {
+                                            navigator.clipboard.writeText(coupon.code);
+                                            toast.success('Code Copied');
+                                        }
+                                    }}
+                                    style={{
+                                        width: '100%',
+                                        background: '#fff',
+                                        border: `2px solid ${primaryColor}`,
+                                        color: primaryColor,
+                                        padding: '0.75rem',
+                                        borderRadius: '50px',
+                                        fontSize: '1rem',
+                                        fontWeight: 'bold',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '0.5rem',
+                                        marginBottom: '1rem',
+                                        cursor: 'pointer'
+                                    }}
+                                >
                                     <Copy size={18} />
                                     Copy Code
                                 </button>
@@ -3770,7 +3848,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         fontWeight: 'bold',
                                         cursor: 'pointer'
                                     }}>
-                                    {coupon?.buttonTitle || 'Redeem Now'}
+                                    Redeem Now
                                 </button>
                                 {coupon?.terms && (
                                     <div style={{
@@ -6728,10 +6806,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         border: 'none',
                                         fontSize: '0.95rem',
                                         fontWeight: selectedMenuTab === category.id ? '800' : '600',
-                                        color: selectedMenuTab === category.id ? secondaryColor : '#8b95a5',
+                                        color: selectedMenuTab === category.id ? (headerColor || '#7f1d1d') : '#8b95a5',
                                         cursor: 'pointer',
                                         padding: '0.4rem 0',
-                                        borderBottom: selectedMenuTab === category.id ? `3px solid ${secondaryColor}` : 'none',
+                                        borderBottom: selectedMenuTab === category.id ? `3px solid ${headerColor || '#7f1d1d'}` : 'none',
                                         marginBottom: selectedMenuTab === category.id ? '-2px' : '0',
                                         transition: 'all 0.2s ease',
                                         whiteSpace: 'nowrap',
@@ -6752,7 +6830,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         <div style={{
                                             padding: '3rem 1rem',
                                             textAlign: 'center',
-                                            color: secondaryColor,
+                                            color: primaryColor,
                                             fontWeight: '700',
                                             fontSize: '1rem'
                                         }}>
@@ -6789,7 +6867,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             <p style={{
                                                 fontSize: '1rem',
                                                 fontWeight: '700',
-                                                color: secondaryColor,
+                                                color: headerColor || '#7f1d1d',
                                                 margin: 0
                                             }}>
                                                 {product.price} {businessInfo?.currency || '$'}
@@ -6800,7 +6878,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                 width: '35px',
                                                 height: '35px',
                                                 borderRadius: '50%',
-                                                background: secondaryColor,
+                                                background: headerColor || '#7f1d1d',
                                                 border: 'none',
                                                 color: '#fff',
                                                 fontSize: '1.25rem',

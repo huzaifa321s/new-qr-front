@@ -3,6 +3,7 @@ import ColorPicker from './ColorPicker';
 
 import { useState, useRef } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
+import ImageUploadModal from './ImageUploadModal';
 
 const BusinessPageConfig = ({ config, onChange }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
@@ -15,6 +16,9 @@ const BusinessPageConfig = ({ config, onChange }) => {
     // New state for modal and hover
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [uploadModalTempImage, setUploadModalTempImage] = useState(null);
+    const [uploadModalFileName, setUploadModalFileName] = useState('');
     const fileInputRef = useRef(null);
 
     const design = config.design || {};
@@ -181,9 +185,16 @@ const BusinessPageConfig = ({ config, onChange }) => {
 
         const reader = new FileReader();
         reader.onload = () => {
-            handleDesignUpdate('heroImage', reader.result);
+            setUploadModalTempImage(reader.result);
+            setUploadModalFileName(file.name);
+            setIsUploadModalOpen(true);
         };
         reader.readAsDataURL(file);
+        e.target.value = ''; // Reset input
+    };
+
+    const handleUploadModalSave = (url) => {
+        handleDesignUpdate('heroImage', url);
     };
 
     const triggerFileUpload = () => {
@@ -1445,7 +1456,19 @@ const BusinessPageConfig = ({ config, onChange }) => {
                     )
                 }
             </div>
-        </div >
+            {/* Reusable Upload Modal */}
+            <ImageUploadModal
+                isOpen={isUploadModalOpen}
+                onClose={() => {
+                    setIsUploadModalOpen(false);
+                    setUploadModalTempImage(null);
+                }}
+                tempImage={uploadModalTempImage}
+                onSave={handleUploadModalSave}
+                fileName={uploadModalFileName}
+                type="image"
+            />
+        </div>
     );
 };
 

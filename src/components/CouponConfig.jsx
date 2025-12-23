@@ -1,6 +1,7 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Eye } from 'lucide-react';
 import { useState, useRef } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
+import ImageUploadModal from './ImageUploadModal';
 
 const CouponConfig = ({ config, onChange }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
@@ -10,6 +11,9 @@ const CouponConfig = ({ config, onChange }) => {
     // New state for modal and hover
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [uploadModalTempImage, setUploadModalTempImage] = useState(null);
+    const [uploadModalFileName, setUploadModalFileName] = useState('');
     const fileInputRef = useRef(null);
 
     const design = config.design || {};
@@ -98,9 +102,16 @@ const CouponConfig = ({ config, onChange }) => {
 
         const reader = new FileReader();
         reader.onload = () => {
-            handleBackgroundImageUpdate(reader.result);
+            setUploadModalTempImage(reader.result);
+            setUploadModalFileName(file.name);
+            setIsUploadModalOpen(true);
         };
         reader.readAsDataURL(file);
+        e.target.value = ''; // Reset input
+    };
+
+    const handleUploadModalSave = (url) => {
+        handleBackgroundImageUpdate(url);
     };
 
     const triggerFileUpload = () => {
@@ -726,8 +737,9 @@ const CouponConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={coupon.buttonTitle || 'GET COUPON'}
+                                value={coupon.buttonTitle || 'Redeem Now'}
                                 onChange={(e) => handleCouponUpdate('buttonTitle', e.target.value)}
+                                placeholder="Redeem Now"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
@@ -783,6 +795,18 @@ const CouponConfig = ({ config, onChange }) => {
                     </div>
                 )}
             </div>
+            {/* Reusable Upload Modal */}
+            <ImageUploadModal
+                isOpen={isUploadModalOpen}
+                onClose={() => {
+                    setIsUploadModalOpen(false);
+                    setUploadModalTempImage(null);
+                }}
+                tempImage={uploadModalTempImage}
+                onSave={handleUploadModalSave}
+                fileName={uploadModalFileName}
+                type="image"
+            />
         </div>
     );
 };
