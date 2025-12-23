@@ -26,6 +26,7 @@ import ProductPageConfig from '../components/ProductPageConfig';
 import { qrTypes } from '../utils/qrTypes';
 import { getPreviewConfig } from '../utils/previewConfigs';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 import { ArrowRight } from 'lucide-react';
 
 const Generator = () => {
@@ -336,10 +337,46 @@ const Generator = () => {
         }
     };
 
+    const handleContinue = () => {
+        if (selectedType === 'app-store') {
+            const googleUrl = (pageConfig?.appLinks?.google || '').trim();
+            const appleUrl = (pageConfig?.appLinks?.apple || '').trim();
+
+            const isGooglePresent = googleUrl !== '' && googleUrl !== 'https://';
+            const isApplePresent = appleUrl !== '' && appleUrl !== 'https://';
+
+            // 1. Check if at least one is present
+            if (!isGooglePresent && !isApplePresent) {
+                toast.error('Please provide at least one valid Play Store or App Store link');
+                return;
+            }
+
+            // 2. If Google is present, validate it
+            if (isGooglePresent) {
+                const isValidGoogle = googleUrl.includes('play.google.com');
+                if (!isValidGoogle) {
+                    toast.error('Please enter a valid Play Store URL (e.g., play.google.com/...)');
+                    return;
+                }
+            }
+
+            // 3. If Apple is present, validate it
+            if (isApplePresent) {
+                const isValidApple = appleUrl.includes('apps.apple.com') || appleUrl.includes('itunes.apple.com');
+                if (!isValidApple) {
+                    toast.error('Please enter a valid App Store URL (e.g., apps.apple.com/...)');
+                    return;
+                }
+            }
+        }
+        setActiveStep('design');
+    };
+
     const typeInfo = qrTypes.find(t => t.id === selectedType) || qrTypes[0];
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
+            <Toaster position="top-right" />
             {/* Left Panel */}
             <div style={{ flex: 1, padding: '2rem', overflowY: 'auto', height: '100vh' }}>
                 <div style={{ maxWidth: '100%', margin: '0 auto' }}>
@@ -537,7 +574,7 @@ const Generator = () => {
 
                             <div style={{ textAlign: 'center', marginTop: '3rem' }}>
                                 <button
-                                    onClick={() => setActiveStep('design')}
+                                    onClick={handleContinue}
                                     style={{
                                         background: 'transparent',
                                         border: 'none',

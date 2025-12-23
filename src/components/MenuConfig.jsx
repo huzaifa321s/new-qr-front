@@ -364,7 +364,7 @@ const MenuConfig = ({ config, onChange }) => {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             {categories.map((cat) => (
                                 <div key={cat.id} style={{ borderRadius: '4px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', background: '#fff' }}>
-                                    <div onClick={() => toggleCategory(cat.id)} style={{ padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', fontWeight: 'bold' }}>
+                                    <div onClick={() => toggleCategory(cat.id)} style={{ padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', fontWeight: 'bold', color: '#000000' }}>
                                         {cat.name || 'New Category'}
                                         {openCategoryId === cat.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                                     </div>
@@ -404,18 +404,99 @@ const MenuConfig = ({ config, onChange }) => {
                 </div>
                 {isTimingsOpen && (
                     <div style={{ padding: '2rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '1rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginBottom: '2rem' }}>
                             {['24 hrs', 'AM/PM'].map(f => (
-                                <button key={f} onClick={() => handleTimeFormatChange(f)} style={{ padding: '0.4rem 0.8rem', borderRadius: '4px', border: timeFormat === f ? '1px solid #8b5cf6' : '1px solid #e2e8f0', color: timeFormat === f ? '#8b5cf6' : '#64748b' }}>{f}</button>
+                                <button
+                                    key={f}
+                                    onClick={() => handleTimeFormatChange(f)}
+                                    style={{
+                                        padding: '0.6rem 1.2rem',
+                                        borderRadius: '8px',
+                                        border: timeFormat === f ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                        background: timeFormat === f ? '#fff' : '#fff',
+                                        color: timeFormat === f ? '#8b5cf6' : '#94a3b8',
+                                        fontWeight: '700',
+                                        fontSize: '0.85rem',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s',
+                                        boxShadow: timeFormat === f ? '0 4px 12px rgba(139, 92, 246, 0.15)' : 'none'
+                                    }}
+                                >
+                                    {f}
+                                </button>
                             ))}
                         </div>
-                        {timings.map((day, idx) => (
-                            <div key={day.day} style={{ display: 'grid', gridTemplateColumns: '100px 1fr 1fr', gap: '1rem', alignItems: 'center', marginBottom: '0.8rem' }}>
-                                <span style={{ fontSize: '0.9rem' }}>{day.day}</span>
-                                <input type="text" value={day.start} onChange={(e) => handleTimingChange(idx, 'start', e.target.value)} style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
-                                <input type="text" value={day.end} onChange={(e) => handleTimingChange(idx, 'end', e.target.value)} style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
-                            </div>
-                        ))}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            {timings.map((day, idx) => (
+                                <div key={day.day} style={{ display: 'grid', gridTemplateColumns: '40px 140px 1fr 1fr', gap: '1.5rem', alignItems: 'center' }}>
+                                    <div
+                                        onClick={() => handleTimingChange(idx, 'isOpen', !day.isOpen)}
+                                        style={{
+                                            width: '24px',
+                                            height: '24px',
+                                            borderRadius: '4px',
+                                            border: `2px solid ${day.isOpen ? '#06b6d4' : '#e2e8f0'}`,
+                                            background: day.isOpen ? '#06b6d4' : '#fff',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s'
+                                        }}
+                                    >
+                                        {day.isOpen && <Check size={16} color="#fff" strokeWidth={4} />}
+                                    </div>
+
+                                    <span style={{ fontSize: '1rem', fontWeight: '500', color: '#475569' }}>{day.day}</span>
+
+                                    <div style={{ position: 'relative' }}>
+                                        <input
+                                            type="text"
+                                            value={day.start}
+                                            disabled={!day.isOpen}
+                                            onChange={(e) => handleTimingChange(idx, 'start', e.target.value)}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem 1rem',
+                                                paddingRight: '2.5rem',
+                                                borderRadius: '8px',
+                                                border: '1px solid #e2e8f0',
+                                                fontSize: '0.9rem',
+                                                color: '#1e293b',
+                                                background: day.isOpen ? '#fff' : '#f8fafc',
+                                                outline: 'none',
+                                                transition: 'all 0.2s'
+                                            }}
+                                            placeholder="08:00 AM"
+                                        />
+                                        <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', opacity: 0.6 }} />
+                                    </div>
+
+                                    <div style={{ position: 'relative' }}>
+                                        <input
+                                            type="text"
+                                            value={day.end}
+                                            disabled={!day.isOpen}
+                                            onChange={(e) => handleTimingChange(idx, 'end', e.target.value)}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem 1rem',
+                                                paddingRight: '2.5rem',
+                                                borderRadius: '8px',
+                                                border: '1px solid #e2e8f0',
+                                                fontSize: '0.9rem',
+                                                color: '#1e293b',
+                                                background: day.isOpen ? '#fff' : '#f8fafc',
+                                                outline: 'none',
+                                                transition: 'all 0.2s'
+                                            }}
+                                            placeholder="08:00 AM"
+                                        />
+                                        <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', opacity: 0.6 }} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 )}
             </div>

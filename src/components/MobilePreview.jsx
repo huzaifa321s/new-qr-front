@@ -347,9 +347,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         return (
                                             <div key={comp.id} style={{ display: 'flex', justifyContent: comp.data.position, marginBottom: '1rem' }}>
                                                 <a href={comp.data.link} target="_blank" rel="noopener noreferrer" style={{
-                                                    backgroundColor: comp.data.bgColor,
-                                                    color: comp.data.textColor,
-                                                    border: `${comp.data.borderWidth}px solid ${comp.data.borderColor}`,
+                                                    backgroundColor: comp.data.bgColor || secondaryColor,
+                                                    color: comp.data.textColor || primaryColor,
+                                                    border: `${comp.data.borderWidth}px solid ${comp.data.borderColor || primaryColor}`,
                                                     borderRadius: `${comp.data.borderRadius}px`,
                                                     fontFamily: comp.data.fontFamily,
                                                     fontSize: `${comp.data.fontSize}px`,
@@ -886,7 +886,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 return (
                                     <div key={comp.id} style={{ marginBottom: '1.5rem' }}>
                                         <div style={{
-                                            background: comp.data.bgColor || '#0B2D86',
+                                            background: comp.data.bgColor || primaryColor,
                                             borderRadius: '50% 50% 12px 12px / 25px 25px 0 0',
                                             padding: '2rem 1.5rem',
                                             textAlign: 'center',
@@ -6680,8 +6680,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     </p>
                                     <div style={{ marginTop: '0.25rem' }}>
                                         <button style={{
-                                            background: '#fff',
-                                            color: headerColor || '#7f1d1d',
+                                            background: secondaryColor,
+                                            color: primaryColor,
                                             border: 'none',
                                             borderRadius: '6px',
                                             padding: '0.5rem 0.9rem',
@@ -6728,10 +6728,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         border: 'none',
                                         fontSize: '0.95rem',
                                         fontWeight: selectedMenuTab === category.id ? '800' : '600',
-                                        color: selectedMenuTab === category.id ? (headerColor || '#7f1d1d') : '#8b95a5',
+                                        color: selectedMenuTab === category.id ? secondaryColor : '#8b95a5',
                                         cursor: 'pointer',
                                         padding: '0.4rem 0',
-                                        borderBottom: selectedMenuTab === category.id ? `3px solid ${headerColor || '#7f1d1d'}` : 'none',
+                                        borderBottom: selectedMenuTab === category.id ? `3px solid ${secondaryColor}` : 'none',
                                         marginBottom: selectedMenuTab === category.id ? '-2px' : '0',
                                         transition: 'all 0.2s ease',
                                         whiteSpace: 'nowrap',
@@ -6745,82 +6745,98 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                         {/* Menu Items */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            {activeCategories.find(c => c.id === selectedMenuTab)?.products?.map((product) => (
-                                <div key={product.id} style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'flex-start',
-                                    padding: '0.75rem 0',
-                                    borderBottom: '1px solid #f1f5f9'
-                                }}>
-                                    <div style={{ flex: 1 }}>
-                                        <h4 style={{
-                                            fontSize: '1rem',
+                            {(() => {
+                                const products = activeCategories.find(c => c.id === selectedMenuTab)?.products || [];
+                                if (products.length === 0) {
+                                    return (
+                                        <div style={{
+                                            padding: '3rem 1rem',
+                                            textAlign: 'center',
+                                            color: secondaryColor,
                                             fontWeight: '700',
-                                            color: '#1e293b',
-                                            margin: '0 0 0.25rem 0',
-                                            textTransform: 'uppercase'
+                                            fontSize: '1rem'
                                         }}>
-                                            {product.name}
-                                        </h4>
-                                        <p style={{
-                                            fontSize: '0.8rem',
-                                            color: '#64748b',
-                                            margin: '0 0 0.5rem 0',
-                                            lineHeight: '1.3'
-                                        }}>
-                                            {product.description}
-                                        </p>
-                                        <p style={{
-                                            fontSize: '1rem',
-                                            fontWeight: '700',
-                                            color: headerColor || '#7f1d1d',
-                                            margin: 0
-                                        }}>
-                                            {product.price} {businessInfo?.currency || '$'}
-                                        </p>
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: '1rem' }}>
-                                        <button style={{
-                                            width: '35px',
-                                            height: '35px',
-                                            borderRadius: '50%',
-                                            background: headerColor || '#7f1d1d',
-                                            border: 'none',
-                                            color: '#fff',
-                                            fontSize: '1.25rem',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            fontWeight: '300'
-                                        }}>
-                                            +
-                                        </button>
-                                        {product.image && (
-                                            <div style={{
-                                                width: '60px',
-                                                height: '60px',
-                                                borderRadius: '8px',
-                                                overflow: 'hidden',
-                                                flexShrink: 0,
-                                                position: 'relative'
+                                            No Item available in this category
+                                        </div>
+                                    );
+                                }
+                                return products.map((product) => (
+                                    <div key={product.id} style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'flex-start',
+                                        padding: '0.75rem 0',
+                                        borderBottom: '1px solid #f1f5f9'
+                                    }}>
+                                        <div style={{ flex: 1 }}>
+                                            <h4 style={{
+                                                fontSize: '1rem',
+                                                fontWeight: '700',
+                                                color: '#1e293b',
+                                                margin: '0 0 0.25rem 0',
+                                                textTransform: 'uppercase'
                                             }}>
-                                                <img
-                                                    src={product.image}
-                                                    alt={product.name}
-                                                    style={{
-                                                        width: '100%',
-                                                        height: '100%',
-                                                        objectFit: 'cover',
-                                                        transition: 'opacity 0.3s ease-in-out'
-                                                    }}
-                                                />
-                                            </div>
-                                        )}
+                                                {product.name}
+                                            </h4>
+                                            <p style={{
+                                                fontSize: '0.8rem',
+                                                color: '#64748b',
+                                                margin: '0 0 0.5rem 0',
+                                                lineHeight: '1.3'
+                                            }}>
+                                                {product.description}
+                                            </p>
+                                            <p style={{
+                                                fontSize: '1rem',
+                                                fontWeight: '700',
+                                                color: secondaryColor,
+                                                margin: 0
+                                            }}>
+                                                {product.price} {businessInfo?.currency || '$'}
+                                            </p>
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: '1rem' }}>
+                                            <button style={{
+                                                width: '35px',
+                                                height: '35px',
+                                                borderRadius: '50%',
+                                                background: secondaryColor,
+                                                border: 'none',
+                                                color: '#fff',
+                                                fontSize: '1.25rem',
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                fontWeight: '300'
+                                            }}>
+                                                +
+                                            </button>
+                                            {product.image && (
+                                                <div style={{
+                                                    width: '60px',
+                                                    height: '60px',
+                                                    borderRadius: '8px',
+                                                    overflow: 'hidden',
+                                                    flexShrink: 0,
+                                                    position: 'relative'
+                                                }}>
+                                                    <img
+                                                        src={product.image}
+                                                        alt={product.name}
+                                                        style={{
+                                                            width: '100%',
+                                                            height: '100%',
+                                                            objectFit: 'cover',
+                                                            transition: 'opacity 0.3s ease-in-out'
+                                                        }}
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ));
+                            })()}
                         </div>
 
 
@@ -6846,98 +6862,121 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     </h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         {(() => {
-                            const availableTimings = businessInfo?.timings?.filter(t => t.isOpen);
-                            // Use default if no timings (or empty array)
-                            const displayTimings = (availableTimings && availableTimings.length > 0) ? availableTimings : [
+                            const daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                            const defaultTimings = [
                                 { day: 'Monday', isOpen: true, start: '08:00 AM', end: '08:00 AM' },
-                                { day: 'Saturday', isOpen: true, start: '08:00 AM', end: '08:00 AM' }
+                                { day: 'Tuesday', isOpen: true, start: '08:00 AM', end: '08:00 AM' },
+                                { day: 'Wednesday', isOpen: true, start: '08:00 AM', end: '08:00 AM' },
+                                { day: 'Thursday', isOpen: true, start: '08:00 AM', end: '08:00 AM' },
+                                { day: 'Friday', isOpen: true, start: '08:00 AM', end: '08:00 AM' },
+                                { day: 'Saturday', isOpen: true, start: '08:00 AM', end: '08:00 AM' },
+                                { day: 'Sunday', isOpen: false, start: '08:00 AM', end: '08:00 AM' },
                             ];
+                            const allTimings = (businessInfo?.timings && businessInfo.timings.length > 0) ? businessInfo.timings : defaultTimings;
+                            const openDays = allTimings.filter(t => t.isOpen);
 
-                            // If we are using defaults, we want to simulate Monday-Saturday
-                            const isDefault = (!availableTimings || availableTimings.length === 0);
-
-                            let dayRange = '';
-                            let timeString = '';
-
-                            if (isDefault) {
-                                dayRange = 'MONDAY - SATURDAY';
-                                timeString = '08:00 AM - 08:00 AM';
-                            } else {
-                                const firstDay = displayTimings[0];
-                                const lastDay = displayTimings[displayTimings.length - 1];
-                                timeString = firstDay.start && firstDay.end ? `${firstDay.start} - ${firstDay.end}` : '';
-                                dayRange = displayTimings.length === 1 ? firstDay.day.toUpperCase() : `${firstDay.day.toUpperCase()} - ${lastDay.day.toUpperCase()}`;
+                            if (openDays.length === 0) {
+                                return (
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                                        <Calendar size={20} color={headerColor || '#7f1d1d'} />
+                                        <span style={{ fontSize: '0.9rem', color: '#ef4444', fontWeight: '700' }}>CLOSED</span>
+                                    </div>
+                                );
                             }
 
-                            return (
-                                <>
+                            // Grouping logic for ranges
+                            const groups = [];
+                            if (openDays.length > 0) {
+                                let currentGroup = {
+                                    startDay: openDays[0].day,
+                                    lastDay: openDays[0].day,
+                                    startTime: openDays[0].start,
+                                    endTime: openDays[0].end,
+                                    daysCount: 1,
+                                    expectedNextDayIndex: daysOrder.indexOf(openDays[0].day) + 1
+                                };
+
+                                for (let i = 1; i < openDays.length; i++) {
+                                    const d = openDays[i];
+                                    const dayIndex = daysOrder.indexOf(d.day);
+
+                                    // Check if this day is contiguous and has same timings
+                                    if (dayIndex === currentGroup.expectedNextDayIndex &&
+                                        d.start === currentGroup.startTime &&
+                                        d.end === currentGroup.endTime) {
+                                        currentGroup.lastDay = d.day;
+                                        currentGroup.daysCount++;
+                                        currentGroup.expectedNextDayIndex++;
+                                    } else {
+                                        groups.push(currentGroup);
+                                        currentGroup = {
+                                            startDay: d.day,
+                                            lastDay: d.day,
+                                            startTime: d.start,
+                                            endTime: d.end,
+                                            daysCount: 1,
+                                            expectedNextDayIndex: dayIndex + 1
+                                        };
+                                    }
+                                }
+                                groups.push(currentGroup);
+                            }
+
+                            return groups.map((group, gIdx) => (
+                                <div key={gIdx} style={{ marginBottom: gIdx < groups.length - 1 ? '0.5rem' : 0 }}>
                                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
                                         <Calendar size={20} color={headerColor || '#7f1d1d'} />
                                         <div>
                                             <span style={{ display: 'block', fontSize: '0.9rem', color: '#1e293b', fontWeight: '700' }}>
-                                                {dayRange}
+                                                {group.daysCount > 1
+                                                    ? `${group.startDay.toUpperCase()} - ${group.lastDay.toUpperCase()}`
+                                                    : group.startDay.toUpperCase()
+                                                }
                                             </span>
                                         </div>
                                     </div>
-                                    {timeString && (
-                                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-                                            <Clock size={20} color={headerColor || '#7f1d1d'} />
-                                            <div>
-                                                <span style={{ display: 'block', fontSize: '0.9rem', color: '#1e293b', fontWeight: '600' }}>
-                                                    {timeString} (GMT +5)
-                                                </span>
-                                            </div>
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginTop: '0.4rem' }}>
+                                        <Clock size={20} color={headerColor || '#7f1d1d'} />
+                                        <div>
+                                            <span style={{ display: 'block', fontSize: '0.9rem', color: '#1e293b', fontWeight: '600' }}>
+                                                {group.startTime} - {group.endTime}
+                                            </span>
                                         </div>
-                                    )}
-                                </>
-                            );
+                                    </div>
+                                </div>
+                            ));
                         })()}
                     </div>
                 </div>
-            </div>
 
-
-            {/* Social Media */}
-            <div style={{ padding: '1rem', textAlign: 'center' }}>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-                    {social?.instagram && <Instagram size={20} color={primaryColor} />}
-                    {social?.facebook && <Facebook size={20} color={primaryColor} />}
-                    {social?.twitter && <Twitter size={20} color={primaryColor} />}
-                    {social?.website && <Globe size={20} color={primaryColor} />}
+                {/* Website Footer */}
+                <div style={{
+                    padding: '2.5rem 1rem 2rem 1rem',
+                    textAlign: 'center',
+                    background: primaryColor,
+                    borderRadius: '100% 100% 0 0 / 40px 40px 0 0',
+                    marginTop: '2rem',
+                    position: 'relative',
+                    zIndex: 1,
+                    width: '100%'
+                }}>
+                    <a
+                        href={businessInfo?.website ? (businessInfo.website.startsWith('http') ? businessInfo.website : `https://${businessInfo.website}`) : '#'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                            fontSize: '1rem',
+                            color: '#fff',
+                            textDecoration: 'none',
+                            fontWeight: '700',
+                            wordBreak: 'break-all',
+                            display: 'inline-block'
+                        }}
+                    >
+                        {businessInfo?.website || 'https://www.bobscafe.com'}
+                    </a>
                 </div>
             </div>
-
-            {/* Website Footer */}
-            <div style={{
-                padding: '3rem 1rem 2rem 1rem',
-                textAlign: 'center',
-                background: headerColor || '#7f1d1d',
-                borderRadius: '50% 50% 0 0',
-                marginTop: '2rem',
-                marginBottom: '-2rem',
-                position: 'relative',
-                zIndex: 1
-            }}>
-                <a
-                    href={businessInfo?.website || 'https://www.bobscafe.com'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                        fontSize: '0.9rem',
-                        color: '#fff',
-                        textDecoration: 'none',
-                        fontWeight: '500',
-                        wordBreak: 'break-all',
-                        display: 'inline-block',
-                        padding: '0.5rem 1rem',
-                        border: '1px solid rgba(255,255,255,0.3)',
-                        borderRadius: '50px'
-                    }}
-                >
-                    {businessInfo?.website || 'https://www.bobscafe.com'}
-                </a>
-            </div>
-
         </div >
 
     );
