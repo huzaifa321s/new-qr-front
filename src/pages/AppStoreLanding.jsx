@@ -11,7 +11,7 @@ const AppStoreLanding = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`http://localhost:3000/api/qr/${shortId}`);
+                const res = await axios.get(`/api/qr/${shortId}`);
                 setQrData(res.data);
             } catch (err) {
                 console.error(err);

@@ -4,7 +4,7 @@ import axios from 'axios';
 import {
     Plus, Search, Download, Edit, Trash2, BarChart, ChevronDown,
     MoreVertical, Link, Copy, Globe, Calendar, Star, Folder, AlertTriangle, Check, X,
-    Image as ImageIcon, FileText, PenTool, ChevronLeft, ChevronRight, Menu, Sliders
+    Image as ImageIcon, FileText, PenTool, ChevronLeft, ChevronRight, Menu, Sliders, Loader2
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import QRRenderer from '../components/QRRenderer';
@@ -81,6 +81,7 @@ const Dashboard = () => {
     const [isUrlModalOpen, setIsUrlModalOpen] = useState(false);
     const [editingUrlQr, setEditingUrlQr] = useState(null);
     const [tempShortId, setTempShortId] = useState('');
+    const [isUpdatingUrl, setIsUpdatingUrl] = useState(false);
     const [activeTab, setActiveTab] = useState('All');
     const [selectedQrForStats, setSelectedQrForStats] = useState(null);
 
@@ -230,8 +231,39 @@ const Dashboard = () => {
         setTempShortId('');
     };
 
-    const handleUpdateUrl = () => {
-        console.log("Update URL clicked");
+    const handleUpdateUrl = async () => {
+        if (!editingUrlQr) return;
+
+        // Basic validation
+        if (!tempShortId.trim()) {
+            toast.error('Short ID cannot be empty');
+            return;
+        }
+
+        if (tempShortId.includes(' ')) {
+            toast.error('Short ID cannot contain spaces');
+            return;
+        }
+
+        setIsUpdatingUrl(true);
+        try {
+            const updateData = {
+                shortId: tempShortId,
+            };
+
+            const res = await axios.put(`/api/qr/${editingUrlQr._id}`, updateData);
+
+            // Update local state
+            setQrs(prev => prev.map(q => q._id === editingUrlQr._id ? res.data : q));
+            toast.success('QR Code Short ID updated successfully');
+            handleCloseUrlModal();
+            setLastUpdated(Date.now()); // Trigger image refresh
+        } catch (err) {
+            console.error('Error updating QR:', err);
+            toast.error(err.response?.data?.message || 'Error updating QR Code');
+        } finally {
+            setIsUpdatingUrl(false);
+        }
     };
 
     const handleCopyUrl = (qr) => {
@@ -393,7 +425,13 @@ const Dashboard = () => {
         socket.on('scan-updated', (data) => {
             setQrs(prevQrs => prevQrs.map(qr => {
                 if (qr.shortId === data.shortId) {
-                    return { ...qr, scanCount: data.scanCount };
+                    // Update scanCount AND push dummy scan to array so length updates
+                    const currentScans = qr.scans || [];
+                    return {
+                        ...qr,
+                        scanCount: data.scanCount,
+                        scans: [...currentScans, { timestamp: new Date() }]
+                    };
                 }
                 return qr;
             }));
@@ -617,7 +655,7 @@ const Dashboard = () => {
                             <div style={{ flex: 1, minWidth: '250px', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                                 <div>
                                     <div style={{ fontSize: '3rem', fontWeight: '700', color: '#000', lineHeight: '1.1' }}>
-                                        {selectedQrForStats.scanCount || 0}
+                                        {(selectedQrForStats.scans || []).length}
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#666', fontSize: '0.9rem', marginTop: '0.5rem' }}>
                                         <Folder size={16} /> No Folder
@@ -1600,7 +1638,7 @@ const Dashboard = () => {
                                                             color: '#000',
                                                             lineHeight: 1
                                                         }}>
-                                                            {qr.scanCount || 0}
+                                                            {(qr.scans || []).length}
                                                         </div>
                                                         <div style={{
                                                             fontSize: '0.75rem',
@@ -1652,6 +1690,75 @@ const Dashboard = () => {
                                                     >
                                                         <MoreVertical size={20} />
                                                     </button>
+
+                                                    {/* Delete Tooltip Modal (Same as Statistics Page) */}
+                                                    {deleteConfirmationId === qr._id && (
+                                                        <div style={{
+                                                            position: 'absolute',
+                                                            bottom: 'calc(100% + 15px)',
+                                                            right: '-8px',
+                                                            width: '280px',
+                                                            background: '#ffffff',
+                                                            borderRadius: '8px',
+                                                            boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+                                                            border: '1px solid #e5e5e5',
+                                                            padding: '1.25rem',
+                                                            zIndex: 110,
+                                                            cursor: 'default',
+                                                            textAlign: 'left'
+                                                        }} onClick={e => e.stopPropagation()}>
+                                                            {/* Arrow */}
+                                                            <div style={{
+                                                                position: 'absolute',
+                                                                bottom: '-6px',
+                                                                right: '20px',
+                                                                width: '12px',
+                                                                height: '12px',
+                                                                background: '#ffffff',
+                                                                transform: 'rotate(45deg)',
+                                                                borderRight: '1px solid #e5e5e5',
+                                                                borderBottom: '1px solid #e5e5e5',
+                                                            }}></div>
+
+                                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginBottom: '1rem' }}>
+                                                                <div style={{
+                                                                    minWidth: '20px', height: '20px', background: '#fbbf24', borderRadius: '50%',
+                                                                    display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '2px'
+                                                                }}>
+                                                                    <span style={{ color: '#fff', fontSize: '12px', fontWeight: 'bold' }}>!</span>
+                                                                </div>
+                                                                <div>
+                                                                    <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '0.95rem', fontWeight: '700', color: '#000' }}>Delete the QR Code</h4>
+                                                                    <p style={{ margin: 0, fontSize: '0.85rem', color: '#666', lineHeight: '1.5' }}>Are you sure to delete this QR Code?</p>
+                                                                </div>
+                                                            </div>
+
+                                                            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                                                                <button
+                                                                    onClick={() => setDeleteConfirmationId(null)}
+                                                                    disabled={isDeleting}
+                                                                    style={{
+                                                                        padding: '0.4rem 1rem', borderRadius: '6px', border: '1px solid #e5e5e5',
+                                                                        background: '#fff', color: '#666', fontSize: '0.85rem', cursor: 'pointer', fontWeight: '500'
+                                                                    }}>
+                                                                    No
+                                                                </button>
+                                                                <button
+                                                                    onClick={confirmDelete}
+                                                                    disabled={isDeleting}
+                                                                    style={{
+                                                                        padding: '0.4rem 1rem', borderRadius: '6px', border: 'none', background: '#ef4444',
+                                                                        color: '#fff', fontSize: '0.85rem', cursor: isDeleting ? 'not-allowed' : 'pointer', fontWeight: '500',
+                                                                        minWidth: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                                        opacity: isDeleting ? 0.8 : 1
+                                                                    }}>
+                                                                    {isDeleting ? (
+                                                                        <div style={{ width: '14px', height: '14px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+                                                                    ) : 'Yes'}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    )}
 
                                                     {isMenuOpen && (
                                                         <div style={{
@@ -1725,7 +1832,7 @@ const Dashboard = () => {
                         background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
                     }}>
                         <div style={{
-                            background: '#ffffff', borderRadius: '12px', width: '500px', padding: '1.5rem',
+                            background: '#ffffff', borderRadius: '12px', width: isMobile ? '90%' : '500px', padding: '1.5rem',
                             position: 'relative', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
                         }}>
                             <button
@@ -1736,46 +1843,69 @@ const Dashboard = () => {
                             </button>
 
                             <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#000', marginBottom: '1.5rem' }}>
-                                Edit URL Destination
+                                Edit QR Short ID
                             </h2>
 
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#7c3aed', marginBottom: '0.5rem' }}>
-                                    URL*
-                                </label>
-                                <input
-                                    value={tempShortId}
-                                    onChange={(e) => setTempShortId(e.target.value)}
-                                    style={{
-                                        width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd',
-                                        fontSize: '1rem', color: '#000', outline: 'none'
-                                    }}
-                                />
-                                <div style={{ marginTop: '0.5rem', fontSize: '0.875rem', fontWeight: '600', color: '#7c3aed' }}>
-                                    Preview URL: <span style={{ color: '#999', fontWeight: 'normal' }}>{`${baseUrl}/${tempShortId}`}</span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#7c3aed', marginBottom: '0.5rem' }}>
+                                        QR Slug / Short ID
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', background: '#f9fafb', border: '1px solid #ddd', borderRadius: '8px', padding: '0 0.75rem' }}>
+                                        <span style={{ color: '#9ca3af', fontSize: '0.875rem', userSelect: 'none' }}>{baseUrl.replace(/^https?:\/\//, '')}/view/</span>
+                                        <input
+                                            value={tempShortId}
+                                            onChange={(e) => setTempShortId(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
+                                            style={{
+                                                flex: 1, padding: '0.75rem 0.5rem', border: 'none', background: 'transparent',
+                                                fontSize: '1rem', color: '#000', outline: 'none', fontWeight: '500'
+                                            }}
+                                        />
+                                    </div>
+                                    <p style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: '#666' }}>
+                                        Use only lowercase letters, numbers, and hyphens.
+                                    </p>
                                 </div>
-                            </div>
 
-                            <div style={{
-                                background: '#fffbeb', border: '1px solid #fcd34d', borderRadius: '8px', padding: '1rem', marginBottom: '1.5rem'
-                            }}>
-                                <p style={{ fontSize: '0.875rem', color: '#92400e', lineHeight: '1.5', margin: 0 }}>
-                                    <span style={{ fontWeight: 'bold' }}>Warning:</span> Updating your QR Code URL or ID will deactivate any
-                                    previously printed or shared QR codes. Please make sure to update and redistribute the new QR code if needed.
-                                </p>
-                            </div>
+                                <div style={{
+                                    background: '#fff7ed', border: '1px solid #ffedd5', borderRadius: '8px', padding: '1rem',
+                                    display: 'flex', gap: '0.75rem'
+                                }}>
+                                    <AlertTriangle size={20} color="#ea580c" style={{ flexShrink: 0 }} />
+                                    <p style={{ fontSize: '0.8rem', color: '#9a3412', lineHeight: '1.5', margin: 0 }}>
+                                        <span style={{ fontWeight: 'bold' }}>Important:</span> Changing the Short ID will update the QR code pattern. Any previously printed or shared QR codes with the old ID will <span style={{ fontWeight: 'bold' }}>stop working</span>.
+                                    </p>
+                                </div>
 
-                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                <button
-                                    onClick={handleUpdateUrl}
-                                    style={{
-                                        background: '#fff', border: '2px solid #7c3aed', color: '#7c3aed',
-                                        padding: '0.5rem 2rem', borderRadius: '24px', fontWeight: '700', cursor: 'pointer',
-                                        fontSize: '0.875rem'
-                                    }}
-                                >
-                                    Update
-                                </button>
+                                <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                                    <button
+                                        onClick={handleCloseUrlModal}
+                                        style={{
+                                            flex: 1, background: '#fff', border: '1.5px solid #e5e5e5', color: '#666',
+                                            padding: '0.75rem', borderRadius: '24px', fontWeight: '600', cursor: 'pointer',
+                                            fontSize: '0.875rem'
+                                        }}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleUpdateUrl}
+                                        disabled={isUpdatingUrl}
+                                        style={{
+                                            flex: 2, background: isUpdatingUrl ? '#a78bfa' : '#7c3aed', border: 'none', color: '#fff',
+                                            padding: '0.75rem', borderRadius: '24px', fontWeight: '700', cursor: isUpdatingUrl ? 'not-allowed' : 'pointer',
+                                            fontSize: '0.875rem', boxShadow: '0 4px 6px -1px rgba(124, 58, 237, 0.3)',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem'
+                                        }}
+                                    >
+                                        {isUpdatingUrl ? (
+                                            <>
+                                                <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
+                                                Updating...
+                                            </>
+                                        ) : 'Update QR Code'}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

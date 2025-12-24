@@ -3,9 +3,18 @@ import { ChevronDown, ChevronUp, Upload, X, ArrowRight, Check, Eye, UploadCloud 
 import FormSection from './FormSection';
 import ColorPicker from './ColorPicker';
 
-const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrName, isGenerating, isEditing }) => {
+const DesignQR = ({
+    design, setDesign, qrData, setQrData, onSave,
+    qrName, setQrName, qrNameRef, qrNameError, setQrNameError,
+    isGenerating, isEditing,
+    password, setPassword,
+    passwordExpiry, setPasswordExpiry,
+    scanLimitEnabled, setScanLimitEnabled,
+    scanLimit, setScanLimit
+}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const fileInputRef = useRef(null);
     const currentLogoUrl = design?.image?.url;
 
@@ -55,24 +64,6 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
     return (
         <div style={{ padding: '1rem', width: '100%', boxSizing: 'border-box' }}>
 
-            {/* QR NAME */}
-            <div style={{ marginBottom: '2rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#0f172a' }}>QR Code Name</label>
-                <input
-                    type="text"
-                    value={qrName}
-                    onChange={(e) => setQrName(e.target.value)}
-                    placeholder="Enter QR name..."
-                    style={{
-                        width: '100%',
-                        padding: '0.75rem',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '8px',
-                        fontSize: '0.95rem',
-                        outline: 'none'
-                    }}
-                />
-            </div>
 
             {/* SHAPE & COLOR */}
             <FormSection title="SHAPE & COLOR" defaultOpen={true}>
@@ -572,19 +563,155 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
                 </div>
             </FormSection>
 
+            {/* ADVANCED SETTINGS */}
+            <FormSection title="ADVANCED SETTINGS">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+
+                    {/* Password Protection */}
+                    <div>
+                        <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 'bold', color: '#7c3aed', fontSize: '0.8rem', textTransform: 'uppercase' }}>PASSWORD PROTECTION</label>
+                        <div style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '0.5rem' }}>Require a password to access content</div>
+                        <div style={{ position: 'relative' }}>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="......"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.75rem',
+                                    border: '1px solid #94a3b8',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem',
+                                    outline: 'none'
+                                }}
+                            />
+                            <div
+                                onClick={() => setShowPassword(!showPassword)}
+                                style={{
+                                    position: 'absolute',
+                                    right: '12px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    cursor: 'pointer',
+                                    color: '#94a3b8'
+                                }}
+                            >
+                                {showPassword ? <Eye size={18} /> : <Eye size={18} style={{ opacity: 0.7 }} />}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Password Expiry */}
+                    <div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', color: '#7c3aed', fontSize: '0.8rem', textTransform: 'uppercase' }}>PASSWORD EXPIRY</label>
+                        <input
+                            type="date"
+                            value={passwordExpiry}
+                            onChange={(e) => setPasswordExpiry(e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '0.75rem',
+                                border: '1px solid #000',
+                                borderRadius: '6px',
+                                fontSize: '0.95rem',
+                                outline: 'none'
+                            }}
+                        />
+                    </div>
+
+                    {/* Scan Limit */}
+                    <div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', color: '#7c3aed', fontSize: '0.8rem', textTransform: 'uppercase' }}>SCAN LIMIT</label>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                            <div
+                                onClick={() => setScanLimitEnabled(!scanLimitEnabled)}
+                                style={{
+                                    width: '36px',
+                                    height: '20px',
+                                    background: scanLimitEnabled ? '#7c3aed' : '#cbd5e1',
+                                    borderRadius: '10px',
+                                    position: 'relative',
+                                    cursor: 'pointer',
+                                    transition: 'background 0.2s'
+                                }}
+                            >
+                                <div style={{
+                                    width: '16px',
+                                    height: '16px',
+                                    background: '#fff',
+                                    borderRadius: '50%',
+                                    position: 'absolute',
+                                    top: '2px',
+                                    left: scanLimitEnabled ? '18px' : '2px',
+                                    transition: 'left 0.2s',
+                                    boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                                }}></div>
+                            </div>
+                            <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#000' }}>Limit number of times this coupon can be used</span>
+                        </div>
+                        {scanLimitEnabled && (
+                            <input
+                                type="number"
+                                value={scanLimit}
+                                onChange={(e) => setScanLimit(e.target.value)}
+                                placeholder="10"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.75rem',
+                                    border: '1px solid #000',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem',
+                                    outline: 'none'
+                                }}
+                            />
+                        )}
+                    </div>
+                </div>
+            </FormSection>
+
+            {/* QR NAME */}
+            <div style={{ marginBottom: '2rem' }}>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#0f172a' }}>QR Code Name</label>
+                <input
+                    ref={qrNameRef}
+                    type="text"
+                    value={qrName}
+                    onChange={(e) => {
+                        setQrName(e.target.value);
+                        if (qrNameError) setQrNameError('');
+                    }}
+                    placeholder="Enter QR name..."
+                    style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: `1px solid ${qrNameError ? '#ef4444' : '#e2e8f0'}`,
+                        borderRadius: '8px',
+                        fontSize: '0.95rem',
+                        outline: 'none',
+                        boxShadow: qrNameError ? '0 0 0 1px #ef4444' : 'none'
+                    }}
+                />
+                {qrNameError && (
+                    <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem', fontWeight: '500' }}>
+                        {qrNameError}
+                    </p>
+                )}
+            </div>
+
             {/* SAVE BUTTON */}
             <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
                 <button
                     onClick={onSave}
-                    disabled={isGenerating || !qrName.trim()}
+                    disabled={isGenerating}
                     style={{
-                        background: isGenerating || !qrName.trim() ? '#e2e8f0' : 'linear-gradient(to right, #6366f1, #8b5cf6)',
-                        color: isGenerating || !qrName.trim() ? '#94a3b8' : '#ffffff',
+                        background: isGenerating ? '#e2e8f0' : 'linear-gradient(to right, #6366f1, #8b5cf6)',
+                        color: isGenerating ? '#94a3b8' : '#ffffff',
                         border: 'none',
                         padding: '0.875rem 1.5rem',
                         borderRadius: '8px',
                         fontWeight: '600',
-                        cursor: isGenerating || !qrName.trim() ? 'not-allowed' : 'pointer',
+                        cursor: isGenerating ? 'not-allowed' : 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',

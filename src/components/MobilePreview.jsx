@@ -6834,16 +6834,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
             {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
 
             {/* Content Scrollable Area */}
-            <div style={{ height: '100%', overflowY: 'auto', paddingBottom: '2rem', background: '#f5f6f8' }}>
+            <div style={{ height: '100%', overflowY: 'auto', background: '#f5f6f8', display: 'flex', flexDirection: 'column' }}>
 
                 {/* Header / Cover + Hero */}
                 <div style={{
                     background: headerColor || '#7f1d1d',
                     color: '#fff',
-                    padding: '1rem 1rem 1.25rem',
-                    borderBottomLeftRadius: '20px',
-                    borderBottomRightRadius: '20px',
-                    boxShadow: '0 8px 16px rgba(0,0,0,0.12)'
+                    padding: '0.75rem 1rem',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 20
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ fontSize: '1rem', fontWeight: '700', letterSpacing: '-0.01em' }}>
@@ -6869,7 +6870,16 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             </div>
                         )}
                     </div>
+                </div>
 
+                <div style={{
+                    background: headerColor || '#7f1d1d',
+                    padding: '0 1rem 1.5rem',
+                    borderBottomLeftRadius: '24px',
+                    borderBottomRightRadius: '24px',
+                    boxShadow: '0 12px 24px rgba(0,0,0,0.18)',
+                    marginTop: '-1px'
+                }}>
                     {(() => {
                         // Priority: heroImage (from config) -> backgroundImage (legacy) -> businessInfo -> Default
                         // explicitly check for empty string or null (user removed image)
@@ -6881,7 +6891,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             <>
                                 {imageSource && (
                                     <div style={{
-                                        marginTop: '0.9rem',
+                                        marginTop: '0',
                                         borderRadius: '14px',
                                         overflow: 'hidden',
                                         boxShadow: '0 10px 20px rgba(0,0,0,0.18)'
@@ -6895,7 +6905,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 )}
 
                                 <div style={{ marginTop: imageSource ? '1rem' : '0', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                    <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', letterSpacing: '-0.01em' }}>
+                                    <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', letterSpacing: '-0.01em', color: '#fff' }}>
                                         {businessInfo?.headline || 'Eat.Refresh.Go'}
                                     </h2>
                                     <p style={{ margin: 0, color: 'rgba(255,255,255,0.85)', fontSize: '0.9rem', lineHeight: '1.5' }}>
@@ -6904,7 +6914,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     <div style={{ marginTop: '0.25rem' }}>
                                         <button style={{
                                             background: secondaryColor,
-                                            color: primaryColor,
+                                            color: headerColor || '#7f1d1d',
                                             border: 'none',
                                             borderRadius: '6px',
                                             padding: '0.5rem 0.9rem',
@@ -6912,7 +6922,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             fontSize: '0.85rem',
                                             letterSpacing: '0.02em',
                                             cursor: 'pointer',
-                                            boxShadow: '0 4px 10px rgba(255,255,255,0.18)'
+                                            boxShadow: '0 4px 10px rgba(0,0,0,0.15)'
                                         }}>
                                             TIMINGS
                                         </button>
@@ -7174,11 +7184,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                 {/* Website Footer */}
                 <div style={{
-                    padding: '2.5rem 1rem 2rem 1rem',
+                    padding: '2.5rem 1rem 1.5rem 1rem',
                     textAlign: 'center',
-                    background: primaryColor,
+                    background: headerColor || '#7f1d1d',
                     borderRadius: '100% 100% 0 0 / 40px 40px 0 0',
-                    marginTop: '2rem',
+                    marginTop: 'auto',
                     position: 'relative',
                     zIndex: 1,
                     width: '100%'

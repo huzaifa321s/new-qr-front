@@ -7,18 +7,20 @@ const LandingPage = () => {
     const { shortId } = useParams();
     const [qrData, setQrData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const scanTracked = React.useRef(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 // Fetch QR Data
-                const res = await axios.get(`http://localhost:3000/api/qr/${shortId}`);
+                const res = await axios.get(`/api/qr/${shortId}`);
                 setQrData(res.data);
 
-                // Track Scan if not redirected (no ?scanned=true)
+                // Track Scan if not redirected (no ?scanned=true) and not already tracked
                 const searchParams = new URLSearchParams(location.search);
-                if (!searchParams.get('scanned')) {
-                    await axios.post(`http://localhost:3000/api/qr/scan/${shortId}`);
+                if (!searchParams.get('scanned') && !scanTracked.current) {
+                    scanTracked.current = true;
+                    await axios.post(`/api/qr/scan/${shortId}`);
                 }
             } catch (err) {
                 console.error(err);
@@ -27,7 +29,7 @@ const LandingPage = () => {
             }
         };
         fetchData();
-    }, [shortId, location.search]);
+    }, [shortId]);
 
     if (loading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Loading...</div>;
     if (!qrData) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>QR Code Not Found</div>;

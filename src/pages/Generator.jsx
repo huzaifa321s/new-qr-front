@@ -42,6 +42,12 @@ const Generator = () => {
 
     const [activeStep, setActiveStep] = useState('content'); // 'content' | 'design'
     const [qrName, setQrName] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordExpiry, setPasswordExpiry] = useState('');
+    const [scanLimitEnabled, setScanLimitEnabled] = useState(false);
+    const [scanLimit, setScanLimit] = useState('');
+    const [qrNameError, setQrNameError] = useState('');
+    const qrNameRef = useRef(null);
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedShortId, setGeneratedShortId] = useState(null); // Store shortId after creation
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -55,6 +61,20 @@ const Generator = () => {
         color: '#166534',
         bgColor: '#dcfce7'
     });
+    const [loadingHash, setLoadingHash] = useState(0);
+
+    // Shuffle QR pattern during loading state
+    useEffect(() => {
+        let interval;
+        if (isGenerating) {
+            interval = setInterval(() => {
+                setLoadingHash(prev => prev + 1);
+            }, 100);
+        } else {
+            setLoadingHash(0);
+        }
+        return () => clearInterval(interval);
+    }, [isGenerating]);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 1024);
@@ -62,39 +82,56 @@ const Generator = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // Helper to generate a simple hash of an object for live preview updates
+    const getHash = (obj) => {
+        try {
+            const str = JSON.stringify(obj);
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            return Math.abs(hash).toString(36);
+        } catch (e) {
+            return 'default';
+        }
+    };
+
     // Helper function to generate QR value URL for preview/display
     const getQRValue = () => {
-        const baseUrl = window.location.origin.includes('localhost')
-            ? 'http://localhost:5173'
-            : window.location.origin;
+        const baseUrl = import.meta.env.VITE_FRONTEND_URL || window.location.origin;
 
         // Priority: generatedShortId (after creation) > editingQr.shortId (edit mode) > preview
         const id = generatedShortId || (isEditing ? editingQr?.shortId : null);
 
         if (!id) {
-            // For preview during creation, use a preview URL that matches the pattern
-            if (selectedType === 'app-store') {
-                return `${baseUrl}/app/preview`;
-            } else if (selectedType === 'menu' || selectedType === 'business-page' || selectedType === 'custom-type' || selectedType === 'coupon' || selectedType === 'business-card') {
-                return `${baseUrl}/view/preview`;
+            // For preview during creation
+            let previewUrl = '';
+            if ((selectedType === 'dynamic-url' || selectedType === 'website') && pageConfig.url) {
+                previewUrl = pageConfig.url;
+            } else if (['app-store', 'menu', 'business-page', 'custom-type', 'coupon', 'business-card', 'bio-page', 'lead-generation', 'rating', 'reviews', 'social-media', 'pdf', 'multiple-links', 'password-protected', 'event', 'product-page', 'video', 'image'].includes(selectedType)) {
+                previewUrl = `${baseUrl}/view/preview`;
             } else {
-                const backendUrl = window.location.origin.includes('localhost')
-                    ? 'http://localhost:3000'
-                    : window.location.origin.replace(':5173', ':3000');
-                return `${backendUrl}/preview`;
+                const backendUrl = import.meta.env.VITE_API_URL || (window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin.replace(':5173', ':3000'));
+                previewUrl = `${backendUrl}/preview`;
             }
+
+            // Append config hash to ensure QR pattern updates in real-time as content changes
+            const configHash = getHash(pageConfig);
+            const extraHash = isGenerating ? `&loading=${loadingHash}` : '';
+            return previewUrl.includes('?') ? `${previewUrl}&v=${configHash}${extraHash}` : `${previewUrl}?v=${configHash}${extraHash}`;
         }
 
         // Generate actual URL based on type
-        if (selectedType === 'app-store') {
-            return `${baseUrl}/app/${id}`;
-        } else if (selectedType === 'menu' || selectedType === 'business-page' || selectedType === 'custom-type' || selectedType === 'coupon' || selectedType === 'business-card') {
-            return `${baseUrl}/view/${id}`;
+        // While generating, we still want the preview to animate
+        const extraHash = isGenerating ? `?loading=${loadingHash}` : '';
+
+        if (['app-store', 'menu', 'business-page', 'custom-type', 'coupon', 'business-card', 'bio-page', 'lead-generation', 'rating', 'reviews', 'social-media', 'pdf', 'multiple-links', 'password-protected', 'event', 'product-page', 'video', 'image'].includes(selectedType)) {
+            return `${baseUrl}/view/${id}${extraHash}`;
         } else {
-            const backendUrl = window.location.origin.includes('localhost')
-                ? 'http://localhost:3000'
-                : window.location.origin.replace(':5173', ':3000');
-            return `${backendUrl}/${id}`;
+            const backendUrl = import.meta.env.VITE_API_URL || (window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin.replace(':5173', ':3000'));
+            return `${backendUrl}/${id}${extraHash}`;
         }
     };
 
@@ -162,6 +199,10 @@ const Generator = () => {
 
         if (editingQr) {
             setQrName(editingQr.name || '');
+            setPassword(editingQr.password || '');
+            setPasswordExpiry(editingQr.passwordExpiry ? new Date(editingQr.passwordExpiry).toISOString().split('T')[0] : '');
+            setScanLimitEnabled(editingQr.scanLimitEnabled || false);
+            setScanLimit(editingQr.scanLimit || '');
 
             // Properly merge design with defaults to ensure all fields are populated
             const defaultDesign = {
@@ -297,13 +338,19 @@ const Generator = () => {
         if (!qrDesign || !getQRValue()) return;
         const result = calculateScannability(qrDesign, getQRValue());
         setScannability(result);
-    }, [qrDesign, pageConfig, generatedShortId]);
+    }, [qrDesign, pageConfig, generatedShortId, selectedType]);
 
     const handleSave = async () => {
         if (!qrName.trim()) {
-            alert('Please name your QR Code');
+            setQrNameError('QR name is required');
+            if (qrNameRef.current) {
+                qrNameRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                qrNameRef.current.focus();
+            }
             return;
         }
+
+        setQrNameError('');
 
         setIsGenerating(true);
 
@@ -320,18 +367,12 @@ const Generator = () => {
             let qrDataUrl = 'https://placeholder.com';
 
             if (isEditing) {
-                const baseUrl = window.location.origin.includes('localhost')
-                    ? 'http://localhost:5173'
-                    : window.location.origin;
+                const baseUrl = import.meta.env.VITE_FRONTEND_URL || window.location.origin;
 
-                if (selectedType === 'app-store') {
-                    qrDataUrl = `${baseUrl}/app/${editingQr.shortId}`;
-                } else if (selectedType === 'menu' || selectedType === 'business-page' || selectedType === 'custom-type' || selectedType === 'coupon' || selectedType === 'business-card' || selectedType === 'bio-page' || selectedType === 'lead-generation' || selectedType === 'rating' || selectedType === 'reviews' || selectedType === 'social-media' || selectedType === 'pdf' || selectedType === 'multiple-links' || selectedType === 'password-protected' || selectedType === 'event' || selectedType === 'product-page' || selectedType === 'video' || selectedType === 'image') {
+                if (['app-store', 'menu', 'business-page', 'custom-type', 'coupon', 'business-card', 'bio-page', 'lead-generation', 'rating', 'reviews', 'social-media', 'pdf', 'multiple-links', 'password-protected', 'event', 'product-page', 'video', 'image'].includes(selectedType)) {
                     qrDataUrl = `${baseUrl}/view/${editingQr.shortId}`;
                 } else {
-                    const backendUrl = window.location.origin.includes('localhost')
-                        ? 'http://localhost:3000'
-                        : window.location.origin.replace(':5173', ':3000');
+                    const backendUrl = import.meta.env.VITE_API_URL || (window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin.replace(':5173', ':3000'));
                     qrDataUrl = `${backendUrl}/${editingQr.shortId}`;
                 }
             }
@@ -378,7 +419,11 @@ const Generator = () => {
                 feedback: pageConfig.feedback,
                 images: pageConfig.images,
                 dynamicUrl: pageConfig.url,
-                name: qrName
+                name: qrName,
+                password,
+                passwordExpiry,
+                scanLimitEnabled,
+                scanLimit: scanLimit ? Number(scanLimit) : null
             };
 
             if (isEditing) {
@@ -703,9 +748,20 @@ const Generator = () => {
                             setDesign={setQrDesign}
                             qrName={qrName}
                             setQrName={setQrName}
+                            qrNameRef={qrNameRef}
+                            qrNameError={qrNameError}
+                            setQrNameError={setQrNameError}
                             onSave={handleSave}
                             isGenerating={isGenerating}
                             isEditing={isEditing}
+                            password={password}
+                            setPassword={setPassword}
+                            passwordExpiry={passwordExpiry}
+                            setPasswordExpiry={setPasswordExpiry}
+                            scanLimitEnabled={scanLimitEnabled}
+                            setScanLimitEnabled={setScanLimitEnabled}
+                            scanLimit={scanLimit}
+                            setScanLimit={setScanLimit}
                         />
                     )}
                 </div>

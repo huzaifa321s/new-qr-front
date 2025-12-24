@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
     Download, Edit, Trash2, ArrowLeft, Link as LinkIcon, Calendar, Folder, Star, Globe, Copy, Check,
-    Plus, BarChart, FileText, ChevronLeft, Bell, X, Image as ImageIcon, PenTool, Home
+    Plus, BarChart, FileText, ChevronLeft, Bell, X, Image as ImageIcon, PenTool, Home, Smartphone
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { io } from 'socket.io-client';
@@ -46,7 +46,7 @@ const Statistics = () => {
     useEffect(() => {
         const fetchQR = async () => {
             try {
-                const res = await axios.get(`http://localhost:3000/api/qr/detail/${id}`);
+                const res = await axios.get(`/api/qr/detail/${id}`);
                 setQr(res.data);
             } catch (err) {
                 console.error(err);
@@ -59,7 +59,7 @@ const Statistics = () => {
 
         fetchQR();
 
-        const socket = io('http://localhost:3000');
+        const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000');
         socket.on('scan-updated', (data) => {
             if (data._id === id) {
                 fetchQR();
@@ -70,7 +70,8 @@ const Statistics = () => {
     }, [id, navigate]);
 
     const handleCopyLink = (shortId) => {
-        const link = `${window.location.origin}/view/${shortId}`;
+        const baseUrl = import.meta.env.VITE_FRONTEND_URL || window.location.origin;
+        const link = `${baseUrl}/view/${shortId}`;
         navigator.clipboard.writeText(link);
         toast.success('Link copied to clipboard');
     };
@@ -93,7 +94,8 @@ const Statistics = () => {
         try {
             const filename = `${qr.name || 'qr-code'}.${downloadFormat}`;
             // Use Backend API
-            const downloadUrl = `http://localhost:3000/api/qr/download/${qr.shortId}?format=${downloadFormat}`;
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const downloadUrl = `${baseUrl}/api/qr/download/${qr.shortId}?format=${downloadFormat}`;
             console.log('📥 Downloading from:', downloadUrl);
             const response = await fetch(downloadUrl);
             if (!response.ok) throw new Error('Download failed');
@@ -188,8 +190,13 @@ const Statistics = () => {
 
     // Heatmap
     const heatmapData = Array(7).fill(0).map(() => Array(24).fill(0));
-    (qr.scans || []).forEach(s => { const d = new Date(s.timestamp); heatmapData[d.getDay()][d.getHours()]++; });
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    (qr.scans || []).forEach(s => {
+        const d = new Date(s.timestamp);
+        // Convert Sun(0) -> 6, Mon(1) -> 0, etc.
+        const dayIndex = (d.getDay() + 6) % 7;
+        heatmapData[dayIndex][d.getHours()]++;
+    });
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f7fa', fontFamily: 'sans-serif' }}>
@@ -208,10 +215,10 @@ const Statistics = () => {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '2rem' }}>
                             {/* Left Info */}
                             <div style={{ flex: 1, minWidth: '300px' }}>
-                                <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#111827', lineHeight: 1, marginBottom: '0.5rem' }}>{qr.scanCount || 0} <span style={{ fontSize: '1rem', color: '#9ca3af', fontWeight: 'normal' }}>Scans</span></div>
+                                <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#111827', lineHeight: 1, marginBottom: '0.5rem' }}>{(qr.scans || []).length} <span style={{ fontSize: '1rem', color: '#9ca3af', fontWeight: 'normal' }}>Scans</span></div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#6b7280', marginBottom: '2rem' }}>{qr.folder ? <Folder size={16} /> : null} {qr.folder || 'No Folder'}</div>
                                 <div style={{ display: 'grid', gap: '1.5rem' }}>
-                                    <div><div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '0.25rem' }}>QR LINK</div><div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><a href={`${window.location.origin}/view/${qr.shortId}`} target="_blank" rel="noreferrer" style={{ color: '#7c3aed', textDecoration: 'none', fontWeight: '500' }}>{window.location.origin}/view/{qr.shortId}</a><Copy size={14} color="#9ca3af" onClick={() => handleCopyLink(qr.shortId)} style={{ cursor: 'pointer' }} /></div></div>
+                                    <div><div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '0.25rem' }}>QR LINK</div><div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><a href={`${import.meta.env.VITE_FRONTEND_URL || window.location.origin}/view/${qr.shortId}`} target="_blank" rel="noreferrer" style={{ color: '#7c3aed', textDecoration: 'none', fontWeight: '500' }}>{import.meta.env.VITE_FRONTEND_URL || window.location.origin}/view/{qr.shortId}</a><Copy size={14} color="#9ca3af" onClick={() => handleCopyLink(qr.shortId)} style={{ cursor: 'pointer' }} /></div></div>
                                     <div><div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '0.25rem' }}>CREATED</div><div style={{ color: '#1f2937', fontSize: '0.875rem' }}>{new Date(qr.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div></div>
                                     <div><div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '0.25rem' }}>TYPE</div><div style={{ display: 'inline-block', padding: '0.25rem 0.75rem', background: '#f3e8ff', color: '#7c3aed', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '600', textTransform: 'capitalize' }}>{qr.type.replace('-', ' ')}</div></div>
                                 </div>
@@ -230,7 +237,7 @@ const Statistics = () => {
                                             />
                                         ) : (
                                             <QRRenderer
-                                                value={`${window.location.origin}/view/${qr.shortId}`}
+                                                value={`${import.meta.env.VITE_FRONTEND_URL || window.location.origin}/view/${qr.shortId}`}
                                                 design={qr.design || {}}
                                                 size={140}
                                                 id={`qr-${qr._id}`}
@@ -372,7 +379,7 @@ const Statistics = () => {
                                             <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Total Scans</span>
                                         </div>
                                         <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#7c3aed', lineHeight: 1, marginBottom: '0.5rem' }}>
-                                            {qr.scanCount || 0}
+                                            {(qr.scans || []).length}
                                         </div>
                                         <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>
                                             Dec 17, 2025 to Dec 17, 2025
@@ -401,14 +408,76 @@ const Statistics = () => {
                         {/* Demographics */}
                         <div style={{ flex: 1, minWidth: '300px', background: '#fff', borderRadius: '16px', padding: '2rem', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                             <h4 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', marginBottom: '2rem' }}>Demographics</h4>
-                            <div style={{ display: 'grid', gap: '2rem' }}>
-                                {[{ title: 'Device', stats: deviceStats, color: '#10b981' }, { title: 'Country', stats: countryStats, color: '#3b82f6' }, { title: 'City', stats: cityStats, color: '#ef4444' }].map((cat, i) => (
+                            <div style={{ display: 'grid', gap: '3rem' }}>
+                                {[
+                                    {
+                                        title: 'Device',
+                                        stats: deviceStats,
+                                        icon: Smartphone,
+                                        emptyTitle: 'No Device Data',
+                                        emptyDesc: 'Info about which devices were used will appear here.',
+                                        badge: 'This fills when scans come in'
+                                    },
+                                    {
+                                        title: 'Country',
+                                        stats: countryStats,
+                                        icon: Globe,
+                                        emptyTitle: 'No Location Data',
+                                        emptyDesc: 'Geographic data will show once scans begin.',
+                                        badge: 'Scans from multiple locations upcoming'
+                                    },
+                                    {
+                                        title: 'City',
+                                        stats: cityStats,
+                                        icon: Globe,
+                                        emptyTitle: 'No Location Data',
+                                        emptyDesc: 'Geographic data will show once scans begin.',
+                                        badge: 'Scans from multiple locations upcoming'
+                                    }
+                                ].map((cat, i) => (
                                     <div key={i}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}><div style={{ width: '6px', height: '6px', background: '#8b5cf6', borderRadius: '50%' }}></div><div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>Scans by {cat.title}</div></div>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                                            <div style={{ width: '100px', height: '100px' }}><ResponsiveContainer><PieChart><Pie data={cat.stats.data} innerRadius={30} outerRadius={45} paddingAngle={0} dataKey="value" stroke="none">{cat.stats.data.map((_, idx) => <Cell key={idx} fill={idx === 0 ? cat.color : '#f3f4f6'} />)}</Pie></PieChart></ResponsiveContainer></div>
-                                            <div style={{ flex: 1 }}>{cat.stats.data.slice(0, 1).map((d, idx) => <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', background: '#f9fafb', padding: '0.5rem', borderRadius: '8px' }}><span style={{ fontSize: '0.875rem', color: '#374151' }}>{d.name}</span><span style={{ fontWeight: '600', color: '#6b7280' }}>{Math.round((d.value / cat.stats.total) * 100)}%</span></div>)}</div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                                            <div style={{ width: '6px', height: '6px', background: '#8b5cf6', borderRadius: '50%' }}></div>
+                                            <div style={{ fontSize: '0.95rem', fontWeight: '600', color: '#111827' }}>Scans by {cat.title}</div>
                                         </div>
+
+                                        {cat.stats.data.length === 0 ? (
+                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem 0 2rem 0', textAlign: 'center' }}>
+                                                <cat.icon size={64} color="#e5e7eb" style={{ marginBottom: '1rem', strokeWidth: 1.5 }} />
+                                                <div style={{ fontSize: '1rem', fontWeight: '600', color: '#374151', marginBottom: '0.5rem' }}>{cat.emptyTitle}</div>
+                                                <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1.5rem', maxWidth: '80%' }}>{cat.emptyDesc}</div>
+                                                <div style={{ background: '#f9fafb', padding: '0.5rem 1.25rem', borderRadius: '999px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', color: '#4b5563', border: '1px solid #f3f4f6' }}>
+                                                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#9ca3af' }}></div>
+                                                    {cat.badge}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                                                <div style={{ width: '120px', height: '120px' }}>
+                                                    <ResponsiveContainer>
+                                                        <PieChart>
+                                                            <Pie data={cat.stats.data} innerRadius={35} outerRadius={55} paddingAngle={0} dataKey="value" stroke="none">
+                                                                {cat.stats.data.map((_, idx) => <Cell key={idx} fill={COLORS[idx % COLORS.length]} />)}
+                                                            </Pie>
+                                                        </PieChart>
+                                                    </ResponsiveContainer>
+                                                </div>
+                                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                                    {cat.stats.data.map((d, idx) => (
+                                                        <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f9fafb', padding: '0.75rem 1rem', borderRadius: '8px' }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: COLORS[idx % COLORS.length] }}></div>
+                                                                <span style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151' }}>{d.name}</span>
+                                                            </div>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                                                                <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#6b7280' }}>{d.value}</span>
+                                                                <span style={{ fontSize: '0.875rem', fontWeight: '500', color: '#9ca3af', minWidth: '35px', textAlign: 'right' }}>{Math.round((d.value / cat.stats.total) * 100)}%</span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -418,12 +487,37 @@ const Statistics = () => {
                             <h4 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', marginBottom: '2rem' }}>Activity Heatmap</h4>
                             <div style={{ overflowX: 'auto' }}>
                                 <div style={{ minWidth: '300px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                                        <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Less</span>
+                                        {[0.1, 0.4, 0.6, 0.8, 1].map((opacity, i) => (
+                                            <div key={i} style={{ width: '16px', height: '16px', borderRadius: '4px', background: '#7c3aed', opacity: opacity }}></div>
+                                        ))}
+                                        <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>More</span>
+                                    </div>
                                     <div style={{ display: 'grid', gridTemplateColumns: 'auto repeat(7, 1fr)', gap: '4px' }}>
-                                        <div />{days.map(d => <div key={d} style={{ fontSize: '0.75rem', color: '#9ca3af', textAlign: 'center' }}>{d.slice(0, 3)}</div>)}
+                                        <div />{days.map(d => <div key={d} style={{ fontSize: '0.75rem', color: '#9ca3af', textAlign: 'center', paddingBottom: '0.5rem' }}>{d}</div>)}
                                         {Array.from({ length: 24 }).map((_, h) => (
                                             <React.Fragment key={h}>
                                                 <div style={{ fontSize: '0.65rem', color: '#9ca3af', textAlign: 'right', paddingRight: '0.5rem', alignSelf: 'center' }}>{h === 0 ? '12am' : h === 12 ? '12pm' : h > 12 ? `${h - 12}pm` : `${h}am`}</div>
-                                                {days.map((_, d) => <div key={`${d}-${h}`} style={{ height: '24px', background: heatmapData[d][h] > 0 ? '#7c3aed' : '#f3f4f6', opacity: heatmapData[d][h] > 0 ? Math.min(0.4 + (heatmapData[d][h] * 0.1), 1) : 1, borderRadius: '4px' }} title={`${days[d]} ${h}:00 - ${heatmapData[d][h]} scans`} />)}
+                                                {days.map((_, d) => {
+                                                    const count = heatmapData[d][h];
+                                                    return (
+                                                        <div key={`${d}-${h}`} style={{
+                                                            height: '24px',
+                                                            background: count > 0 ? '#7c3aed' : '#f3f4f6',
+                                                            opacity: count > 0 ? Math.min(0.4 + (count * 0.1), 1) : 1,
+                                                            borderRadius: '4px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            color: '#fff',
+                                                            fontSize: '0.65rem',
+                                                            fontWeight: 'bold'
+                                                        }} title={`${days[d]} ${h}:00 - ${count} scans`}>
+                                                            {count > 0 && count}
+                                                        </div>
+                                                    );
+                                                })}
                                             </React.Fragment>
                                         ))}
                                     </div>
