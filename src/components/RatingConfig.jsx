@@ -375,32 +375,34 @@ const RatingConfig = ({ config, onChange }) => {
                 </div>
 
                 {isBasicInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* NAME FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 NAME*
                             </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 {/* Name Input */}
-                                <input
-                                    type="text"
-                                    value={basicInfo.name || ''}
-                                    onChange={(e) => handleBasicInfoUpdate('name', e.target.value)}
-                                    placeholder="Bob's Cafe"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
+                                <div style={{ flex: '2 1 200px' }}>
+                                    <input
+                                        type="text"
+                                        value={basicInfo.name || ''}
+                                        onChange={(e) => handleBasicInfoUpdate('name', e.target.value)}
+                                        placeholder="Bob's Cafe"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                </div>
 
                                 {/* Text Color */}
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -463,7 +465,7 @@ const RatingConfig = ({ config, onChange }) => {
                                 </div>
 
                                 {/* Font */}
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -478,7 +480,8 @@ const RatingConfig = ({ config, onChange }) => {
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff'
+                                            background: '#fff',
+                                            height: '44px'
                                         }}
                                     >
                                         <option value="Lato">Lato</option>
@@ -538,7 +541,7 @@ const RatingConfig = ({ config, onChange }) => {
 
                 {
                     isRatingOpen && (
-                        <div style={{ padding: '2rem', background: '#fff' }}>
+                        <div style={{ padding: '1rem', background: '#fff' }}>
 
                             {/* QUESTION FIELD */}
                             <div style={{ marginBottom: '2rem' }}>
@@ -562,13 +565,14 @@ const RatingConfig = ({ config, onChange }) => {
                             </div>
 
                             {/* RATING TYPE OPTIONS */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
 
                                 {/* Thumbs Up/Down Option */}
                                 <div
                                     onClick={() => handleRatingUpdate('type', 'thumbs')}
                                     style={{
-                                        padding: '2rem 1rem',
+                                        flex: '1 1 150px',
+                                        padding: '1.5rem 1rem',
                                         border: rating.type === 'thumbs' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
                                         borderRadius: '8px',
                                         display: 'flex',
@@ -580,26 +584,26 @@ const RatingConfig = ({ config, onChange }) => {
                                     }}
                                 >
                                     <div style={{
-                                        width: '48px',
-                                        height: '48px',
+                                        width: '40px',
+                                        height: '40px',
                                         borderRadius: '50%',
                                         background: '#8b5cf6',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        fontSize: '1.5rem'
+                                        fontSize: '1.2rem'
                                     }}>
                                         👍
                                     </div>
                                     <div style={{
-                                        width: '48px',
-                                        height: '48px',
+                                        width: '40px',
+                                        height: '40px',
                                         borderRadius: '50%',
                                         background: '#8b5cf6',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        fontSize: '1.5rem'
+                                        fontSize: '1.2rem'
                                     }}>
                                         👎
                                     </div>
@@ -609,7 +613,8 @@ const RatingConfig = ({ config, onChange }) => {
                                 <div
                                     onClick={() => handleRatingUpdate('type', 'emoji')}
                                     style={{
-                                        padding: '2rem 1rem',
+                                        flex: '1 1 150px',
+                                        padding: '1.5rem 1rem',
                                         border: rating.type === 'emoji' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
                                         borderRadius: '8px',
                                         display: 'flex',
@@ -629,7 +634,8 @@ const RatingConfig = ({ config, onChange }) => {
                                 <div
                                     onClick={() => handleRatingUpdate('type', 'stars')}
                                     style={{
-                                        padding: '2rem 1rem',
+                                        flex: '1 1 150px',
+                                        padding: '1.5rem 1rem',
                                         border: rating.type === 'stars' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
                                         borderRadius: '8px',
                                         display: 'flex',
@@ -689,18 +695,18 @@ const RatingConfig = ({ config, onChange }) => {
 
                 {
                     isSocialOpen && (
-                        <div style={{ padding: '2rem', background: '#fff' }}>
+                        <div style={{ padding: '1rem', background: '#fff' }}>
 
                             {/* Selected Social Media Inputs Grid */}
                             {socialLinks.length > 0 && (
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                                <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
                                     {socialLinks.map((link) => {
                                         const platform = socialPlatforms.find(p => p.id === link.platform);
                                         if (!platform) return null;
                                         const Icon = platform.icon;
 
                                         return (
-                                            <div key={link.id} style={{ position: 'relative' }}>
+                                            <div key={link.id} style={{ flex: '1 1 200px', position: 'relative' }}>
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                                                     <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6' }}>
                                                         {platform.name}*

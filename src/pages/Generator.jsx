@@ -46,7 +46,21 @@ const Generator = () => {
     const [generatedShortId, setGeneratedShortId] = useState(null); // Store shortId after creation
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const [showUnsavedModal, setShowUnsavedModal] = useState(false);
+    const [activeTab, setActiveTab] = useState('generator');
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
     const [initialState, setInitialState] = useState({ pageConfig: {}, qrDesign: {}, qrName: '' });
+    const [scannability, setScannability] = useState({
+        score: 100,
+        text: 'EXCELLENT',
+        color: '#166534',
+        bgColor: '#dcfce7'
+    });
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // Helper function to generate QR value URL for preview/display
     const getQRValue = () => {
@@ -83,6 +97,51 @@ const Generator = () => {
             return `${backendUrl}/${id}`;
         }
     };
+
+    // --- SCANNABILITY ENGINE ---
+    const getRelativeLuminance = (hex) => {
+        // Handle cases where hex might be null or undefined
+        if (!hex) return 0;
+        let c = hex.replace(/^#/, '');
+        if (c.length === 3) {
+            c = c.split('').map(x => x + x).join('');
+        }
+        const rgb = c.match(/.{2}/g).map(x => parseInt(x, 16) / 255);
+        const [r, g, b] = rgb.map(c => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+
+    const getContrastRatio = (color1, color2) => {
+        const L1 = getRelativeLuminance(color1);
+        const L2 = getRelativeLuminance(color2);
+        return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+    };
+
+    const calculateScannability = (design, qrValue) => {
+        let score = 100;
+        const contrast = getContrastRatio(design.dots.color, design.background.color);
+
+        // 1. Contrast Check (Weight: 60%)
+        if (contrast < 2.5) score -= 60;
+        else if (contrast < 4.5) score -= 30;
+
+        // 2. Logo Check (Weight: 20%)
+        if (design.image?.url && design.imageOptions?.imageSize > 0.35) {
+            score -= 20;
+        } else if (design.image?.url && design.imageOptions?.imageSize > 0.2) {
+            score -= 10;
+        }
+
+        // 3. Data Density (Weight: 20%)
+        if (qrValue.length > 200) score -= 20;
+        else if (qrValue.length > 100) score -= 10;
+
+        // Final result mapping
+        if (score >= 90) return { score, text: 'EXCELLENT', color: '#166534', bgColor: '#dcfce7' };
+        if (score >= 60) return { score, text: 'GOOD', color: '#1e40af', bgColor: '#dbeafe' };
+        return { score, text: 'CRITICAL', color: '#991b1b', bgColor: '#fee2e2' };
+    };
+    // ---------------------------
 
     // QR Code Design State (Visuals)
     const [qrDesign, setQrDesign] = useState({
@@ -234,6 +293,12 @@ const Generator = () => {
         setHasUnsavedChanges(currentStateStr !== initialStateStr);
     }, [pageConfig, qrDesign, qrName, initialState]);
 
+    useEffect(() => {
+        if (!qrDesign || !getQRValue()) return;
+        const result = calculateScannability(qrDesign, getQRValue());
+        setScannability(result);
+    }, [qrDesign, pageConfig, generatedShortId]);
+
     const handleSave = async () => {
         if (!qrName.trim()) {
             alert('Please name your QR Code');
@@ -377,7 +442,14 @@ const Generator = () => {
         <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
             <Toaster position="top-right" />
             {/* Left Panel */}
-            <div style={{ flex: 1, padding: '2rem', overflowY: 'auto', height: '100vh' }}>
+            <div style={{
+                flex: 1,
+                padding: isMobile ? '1rem' : '2rem',
+                overflowY: isMobile ? 'visible' : 'auto',
+                height: isMobile ? 'auto' : '100vh',
+                display: isMobile && activeTab !== 'generator' ? 'none' : 'block',
+                marginBottom: isMobile ? '80px' : '0'
+            }}>
                 <div style={{ maxWidth: '100%', margin: '0 auto' }}>
 
                     {/* Header / Nav */}
@@ -415,7 +487,17 @@ const Generator = () => {
                             <span style={{ color: '#8b5cf6', fontWeight: '600', fontSize: '0.9rem' }}>
                                 {activeStep === 'content' ? 'Content Configuration' : 'Design QR Code'}
                             </span>
-                            <div style={{ width: '150px', height: '4px', background: 'linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%)', borderRadius: '2px', marginTop: '0.5rem' }}></div>
+                            <div style={{ width: '150px', height: '4px', background: '#e5e7eb', borderRadius: '2px', marginTop: '0.5rem', position: 'relative' }}>
+                                <div style={{
+                                    width: activeStep === 'content' ? '70px' : '100%',
+                                    height: '100%',
+                                    background: 'linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%)',
+                                    borderRadius: '2px',
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: 0
+                                }}></div>
+                            </div>
                         </div>
 
                         <div style={{ width: '40px' }}></div>
@@ -631,24 +713,20 @@ const Generator = () => {
 
             {/* Right Panel - Preview */}
             <div style={{
-                width: '400px',
+                width: isMobile ? '100%' : '400px',
                 background: 'linear-gradient(180deg, #eef2ff 0%, #f3e8ff 100%)',
-                borderLeft: '1px solid #e2e8f0',
-                display: 'flex',
+                borderLeft: isMobile ? 'none' : '1px solid #e2e8f0',
+                display: isMobile ? (activeTab === 'preview' ? 'flex' : 'none') : 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                padding: '2rem',
-                position: 'sticky',
+                padding: isMobile ? '1rem' : '2rem',
+                position: isMobile ? 'relative' : 'sticky',
                 top: 0,
-                height: '100vh',
-                overflowY: 'hidden'
+                height: isMobile ? 'auto' : '100vh',
+                overflowY: isMobile ? 'visible' : 'hidden',
+                marginBottom: isMobile ? '80px' : '0'
             }}>
-                <div style={{ alignSelf: 'flex-end', marginBottom: '2rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#fff', padding: '0.25rem 0.75rem 0.25rem 0.25rem', borderRadius: '20px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
-                        <div style={{ width: '32px', height: '32px', background: '#06b6d4', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 'bold' }}>H</div>
-                        <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '500' }}>Dashboard</span>
-                    </div>
-                </div>
+                <div style={{ marginBottom: '2rem' }}></div>
 
                 {activeStep === 'content' ? (
                     <>
@@ -731,19 +809,68 @@ const Generator = () => {
                         </div>
 
                         <div style={{
-                            background: '#dcfce7',
-                            color: '#166534',
+                            background: scannability.bgColor,
+                            color: scannability.color,
                             padding: '0.25rem 1rem',
                             borderRadius: '4px',
                             fontSize: '0.8rem',
                             fontWeight: '600',
-                            border: '1px solid #bbf7d0'
+                            border: `1px solid ${scannability.color}20`
                         }}>
-                            Scannability: EXCELLENT
+                            Scannability: {scannability.text}
                         </div>
                     </>
                 )}
             </div>
+
+            {/* Mobile Bottom Navigation */}
+            {isMobile && (
+                <div style={{
+                    position: 'fixed',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: '70px',
+                    background: '#fff',
+                    display: 'flex',
+                    borderTop: '1px solid #e2e8f0',
+                    boxShadow: '0 -4px 12px rgba(0,0,0,0.05)',
+                    zIndex: 1000
+                }}>
+                    <div
+                        onClick={() => setActiveTab('generator')}
+                        style={{
+                            flex: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '4px',
+                            color: activeTab === 'generator' ? '#8b5cf6' : '#94a3b8',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-settings"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></svg>
+                        <span style={{ fontSize: '0.75rem', fontWeight: activeTab === 'generator' ? '600' : '400' }}>Generator</span>
+                    </div>
+                    <div
+                        onClick={() => setActiveTab('preview')}
+                        style={{
+                            flex: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '4px',
+                            color: activeTab === 'preview' ? '#8b5cf6' : '#94a3b8',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z" /><circle cx="12" cy="12" r="3" /></svg>
+                        <span style={{ fontSize: '0.75rem', fontWeight: activeTab === 'preview' ? '600' : '400' }}>Preview</span>
+                    </div>
+                </div>
+            )}
 
             {/* Unsaved Changes Modal */}
             {showUnsavedModal && (

@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ArrowLeft, Check, X } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Settings, Eye } from 'lucide-react';
 import { qrTypes } from '../utils/qrTypes';
 import MobilePreview from '../components/MobilePreview';
 import { getPreviewConfig } from '../utils/previewConfigs';
 
 const TemplateSelection = () => {
-    const [selectedType, setSelectedType] = useState(null);
+    const [selectedType, setSelectedType] = useState('app-store');
+    const [activeTab, setActiveTab] = useState('generator');
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
     const navigate = useNavigate();
+
+    React.useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const handleContinue = () => {
         if (selectedType) {
@@ -120,7 +128,7 @@ const TemplateSelection = () => {
                         overflow: 'hidden'
                     }}>
                         <div style={{
-                            width: '50%',
+                            width: '20%',
                             height: '100%',
                             background: 'linear-gradient(to right, #6366f1, #8b5cf6)',
                             borderRadius: '3px'
@@ -128,10 +136,20 @@ const TemplateSelection = () => {
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '3rem', alignItems: 'flex-start' }}>
+                <div style={{
+                    display: 'flex',
+                    gap: isMobile ? '0' : '3rem',
+                    alignItems: 'flex-start',
+                    flexDirection: isMobile ? 'column' : 'row',
+                    marginBottom: isMobile ? '20px' : '0'
+                }}>
 
                     {/* Left Side: QR Type Grid */}
-                    <div style={{ flex: 1 }}>
+                    <div style={{
+                        flex: 1,
+                        width: '100%',
+                        display: (isMobile && activeTab !== 'generator') ? 'none' : 'block'
+                    }}>
                         {/* Scrollable QR Type Grid */}
                         <div
                             className="custom-scrollbar"
@@ -139,7 +157,7 @@ const TemplateSelection = () => {
                                 height: '55vh',
                                 overflowY: 'auto',
                                 paddingRight: '1rem',
-                                marginBottom: '2rem'
+                                marginBottom: isMobile ? '1rem' : '2rem'
                             }}>
                             <style>
                                 {`
@@ -161,7 +179,7 @@ const TemplateSelection = () => {
                             </style>
                             <div style={{
                                 display: 'grid',
-                                gridTemplateColumns: 'repeat(3, 1fr)',
+                                gridTemplateColumns: isMobile ? 'repeat(auto-fill, minmax(280px, 1fr))' : 'repeat(3, 1fr)',
                                 gap: '1.5rem'
                             }}>
                                 {qrTypes.map(type => (
@@ -217,6 +235,26 @@ const TemplateSelection = () => {
                                         }}>
                                             {type.icon}
                                         </div>
+
+                                        {/* Incomplete Badge */}
+                                        {['survey', 'social-media', 'product-page', 'dynamic-url', 'image', 'video'].includes(type.id) && (
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: '-10px',
+                                                right: '10px',
+                                                background: '#ef4444',
+                                                color: '#fff',
+                                                padding: '2px 10px',
+                                                borderRadius: '20px',
+                                                fontSize: '0.7rem',
+                                                fontWeight: 'bold',
+                                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                                                textTransform: 'uppercase',
+                                                zIndex: 10
+                                            }}>
+                                                incomplete
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -225,11 +263,12 @@ const TemplateSelection = () => {
 
                     {/* Right Side: Mobile Preview Panel */}
                     <div style={{
-                        width: '350px',
+                        width: isMobile ? '100%' : '350px',
                         flexShrink: 0,
-                        position: 'sticky',
-                        top: '2rem',
-                        display: selectedType ? 'block' : 'none',
+                        position: isMobile ? 'relative' : 'sticky',
+                        top: isMobile ? '0' : '2rem',
+                        display: isMobile ? (activeTab === 'preview' ? 'flex' : 'none') : (selectedType ? 'block' : 'none'),
+                        justifyContent: 'center',
                         transition: 'opacity 0.3s ease'
                     }}>
                         {selectedType && (
@@ -273,9 +312,10 @@ const TemplateSelection = () => {
 
                 {/* Continue Button */}
                 <div style={{
-                    display: 'flex',
+                    display: isMobile ? (activeTab === 'generator' ? 'flex' : 'none') : 'flex',
                     justifyContent: 'center',
-                    // marginTop: '1rem'
+                    marginTop: isMobile ? '0.5rem' : '0',
+                    marginBottom: isMobile ? '100px' : '0'
                 }}>
                     <button
                         onClick={handleContinue}
@@ -321,6 +361,56 @@ const TemplateSelection = () => {
                     </button>
                 </div>
             </div>
+
+            {/* Mobile Bottom Navigation */}
+            {isMobile && (
+                <div style={{
+                    position: 'fixed',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: '70px',
+                    background: '#fff',
+                    display: 'flex',
+                    borderTop: '1px solid #e2e8f0',
+                    boxShadow: '0 -4px 12px rgba(0,0,0,0.05)',
+                    zIndex: 1000
+                }}>
+                    <div
+                        onClick={() => setActiveTab('generator')}
+                        style={{
+                            flex: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '4px',
+                            color: activeTab === 'generator' ? '#8b5cf6' : '#94a3b8',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        <Settings size={24} />
+                        <span style={{ fontSize: '0.75rem', fontWeight: activeTab === 'generator' ? '600' : '400' }}>Generator</span>
+                    </div>
+                    <div
+                        onClick={() => setActiveTab('preview')}
+                        style={{
+                            flex: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '4px',
+                            color: activeTab === 'preview' ? '#8b5cf6' : '#94a3b8',
+                            cursor: 'pointer',
+                            opacity: selectedType ? 1 : 0.5
+                        }}
+                    >
+                        <Eye size={24} />
+                        <span style={{ fontSize: '0.75rem', fontWeight: activeTab === 'preview' ? '600' : '400' }}>Preview</span>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

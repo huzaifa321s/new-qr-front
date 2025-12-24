@@ -521,12 +521,12 @@ const EventConfig = ({ config, onChange }) => {
                 </div>
 
                 {isBasicInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* ORGANIZATION NAME */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.5rem' }}>
-                                <div>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                <div style={{ flex: '2 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         ORGANIZATION NAME*
                                     </label>
@@ -546,7 +546,7 @@ const EventConfig = ({ config, onChange }) => {
                                     />
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -601,7 +601,7 @@ const EventConfig = ({ config, onChange }) => {
                                     </div>
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -634,8 +634,8 @@ const EventConfig = ({ config, onChange }) => {
 
                         {/* EVENT NAME */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.5rem' }}>
-                                <div>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                <div style={{ flex: '2 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         EVENT NAME*
                                     </label>
@@ -655,7 +655,7 @@ const EventConfig = ({ config, onChange }) => {
                                     />
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -710,7 +710,7 @@ const EventConfig = ({ config, onChange }) => {
                                     </div>
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -765,9 +765,9 @@ const EventConfig = ({ config, onChange }) => {
                         </div>
 
                         {/* BUTTON & LINK */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '0' }}>
+                        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '0' }}>
                             {/* BUTTON */}
-                            <div>
+                            <div style={{ flex: '1 1 200px' }}>
                                 <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     BUTTON
                                 </label>
@@ -788,7 +788,7 @@ const EventConfig = ({ config, onChange }) => {
                             </div>
 
                             {/* LINK */}
-                            <div>
+                            <div style={{ flex: '1 1 200px' }}>
                                 <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     LINK
                                 </label>
@@ -834,7 +834,7 @@ const EventConfig = ({ config, onChange }) => {
                 </div>
 
                 {isScheduleOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* Time Format Toggle */}
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '1.5rem' }}>
@@ -871,9 +871,9 @@ const EventConfig = ({ config, onChange }) => {
 
                         {/* Days List */}
                         {eventSchedule.days && eventSchedule.days.map((day, index) => (
-                            <div key={day.id} style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem', marginBottom: '1.5rem' }}>
+                            <div key={day.id} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem', paddingBottom: '1.5rem', borderBottom: '1px solid #f1f5f9' }}>
                                 {/* DAY/DATE */}
-                                <div style={{ flex: 2 }}>
+                                <div>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         DAY{index + 1}*
                                     </label>
@@ -893,73 +893,76 @@ const EventConfig = ({ config, onChange }) => {
                                     />
                                 </div>
 
-                                {/* BEGINS AT */}
-                                <div style={{ flex: 1.5 }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        BEGINS AT*
-                                    </label>
-                                    <div style={{ position: 'relative' }}>
-                                        <input
-                                            type="text"
-                                            value={day.begins}
-                                            onChange={(e) => handleDayUpdate(day.id, 'begins', e.target.value)}
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                paddingRight: '2.5rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
-                                                fontSize: '0.9rem',
-                                                outline: 'none',
-                                                color: '#1e293b'
-                                            }}
-                                        />
-                                        <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+                                    {/* BEGINS AT */}
+                                    <div style={{ flex: '1 1 120px' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                            BEGINS AT*
+                                        </label>
+                                        <div style={{ position: 'relative' }}>
+                                            <input
+                                                type="text"
+                                                value={day.begins}
+                                                onChange={(e) => handleDayUpdate(day.id, 'begins', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    paddingRight: '2.5rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #1e293b',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    color: '#1e293b'
+                                                }}
+                                            />
+                                            <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* ENDS AT */}
-                                <div style={{ flex: 1.5 }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        ENDS AT*
-                                    </label>
-                                    <div style={{ position: 'relative' }}>
-                                        <input
-                                            type="text"
-                                            value={day.ends}
-                                            onChange={(e) => handleDayUpdate(day.id, 'ends', e.target.value)}
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                paddingRight: '2.5rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
-                                                fontSize: '0.9rem',
-                                                outline: 'none',
-                                                color: '#1e293b'
-                                            }}
-                                        />
-                                        <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                                    {/* ENDS AT */}
+                                    <div style={{ flex: '1 1 120px' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                            ENDS AT*
+                                        </label>
+                                        <div style={{ position: 'relative' }}>
+                                            <input
+                                                type="text"
+                                                value={day.ends}
+                                                onChange={(e) => handleDayUpdate(day.id, 'ends', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    paddingRight: '2.5rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #1e293b',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    color: '#1e293b'
+                                                }}
+                                            />
+                                            <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Remove Button */}
-                                <div
-                                    onClick={() => handleRemoveDay(day.id)}
-                                    style={{
-                                        width: '32px',
-                                        height: '32px',
-                                        borderRadius: '50%',
-                                        border: '1px solid #e2e8f0',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        marginBottom: '6px', // Align with inputs
-                                        flexShrink: 0
-                                    }}
-                                >
-                                    <X size={16} color="#cbd5e1" />
+                                    {/* Remove Button */}
+                                    <div
+                                        onClick={() => handleRemoveDay(day.id)}
+                                        style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            borderRadius: '50%',
+                                            border: '1px solid #e2e8f0',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                            marginBottom: '6px', // Align with inputs
+                                            flexShrink: 0,
+                                            marginLeft: 'auto'
+                                        }}
+                                    >
+                                        <X size={16} color="#cbd5e1" />
+                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -1012,7 +1015,7 @@ const EventConfig = ({ config, onChange }) => {
                 </div>
 
                 {isVenuOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
                         <div>
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 LOCATION*
@@ -1057,7 +1060,7 @@ const EventConfig = ({ config, onChange }) => {
                 </div>
 
                 {isFacilitiesOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
                         <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
                             {facilityIcons.map((item) => {
                                 const Icon = item.icon;
@@ -1112,7 +1115,7 @@ const EventConfig = ({ config, onChange }) => {
                 </div>
 
                 {isContactOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* NAME OF PERSON */}
                         <div style={{ marginBottom: '2rem' }}>
@@ -1156,10 +1159,9 @@ const EventConfig = ({ config, onChange }) => {
                             />
                         </div>
 
-                        {/* CHANNELS */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             {contactInfo.channels && contactInfo.channels.map(channel => (
-                                <div key={channel.id} style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                                <div key={channel.id} style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
                                     {/* Icon Box */}
                                     <div style={{
                                         width: '44px',
@@ -1175,7 +1177,7 @@ const EventConfig = ({ config, onChange }) => {
                                     </div>
 
                                     {/* Input */}
-                                    <div style={{ flex: 1, position: 'relative' }}>
+                                    <div style={{ flex: '1 1 200px', position: 'relative' }}>
                                         <input
                                             type="text"
                                             value={channel.value}
@@ -1191,15 +1193,10 @@ const EventConfig = ({ config, onChange }) => {
                                                 color: '#1e293b'
                                             }}
                                         />
-                                        {/* Since icon is external, we don't need absolute icon inside except maybe small indicator? 
-                                            Screenshot shows a small globe/phone icon INSIDE the input too? 
-                                            "15555551234" has a small phone icon inside start.
-                                        */}
                                         <div style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center' }}>
                                             {channel.type === 'phone' && (
                                                 <Phone size={14} color="#64748b" style={{ marginRight: '8px' }} />
                                             )}
-                                            {/* Screenshot shows internal icon, let's add it */}
                                             {channel.type === 'email' && (
                                                 <Mail size={14} color="#64748b" style={{ marginRight: '8px' }} />
                                             )}
@@ -1210,7 +1207,7 @@ const EventConfig = ({ config, onChange }) => {
                                     </div>
 
                                     {/* Controls */}
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '12px', marginLeft: 'auto' }}>
                                         <X
                                             size={16}
                                             color="#cbd5e1"
@@ -1319,16 +1316,16 @@ const EventConfig = ({ config, onChange }) => {
                 </div>
 
                 {isSocialOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* Active Inputs */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
                             {socialLinks.map(link => {
                                 const platform = socialPlatforms.find(p => p.id === link.platform);
                                 if (!platform) return null;
                                 const Icon = platform.icon;
                                 return (
-                                    <div key={link.id}>
+                                    <div key={link.id} style={{ flex: '1 1 200px' }}>
                                         <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b', marginBottom: '0.5rem', textTransform: 'capitalize' }}>
                                             {link.platform}*
                                         </label>

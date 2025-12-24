@@ -38,7 +38,7 @@ const DynamicUrlConfig = ({ config, onChange }) => {
                 </div>
 
                 {isInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
                         <div>
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 WEBSITE OR PAGE LINK*

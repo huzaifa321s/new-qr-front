@@ -134,8 +134,8 @@ const AppStoreConfig = ({ config, onChange }) => {
                             })}
                         </div>
 
-                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                            <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <div style={{ flex: '1 1 150px' }}>
                                 <ColorPicker
                                     label="Primary Color"
                                     color={getValue('design.color.dark') || '#0f3485'}
@@ -144,7 +144,7 @@ const AppStoreConfig = ({ config, onChange }) => {
                                     }}
                                 />
                             </div>
-                            <div style={{ flex: 1 }}>
+                            <div style={{ flex: '1 1 150px' }}>
                                 <ColorPicker
                                     label="Secondary Color"
                                     color={getValue('design.color.light') || '#f3f4f6'}
@@ -163,15 +163,15 @@ const AppStoreConfig = ({ config, onChange }) => {
                         {(() => {
                             const currentUrl = getValue('design.logo.url');
                             const presets = [
-                                { icon: '❤️', svg: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"%3E%3Ccircle cx="64" cy="64" r="60" fill="%23fff5f5" stroke="%23ec4899" stroke-width="2"/%3E%3Cpath d="M 40 60 L 60 75 L 90 45" stroke="%23ec4899" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E' },
-                                { icon: '🏪', svg: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"%3E%3Ccircle cx="64" cy="64" r="60" fill="%23f0fdf4" stroke="%2322c55e" stroke-width="2"/%3E%3Cpath d="M 35 45 L 35 95 Q 35 105 45 105 L 95 105 Q 105 105 105 95 L 105 55 Q 105 45 95 45 L 65 45 Q 55 45 55 55 L 55 95" stroke="%2322c55e" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E' },
-                                { icon: '⭐', svg: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"%3E%3Ccircle cx="64" cy="64" r="60" fill="%23fffbeb" stroke="%23f59e0b" stroke-width="2"/%3E%3Cpath d="M 64 35 L 74 60 L 100 60 L 80 75 L 90 100 L 64 85 L 38 100 L 48 75 L 28 60 L 54 60 Z" fill="%23f59e0b"/%3E%3C/svg%3E' },
-                                { icon: '🎯', svg: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"%3E%3Ccircle cx="64" cy="64" r="60" fill="%23f0f9ff" stroke="%230ea5e9" stroke-width="2"/%3E%3Ccircle cx="64" cy="64" r="20" fill="none" stroke="%230ea5e9" stroke-width="3"/%3E%3Ccircle cx="64" cy="64" r="3" fill="%230ea5e9"/%3E%3C/svg%3E' }
+                                { id: 'app1', url: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=150&h=150&fit=crop' },
+                                { id: 'app2', url: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=150&h=150&fit=crop' },
+                                { id: 'app3', url: 'https://images.unsplash.com/photo-1611944212129-29977ae1398c?w=150&h=150&fit=crop' },
+                                { id: 'app4', url: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=150&h=150&fit=crop' }
                             ];
-                            const isPreset = presets.some(p => p.svg === currentUrl);
+                            const isPreset = presets.some(p => p.url === currentUrl);
 
                             return (
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                     {/* 1. Remove Button */}
                                     <button
                                         onClick={() => updateConfig('design.logo.url', '')}
@@ -196,12 +196,12 @@ const AppStoreConfig = ({ config, onChange }) => {
                                     </button>
 
                                     {/* 2. Presets */}
-                                    {presets.map((item, idx) => {
-                                        const isSelected = currentUrl === item.svg;
+                                    {presets.map((item) => {
+                                        const isSelected = currentUrl === item.url;
                                         return (
                                             <div
-                                                key={idx}
-                                                onClick={() => updateConfig('design.logo.url', item.svg)}
+                                                key={item.id}
+                                                onClick={() => updateConfig('design.logo.url', item.url)}
                                                 style={{
                                                     minWidth: '80px',
                                                     height: '80px',
@@ -213,12 +213,16 @@ const AppStoreConfig = ({ config, onChange }) => {
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
                                                     background: '#f8fafc',
-                                                    fontSize: '40px',
                                                     flexShrink: 0,
-                                                    position: 'relative'
+                                                    position: 'relative',
+                                                    transition: 'all 0.2s'
                                                 }}
                                             >
-                                                {item.icon}
+                                                <img
+                                                    src={item.url}
+                                                    alt="Preset Logo"
+                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                />
                                                 {isSelected && (
                                                     <div style={{
                                                         position: 'absolute',
@@ -423,9 +427,9 @@ const AppStoreConfig = ({ config, onChange }) => {
 
                     {/* App Name */}
                     <div className="form-group">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
                             <label className="label">APP NAME*</label>
-                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
                                 <input
                                     type="color"
                                     value={getValue('businessInfo.titleColor') || '#000000'}
@@ -453,9 +457,9 @@ const AppStoreConfig = ({ config, onChange }) => {
 
                     {/* Detail */}
                     <div className="form-group">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
                             <label className="label">DETAIL</label>
-                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
                                 <input
                                     type="color"
                                     value={getValue('businessInfo.subtitleColor') || '#4b5563'}
@@ -483,9 +487,9 @@ const AppStoreConfig = ({ config, onChange }) => {
 
                     {/* Title (Call to Action) */}
                     <div className="form-group">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
                             <label className="label">TITLE*</label>
-                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
                                 <input
                                     type="color"
                                     value={getValue('businessInfo.ctaColor') || '#000000'}
@@ -543,7 +547,7 @@ const AppStoreConfig = ({ config, onChange }) => {
                     {/* Button Type */}
                     <div className="form-group">
                         <label className="label">BUTTON TYPE</label>
-                        <div style={{ display: 'flex', gap: '2rem' }}>
+                        <div style={{ display: 'flex', gap: '1rem 2rem', flexWrap: 'wrap' }}>
                             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: '#1e293b', fontWeight: '500' }}>
                                 <input
                                     type="radio"
@@ -689,7 +693,7 @@ const AppStoreConfig = ({ config, onChange }) => {
                     {/* Type (Image/Video) */}
                     <div className="form-group">
                         <label className="label">TYPE</label>
-                        <div style={{ display: 'flex', gap: '2rem' }}>
+                        <div style={{ display: 'flex', gap: '1rem 2rem', flexWrap: 'wrap' }}>
                             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: '#1e293b', fontWeight: '500' }}>
                                 <input
                                     type="radio"

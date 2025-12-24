@@ -409,32 +409,34 @@ const SurveyConfig = ({ config, onChange }) => {
                 </div>
 
                 {isBasicInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* ORGANIZATION NAME FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 ORGANIZATION NAME*
                             </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 {/* Organization Name Input */}
-                                <input
-                                    type="text"
-                                    value={basicInfo.organizationName || ''}
-                                    onChange={(e) => handleBasicInfoUpdate('organizationName', e.target.value)}
-                                    placeholder="Luxury Hotels"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
+                                <div style={{ flex: '2 1 200px' }}>
+                                    <input
+                                        type="text"
+                                        value={basicInfo.organizationName || ''}
+                                        onChange={(e) => handleBasicInfoUpdate('organizationName', e.target.value)}
+                                        placeholder="Luxury Hotels"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                </div>
 
                                 {/* Text Color */}
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -489,7 +491,7 @@ const SurveyConfig = ({ config, onChange }) => {
                                 </div>
 
                                 {/* Font */}
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -504,7 +506,8 @@ const SurveyConfig = ({ config, onChange }) => {
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff'
+                                            background: '#fff',
+                                            height: '44px'
                                         }}
                                     >
                                         <option value="Lato">Lato</option>
@@ -521,27 +524,29 @@ const SurveyConfig = ({ config, onChange }) => {
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 DESCRIPTION
                             </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 {/* Description Textarea */}
-                                <textarea
-                                    value={basicInfo.description || ''}
-                                    onChange={(e) => handleBasicInfoUpdate('description', e.target.value)}
-                                    placeholder="We aim to provide fresh and healthy snacks for people on the go."
-                                    rows={3}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none',
-                                        resize: 'vertical',
-                                        fontFamily: 'inherit'
-                                    }}
-                                />
+                                <div style={{ flex: '2 1 200px' }}>
+                                    <textarea
+                                        value={basicInfo.description || ''}
+                                        onChange={(e) => handleBasicInfoUpdate('description', e.target.value)}
+                                        placeholder="We aim to provide fresh and healthy snacks for people on the go."
+                                        rows={3}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            resize: 'vertical',
+                                            fontFamily: 'inherit'
+                                        }}
+                                    />
+                                </div>
 
                                 {/* Text Color */}
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -596,7 +601,7 @@ const SurveyConfig = ({ config, onChange }) => {
                                 </div>
 
                                 {/* Font */}
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -611,7 +616,8 @@ const SurveyConfig = ({ config, onChange }) => {
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff'
+                                            background: '#fff',
+                                            height: '44px'
                                         }}
                                     >
                                         <option value="Lato">Lato</option>
@@ -669,7 +675,7 @@ const SurveyConfig = ({ config, onChange }) => {
                 </div>
 
                 {isSurveyQuestionsOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* LANGUAGES */}
                         <div style={{ marginBottom: '2rem' }}>
@@ -1276,32 +1282,34 @@ const SurveyConfig = ({ config, onChange }) => {
                 </div>
 
                 {isThankYouOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* THANKYOU TITLE FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 THANKYOU TITLE*
                             </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 {/* Title Input */}
-                                <input
-                                    type="text"
-                                    value={thankYou.title || ''}
-                                    onChange={(e) => handleThankYouUpdate('title', e.target.value)}
-                                    placeholder="We appreciate your feedback!"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
+                                <div style={{ flex: '2 1 200px' }}>
+                                    <input
+                                        type="text"
+                                        value={thankYou.title || ''}
+                                        onChange={(e) => handleThankYouUpdate('title', e.target.value)}
+                                        placeholder="We appreciate your feedback!"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                </div>
 
                                 {/* Text Color */}
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -1356,7 +1364,7 @@ const SurveyConfig = ({ config, onChange }) => {
                                 </div>
 
                                 {/* Font */}
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -1371,7 +1379,8 @@ const SurveyConfig = ({ config, onChange }) => {
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff'
+                                            background: '#fff',
+                                            height: '44px'
                                         }}
                                     >
                                         <option value="Lato">Lato</option>
@@ -1452,18 +1461,18 @@ const SurveyConfig = ({ config, onChange }) => {
                 </div>
 
                 {isSocialOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* Selected Social Media Inputs Grid */}
                         {socialLinks.length > 0 && (
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
                                 {socialLinks.map((link) => {
                                     const platform = socialPlatforms.find(p => p.id === link.platform);
                                     if (!platform) return null;
                                     const Icon = platform.icon;
 
                                     return (
-                                        <div key={link.id} style={{ position: 'relative' }}>
+                                        <div key={link.id} style={{ position: 'relative', flex: '1 1 200px' }}>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                                                 <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b' }}>
                                                     {platform.name}*
@@ -1496,7 +1505,7 @@ const SurveyConfig = ({ config, onChange }) => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                                                 <div style={{
                                                     width: '40px',
                                                     height: '40px',
@@ -1528,7 +1537,7 @@ const SurveyConfig = ({ config, onChange }) => {
                                                     onChange={(e) => handleSocialLinkUpdate(link.id, e.target.value)}
                                                     placeholder="https://"
                                                     style={{
-                                                        flex: 1,
+                                                        flex: '1 1 180px',
                                                         padding: '0.5rem',
                                                         borderRadius: '4px',
                                                         border: '1px solid #1e293b',

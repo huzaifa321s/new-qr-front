@@ -53,7 +53,7 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
     ];
 
     return (
-        <div style={{ padding: '2rem', width: '100%' }}>
+        <div style={{ padding: '1rem', width: '100%', boxSizing: 'border-box' }}>
 
             {/* QR NAME */}
             <div style={{ marginBottom: '2rem' }}>
@@ -124,11 +124,12 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
                                 borderRadius: '4px',
                                 padding: '0.5rem',
                                 background: '#fff',
-                                width: '200px',
+                                width: '100%',
+                                maxWidth: '200px',
                                 justifyContent: 'space-between'
                             }}>
                                 <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: '500' }}>{design?.dots?.color || '#000000'}</span>
-                                <div style={{ position: 'relative', width: '24px', height: '24px' }}>
+                                <div style={{ position: 'relative', width: '24px', height: '24px', flexShrink: 0 }}>
                                     <input
                                         type="color"
                                         value={design?.dots?.color || '#000000'}
@@ -214,11 +215,12 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
                                 borderRadius: '4px',
                                 padding: '0.5rem',
                                 background: '#fff',
-                                width: '200px',
+                                width: '100%',
+                                maxWidth: '200px',
                                 justifyContent: 'space-between'
                             }}>
                                 <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: '500' }}>{design?.cornersSquare?.color || design?.dots?.color || '#000000'}</span>
-                                <div style={{ position: 'relative', width: '24px', height: '24px' }}>
+                                <div style={{ position: 'relative', width: '24px', height: '24px', flexShrink: 0 }}>
                                     <input
                                         type="color"
                                         value={design?.cornersSquare?.color || design?.dots?.color || '#000000'}
@@ -298,11 +300,12 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
                                 borderRadius: '4px',
                                 padding: '0.5rem',
                                 background: '#fff',
-                                width: '200px',
+                                width: '100%',
+                                maxWidth: '200px',
                                 justifyContent: 'space-between'
                             }}>
                                 <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: '500' }}>{design?.cornersDot?.color || design?.dots?.color || '#000000'}</span>
-                                <div style={{ position: 'relative', width: '24px', height: '24px' }}>
+                                <div style={{ position: 'relative', width: '24px', height: '24px', flexShrink: 0 }}>
                                     <input
                                         type="color"
                                         value={design?.cornersDot?.color || design?.dots?.color || '#000000'}
@@ -343,11 +346,12 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
                                 borderRadius: '4px',
                                 padding: '0.5rem',
                                 background: '#fff',
-                                width: '200px',
+                                width: '100%',
+                                maxWidth: '200px',
                                 justifyContent: 'space-between'
                             }}>
                                 <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: '500' }}>{design?.background?.color || '#ffffff'}</span>
-                                <div style={{ position: 'relative', width: '24px', height: '24px' }}>
+                                <div style={{ position: 'relative', width: '24px', height: '24px', flexShrink: 0 }}>
                                     <input
                                         type="color"
                                         value={design?.background?.color || '#ffffff'}
@@ -577,14 +581,18 @@ const DesignQR = ({ design, setDesign, qrData, setQrData, onSave, qrName, setQrN
                         background: isGenerating || !qrName.trim() ? '#e2e8f0' : 'linear-gradient(to right, #6366f1, #8b5cf6)',
                         color: isGenerating || !qrName.trim() ? '#94a3b8' : '#ffffff',
                         border: 'none',
-                        padding: '0.875rem 2rem',
+                        padding: '0.875rem 1.5rem',
                         borderRadius: '8px',
                         fontWeight: '600',
                         cursor: isGenerating || !qrName.trim() ? 'not-allowed' : 'pointer',
                         display: 'flex',
                         alignItems: 'center',
+                        justifyContent: 'center',
+                        flexWrap: 'wrap',
                         gap: '0.5rem',
-                        fontSize: '0.95rem'
+                        fontSize: '0.95rem',
+                        width: 'auto',
+                        minWidth: '200px'
                     }}
                 >
                     {isGenerating ? 'Saving...' : (isEditing ? 'Update QR Code' : 'Save QR Code')}

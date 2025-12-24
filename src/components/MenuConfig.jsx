@@ -344,7 +344,7 @@ const MenuConfig = ({ config, onChange }) => {
                     {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
                 {isBasicInfoOpen && (
-                    <div style={{ padding: '2rem' }}>
+                    <div style={{ padding: '1rem' }}>
                         <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>RESTAURANT NAME*</label><input type="text" value={businessInfo.title || ''} onChange={e => handleBusinessInfoUpdate('title', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
                         <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>TITLE*</label><input type="text" value={businessInfo.headline || 'DOWNLOAD NOW'} onChange={e => handleBusinessInfoUpdate('headline', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
                         <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>DESCRIPTION</label><textarea value={businessInfo.description || ''} onChange={e => handleBusinessInfoUpdate('description', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
@@ -360,7 +360,7 @@ const MenuConfig = ({ config, onChange }) => {
                     {isMenuOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
                 {isMenuOpen && (
-                    <div style={{ padding: '2rem', background: '#faf9fc' }}>
+                    <div style={{ padding: '1rem', background: '#faf9fc' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             {categories.map((cat) => (
                                 <div key={cat.id} style={{ borderRadius: '4px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', background: '#fff' }}>
@@ -369,13 +369,13 @@ const MenuConfig = ({ config, onChange }) => {
                                         {openCategoryId === cat.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                                     </div>
                                     {openCategoryId === cat.id && (
-                                        <div style={{ padding: '1.5rem' }}>
+                                        <div style={{ padding: '1rem' }}>
                                             <input type="text" value={cat.name} onChange={(e) => handleCategoryNameChange(cat.id, e.target.value)} placeholder="Category Name" style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
                                             {cat.products.map((prod, idx) => (
                                                 <div key={prod.id} style={{ border: '1px solid #f1f5f9', padding: '1rem', borderRadius: '8px', marginBottom: '1rem', background: '#f8fafc' }}>
-                                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '0.5rem' }}>
-                                                        <input type="text" value={prod.name} placeholder="Product Name" onChange={(e) => handleProductChange(cat.id, prod.id, 'name', e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
-                                                        <input type="text" value={prod.price} placeholder="Price" onChange={(e) => handleProductChange(cat.id, prod.id, 'price', e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
+                                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+                                                        <input type="text" value={prod.name} placeholder="Product Name" onChange={(e) => handleProductChange(cat.id, prod.id, 'name', e.target.value)} style={{ flex: '1 1 150px', padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
+                                                        <input type="text" value={prod.price} placeholder="Price" onChange={(e) => handleProductChange(cat.id, prod.id, 'price', e.target.value)} style={{ flex: '1 1 80px', padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
                                                     </div>
                                                     <textarea value={prod.description} placeholder="Description" onChange={(e) => handleProductChange(cat.id, prod.id, 'description', e.target.value)} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0', marginBottom: '0.5rem' }} />
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -403,7 +403,7 @@ const MenuConfig = ({ config, onChange }) => {
                     {isTimingsOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
                 {isTimingsOpen && (
-                    <div style={{ padding: '2rem' }}>
+                    <div style={{ padding: '1rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginBottom: '2rem' }}>
                             {['24 hrs', 'AM/PM'].map(f => (
                                 <button
@@ -428,71 +428,77 @@ const MenuConfig = ({ config, onChange }) => {
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                             {timings.map((day, idx) => (
-                                <div key={day.day} style={{ display: 'grid', gridTemplateColumns: '40px 140px 1fr 1fr', gap: '1.5rem', alignItems: 'center' }}>
-                                    <div
-                                        onClick={() => handleTimingChange(idx, 'isOpen', !day.isOpen)}
-                                        style={{
-                                            width: '24px',
-                                            height: '24px',
-                                            borderRadius: '4px',
-                                            border: `2px solid ${day.isOpen ? '#06b6d4' : '#e2e8f0'}`,
-                                            background: day.isOpen ? '#06b6d4' : '#fff',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            cursor: 'pointer',
-                                            transition: 'all 0.2s'
-                                        }}
-                                    >
-                                        {day.isOpen && <Check size={16} color="#fff" strokeWidth={4} />}
+                                <div key={day.day} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingBottom: '1rem', borderBottom: '1px solid #f1f5f9' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        <div
+                                            onClick={() => handleTimingChange(idx, 'isOpen', !day.isOpen)}
+                                            style={{
+                                                width: '24px',
+                                                height: '24px',
+                                                borderRadius: '4px',
+                                                border: `2px solid ${day.isOpen ? '#06b6d4' : '#e2e8f0'}`,
+                                                background: day.isOpen ? '#06b6d4' : '#fff',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.2s',
+                                                flexShrink: 0
+                                            }}
+                                        >
+                                            {day.isOpen && <Check size={16} color="#fff" strokeWidth={4} />}
+                                        </div>
+                                        <span style={{ fontSize: '1rem', fontWeight: 'bold', color: '#475569', minWidth: '100px' }}>{day.day}</span>
                                     </div>
 
-                                    <span style={{ fontSize: '1rem', fontWeight: '500', color: '#475569' }}>{day.day}</span>
+                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                        <div style={{ position: 'relative', flex: '1 1 120px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem' }}>OPEN</label>
+                                            <input
+                                                type="text"
+                                                value={day.start}
+                                                disabled={!day.isOpen}
+                                                onChange={(e) => handleTimingChange(idx, 'start', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem 1rem',
+                                                    paddingRight: '2.5rem',
+                                                    borderRadius: '8px',
+                                                    border: '1px solid #e2e8f0',
+                                                    fontSize: '0.9rem',
+                                                    color: '#1e293b',
+                                                    background: day.isOpen ? '#fff' : '#f8fafc',
+                                                    outline: 'none',
+                                                    transition: 'all 0.2s'
+                                                }}
+                                                placeholder="08:00 AM"
+                                            />
+                                            <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '1rem', top: 'calc(50% + 8px)', transform: 'translateY(-50%)', opacity: 0.6 }} />
+                                        </div>
 
-                                    <div style={{ position: 'relative' }}>
-                                        <input
-                                            type="text"
-                                            value={day.start}
-                                            disabled={!day.isOpen}
-                                            onChange={(e) => handleTimingChange(idx, 'start', e.target.value)}
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem 1rem',
-                                                paddingRight: '2.5rem',
-                                                borderRadius: '8px',
-                                                border: '1px solid #e2e8f0',
-                                                fontSize: '0.9rem',
-                                                color: '#1e293b',
-                                                background: day.isOpen ? '#fff' : '#f8fafc',
-                                                outline: 'none',
-                                                transition: 'all 0.2s'
-                                            }}
-                                            placeholder="08:00 AM"
-                                        />
-                                        <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', opacity: 0.6 }} />
-                                    </div>
-
-                                    <div style={{ position: 'relative' }}>
-                                        <input
-                                            type="text"
-                                            value={day.end}
-                                            disabled={!day.isOpen}
-                                            onChange={(e) => handleTimingChange(idx, 'end', e.target.value)}
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem 1rem',
-                                                paddingRight: '2.5rem',
-                                                borderRadius: '8px',
-                                                border: '1px solid #e2e8f0',
-                                                fontSize: '0.9rem',
-                                                color: '#1e293b',
-                                                background: day.isOpen ? '#fff' : '#f8fafc',
-                                                outline: 'none',
-                                                transition: 'all 0.2s'
-                                            }}
-                                            placeholder="08:00 AM"
-                                        />
-                                        <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', opacity: 0.6 }} />
+                                        <div style={{ position: 'relative', flex: '1 1 120px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem' }}>CLOSE</label>
+                                            <input
+                                                type="text"
+                                                value={day.end}
+                                                disabled={!day.isOpen}
+                                                onChange={(e) => handleTimingChange(idx, 'end', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem 1rem',
+                                                    paddingRight: '2.5rem',
+                                                    borderRadius: '8px',
+                                                    border: '1px solid #e2e8f0',
+                                                    fontSize: '0.9rem',
+                                                    color: '#1e293b',
+                                                    background: day.isOpen ? '#fff' : '#f8fafc',
+                                                    outline: 'none',
+                                                    transition: 'all 0.2s'
+                                                }}
+                                                placeholder="08:00 AM"
+                                            />
+                                            <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '1rem', top: 'calc(50% + 8px)', transform: 'translateY(-50%)', opacity: 0.6 }} />
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -507,12 +513,12 @@ const MenuConfig = ({ config, onChange }) => {
                     {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
                 {isSocialOpen && (
-                    <div style={{ padding: '2rem' }}>
+                    <div style={{ padding: '1rem' }}>
                         {socials.map((s, idx) => (
-                            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                                <div style={{ background: getSocialColor(s.id), padding: '0.5rem', borderRadius: '4px' }}>{getSocialIcon(s.id)}</div>
-                                <input type="text" value={s.url} placeholder={s.placeholder} onChange={(e) => handleSocialChange(idx, e.target.value)} style={{ flex: 1, padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
-                                <button onClick={() => handleRemoveSocial(idx)} style={{ color: '#ef4444' }}><X size={16} /></button>
+                            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+                                <div style={{ background: getSocialColor(s.id), padding: '0.5rem', borderRadius: '4px', flexShrink: 0 }}>{getSocialIcon(s.id)}</div>
+                                <input type="text" value={s.url} placeholder={s.placeholder} onChange={(e) => handleSocialChange(idx, e.target.value)} style={{ flex: '1 1 150px', padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
+                                <button onClick={() => handleRemoveSocial(idx)} style={{ color: '#ef4444', marginLeft: 'auto' }}><X size={16} /></button>
                             </div>
                         ))}
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem' }}>

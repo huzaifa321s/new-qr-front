@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Phone, MapPin, Clock, Globe, Instagram, Facebook, Twitter, X, Copy, Mail, Linkedin, MessageCircle, Wifi, Armchair, Accessibility, Calendar, User, Heart, Briefcase, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Video, PenTool, Github, Send, Headphones, Pin, Bot, ChevronRight, Users, Baby, PawPrint, Plug, ParkingCircle, Bus, Car, Bed, Coffee, Martini, Utensils, Download, File, Wine, Plane, Star, ThumbsUp, ThumbsDown, Frown, Meh, Smile, Laugh } from 'lucide-react';
+import { Phone, MapPin, Clock, Globe, Instagram, Facebook, Twitter, X, Copy, Mail, Linkedin, MessageCircle, Wifi, Armchair, Accessibility, Calendar, User, Heart, Briefcase, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Video, PenTool, Github, Send, Headphones, Pin, Bot, ChevronRight, Users, Baby, PawPrint, Plug, ParkingCircle, Bus, Car, Bed, Coffee, Martini, Utensils, Download, File, Wine, Plane, Star, ThumbsUp, ThumbsDown, Frown, Meh, Smile, Laugh, Share } from 'lucide-react';
 import { FaWhatsapp, FaDiscord, FaTwitch, FaSnapchat, FaTiktok, FaSpotify, FaPinterest, FaTelegram, FaReddit, FaBehance, FaTumblr } from 'react-icons/fa';
 import { SiKick } from 'react-icons/si';
 
@@ -141,21 +141,32 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
 
     const productImages = [
-        'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=300&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1481671703460-040cb8a2d909?w=300&h=300&fit=crop'
+        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=600&fit=crop'
     ];
+
+    const displayProductImages = (() => {
+        const bInfo = basicInfo || config?.basicInfo || {};
+        const imagesToFilter = bInfo.productImages || [];
+        const filtered = imagesToFilter
+            .filter(img => {
+                const url = typeof img === 'string' ? img : img?.url;
+                return url && url.length > 5 && !url.includes('res.cloudinary.com/date1bmhd');
+            })
+            .map(img => typeof img === 'string' ? img : img.url);
+        return filtered.length > 0 ? filtered : productImages;
+    })();
 
     const [productImageIndex, setProductImageIndex] = useState(0);
 
     useEffect(() => {
-        if (type !== 'product-page') return;
-        const count = (basicInfo?.productImages && basicInfo.productImages.length > 0) ? basicInfo.productImages.length : 3;
+        if (type !== 'product-page' || displayProductImages.length <= 1) return;
         const interval = setInterval(() => {
-            setProductImageIndex((prev) => (prev + 1) % count);
+            setProductImageIndex((prev) => (prev + 1) % displayProductImages.length);
         }, 3000);
         return () => clearInterval(interval);
-    }, [type, basicInfo?.productImages]);
+    }, [type, displayProductImages.length]);
 
     const [openAccordion, setOpenAccordion] = useState(null);
     const [feedbackText, setFeedbackText] = useState('');
@@ -235,15 +246,6 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     }, [type, displayImages.length]);
 
 
-    // Auto-slide product images
-    React.useEffect(() => {
-        if (type === 'product-page') {
-            const interval = setInterval(() => {
-                setProductImageIndex((prev) => (prev + 1) % productImages.length);
-            }, 3000);
-            return () => clearInterval(interval);
-        }
-    }, [type]);
 
     // Reset rating selection when type changes
     useEffect(() => {
@@ -5086,7 +5088,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
     if (type === 'event') {
         const primaryColor = design?.color?.header || '#0d9488';
-        const secondaryColor = design?.color?.light || '#0d9488';
+        const secondaryColor = design?.color?.light || '#FFC700';
         const isHeaderImageRemoved = design?.headerImage?.url === null || design?.headerImage?.url === '';
         const headerImageSource = isHeaderImageRemoved ? null : (design?.headerImage?.url || 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&h=150&fit=crop');
 
@@ -5325,7 +5327,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         {/* Yellow Divider */}
                         <div style={{
                             height: '4px',
-                            background: '#fbbf24',
+                            background: secondaryColor,
                             margin: '1.5rem 0',
                             borderRadius: '2px'
                         }}></div>
@@ -5363,7 +5365,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         {/* Yellow Divider */}
                         <div style={{
                             height: '4px',
-                            background: '#fbbf24',
+                            background: secondaryColor,
                             margin: '1.5rem 0',
                             borderRadius: '2px'
                         }}></div>
@@ -5476,6 +5478,46 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             })}
                         </div>
                     </div>
+
+                    {/* Action Buttons */}
+                    <div style={{ display: 'flex', gap: '0.75rem', padding: '1.5rem', justifyContent: 'center' }}>
+                        <button style={{
+                            flex: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.6rem',
+                            background: primaryColor,
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '50px',
+                            padding: '8px 12px',
+                            cursor: 'pointer'
+                        }}>
+                            <div style={{ background: '#fff', borderRadius: '50%', padding: '5px', display: 'flex' }}>
+                                <Calendar size={18} color={primaryColor} />
+                            </div>
+                            <span style={{ fontSize: '0.85rem', fontWeight: 'bold', textAlign: 'left', lineHeight: '1.1' }}>
+                                Add to<br />Calendar
+                            </span>
+                        </button>
+                        <button style={{
+                            flex: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.75rem',
+                            background: '#fff',
+                            color: '#1e293b',
+                            border: `2px solid ${primaryColor}`,
+                            borderRadius: '50px',
+                            padding: '8px 12px',
+                            cursor: 'pointer'
+                        }}>
+                            <div style={{ background: primaryColor, borderRadius: '50%', padding: '5px', display: 'flex' }}>
+                                <Share size={18} color="#fff" />
+                            </div>
+                            <span style={{ fontSize: '1rem', fontWeight: 'bold' }}>Share</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         );
@@ -5520,12 +5562,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                             return (
                                 <div style={{
-                                    background: '#000',
-                                    padding: '0.5rem 0.75rem',
-                                    borderRadius: '8px',
-                                    overflow: 'hidden'
+                                    display: 'flex',
+                                    alignItems: 'center'
                                 }}>
-                                    <img src={logoSource} alt="Logo" style={{ height: '24px', width: 'auto', objectFit: 'contain' }} />
+                                    <img src={logoSource} alt="Logo" style={{ height: '40px', width: 'auto', objectFit: 'contain' }} />
                                 </div>
                             );
                         })()}
@@ -5543,23 +5583,21 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     {/* Image Carousel */}
                     <div style={{
                         position: 'relative',
-                        height: '240px', // Increased height
-                        background: '#fff', // White background to show images clearly
+                        width: '100%',
+                        height: '240px',
+                        background: '#fff',
                         padding: '1.5rem',
                         zIndex: 1
                     }}>
                         <div style={{
                             position: 'relative',
+                            width: '100%',
                             height: '100%',
                             overflow: 'hidden',
                             borderRadius: '12px',
                             background: '#f8fafc'
                         }}>
-                            {(basicInfo?.productImages && basicInfo.productImages.length > 0 ? basicInfo.productImages : [
-                                { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743372/item-1_fr9qst.png' },
-                                { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-2_suygda.webp' },
-                                { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-3_ycglwq.webp' }
-                            ]).map((img, index) => {
+                            {displayProductImages.map((img, index) => {
                                 const imgSrc = typeof img === 'string' ? img : img?.url;
                                 return (
                                     <img
@@ -5572,11 +5610,12 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             left: 0,
                                             width: '100%',
                                             height: '100%',
-                                            objectFit: 'contain',
+                                            objectFit: 'cover',
                                             opacity: productImageIndex === index ? 1 : 0,
                                             transition: 'opacity 0.6s ease-in-out',
                                             zIndex: productImageIndex === index ? 2 : 1
                                         }}
+                                        onError={(e) => { e.target.style.display = 'none'; }}
                                     />
                                 );
                             })}
@@ -5591,11 +5630,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             gap: '0.6rem',
                             zIndex: 10
                         }}>
-                            {(basicInfo?.productImages && basicInfo.productImages.length > 0 ? basicInfo.productImages : [
-                                { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743372/item-1_fr9qst.png' },
-                                { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-2_suygda.webp' },
-                                { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-3_ycglwq.webp' }
-                            ]).map((_, index) => (
+                            {displayProductImages.map((_, index) => (
                                 <div
                                     key={index}
                                     style={{
@@ -5829,7 +5864,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             border: 'none',
                             borderRadius: '8px',
                             padding: '1rem',
-                            color: feedback?.textColor || '#fff',
+                            color: feedback?.textColor || '#ffffff',
                             fontWeight: '600',
                             fontSize: '1rem',
                             cursor: 'pointer',
@@ -5911,66 +5946,58 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 )}
                             </div>
 
-                            {/* Social Media */}
-                            {contact?.socials && contact.socials.length > 0 && (
-                                <div style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    gap: '1rem',
-                                    marginTop: '1.5rem',
-                                    flexWrap: 'wrap'
-                                }}>
-                                    {contact.socials.map((social, idx) => {
-                                        const iconObj = socialIconsMap.find(i => i.id === social.platform);
-                                        if (!iconObj) return null;
-                                        return (
-                                            <a
-                                                key={idx}
-                                                href={social.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                style={{
-                                                    width: '48px',
-                                                    height: '48px',
-                                                    borderRadius: '50%',
-                                                    background: '#fff',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
-                                                }}
-                                            >
-                                                {typeof iconObj.icon === 'string' ? (
-                                                    <img
-                                                        src={iconObj.icon}
-                                                        alt={iconObj.name}
-                                                        style={{
-                                                            width: '24px',
-                                                            height: '24px',
-                                                            objectFit: 'contain',
-                                                            // Since the background is white (#fff), we don't invert the colored icons from Flaticon
-                                                            // unless it's a specific requirement.
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    React.cloneElement(iconObj.icon, { color: iconObj.color, size: 24 })
-                                                )}
-                                            </a>
-                                        );
-                                    })}
-                                </div>
-                            )}
                         </div>
                     </div>
 
+                    {/* Social Media Outside Contact */}
+                    {contact?.socials && contact.socials.length > 0 && (
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            gap: '1.25rem',
+                            padding: '0.5rem 1.5rem 1.5rem',
+                            flexWrap: 'wrap'
+                        }}>
+                            {contact.socials.map((social, idx) => {
+                                const iconObj = socialIconsMap.find(i => i.id === social.platform);
+                                if (!iconObj) return null;
+                                return (
+                                    <a
+                                        key={idx}
+                                        href={social.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            transition: 'transform 0.2s'
+                                        }}
+                                    >
+                                        {typeof iconObj.icon === 'string' ? (
+                                            <img
+                                                src={iconObj.icon}
+                                                alt={iconObj.name}
+                                                style={{
+                                                    width: '32px',
+                                                    height: '32px',
+                                                    objectFit: 'contain'
+                                                }}
+                                            />
+                                        ) : (
+                                            React.cloneElement(iconObj.icon, { color: iconObj.color, size: 32 })
+                                        )}
+                                    </a>
+                                );
+                            })}
+                        </div>
+                    )}
+
                     {/* See Product Rating Footer */}
                     <div style={{
-                        background: primaryColor,
-                        borderTop: `14px solid ${secondaryColor}`,
+                        background: secondaryColor,
                         padding: '1.25rem',
                         textAlign: 'center',
-                        borderBottomLeftRadius: isLiveView ? '0' : '30px',
-                        borderBottomRightRadius: isLiveView ? '0' : '30px',
                         marginTop: 'auto'
                     }}>
                         <a

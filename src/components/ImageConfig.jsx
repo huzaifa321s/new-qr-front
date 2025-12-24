@@ -64,7 +64,7 @@ const ImageConfig = ({ config, onChange }) => {
                 </div>
 
                 {isImagesOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         <div style={{ marginBottom: '1rem' }}>
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.75rem', textTransform: 'uppercase' }}>

@@ -159,10 +159,10 @@ const CouponConfig = ({ config, onChange }) => {
     ];
 
     const logoOptions = [
-        { id: 'logo1', url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix' },
-        { id: 'logo2', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Food' },
-        { id: 'logo3', url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka' },
-        { id: 'logo4', url: 'https://img.freepik.com/premium-vector/luxury-letter-b-logo-design_101354-756.jpg' }
+        { id: 'logo1', url: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=150&h=150&fit=crop' },
+        { id: 'logo2', url: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=150&h=150&fit=crop' },
+        { id: 'logo3', url: 'https://images.unsplash.com/photo-1611944212129-29977ae1398c?w=150&h=150&fit=crop' },
+        { id: 'logo4', url: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=150&h=150&fit=crop' }
     ];
 
     return (
@@ -193,7 +193,7 @@ const CouponConfig = ({ config, onChange }) => {
             >
                 {/* BACKGROUND IMAGE SECTION - Passed as Children */}
                 <div style={{ marginBottom: '2rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                         <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
                             BACKGROUND IMAGE
                         </span>
@@ -348,7 +348,7 @@ const CouponConfig = ({ config, onChange }) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '2rem'
+                    padding: '1rem'
                 }} onClick={() => setIsModalOpen(false)}>
                     <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={e => e.stopPropagation()}>
                         <img src={coupon.image} alt="Background Preview" style={{ maxWidth: '100%', maxHeight: '90vh', borderRadius: '8px' }} />
@@ -356,8 +356,8 @@ const CouponConfig = ({ config, onChange }) => {
                             onClick={() => setIsModalOpen(false)}
                             style={{
                                 position: 'absolute',
-                                top: '-40px',
-                                right: '-40px',
+                                top: '10px',
+                                right: '10px',
                                 background: 'white',
                                 border: 'none',
                                 borderRadius: '50%',
@@ -380,7 +380,7 @@ const CouponConfig = ({ config, onChange }) => {
                 <div
                     onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
                     style={{
-                        padding: '1.5rem',
+                        padding: '1rem',
                         background: '#f8fafc',
                         display: 'flex',
                         alignItems: 'center',
@@ -396,12 +396,11 @@ const CouponConfig = ({ config, onChange }) => {
                 </div>
 
                 {isBasicInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
-                        {/* COMPANY NAME */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.5rem' }}>
-                                <div>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                <div style={{ flex: '2 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         COMPANY NAME*
                                     </label>
@@ -421,7 +420,7 @@ const CouponConfig = ({ config, onChange }) => {
                                     />
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -476,7 +475,7 @@ const CouponConfig = ({ config, onChange }) => {
                                     </div>
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -507,10 +506,9 @@ const CouponConfig = ({ config, onChange }) => {
                             </div>
                         </div>
 
-                        {/* HEADLINE */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.5rem' }}>
-                                <div>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                <div style={{ flex: '2 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         HEADLINE*
                                     </label>
@@ -530,7 +528,7 @@ const CouponConfig = ({ config, onChange }) => {
                                     />
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -585,7 +583,7 @@ const CouponConfig = ({ config, onChange }) => {
                                     </div>
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -648,7 +646,7 @@ const CouponConfig = ({ config, onChange }) => {
                 <div
                     onClick={() => setIsCouponOpen(!isCouponOpen)}
                     style={{
-                        padding: '1.5rem',
+                        padding: '1rem',
                         background: '#f8fafc',
                         display: 'flex',
                         alignItems: 'center',
@@ -664,7 +662,7 @@ const CouponConfig = ({ config, onChange }) => {
                 </div>
 
                 {isCouponOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* COUPON CODE */}
                         <div style={{ marginBottom: '2rem' }}>

@@ -265,12 +265,12 @@ const BusinessCardConfig = ({ config, onChange }) => {
                 </div>
 
                 {isBasicInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* NAME */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.5rem' }}>
-                                <div>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                <div style={{ flex: '2 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         NAME*
                                     </label>
@@ -290,7 +290,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     />
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -345,7 +345,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     </div>
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -401,10 +401,9 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             />
                         </div>
 
-                        {/* JOB TITLE */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.5rem' }}>
-                                <div>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                <div style={{ flex: '2 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         JOB TITLE
                                     </label>
@@ -424,7 +423,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     />
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -479,7 +478,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     </div>
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -512,10 +511,9 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             </div>
                         </div>
 
-                        {/* COMPANY NAME */}
                         <div style={{ marginBottom: '0' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.5rem' }}>
-                                <div>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                <div style={{ flex: '2 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         COMPANY NAME
                                     </label>
@@ -535,7 +533,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     />
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -590,7 +588,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     </div>
                                 </div>
 
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -648,12 +646,12 @@ const BusinessCardConfig = ({ config, onChange }) => {
                 </div>
 
                 {isContactOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* PHONE */}
                         <div style={{ marginBottom: '1.5rem' }}>
                             {contact.phone ? (
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                     <div style={{
                                         width: '48px',
                                         height: '48px',
@@ -726,7 +724,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                         {/* EMAIL */}
                         <div style={{ marginBottom: '1.5rem' }}>
                             {contact.email ? (
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                     <div style={{
                                         width: '48px',
                                         height: '48px',
@@ -799,7 +797,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                         {/* WEBSITE */}
                         <div style={{ marginBottom: '1.5rem' }}>
                             {contact.website ? (
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                     <div style={{
                                         width: '48px',
                                         height: '48px',
@@ -872,7 +870,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                         {/* ADDRESS */}
                         <div style={{ marginBottom: '0' }}>
                             {contact.address ? (
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                     <input
                                         type="text"
                                         value={contact.address || ''}
@@ -955,13 +953,13 @@ const BusinessCardConfig = ({ config, onChange }) => {
                 </div>
 
                 {isSocialOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
-                        {/* Grid for social media inputs */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                        {/* Flex for social media inputs */}
+                        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
 
                             {social.website && (
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Website*
                                     </label>
@@ -1012,7 +1010,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             )}
 
                             {social.whatsapp && (
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Whatsapp*
                                     </label>
@@ -1063,7 +1061,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             )}
 
                             {social.facebook && (
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Facebook*
                                     </label>
@@ -1114,7 +1112,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             )}
 
                             {social.linkedin && (
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Linkedin*
                                     </label>
@@ -1165,7 +1163,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             )}
 
                             {social.tiktok && (
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Tiktok*
                                     </label>
@@ -1216,7 +1214,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             )}
 
                             {social.instagram && (
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Instagram*
                                     </label>
@@ -1267,7 +1265,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             )}
 
                             {social.twitter && (
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Twitter (X)*
                                     </label>
@@ -1318,7 +1316,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             )}
 
                             {social.discord && (
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Discord*
                                     </label>
@@ -1369,7 +1367,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             )}
 
                             {social.youtube && (
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         YouTube*
                                     </label>
@@ -1420,7 +1418,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             )}
 
                             {social.twitch && (
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Twitch*
                                     </label>
@@ -1471,7 +1469,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             )}
 
                             {social.line && (
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Line*
                                     </label>
@@ -1522,7 +1520,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             )}
 
                             {social.snapchat && (
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Snapchat*
                                     </label>
@@ -1573,7 +1571,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                             )}
 
                             {social.tumblr && (
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Tumblr*
                                     </label>
@@ -2000,7 +1998,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                 </div>
 
                 {isExchangeOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* Full Name */}
                         <div style={{ marginBottom: '1rem' }}>
@@ -2250,7 +2248,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                         <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                                             {field.type === 'options' ? 'Option' : 'Radio'} {optIndex + 1}
                                                         </label>
-                                                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                                             <input
                                                                 type="text"
                                                                 value={option}

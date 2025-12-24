@@ -64,7 +64,7 @@ const VideoConfig = ({ config, onChange }) => {
                 </div>
 
                 {isInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* Video Title */}
                         <div style={{ marginBottom: '1.5rem' }}>

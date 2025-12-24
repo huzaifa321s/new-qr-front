@@ -433,31 +433,33 @@ const ReviewsConfig = ({ config, onChange }) => {
                 </div>
 
                 {isBasicInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* ORGANIZATION NAME FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 ORGANIZATION NAME*
                             </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 {/* Organization Name Input */}
-                                <input
-                                    type="text"
-                                    value={basicInfo.organizationName || 'LUXURY HOTELS'}
-                                    onChange={(e) => handleBasicInfoUpdate('organizationName', e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
+                                <div style={{ flex: '2 1 200px' }}>
+                                    <input
+                                        type="text"
+                                        value={basicInfo.organizationName || 'LUXURY HOTELS'}
+                                        onChange={(e) => handleBasicInfoUpdate('organizationName', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                </div>
 
                                 {/* Text Color */}
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -502,7 +504,7 @@ const ReviewsConfig = ({ config, onChange }) => {
                                 </div>
 
                                 {/* Font */}
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -517,7 +519,8 @@ const ReviewsConfig = ({ config, onChange }) => {
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff'
+                                            background: '#fff',
+                                            height: '44px'
                                         }}
                                     >
                                         <option value="Lato">Lato</option>
@@ -534,24 +537,26 @@ const ReviewsConfig = ({ config, onChange }) => {
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 TITLE*
                             </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 {/* Title Input */}
-                                <input
-                                    type="text"
-                                    value={basicInfo.title || 'Give us your feedback'}
-                                    onChange={(e) => handleBasicInfoUpdate('title', e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
+                                <div style={{ flex: '2 1 200px' }}>
+                                    <input
+                                        type="text"
+                                        value={basicInfo.title || 'Give us your feedback'}
+                                        onChange={(e) => handleBasicInfoUpdate('title', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                </div>
 
                                 {/* Text Color */}
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -596,7 +601,7 @@ const ReviewsConfig = ({ config, onChange }) => {
                                 </div>
 
                                 {/* Font */}
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -611,7 +616,8 @@ const ReviewsConfig = ({ config, onChange }) => {
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff'
+                                            background: '#fff',
+                                            height: '44px'
                                         }}
                                     >
                                         <option value="Lato">Lato</option>
@@ -690,7 +696,7 @@ const ReviewsConfig = ({ config, onChange }) => {
                 </div>
 
                 {isCategoryOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* Categories List */}
                         {categories.map((category, categoryIndex) => (
@@ -701,7 +707,7 @@ const ReviewsConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         CATEGORY NAME*
                                     </label>
-                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                         <input
                                             type="text"
                                             value={category.name || ''}
@@ -748,7 +754,7 @@ const ReviewsConfig = ({ config, onChange }) => {
                                         </label>
 
                                         {category.subcategories.map((subcategory, subIndex) => (
-                                            <div key={subIndex} style={{ marginBottom: '0.75rem', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                            <div key={subIndex} style={{ marginBottom: '0.75rem', display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                                 <input
                                                     type="text"
                                                     value={subcategory || ''}
@@ -861,15 +867,15 @@ const ReviewsConfig = ({ config, onChange }) => {
                 </div>
 
                 {isSocialOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
-                        {/* Social Media Input Fields - 2 Column Grid */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                        {/* Social Media Input Fields */}
+                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
                             {Object.keys(social).map((platformId) => {
                                 const platform = socialIconsMap.find(p => p.id === platformId);
                                 if (!platform) return null;
                                 return (
-                                    <div key={platformId}>
+                                    <div key={platformId} style={{ flex: '1 1 200px' }}>
                                         <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                             {platform.name}*
                                         </label>
@@ -937,7 +943,7 @@ const ReviewsConfig = ({ config, onChange }) => {
                             </div>
 
                             {/* Social Media Icons Grid */}
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(50px, 1fr))', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                                 {socialIconsMap.map((platform) => {
                                     const isSelected = social[platform.id] !== undefined;
                                     return (

@@ -56,7 +56,7 @@ export const couponPreviewConfig = {
     type: 'coupon',
     design: {
         color: { dark: '#7c3aed', light: '#ffffff' }, // Violet/Purple
-        logo: { url: 'https://img.freepik.com/premium-vector/luxury-letter-b-logo-design_101354-756.jpg' } // Boutique logo placeholder
+        logo: { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1735027374/uploaded_image_1766558174126_zyqvhx.png' } // Boutique logo placeholder
     },
     businessInfo: {
         title: "ABC Boutique"
@@ -368,9 +368,9 @@ export const productPagePreviewConfig = {
         price: '95',
         currency: '₨',
         productImages: [
-            { id: 'def-1', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743372/item-1_fr9qst.png' },
-            { id: 'def-2', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-2_suygda.webp' },
-            { id: 'def-3', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-3_ycglwq.webp' }
+            { id: 'def-1', url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop' },
+            { id: 'def-2', url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=600&fit=crop' },
+            { id: 'def-3', url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=600&fit=crop' }
         ]
     },
     content: {
@@ -392,7 +392,7 @@ export const productPagePreviewConfig = {
     feedback: {
         title: 'Add Your Feedback',
         ratingUrl: 'https://www.dairylandltd.com/floveredmilk/rating',
-        textColor: '#000000',
+        textColor: '#FFFFFF',
         font: 'Lato'
     },
     design: {

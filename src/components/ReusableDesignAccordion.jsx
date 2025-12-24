@@ -140,7 +140,7 @@ const ReusableDesignAccordion = ({
             </div>
 
             {isOpen && (
-                <div style={{ padding: '2rem', background: '#fff' }}>
+                <div style={{ padding: '1rem', background: '#fff' }}>
 
                     {showColors && (
                         <div style={{ marginBottom: showLogo || children ? '2rem' : '0' }}>
@@ -149,7 +149,7 @@ const ReusableDesignAccordion = ({
                             </label>
 
                             {/* Color Palettes */}
-                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
                                 {palettes.map((palette, idx) => (
                                     <div
                                         key={idx}
@@ -197,9 +197,9 @@ const ReusableDesignAccordion = ({
                             }}></div>
 
                             {/* Primary and Secondary Color Inputs */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '1.5rem', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                 {/* Primary Color */}
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Primary Color
                                     </label>
@@ -258,7 +258,8 @@ const ReusableDesignAccordion = ({
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    paddingTop: '1.2rem'
+                                    paddingTop: '1.2rem',
+                                    flexShrink: 0
                                 }}>
                                     <div
                                         onClick={() => handleColorPaletteClick(secondaryColor, primaryColor)}
@@ -276,7 +277,7 @@ const ReusableDesignAccordion = ({
                                 </div>
 
                                 {/* Secondary Color */}
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Secondary Color
                                     </label>
@@ -336,7 +337,7 @@ const ReusableDesignAccordion = ({
 
                     {showLogo && (
                         <div style={{ marginBottom: children ? '2rem' : '0' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                                 <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
                                     {logoLabel}
                                 </span>
@@ -345,7 +346,7 @@ const ReusableDesignAccordion = ({
                                 </span>
                             </div>
 
-                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', overflowX: 'auto', paddingBottom: '0.5rem', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', paddingBottom: '0.5rem' }}>
                                 {/* Remove/Clear Option */}
                                 <div
                                     onClick={() => {
@@ -571,8 +572,8 @@ const ReusableDesignAccordion = ({
                             onClick={() => setIsModalOpen(false)}
                             style={{
                                 position: 'absolute',
-                                top: '-40px',
-                                right: '-40px',
+                                top: '10px',
+                                right: '10px',
                                 background: 'white',
                                 border: 'none',
                                 borderRadius: '50%',

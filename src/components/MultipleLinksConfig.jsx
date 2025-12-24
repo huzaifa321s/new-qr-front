@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Plus, Facebook, Instagram, Twitter, Linkedin, Github, Youtube, Globe, Mail } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const MultipleLinksConfig = ({ config, onChange }) => {
@@ -8,6 +8,13 @@ const MultipleLinksConfig = ({ config, onChange }) => {
 
     const [isLinksOpen, setIsLinksOpen] = useState(false);
     const [isSocialOpen, setIsSocialOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const design = config.design || {};
     const basicInfo = config.basicInfo || {};
@@ -174,14 +181,14 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                 </div>
 
                 {isBasicInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: isMobile ? '1rem' : '2rem', background: '#fff' }}>
 
                         {/* HEADLINE FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 HEADLINE*
                             </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr 1fr', gap: '1rem' }}>
                                 {/* Headline Input */}
                                 <input
                                     type="text"
@@ -328,10 +335,10 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                 </div>
 
                 {isLinksOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: isMobile ? '1rem' : '2rem', background: '#fff' }}>
 
                         {links.map((link) => (
-                            <div key={link.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem', alignItems: 'end' }}>
+                            <div key={link.id} style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem', alignItems: 'end' }}>
                                 {/* URL Input */}
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
@@ -441,10 +448,10 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                 </div>
 
                 {isSocialOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: isMobile ? '1rem' : '2rem', background: '#fff' }}>
 
                         {/* Selected Social Channels */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: socialLinks.length > 0 ? '2.5rem' : '0' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '1rem' : '2rem', marginBottom: socialLinks.length > 0 ? '2.5rem' : '0' }}>
                             {socialLinks.map((link) => {
                                 const platform = socialPlatforms.find(p => p.id === link.platform) || socialPlatforms[0];
                                 const Icon = platform.icon;

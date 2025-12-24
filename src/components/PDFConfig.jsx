@@ -181,31 +181,32 @@ const PDFConfig = ({ config, onChange }) => {
                 </div>
 
                 {isBasicInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
-                        {/* COMPANY NAME FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 COMPANY NAME*
                             </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 {/* Company Name Input */}
-                                <input
-                                    type="text"
-                                    value={basicInfo.companyName || 'Software Company'}
-                                    onChange={(e) => handleBasicInfoUpdate('companyName', e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
+                                <div style={{ flex: '2 1 200px' }}>
+                                    <input
+                                        type="text"
+                                        value={basicInfo.companyName || 'Software Company'}
+                                        onChange={(e) => handleBasicInfoUpdate('companyName', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                </div>
 
                                 {/* Text Color */}
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -261,7 +262,7 @@ const PDFConfig = ({ config, onChange }) => {
                                 </div>
 
                                 {/* Font */}
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -276,7 +277,8 @@ const PDFConfig = ({ config, onChange }) => {
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff'
+                                            background: '#fff',
+                                            height: '44px'
                                         }}
                                     >
                                         <option value="Lato">Lato</option>
@@ -288,29 +290,30 @@ const PDFConfig = ({ config, onChange }) => {
                             </div>
                         </div>
 
-                        {/* PDF TITLE FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 PDF TITLE*
                             </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 {/* PDF Title Input */}
-                                <input
-                                    type="text"
-                                    value={basicInfo.pdfTitle || 'See Our Company Profile'}
-                                    onChange={(e) => handleBasicInfoUpdate('pdfTitle', e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
+                                <div style={{ flex: '2 1 200px' }}>
+                                    <input
+                                        type="text"
+                                        value={basicInfo.pdfTitle || 'See Our Company Profile'}
+                                        onChange={(e) => handleBasicInfoUpdate('pdfTitle', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                </div>
 
                                 {/* Text Color */}
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -366,7 +369,7 @@ const PDFConfig = ({ config, onChange }) => {
                                 </div>
 
                                 {/* Font */}
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -381,7 +384,8 @@ const PDFConfig = ({ config, onChange }) => {
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff'
+                                            background: '#fff',
+                                            height: '44px'
                                         }}
                                     >
                                         <option value="Lato">Lato</option>
@@ -440,7 +444,7 @@ const PDFConfig = ({ config, onChange }) => {
                 </div>
 
                 {isUploadPdfOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* PDF TITLE */}
                         <div style={{ marginBottom: '2rem' }}>

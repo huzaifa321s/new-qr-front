@@ -4,7 +4,7 @@ import axios from 'axios';
 import {
     Plus, Search, Download, Edit, Trash2, BarChart, ChevronDown,
     MoreVertical, Link, Copy, Globe, Calendar, Star, Folder, AlertTriangle, Check, X,
-    Image as ImageIcon, FileText, PenTool, ChevronLeft, ChevronRight
+    Image as ImageIcon, FileText, PenTool, ChevronLeft, ChevronRight, Menu, Sliders
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import QRRenderer from '../components/QRRenderer';
@@ -97,6 +97,16 @@ const Dashboard = () => {
     const [pageLimit, setPageLimit] = useState(20);
     const [totalPages, setTotalPages] = useState(1);
     const [totalQRs, setTotalQRs] = useState(0);
+
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const baseUrl = window.location.origin;
 
@@ -528,10 +538,50 @@ const Dashboard = () => {
             <Toaster position="top-right" />
 
             {/* Sidebar */}
-            <Sidebar />
+            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
             {/* Main Content */}
-            <div style={{ flex: 1, padding: '1.5rem 2rem', overflowY: 'auto' }}>
+            <div style={{
+                flex: 1,
+                padding: isMobile ? '1rem' : '1.5rem 2rem',
+                overflowY: 'auto',
+                marginLeft: (isMobile || !isSidebarOpen) ? 0 : '0' // Adjusted by Sidebar sticky/fixed
+            }}>
+
+                {/* Mobile Header */}
+                {isMobile && (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '1rem 0',
+                        marginBottom: '1.5rem',
+                        borderBottom: '1px solid #e5e5e5'
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <div style={{
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '6px',
+                                background: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: '#fff',
+                                fontWeight: 'bold'
+                            }}>
+                                Q
+                            </div>
+                            <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>Dashboard</span>
+                        </div>
+                        <button
+                            onClick={() => setIsSidebarOpen(true)}
+                            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                        >
+                            <Menu size={24} color="#000" />
+                        </button>
+                    </div>
+                )}
 
                 {/* STATISTICS VIEW (Refactored to /statistics/:id) */}
                 {false ? (
@@ -1074,130 +1124,189 @@ const Dashboard = () => {
                                     background: '#7c3aed',
                                     color: '#ffffff',
                                     border: 'none',
-                                    padding: '0.625rem 1.25rem',
-                                    borderRadius: '6px',
+                                    padding: isMobile ? '0.5rem' : '0.625rem 1.25rem',
+                                    borderRadius: isMobile ? '50%' : '6px',
                                     fontWeight: '600',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
+                                    justifyContent: 'center',
                                     gap: '0.5rem',
-                                    fontSize: '0.875rem'
+                                    fontSize: '0.875rem',
+                                    position: isMobile ? 'fixed' : 'static',
+                                    bottom: isMobile ? '2rem' : 'auto',
+                                    right: isMobile ? '1.5rem' : 'auto',
+                                    zIndex: 100,
+                                    boxShadow: isMobile ? '0 4px 12px rgba(124, 58, 237, 0.5)' : 'none'
                                 }}
                             >
-                                <Plus size={16} /> CREATE NEW QR
+                                <Plus size={isMobile ? 24 : 16} />
+                                {!isMobile && "CREATE NEW QR"}
                             </button>
                         </div>
 
-                        {/* Filters Row */}
-                        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                            <div style={{ position: 'relative' }}>
-                                <select
-                                    value={selectedTypeFilter}
-                                    onChange={(e) => setSelectedTypeFilter(e.target.value)}
+                        {/* Search Bar - Full width on Mobile */}
+                        {isMobile && (
+                            <div style={{ position: 'relative', width: '100%', marginBottom: '1rem' }}>
+                                <Search size={16} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#999' }} />
+                                <input
+                                    type="text"
+                                    placeholder="Search"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
                                     style={{
-                                        padding: '0.5rem 2rem 0.5rem 0.75rem',
-                                        border: '1px solid #ddd',
-                                        borderRadius: '6px',
+                                        width: '100%',
+                                        padding: '0.6rem 0.75rem 0.6rem 2.25rem',
+                                        border: '1px solid #7c3aed',
+                                        borderRadius: '50px',
                                         fontSize: '0.875rem',
-                                        color: '#666',
-                                        background: '#fff',
-                                        cursor: 'pointer',
-                                        appearance: 'none',
-                                        minWidth: '150px'
+                                        outline: 'none',
+                                        background: '#fff'
                                     }}
-                                >
-                                    <option value="All types">All types</option>
-                                    {qrTypes.map(type => (
-                                        <option key={type.value} value={type.value}>{type.label}</option>
-                                    ))}
-                                </select>
-                                <ChevronDown size={14} style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', color: '#666', pointerEvents: 'none' }} />
-                            </div>
-
-                            <div style={{ position: 'relative' }}>
-                                <select
-                                    value={sortOption}
-                                    onChange={(e) => setSortOption(e.target.value)}
-                                    style={{
-                                        padding: '0.5rem 2rem 0.5rem 0.75rem',
-                                        border: '1px solid #ddd',
-                                        borderRadius: '6px',
-                                        fontSize: '0.875rem',
-                                        color: '#666',
-                                        background: '#fff',
-                                        cursor: 'pointer',
-                                        appearance: 'none',
-                                        minWidth: '140px'
-                                    }}
-                                >
-                                    <option value="Last Created">Last Created</option>
-                                    <option value="First Created">First Created</option>
-                                    <option value="Most Scanned">Most Scanned</option>
-                                    <option value="Last 30 Days">Last 30 Days</option>
-                                    <option value="Lifetime">Lifetime</option>
-                                </select>
-                                <ChevronDown size={14} style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', color: '#666', pointerEvents: 'none' }} />
-                            </div>
-
-                            <div style={{ position: 'relative', zIndex: 10 }}>
-                                <DatePicker
-                                    selected={startDate}
-                                    onChange={(dates) => {
-                                        const [start, end] = dates;
-                                        setStartDate(start);
-                                        setEndDate(end);
-                                    }}
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    selectsRange
-                                    customInput={<DateCustomInput startDate={startDate} endDate={endDate} />}
                                 />
                             </div>
+                        )}
 
-                            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <button
-                                    onClick={() => {
-                                        setSearchTerm('');
-                                        setActiveTab('All');
-                                        setSortOption('Last Created');
-                                        setSelectedTypeFilter('All types');
-                                        setStartDate(null);
-                                        setEndDate(null);
-                                        toast.success('All filters cleared');
-                                    }}
-                                    style={{
-                                        background: 'transparent',
-                                        border: 'none',
-                                        color: '#7c3aed',
-                                        fontSize: '0.875rem',
-                                        cursor: 'pointer',
-                                        fontWeight: '500'
-                                    }}
-                                >
-                                    Clear Filters
-                                </button>
-                                <div style={{ position: 'relative', width: '220px' }}>
-                                    <Search size={16} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#999' }} />
-                                    <input
-                                        type="text"
-                                        placeholder="Search"
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
+                        {/* Filters Row - Replaced by icon on Mobile */}
+                        {!isMobile ? (
+                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                <div style={{ position: 'relative' }}>
+                                    <select
+                                        value={selectedTypeFilter}
+                                        onChange={(e) => setSelectedTypeFilter(e.target.value)}
                                         style={{
-                                            width: '100%',
-                                            padding: '0.5rem 0.75rem 0.5rem 2.25rem',
+                                            padding: '0.5rem 2rem 0.5rem 0.75rem',
                                             border: '1px solid #ddd',
                                             borderRadius: '6px',
                                             fontSize: '0.875rem',
-                                            outline: 'none'
+                                            color: '#666',
+                                            background: '#fff',
+                                            cursor: 'pointer',
+                                            appearance: 'none',
+                                            minWidth: '150px'
                                         }}
+                                    >
+                                        <option value="All types">All types</option>
+                                        {qrTypes.map(type => (
+                                            <option key={type.value} value={type.value}>{type.label}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown size={14} style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', color: '#666', pointerEvents: 'none' }} />
+                                </div>
+
+                                <div style={{ position: 'relative' }}>
+                                    <select
+                                        value={sortOption}
+                                        onChange={(e) => setSortOption(e.target.value)}
+                                        style={{
+                                            padding: '0.5rem 2rem 0.5rem 0.75rem',
+                                            border: '1px solid #ddd',
+                                            borderRadius: '6px',
+                                            fontSize: '0.875rem',
+                                            color: '#666',
+                                            background: '#fff',
+                                            cursor: 'pointer',
+                                            appearance: 'none',
+                                            minWidth: '140px'
+                                        }}
+                                    >
+                                        <option value="Last Created">Last Created</option>
+                                        <option value="First Created">First Created</option>
+                                        <option value="Most Scanned">Most Scanned</option>
+                                        <option value="Last 30 Days">Last 30 Days</option>
+                                        <option value="Lifetime">Lifetime</option>
+                                    </select>
+                                    <ChevronDown size={14} style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', color: '#666', pointerEvents: 'none' }} />
+                                </div>
+
+                                <div style={{ position: 'relative', zIndex: 10 }}>
+                                    <DatePicker
+                                        selected={startDate}
+                                        onChange={(dates) => {
+                                            const [start, end] = dates;
+                                            setStartDate(start);
+                                            setEndDate(end);
+                                        }}
+                                        startDate={startDate}
+                                        endDate={endDate}
+                                        selectsRange
+                                        customInput={<DateCustomInput startDate={startDate} endDate={endDate} />}
                                     />
                                 </div>
-                            </div>
-                        </div>
 
-                        {/* Pagination Controls */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', padding: '1rem', background: '#f9fafb', borderRadius: '8px' }}>
+                                <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                    <button
+                                        onClick={() => {
+                                            setSearchTerm('');
+                                            setActiveTab('All');
+                                            setSortOption('Last Created');
+                                            setSelectedTypeFilter('All types');
+                                            setStartDate(null);
+                                            setEndDate(null);
+                                            toast.success('All filters cleared');
+                                        }}
+                                        style={{
+                                            background: 'transparent',
+                                            border: 'none',
+                                            color: '#7c3aed',
+                                            fontSize: '0.875rem',
+                                            cursor: 'pointer',
+                                            fontWeight: '500'
+                                        }}
+                                    >
+                                        Clear Filters
+                                    </button>
+                                    <div style={{ position: 'relative', width: '220px' }}>
+                                        <Search size={16} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#999' }} />
+                                        <input
+                                            type="text"
+                                            placeholder="Search"
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.5rem 0.75rem 0.5rem 2.25rem',
+                                                border: '1px solid #ddd',
+                                                borderRadius: '6px',
+                                                fontSize: '0.875rem',
+                                                outline: 'none'
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                <button
+                                    onClick={() => setIsFilterDrawerOpen(true)}
+                                    style={{
+                                        background: '#fff',
+                                        border: '1px solid #e5e5e5',
+                                        borderRadius: '6px',
+                                        padding: '0.5rem',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    <Sliders size={20} color="#666" />
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Pagination Controls - Stack on Mobile */}
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: isMobile ? 'column' : 'row',
+                            justifyContent: 'space-between',
+                            alignItems: isMobile ? 'flex-start' : 'center',
+                            marginBottom: '1.5rem',
+                            padding: '1rem',
+                            background: '#f9fafb',
+                            borderRadius: '8px',
+                            gap: '1rem'
+                        }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                 <span style={{ fontSize: '0.875rem', color: '#666' }}>Show:</span>
                                 <select
@@ -1221,11 +1330,8 @@ const Dashboard = () => {
                                 </select>
                                 <span style={{ fontSize: '0.875rem', color: '#666' }}>per page</span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <span style={{ fontSize: '0.875rem', color: '#666' }}>
-                                    Page {currentPage} of {totalPages} ({totalQRs} total)
-                                </span>
-                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', width: isMobile ? '100%' : 'auto', justifyContent: 'space-between' }}>
+                                <div style={{ display: 'flex', gap: '0.5rem', order: isMobile ? 2 : 1 }}>
                                     <button
                                         onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                                         disabled={currentPage === 1}
@@ -1238,8 +1344,11 @@ const Dashboard = () => {
                                             fontSize: '0.875rem'
                                         }}
                                     >
-                                        Previous
+                                        <ChevronLeft size={16} />
                                     </button>
+                                    <div style={{ fontSize: '0.875rem', color: '#666', display: 'flex', alignItems: 'center', px: '0.5rem' }}>
+                                        {currentPage} / {totalPages}
+                                    </div>
                                     <button
                                         onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                                         disabled={currentPage === totalPages}
@@ -1252,9 +1361,12 @@ const Dashboard = () => {
                                             fontSize: '0.875rem'
                                         }}
                                     >
-                                        Next
+                                        <ChevronRight size={16} />
                                     </button>
                                 </div>
+                                <span style={{ fontSize: '0.875rem', color: '#666', order: isMobile ? 1 : 2 }}>
+                                    {totalQRs} total
+                                </span>
                             </div>
                         </div>
 
@@ -1305,124 +1417,131 @@ const Dashboard = () => {
                         ) : filteredQrs.length === 0 ? (
                             <div style={{ textAlign: 'center', padding: '4rem', color: '#999' }}>No QR codes yet.</div>
                         ) : (
-                            <>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                    {filteredQrs.map((qr, index) => {
-                                        const isMenuOpen = activeMenuId === qr._id;
-                                        const expiryDate = new Date(qr.createdAt);
-                                        expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                {filteredQrs.map((qr, index) => {
+                                    const isMenuOpen = activeMenuId === qr._id;
+                                    const expiryDate = new Date(qr.createdAt);
+                                    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
 
-                                        return (
-                                            <div
-                                                key={qr._id}
-                                                style={{
-                                                    position: 'relative',
-                                                    background: '#ffffff',
+                                    return (
+                                        <div
+                                            key={qr._id}
+                                            style={{
+                                                position: 'relative',
+                                                background: '#ffffff',
+                                                border: '1px solid #e5e5e5',
+                                                borderRadius: '8px',
+                                                padding: '1.25rem 1.5rem',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '2rem'
+                                            }}
+                                        >
+                                            {/* QR Code + Info */}
+                                            <div style={{
+                                                display: 'flex',
+                                                gap: '1rem',
+                                                alignItems: 'center',
+                                                minWidth: isMobile ? 'none' : '280px',
+                                                width: isMobile ? '100%' : 'auto'
+                                            }}>
+                                                <div style={{
+                                                    width: '70px',
+                                                    height: '70px',
+                                                    background: '#fff',
+                                                    padding: '6px',
                                                     border: '1px solid #e5e5e5',
-                                                    borderRadius: '8px',
-                                                    padding: '1.25rem 1.5rem',
+                                                    borderRadius: '6px',
                                                     display: 'flex',
                                                     alignItems: 'center',
-                                                    gap: '2rem'
-                                                }}
-                                            >
-
-
-                                                {/* QR Code + Info */}
-                                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', minWidth: '280px' }}>
-                                                    <div style={{
-                                                        width: '70px',
-                                                        height: '70px',
-                                                        background: '#fff',
-                                                        padding: '6px',
-                                                        border: '1px solid #e5e5e5',
-                                                        borderRadius: '6px',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center'
-                                                    }}>
-                                                        {qr.qrImageUrl ? (
-                                                            <img
-                                                                src={`${qr.qrImageUrl}?t=${lastUpdated}`}
-                                                                alt="QR Code"
-                                                                style={{
-                                                                    width: '58px',
-                                                                    height: '58px',
-                                                                    objectFit: 'contain'
-                                                                }}
-                                                            />
-                                                        ) : (
-                                                            <QRRenderer
-                                                                value={`http://localhost:3000/${qr.shortId}`}
-                                                                design={qr.design || {}}
-                                                                size={58}
-                                                                id={`qr-${qr._id}`}  // Add this I
-                                                                margin={5}
-                                                            />
-                                                        )}
-                                                    </div>
-
-                                                    <div>
-                                                        <div style={{ color: '#7c3aed', fontWeight: '600', fontSize: '0.75rem', marginBottom: '0.25rem' }}>
-                                                            {qr.type === 'app-store' ? 'App Store' : qr.type.charAt(0).toUpperCase() + qr.type.slice(1)}
-                                                        </div>
-                                                        <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#000', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                                                            {renamingId === qr._id ? (
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                                    <input
-                                                                        value={tempName}
-                                                                        onChange={(e) => setTempName(e.target.value)}
-                                                                        autoFocus
-                                                                        style={{
-                                                                            fontSize: '1.1rem',
-                                                                            fontWeight: '700',
-                                                                            color: '#000',
-                                                                            border: 'none',
-                                                                            borderBottom: '2px solid #7c3aed',
-                                                                            background: 'transparent',
-                                                                            outline: 'none',
-                                                                            width: '150px',
-                                                                            padding: '0 0 2px 0'
-                                                                        }}
-                                                                    />
-                                                                    <button
-                                                                        onClick={handleCancelRename}
-                                                                        style={{ background: '#fee2e2', border: '1px solid #fecaca', borderRadius: '50%', cursor: 'pointer', width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
-                                                                    >
-                                                                        <X size={12} color="#ef4444" />
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => handleSaveRename(qr._id)}
-                                                                        style={{ background: '#dcfce7', border: '1px solid #bbf7d0', borderRadius: '50%', cursor: 'pointer', width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
-                                                                    >
-                                                                        <Check size={12} color="#16a34a" />
-                                                                    </button>
-                                                                </div>
-                                                            ) : (
-                                                                <>
-                                                                    {qr.name || 'Untitled QR'}
-                                                                    <Edit
-                                                                        size={12}
-                                                                        color="#999"
-                                                                        style={{ cursor: 'pointer', opacity: 0.6 }}
-                                                                        onMouseOver={(e) => e.target.style.opacity = 1}
-                                                                        onMouseOut={(e) => e.target.style.opacity = 0.6}
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation();
-                                                                            handleStartRename(qr);
-                                                                        }}
-                                                                    />
-                                                                </>
-                                                            )}
-                                                        </div>
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: '#999', fontSize: '0.75rem' }}>
-                                                            <Calendar size={12} />
-                                                            <span>Expires At: {expiryDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                                                        </div>
-                                                    </div>
+                                                    justifyContent: 'center',
+                                                    flexShrink: 0
+                                                }}>
+                                                    {qr.qrImageUrl ? (
+                                                        <img
+                                                            src={`${qr.qrImageUrl}?t=${lastUpdated}`}
+                                                            alt="QR Code"
+                                                            style={{
+                                                                width: '58px',
+                                                                height: '58px',
+                                                                objectFit: 'contain'
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <QRRenderer
+                                                            value={`http://localhost:3000/${qr.shortId}`}
+                                                            design={qr.design || {}}
+                                                            size={58}
+                                                            id={`qr-${qr._id}`}
+                                                            margin={5}
+                                                        />
+                                                    )}
                                                 </div>
 
-                                                {/* URLs Section */}
+                                                <div style={{ flex: 1 }}>
+                                                    <div style={{ color: '#7c3aed', fontWeight: '600', fontSize: '0.75rem', marginBottom: '0.25rem' }}>
+                                                        {qr.type === 'app-store' ? 'App Store' : qr.type.charAt(0).toUpperCase() + qr.type.slice(1)}
+                                                    </div>
+                                                    <div style={{ fontSize: isMobile ? '1rem' : '1.1rem', fontWeight: '700', color: '#000', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
+                                                        {renamingId === qr._id ? (
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                                <input
+                                                                    value={tempName}
+                                                                    onChange={(e) => setTempName(e.target.value)}
+                                                                    autoFocus
+                                                                    style={{
+                                                                        fontSize: '1rem',
+                                                                        fontWeight: '700',
+                                                                        color: '#000',
+                                                                        border: 'none',
+                                                                        borderBottom: '2px solid #7c3aed',
+                                                                        background: 'transparent',
+                                                                        outline: 'none',
+                                                                        width: isMobile ? '100px' : '150px',
+                                                                        padding: '0 0 2px 0'
+                                                                    }}
+                                                                />
+                                                                <button
+                                                                    onClick={handleCancelRename}
+                                                                    style={{ background: '#fee2e2', border: '1px solid #fecaca', borderRadius: '50%', cursor: 'pointer', width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
+                                                                >
+                                                                    <X size={12} color="#ef4444" />
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleSaveRename(qr._id)}
+                                                                    style={{ background: '#dcfce7', border: '1px solid #bbf7d0', borderRadius: '50%', cursor: 'pointer', width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
+                                                                >
+                                                                    <Check size={12} color="#16a34a" />
+                                                                </button>
+                                                            </div>
+                                                        ) : (
+                                                            <>
+                                                                <span style={{ maxWidth: isMobile ? '150px' : 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                                    {qr.name || 'Untitled QR'}
+                                                                </span>
+                                                                <Edit
+                                                                    size={12}
+                                                                    color="#999"
+                                                                    style={{ cursor: 'pointer', opacity: 0.6 }}
+                                                                    onMouseOver={(e) => e.target.style.opacity = 1}
+                                                                    onMouseOut={(e) => e.target.style.opacity = 0.6}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handleStartRename(qr);
+                                                                    }}
+                                                                />
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: '#999', fontSize: '0.75rem' }}>
+                                                        <Calendar size={12} />
+                                                        <span>Expires At: {expiryDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* URLs Section - Hidden on Mobile */}
+                                            {!isMobile && (
                                                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingLeft: '1rem', borderLeft: '1px solid #f0f0f0' }}>
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                                         <Link size={14} color="#999" />
@@ -1458,9 +1577,16 @@ const Dashboard = () => {
                                                         />
                                                     </div>
                                                 </div>
+                                            )}
 
-                                                {/* Scans + Actions */}
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                                            {/* Scans + Actions */}
+                                            <div style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: isMobile ? '0.5rem' : '1.5rem',
+                                                marginLeft: isMobile ? 'auto' : '0'
+                                            }}>
+                                                {!isMobile && (
                                                     <div style={{
                                                         display: 'flex',
                                                         flexDirection: 'column',
@@ -1485,207 +1611,111 @@ const Dashboard = () => {
                                                             Scans
                                                         </div>
                                                     </div>
+                                                )}
 
+                                                <button
+                                                    onClick={() => handleDownloadClick(qr)}
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        background: '#fff',
+                                                        border: '1.5px solid #e5e5e5',
+                                                        color: '#7c3aed',
+                                                        borderRadius: isMobile ? '50%' : '20px',
+                                                        width: isMobile ? '40px' : 'auto',
+                                                        height: isMobile ? '40px' : 'auto',
+                                                        padding: isMobile ? '0' : '0.5rem 1rem',
+                                                        fontWeight: '700',
+                                                        fontSize: '0.75rem',
+                                                        cursor: 'pointer',
+                                                    }}
+                                                >
+                                                    {isMobile ? <Download size={20} /> : <>DOWNLOAD <Download size={14} /></>}
+                                                </button>
+
+                                                <div className="qr-menu-container" style={{ position: 'relative' }}>
                                                     <button
-                                                        onClick={() => handleDownloadClick(qr)}
+                                                        onClick={(e) => toggleMenu(e, qr._id)}
                                                         style={{
+                                                            width: '40px',
+                                                            height: '40px',
+                                                            borderRadius: '50%',
+                                                            border: '1px solid #e5e5e5',
+                                                            background: '#fff',
                                                             display: 'flex',
                                                             alignItems: 'center',
-                                                            gap: '0.5rem',
-                                                            background: '#fff',
-                                                            border: '2px solid #7c3aed',
-                                                            color: '#7c3aed',
-                                                            borderRadius: '20px',
-                                                            padding: '0.5rem 1rem',
-                                                            fontWeight: '700',
-                                                            fontSize: '0.75rem',
+                                                            justifyContent: 'center',
                                                             cursor: 'pointer',
-                                                            letterSpacing: '0.3px'
+                                                            color: '#666'
                                                         }}
                                                     >
-                                                        DOWNLOAD <Download size={14} />
+                                                        <MoreVertical size={20} />
                                                     </button>
 
-                                                    <div className="qr-menu-container" style={{ position: 'relative' }}>
-                                                        {deleteConfirmationId === qr._id && (
-                                                            <div style={{
-                                                                position: 'absolute',
-                                                                bottom: 'calc(100% + 15px)',
-                                                                right: '-8px',
-                                                                width: '280px',
-                                                                background: '#ffffff',
-                                                                borderRadius: '8px',
-                                                                boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-                                                                border: '1px solid #e5e5e5',
-                                                                padding: '1.25rem',
-                                                                zIndex: 50,
-                                                                cursor: 'default',
-                                                                textAlign: 'left'
-                                                            }} onClick={e => e.stopPropagation()}>
-                                                                <div style={{
-                                                                    position: 'absolute',
-                                                                    bottom: '-6px',
-                                                                    right: '20px',
-                                                                    width: '12px',
-                                                                    height: '12px',
-                                                                    background: '#ffffff',
-                                                                    transform: 'rotate(45deg)',
-                                                                    borderRight: '1px solid #e5e5e5',
-                                                                    borderBottom: '1px solid #e5e5e5',
-                                                                }}></div>
-
-                                                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginBottom: '1rem' }}>
-                                                                    <div style={{
-                                                                        minWidth: '20px',
-                                                                        height: '20px',
-                                                                        background: '#fbbf24',
-                                                                        borderRadius: '50%',
-                                                                        display: 'flex',
-                                                                        alignItems: 'center',
-                                                                        justifyContent: 'center',
-                                                                        marginTop: '2px'
-                                                                    }}>
-                                                                        <span style={{ color: '#fff', fontSize: '12px', fontWeight: 'bold' }}>!</span>
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '0.95rem', fontWeight: '700', color: '#000' }}>Delete the QR Code</h4>
-                                                                        <p style={{ margin: 0, fontSize: '0.85rem', color: '#666', lineHeight: '1.5' }}>
-                                                                            Are you sure to delete this QR Code?
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+                                                    {isMenuOpen && (
+                                                        <div style={{
+                                                            position: 'absolute',
+                                                            bottom: isMobile ? '45px' : 'auto',
+                                                            top: isMobile ? 'auto' : '45px',
+                                                            right: '0',
+                                                            width: '180px',
+                                                            background: '#ffffff',
+                                                            borderRadius: '8px',
+                                                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                                                            border: '1px solid #e5e5e5',
+                                                            zIndex: 100,
+                                                            overflow: 'hidden'
+                                                        }}>
+                                                            <div style={{ padding: '0.5rem 0' }}>
+                                                                {[
+                                                                    { icon: Edit, label: 'Edit', color: '#666', action: () => handleEditQR(qr) },
+                                                                    { icon: BarChart, label: 'Statistics', color: '#666', action: () => navigate(`/statistics/${qr._id}`) },
+                                                                    { icon: Trash2, label: 'Delete', color: '#ef4444', action: () => handleDeleteClick(qr._id) }
+                                                                ].map((item, idx) => (
                                                                     <button
-                                                                        onClick={() => setDeleteConfirmationId(null)}
-                                                                        disabled={isDeleting}
+                                                                        key={idx}
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            if (item.action) item.action();
+                                                                            toggleMenu(e, qr._id);
+                                                                        }}
                                                                         style={{
-                                                                            padding: '0.4rem 1rem',
-                                                                            borderRadius: '6px',
-                                                                            border: '1px solid #e5e5e5',
-                                                                            background: '#fff',
-                                                                            color: '#666',
-                                                                            fontSize: '0.85rem',
-                                                                            cursor: 'pointer',
-                                                                            fontWeight: '500'
-                                                                        }}>
-                                                                        No
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={confirmDelete}
-                                                                        disabled={isDeleting}
-                                                                        style={{
-                                                                            padding: '0.4rem 1rem',
-                                                                            borderRadius: '6px',
-                                                                            border: 'none',
-                                                                            background: '#7c3aed',
-                                                                            color: '#fff',
-                                                                            fontSize: '0.85rem',
-                                                                            cursor: isDeleting ? 'not-allowed' : 'pointer',
-                                                                            fontWeight: '500',
-                                                                            minWidth: '60px',
                                                                             display: 'flex',
                                                                             alignItems: 'center',
-                                                                            justifyContent: 'center',
-                                                                            opacity: isDeleting ? 0.8 : 1
-                                                                        }}>
-                                                                        {isDeleting ? (
-                                                                            <div style={{
-                                                                                width: '14px',
-                                                                                height: '14px',
-                                                                                border: '2px solid rgba(255,255,255,0.3)',
-                                                                                borderTopColor: '#fff',
-                                                                                borderRadius: '50%',
-                                                                                animation: 'spin 1s linear infinite'
-                                                                            }}></div>
-                                                                        ) : 'Yes'}
+                                                                            gap: '0.75rem',
+                                                                            width: '100%',
+                                                                            padding: '0.625rem 1rem',
+                                                                            border: 'none',
+                                                                            background: '#fff',
+                                                                            cursor: 'pointer',
+                                                                            color: item.color,
+                                                                            fontSize: '0.875rem',
+                                                                            transition: 'background 0.2s',
+                                                                            textAlign: 'left',
+                                                                            fontWeight: '400'
+                                                                        }}
+                                                                        onMouseEnter={(e) => e.target.style.background = '#f8f8f8'}
+                                                                        onMouseLeave={(e) => e.target.style.background = '#fff'}
+                                                                    >
+                                                                        <item.icon size={15} />
+                                                                        {item.label}
                                                                     </button>
-                                                                </div>
+                                                                ))}
                                                             </div>
-                                                        )}
-                                                        <button
-                                                            onClick={(e) => toggleMenu(e, qr._id)}
-                                                            style={{
-                                                                width: '32px',
-                                                                height: '32px',
-                                                                borderRadius: '50%',
-                                                                border: '1px solid #e5e5e5',
-                                                                background: '#fff',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                                cursor: 'pointer',
-                                                                color: '#666'
-                                                            }}
-                                                        >
-                                                            <MoreVertical size={16} />
-                                                        </button>
-
-                                                        {isMenuOpen && (
-                                                            <div style={{
-                                                                position: 'absolute',
-                                                                top: '40px',
-                                                                right: '0',
-                                                                width: '180px',
-                                                                background: '#ffffff',
-                                                                borderRadius: '8px',
-                                                                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                                                                border: '1px solid #e5e5e5',
-                                                                zIndex: 100,
-                                                                overflow: 'hidden'
-                                                            }}>
-                                                                <div style={{ padding: '0.5rem 0' }}>
-                                                                    {[
-                                                                        { icon: Edit, label: 'Edit', color: '#666', action: () => handleEditQR(qr) },
-                                                                        { icon: BarChart, label: 'Statistics', color: '#666', action: () => navigate(`/statistics/${qr._id}`) },
-                                                                        { icon: Trash2, label: 'Delete', color: '#ef4444', action: () => handleDeleteClick(qr._id) }
-                                                                    ].map((item, idx) => (
-                                                                        <button
-                                                                            key={idx}
-                                                                            onClick={(e) => {
-                                                                                e.stopPropagation();
-                                                                                if (item.action) item.action();
-                                                                                toggleMenu(e, qr._id);
-                                                                            }}
-                                                                            style={{
-                                                                                display: 'flex',
-                                                                                alignItems: 'center',
-                                                                                gap: '0.75rem',
-                                                                                width: '100%',
-                                                                                padding: '0.625rem 1rem',
-                                                                                border: 'none',
-                                                                                background: '#fff',
-                                                                                cursor: 'pointer',
-                                                                                color: item.color,
-                                                                                fontSize: '0.875rem',
-                                                                                transition: 'background 0.2s',
-                                                                                textAlign: 'left',
-                                                                                fontWeight: '400'
-                                                                            }}
-                                                                            onMouseEnter={(e) => e.target.style.background = '#f8f8f8'}
-                                                                            onMouseLeave={(e) => e.target.style.background = '#fff'}
-                                                                        >
-                                                                            <item.icon size={15} />
-                                                                            {item.label}
-                                                                        </button>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                    </div>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
-                                        );
-                                    })}
-                                </div>
-
-
-                            </>
-                        )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )
+                        }
                     </>
-                )
-                }
-            </div >
+                )}
+            </div>
 
             {/* Edit URL Modal */}
             {
@@ -1760,8 +1790,9 @@ const Dashboard = () => {
                         background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
                     }}>
                         <div style={{
-                            background: '#ffffff', borderRadius: '12px', width: '600px', padding: '1.5rem',
-                            position: 'relative', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+                            background: '#ffffff', borderRadius: '12px', width: isMobile ? '90%' : '600px', padding: '1.5rem',
+                            position: 'relative', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                            maxHeight: isMobile ? '90vh' : 'auto', overflowY: 'auto'
                         }}>
                             <button
                                 onClick={handleCloseDownloadModal}
@@ -1774,12 +1805,17 @@ const Dashboard = () => {
                                 Save as...
                             </h2>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
+                            <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+                                gap: '1rem',
+                                marginBottom: '2rem'
+                            }}>
                                 {[
-                                    { id: 'jpeg', label: 'JPEG', icon: ImageIcon, desc: 'Standard Image File' },
-                                    { id: 'png', label: 'PNG', icon: ImageIcon, desc: 'Image format with transparency.' },
+                                    { id: 'jpeg', label: 'JPEG', icon: ImageIcon, desc: 'Standard Image' },
+                                    { id: 'png', label: 'PNG', icon: ImageIcon, desc: 'Transparency support' },
                                     { id: 'svg', label: 'SVG', icon: PenTool, desc: 'Vector File' },
-                                    { id: 'pdf', label: 'PDF', icon: FileText, desc: 'Universal file format.' }
+                                    { id: 'pdf', label: 'PDF', icon: FileText, desc: 'Universal file' }
                                 ].map((fmt) => (
                                     <div
                                         key={fmt.id}
@@ -1787,7 +1823,7 @@ const Dashboard = () => {
                                         style={{
                                             border: `2px solid ${downloadFormat === fmt.id ? '#7c3aed' : '#e5e5e5'}`,
                                             borderRadius: '8px',
-                                            padding: '1.5rem 0.5rem',
+                                            padding: '1rem 0.5rem',
                                             textAlign: 'center',
                                             cursor: 'pointer',
                                             transition: 'all 0.2s',
@@ -1795,13 +1831,12 @@ const Dashboard = () => {
                                         }}
                                     >
                                         <div style={{ color: '#7c3aed', marginBottom: '0.5rem', display: 'flex', justifyContent: 'center' }}>
-                                            <fmt.icon size={32} strokeWidth={1.5} />
+                                            <fmt.icon size={24} strokeWidth={1.5} />
                                         </div>
-                                        <div style={{ color: '#7c3aed', fontWeight: 'bold', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                        <div style={{ color: '#7c3aed', fontWeight: 'bold', marginBottom: '0.25rem', textTransform: 'uppercase', fontSize: '0.8rem' }}>
                                             {fmt.label}
                                         </div>
-                                        <div style={{ borderTop: '1px solid #e5e5e5', margin: '0.5rem auto', width: '20px' }} />
-                                        <div style={{ fontSize: '0.7rem', color: '#999' }}>
+                                        <div style={{ fontSize: '0.65rem', color: '#999' }}>
                                             {fmt.desc}
                                         </div>
                                     </div>
@@ -1824,7 +1859,9 @@ const Dashboard = () => {
                                             display: 'flex',
                                             alignItems: 'center',
                                             gap: '0.5rem',
-                                            boxShadow: '0 4px 6px -1px rgba(124, 58, 237, 0.5)'
+                                            boxShadow: '0 4px 6px -1px rgba(124, 58, 237, 0.5)',
+                                            width: isMobile ? '100%' : 'auto',
+                                            justifyContent: 'center'
                                         }}
                                     >
                                         DOWNLOAD QR
@@ -1837,6 +1874,179 @@ const Dashboard = () => {
                 )
             }
 
+            {/* Filters Drawer (Mobile Only) */}
+            {
+                isMobile && isFilterDrawerOpen && (
+                    <div style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: 'rgba(0,0,0,0.5)',
+                        zIndex: 1100,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'flex-end'
+                    }}>
+                        <div style={{
+                            background: '#fff',
+                            borderTopLeftRadius: '24px',
+                            borderTopRightRadius: '24px',
+                            padding: '1.5rem',
+                            maxHeight: '80vh',
+                            overflowY: 'auto'
+                        }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                                <h2 style={{ fontSize: '1.25rem', fontWeight: '700', margin: 0 }}>Filters</h2>
+                                <button
+                                    onClick={() => setIsFilterDrawerOpen(false)}
+                                    style={{ background: '#f5f5f5', border: 'none', borderRadius: '50%', padding: '0.5rem', cursor: 'pointer' }}
+                                >
+                                    <X size={20} color="#666" />
+                                </button>
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                {/* Filter by Type */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#333', marginBottom: '0.75rem' }}>
+                                        Filter by Type
+                                    </label>
+                                    <div style={{ position: 'relative' }}>
+                                        <select
+                                            value={selectedTypeFilter}
+                                            onChange={(e) => setSelectedTypeFilter(e.target.value)}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem 2rem 0.75rem 1rem',
+                                                border: '1px solid #ddd',
+                                                borderRadius: '12px',
+                                                fontSize: '1rem',
+                                                color: '#333',
+                                                background: '#fff',
+                                                appearance: 'none'
+                                            }}
+                                        >
+                                            <option value="All types">All types</option>
+                                            {qrTypes.map(type => (
+                                                <option key={type.value} value={type.value}>{type.label}</option>
+                                            ))}
+                                        </select>
+                                        <ChevronDown size={18} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: '#666', pointerEvents: 'none' }} />
+                                    </div>
+                                </div>
+
+                                {/* Sort By */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#333', marginBottom: '0.75rem' }}>
+                                        Sort By
+                                    </label>
+                                    <div style={{ position: 'relative' }}>
+                                        <select
+                                            value={sortOption}
+                                            onChange={(e) => setSortOption(e.target.value)}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem 2rem 0.75rem 1rem',
+                                                border: '1px solid #ddd',
+                                                borderRadius: '12px',
+                                                fontSize: '1rem',
+                                                color: '#333',
+                                                background: '#fff',
+                                                appearance: 'none'
+                                            }}
+                                        >
+                                            <option value="Last Created">Last Created</option>
+                                            <option value="First Created">First Created</option>
+                                            <option value="Most Scanned">Most Scanned</option>
+                                            <option value="Last 30 Days">Last 30 Days</option>
+                                            <option value="Lifetime">Lifetime</option>
+                                        </select>
+                                        <ChevronDown size={18} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: '#666', pointerEvents: 'none' }} />
+                                    </div>
+                                </div>
+
+                                {/* Date Range */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#333', marginBottom: '0.75rem' }}>
+                                        Date Range
+                                    </label>
+                                    <DatePicker
+                                        selected={startDate}
+                                        onChange={(dates) => {
+                                            const [start, end] = dates;
+                                            setStartDate(start);
+                                            setEndDate(end);
+                                        }}
+                                        startDate={startDate}
+                                        endDate={endDate}
+                                        selectsRange
+                                        customInput={
+                                            <div style={{
+                                                width: '100%',
+                                                padding: '0.75rem 1rem',
+                                                border: '1px solid #ddd',
+                                                borderRadius: '12px',
+                                                fontSize: '1rem',
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center'
+                                            }}>
+                                                <span>{startDate ? `${startDate.toLocaleDateString()} - ${endDate ? endDate.toLocaleDateString() : '...'}` : 'Select dates'}</span>
+                                                <Calendar size={18} color="#666" />
+                                            </div>
+                                        }
+                                    />
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                                    <button
+                                        onClick={() => {
+                                            setSearchTerm('');
+                                            setActiveTab('All');
+                                            setSortOption('Last Created');
+                                            setSelectedTypeFilter('All types');
+                                            setStartDate(null);
+                                            setEndDate(null);
+                                            setIsFilterDrawerOpen(false);
+                                            toast.success('Filters cleared');
+                                        }}
+                                        style={{
+                                            flex: 1,
+                                            padding: '1rem',
+                                            background: '#f5f5f5',
+                                            border: 'none',
+                                            borderRadius: '12px',
+                                            fontWeight: '600',
+                                            color: '#666',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        Clear
+                                    </button>
+                                    <button
+                                        onClick={() => setIsFilterDrawerOpen(false)}
+                                        style={{
+                                            flex: 2,
+                                            padding: '1rem',
+                                            background: '#7c3aed',
+                                            border: 'none',
+                                            borderRadius: '12px',
+                                            fontWeight: '600',
+                                            color: '#fff',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        Apply Filters
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
 
             <style>{`
                 @keyframes spin {

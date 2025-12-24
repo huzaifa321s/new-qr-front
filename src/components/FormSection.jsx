@@ -16,7 +16,7 @@ const FormSection = ({ title, children, defaultOpen = false }) => {
                 onClick={() => setIsOpen(!isOpen)}
                 style={{
                     width: '100%',
-                    padding: '1.25rem',
+                    padding: '1rem 1.25rem',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
@@ -34,7 +34,7 @@ const FormSection = ({ title, children, defaultOpen = false }) => {
             </button>
 
             {isOpen && (
-                <div style={{ padding: '0 1.25rem 1.25rem 1.25rem', borderTop: '1px solid #f1f5f9' }}>
+                <div style={{ padding: '0 1rem 1rem 1rem', borderTop: '1px solid #f1f5f9' }}>
                     {children}
                 </div>
             )}

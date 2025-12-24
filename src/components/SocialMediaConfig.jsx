@@ -205,7 +205,7 @@ const SocialMediaConfig = ({ config, onChange }) => {
             >
                 {/* BACKGROUND IMAGE SECTION */}
                 <div style={{ marginBottom: '2rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem', flexWrap: 'wrap' }}>
                         <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
                             BACKGROUND IMAGE
                         </span>
@@ -371,22 +371,22 @@ const SocialMediaConfig = ({ config, onChange }) => {
                         borderBottom: isBasicInfoOpen ? '1px solid #e2e8f0' : 'none'
                     }}
                 >
-                    <div>
+                    <div style={{ flex: 1 }}>
                         <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
                     </div>
                     {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
 
-                {
-                    isBasicInfoOpen && (
-                        <div style={{ padding: '2rem', background: '#fff' }}>
+                {isBasicInfoOpen && (
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
-                            {/* HEADLINE FIELD */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    HEADLINE*
-                                </label>
-                                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                        {/* HEADLINE FIELD */}
+                        <div style={{ marginBottom: '2.5rem' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                HEADLINE*
+                            </label>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div style={{ flex: 1 }}>
                                     {/* Headline Input */}
                                     <input
                                         type="text"
@@ -401,10 +401,12 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                             outline: 'none'
                                         }}
                                     />
+                                </div>
 
+                                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                     {/* Text Color */}
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <div style={{ flex: '1 1 150px' }}>
+                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.4rem' }}>
                                             Text Color
                                         </label>
                                         <div style={{
@@ -413,7 +415,8 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                             border: '1px solid #1e293b',
                                             borderRadius: '4px',
                                             padding: '0.5rem',
-                                            height: '44px'
+                                            height: '44px',
+                                            background: '#fff'
                                         }}>
                                             <input
                                                 type="text"
@@ -461,8 +464,8 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                     </div>
 
                                     {/* Font */}
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <div style={{ flex: '1 1 150px' }}>
+                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.4rem' }}>
                                             Font
                                         </label>
                                         <select
@@ -470,7 +473,8 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                             onChange={(e) => handleBasicInfoUpdate('headlineFont', e.target.value)}
                                             style={{
                                                 width: '100%',
-                                                padding: '0.75rem',
+                                                height: '44px',
+                                                padding: '0 0.75rem',
                                                 borderRadius: '4px',
                                                 border: '1px solid #1e293b',
                                                 fontSize: '0.9rem',
@@ -487,36 +491,36 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                     </div>
                                 </div>
                             </div>
-
-                            {/* ABOUT US FIELD */}
-                            <div style={{ marginBottom: '0' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    ABOUT US
-                                </label>
-                                <textarea
-                                    value={basicInfo.aboutUs || "Follow us and get updates delivered to your favorite social media channel."}
-                                    onChange={(e) => handleBasicInfoUpdate('aboutUs', e.target.value)}
-                                    rows={3}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none',
-                                        resize: 'vertical',
-                                        fontFamily: 'inherit'
-                                    }}
-                                />
-                            </div>
-
                         </div>
-                    )
-                }
-            </div >
+
+                        {/* ABOUT US FIELD */}
+                        <div style={{ marginBottom: '0' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                ABOUT US
+                            </label>
+                            <textarea
+                                value={basicInfo.aboutUs || "Follow us and get updates delivered to your favorite social media channel."}
+                                onChange={(e) => handleBasicInfoUpdate('aboutUs', e.target.value)}
+                                rows={3}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.75rem',
+                                    borderRadius: '4px',
+                                    border: '1px solid #1e293b',
+                                    fontSize: '0.9rem',
+                                    outline: 'none',
+                                    resize: 'vertical',
+                                    fontFamily: 'inherit'
+                                }}
+                            />
+                        </div>
+
+                    </div>
+                )}
+            </div>
 
             {/* SOCIAL MEDIA CHANNELS ACCORDION */}
-            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
                 <div
                     onClick={() => setIsSocialOpen(!isSocialOpen)}
                     style={{
@@ -529,66 +533,64 @@ const SocialMediaConfig = ({ config, onChange }) => {
                         borderBottom: isSocialOpen ? '1px solid #e2e8f0' : 'none'
                     }}
                 >
-                    <div>
+                    <div style={{ flex: 1 }}>
                         <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
                     </div>
                     {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
 
-                {
-                    isSocialOpen && (
-                        <div style={{ padding: '2rem', background: '#fff' }}>
+                {isSocialOpen && (
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
-                            {/* Dynamic Render of Active Platforms */}
-                            {platformConfig.filter(p => social[p.urlKey] !== undefined).map(platform => {
-                                const Icon = platform.icon;
-                                const isUrlInvalid = social[platform.urlKey] && !social[platform.urlKey].startsWith('http');
+                        {/* Dynamic Render of Active Platforms */}
+                        {platformConfig.filter(p => social[p.urlKey] !== undefined).map(platform => {
+                            const isUrlInvalid = social[platform.urlKey] && !social[platform.urlKey].startsWith('http');
 
-                                return (
-                                    <div key={platform.id} style={{ marginBottom: '2rem' }}>
-                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                            return (
+                                <div key={platform.id} style={{ marginBottom: '2rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '1rem', textTransform: 'uppercase' }}>
+                                        {platform.name.toUpperCase()}
+                                    </label>
+
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                             {/* URL Input */}
-                                            <div>
-                                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                                    {platform.name.toUpperCase()}
+                                            <div style={{ flex: '1 1 200px' }}>
+                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.4rem' }}>
+                                                    URL
                                                 </label>
-                                                <div style={{ marginBottom: '0.25rem' }}>
-                                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                                        URL
-                                                    </label>
-                                                    <div style={{ position: 'relative' }}>
-                                                        <div style={{
-                                                            position: 'absolute',
-                                                            left: '12px',
-                                                            top: '50%',
-                                                            transform: 'translateY(-50%)',
-                                                            width: '24px',
-                                                            height: '24px',
-                                                            background: platform.color,
-                                                            borderRadius: '4px',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            fontSize: '0.9rem',
-                                                            color: platform.color === '#fffc00' ? '#000' : '#fff'
-                                                        }}>
-                                                            <img src={platform.icon} alt="" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
-                                                        </div>
-                                                        <input
-                                                            type="text"
-                                                            value={social[platform.urlKey] || ''}
-                                                            onChange={(e) => handleSocialUpdate(platform.urlKey, e.target.value)}
-                                                            placeholder={platform.placeholder}
-                                                            style={{
-                                                                width: '100%',
-                                                                padding: '0.75rem 0.75rem 0.75rem 3rem',
-                                                                borderRadius: '4px',
-                                                                border: isUrlInvalid ? '1px solid #ef4444' : '1px solid #e2e8f0', // Only erroneous if invalid
-                                                                fontSize: '0.9rem',
-                                                                outline: 'none'
-                                                            }}
-                                                        />
+                                                <div style={{ position: 'relative' }}>
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        left: '12px',
+                                                        top: '50%',
+                                                        transform: 'translateY(-50%)',
+                                                        width: '24px',
+                                                        height: '24px',
+                                                        background: platform.color,
+                                                        borderRadius: '4px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        fontSize: '0.9rem',
+                                                        color: platform.color === '#fffc00' ? '#000' : '#fff'
+                                                    }}>
+                                                        <img src={platform.icon} alt="" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
                                                     </div>
+                                                    <input
+                                                        type="text"
+                                                        value={social[platform.urlKey] || ''}
+                                                        onChange={(e) => handleSocialUpdate(platform.urlKey, e.target.value)}
+                                                        placeholder={platform.placeholder}
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.75rem 0.75rem 0.75rem 3rem',
+                                                            borderRadius: '4px',
+                                                            border: isUrlInvalid ? '1px solid #ef4444' : '1px solid #e2e8f0',
+                                                            fontSize: '0.9rem',
+                                                            outline: 'none'
+                                                        }}
+                                                    />
                                                 </div>
                                                 {isUrlInvalid && (
                                                     <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.25rem' }}>
@@ -598,8 +600,8 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                             </div>
 
                                             {/* Text Input */}
-                                            <div>
-                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem', marginTop: '1.7rem' }}>
+                                            <div style={{ flex: '1 1 120px' }}>
+                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.4rem' }}>
                                                     Text
                                                 </label>
                                                 <div style={{ position: 'relative' }}>
@@ -636,81 +638,81 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                             </div>
                                         </div>
                                     </div>
-                                );
-                            })}
-
-                            {/* ADD MORE Section */}
-                            <div>
-                                <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    ADD MORE
                                 </div>
-                                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
-                                    Click on the icon to add a social media profile.
-                                </div>
+                            );
+                        })}
 
-                                {/* Social Media Icons Grid */}
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(48px, 1fr))', gap: '0.75rem' }}>
-                                    {platformConfig.map(platform => {
-                                        const isActive = social[platform.urlKey] !== undefined;
-                                        return (
-                                            <div
-                                                key={platform.id}
-                                                onClick={() => handleToggleSocial(platform.urlKey, platform.textKey)}
+                        {/* ADD MORE Section */}
+                        <div style={{ marginTop: '2.5rem' }}>
+                            <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                ADD MORE
+                            </div>
+                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                                Click on the icon to add a social media profile.
+                            </div>
+
+                            {/* Social Media Icons Grid */}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(48px, 1fr))', gap: '0.75rem' }}>
+                                {platformConfig.map(platform => {
+                                    const isActive = social[platform.urlKey] !== undefined;
+                                    return (
+                                        <div
+                                            key={platform.id}
+                                            onClick={() => handleToggleSocial(platform.urlKey, platform.textKey)}
+                                            style={{
+                                                width: '48px',
+                                                height: '48px',
+                                                background: platform.color,
+                                                borderRadius: '8px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                position: 'relative',
+                                                transition: 'all 0.2s',
+                                                transform: isActive ? 'scale(0.95)' : 'scale(1)',
+                                                boxShadow: isActive ? 'inset 0 2px 4px rgba(0,0,0,0.2)' : '0 2px 4px rgba(0,0,0,0.1)'
+                                            }}
+                                            title={isActive ? `Remove ${platform.name}` : `Add ${platform.name}`}
+                                        >
+                                            <img
+                                                src={platform.icon}
+                                                alt={platform.name}
                                                 style={{
-                                                    width: '48px',
-                                                    height: '48px',
-                                                    background: platform.color,
-                                                    borderRadius: '8px',
+                                                    width: '24px',
+                                                    height: '24px',
+                                                    objectFit: 'contain'
+                                                }}
+                                            />
+                                            {isActive && (
+                                                <div style={{
+                                                    position: 'absolute',
+                                                    top: '-5px',
+                                                    right: '-5px',
+                                                    width: '20px',
+                                                    height: '20px',
+                                                    background: '#10b981',
+                                                    borderRadius: '50%',
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
-                                                    cursor: 'pointer',
-                                                    position: 'relative',
-                                                    transition: 'all 0.2s',
-                                                    transform: isActive ? 'scale(0.95)' : 'scale(1)',
-                                                    boxShadow: isActive ? 'inset 0 2px 4px rgba(0,0,0,0.2)' : '0 2px 4px rgba(0,0,0,0.1)'
-                                                }}
-                                                title={isActive ? `Remove ${platform.name}` : `Add ${platform.name}`}
-                                            >
-                                                <img
-                                                    src={platform.icon}
-                                                    alt={platform.name}
-                                                    style={{
-                                                        width: '24px',
-                                                        height: '24px',
-                                                        objectFit: 'contain'
-                                                    }}
-                                                />
-                                                {isActive && (
-                                                    <div style={{
-                                                        position: 'absolute',
-                                                        top: '-5px',
-                                                        right: '-5px',
-                                                        width: '20px',
-                                                        height: '20px',
-                                                        background: '#10b981',
-                                                        borderRadius: '50%',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        border: '2px solid #fff'
-                                                    }}>
-                                                        <Check size={12} color="#fff" strokeWidth={3} />
-                                                    </div>
-                                                )}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
+                                                    border: '2px solid #fff'
+                                                }}>
+                                                    <Check size={12} color="#fff" strokeWidth={3} />
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </div>
-
                         </div>
-                    )
-                }
-            </div >
+
+                    </div>
+                )}
+            </div>
 
             {/* SHARE OPTION ACCORDION */}
-            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
                 <div
                     onClick={() => setIsShareOptionOpen(!isShareOptionOpen)}
                     style={{
@@ -723,41 +725,39 @@ const SocialMediaConfig = ({ config, onChange }) => {
                         borderBottom: isShareOptionOpen ? '1px solid #e2e8f0' : 'none'
                     }}
                 >
-                    <div>
+                    <div style={{ flex: 1 }}>
                         <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SHARE OPTION</div>
                     </div>
                     {isShareOptionOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
 
-                {
-                    isShareOptionOpen && (
-                        <div style={{ padding: '2rem', background: '#fff' }}>
+                {isShareOptionOpen && (
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
-                            {/* SHARE MESSAGE FIELD */}
-                            <div style={{ marginBottom: '0' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    SHARE MESSAGE
-                                </label>
-                                <input
-                                    type="text"
-                                    value={shareOption.shareMessage || ''}
-                                    onChange={(e) => handleShareOptionUpdate('shareMessage', e.target.value)}
-                                    placeholder="ssss"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
-                            </div>
-
+                        {/* SHARE MESSAGE FIELD */}
+                        <div style={{ marginBottom: '0' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                SHARE MESSAGE
+                            </label>
+                            <input
+                                type="text"
+                                value={shareOption.shareMessage || ''}
+                                onChange={(e) => handleShareOptionUpdate('shareMessage', e.target.value)}
+                                placeholder="Share this page"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.75rem',
+                                    borderRadius: '4px',
+                                    border: '1px solid #1e293b',
+                                    fontSize: '0.9rem',
+                                    outline: 'none'
+                                }}
+                            />
                         </div>
-                    )
-                }
-            </div >
+
+                    </div>
+                )}
+            </div>
 
             {/* Image Upload Modal */}
             <ImageUploadModal
@@ -832,7 +832,7 @@ const SocialMediaConfig = ({ config, onChange }) => {
                     </div>
                 </div>
             )}
-        </div >
+        </div>
     );
 };
 

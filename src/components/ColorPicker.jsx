@@ -11,7 +11,7 @@ const ColorPicker = ({ label, color, onChange }) => {
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#64748b', marginBottom: '0.5rem' }}>
                 {label}
             </label>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
                 <div
                     onClick={() => setShowPicker(!showPicker)}
                     style={{
@@ -21,7 +21,8 @@ const ColorPicker = ({ label, color, onChange }) => {
                         background: color,
                         border: '2px solid #e2e8f0',
                         cursor: 'pointer',
-                        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                        flexShrink: 0
                     }}
                 />
                 <input
@@ -32,23 +33,24 @@ const ColorPicker = ({ label, color, onChange }) => {
                         padding: '0.5rem',
                         border: '1px solid #cbd5e1',
                         borderRadius: '6px',
-                        width: '100px',
+                        width: '90px',
                         fontSize: '0.9rem',
                         fontFamily: 'monospace'
                     }}
                 />
-                <div style={{ display: 'flex', gap: '0.5rem', marginLeft: 'auto' }}>
+                <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
                     {PRESETS.map(preset => (
                         <div
                             key={preset}
                             onClick={() => onChange(preset)}
                             style={{
-                                width: '24px',
-                                height: '24px',
+                                width: '22px',
+                                height: '22px',
                                 borderRadius: '50%',
                                 background: preset,
                                 cursor: 'pointer',
-                                border: color === preset ? '2px solid #000' : '1px solid #e2e8f0'
+                                border: color === preset ? '2px solid #000' : '1px solid #e2e8f0',
+                                flexShrink: 0
                             }}
                         />
                     ))}

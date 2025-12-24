@@ -461,114 +461,118 @@ const BusinessPageConfig = ({ config, onChange }) => {
 
                 {
                     isBasicInfoOpen && (
-                        <div style={{ padding: '2rem', background: '#fff' }}>
+                        <div style={{ padding: '1rem', background: '#fff' }}>
 
                             {/* COMPANY NAME */}
                             <div style={{ marginBottom: '2rem' }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.5rem' }}>
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                            COMPANY NAME*
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={businessInfo.companyName || "Royal's Cafe"}
-                                            onChange={(e) => handleBusinessInfoUpdate('companyName', e.target.value)}
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
-                                                fontSize: '0.9rem',
-                                                outline: 'none'
-                                            }}
-                                        />
-                                    </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                        <div style={{ flex: '2 1 200px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                COMPANY NAME*
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={businessInfo.companyName || "Royal's Cafe"}
+                                                onChange={(e) => handleBusinessInfoUpdate('companyName', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #1e293b',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none'
+                                                }}
+                                            />
+                                        </div>
 
-                                    <div>
-                                        <ColorPicker
-                                            label="Text Color"
-                                            color={businessInfo.companyNameColor || '#FFFFFF'}
-                                            onChange={(color) => handleBusinessInfoUpdate('companyNameColor', color)}
-                                        />
-                                    </div>
+                                        <div style={{ flex: '1 1 120px' }}>
+                                            <ColorPicker
+                                                label="Text Color"
+                                                color={businessInfo.companyNameColor || '#FFFFFF'}
+                                                onChange={(color) => handleBusinessInfoUpdate('companyNameColor', color)}
+                                            />
+                                        </div>
 
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                            Font
-                                        </label>
-                                        <select
-                                            value={businessInfo.companyNameFont || 'Work Sans'}
-                                            onChange={(e) => handleBusinessInfoUpdate('companyNameFont', e.target.value)}
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
-                                                fontSize: '0.9rem',
-                                                outline: 'none',
-                                                background: '#fff',
-                                                cursor: 'pointer'
-                                            }}
-                                        >
-                                            <option value="Work Sans">Work Sans</option>
-                                            <option value="Lato">Lato</option>
-                                        </select>
+                                        <div style={{ flex: '1 1 100px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                                Font
+                                            </label>
+                                            <select
+                                                value={businessInfo.companyNameFont || 'Work Sans'}
+                                                onChange={(e) => handleBusinessInfoUpdate('companyNameFont', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #1e293b',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    background: '#fff',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                <option value="Work Sans">Work Sans</option>
+                                                <option value="Lato">Lato</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             {/* HEADLINE */}
                             <div style={{ marginBottom: '2rem' }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1.5rem' }}>
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                            HEADLINE
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={businessInfo.headline || 'Eat. Refresh. Go.'}
-                                            onChange={(e) => handleBusinessInfoUpdate('headline', e.target.value)}
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
-                                                fontSize: '0.9rem',
-                                                outline: 'none'
-                                            }}
-                                        />
-                                    </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                        <div style={{ flex: '2 1 200px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                HEADLINE
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={businessInfo.headline || 'Eat. Refresh. Go.'}
+                                                onChange={(e) => handleBusinessInfoUpdate('headline', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #1e293b',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none'
+                                                }}
+                                            />
+                                        </div>
 
-                                    <div>
-                                        <ColorPicker
-                                            label="Text Color"
-                                            color={businessInfo.headlineColor || '#FFFFFF'}
-                                            onChange={(color) => handleBusinessInfoUpdate('headlineColor', color)}
-                                        />
-                                    </div>
+                                        <div style={{ flex: '1 1 120px' }}>
+                                            <ColorPicker
+                                                label="Text Color"
+                                                color={businessInfo.headlineColor || '#FFFFFF'}
+                                                onChange={(color) => handleBusinessInfoUpdate('headlineColor', color)}
+                                            />
+                                        </div>
 
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                            Font
-                                        </label>
-                                        <select
-                                            value={businessInfo.headlineFont || 'Work Sans'}
-                                            onChange={(e) => handleBusinessInfoUpdate('headlineFont', e.target.value)}
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
-                                                fontSize: '0.9rem',
-                                                outline: 'none',
-                                                background: '#fff',
-                                                cursor: 'pointer'
-                                            }}
-                                        >
-                                            <option value="Work Sans">Work Sans</option>
-                                            <option value="Lato">Lato</option>
-                                        </select>
+                                        <div style={{ flex: '1 1 100px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                                Font
+                                            </label>
+                                            <select
+                                                value={businessInfo.headlineFont || 'Work Sans'}
+                                                onChange={(e) => handleBusinessInfoUpdate('headlineFont', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #1e293b',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    background: '#fff',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                <option value="Work Sans">Work Sans</option>
+                                                <option value="Lato">Lato</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -662,7 +666,7 @@ const BusinessPageConfig = ({ config, onChange }) => {
 
                 {
                     isOpeningHoursOpen && (
-                        <div style={{ padding: '2rem', background: '#fff' }}>
+                        <div style={{ padding: '1rem', background: '#fff' }}>
 
                             {/* Time Format Toggle */}
                             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '1.5rem' }}>
@@ -694,88 +698,92 @@ const BusinessPageConfig = ({ config, onChange }) => {
                             {/* Days Schedule */}
                             {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => (
                                 <div key={day} style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: '40px 150px 1fr 1fr',
-                                    gap: '1rem',
-                                    alignItems: 'center',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '0.75rem',
                                     marginBottom: '1rem',
                                     paddingBottom: '1rem',
                                     borderBottom: day !== 'sunday' ? '1px solid #f1f5f9' : 'none'
                                 }}>
-                                    {/* Checkbox */}
-                                    <input
-                                        type="checkbox"
-                                        checked={openingHours[day]?.enabled !== false}
-                                        onChange={(e) => handleOpeningHoursUpdate(day, 'enabled', e.target.checked)}
-                                        style={{
-                                            width: '20px',
-                                            height: '20px',
-                                            accentColor: '#06b6d4',
-                                            cursor: 'pointer'
-                                        }}
-                                    />
-
-                                    {/* Day Name */}
-                                    <div style={{
-                                        fontSize: '0.9rem',
-                                        color: '#1e293b',
-                                        textTransform: 'capitalize'
-                                    }}>
-                                        {day}
-                                    </div>
-
-                                    {/* Opening Time */}
-                                    <div style={{ position: 'relative' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                         <input
-                                            type="text"
-                                            value={openingHours[day]?.open || '08:00 AM'}
-                                            onChange={(e) => handleOpeningHoursUpdate(day, 'open', e.target.value)}
-                                            placeholder="08:00 AM"
+                                            type="checkbox"
+                                            checked={openingHours[day]?.enabled !== false}
+                                            onChange={(e) => handleOpeningHoursUpdate(day, 'enabled', e.target.checked)}
                                             style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                paddingRight: '2.5rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #e2e8f0',
-                                                fontSize: '0.9rem',
-                                                outline: 'none',
-                                                color: '#64748b'
+                                                width: '20px',
+                                                height: '20px',
+                                                accentColor: '#06b6d4',
+                                                cursor: 'pointer'
                                             }}
                                         />
-                                        <Clock size={16} color="#cbd5e1" style={{
-                                            position: 'absolute',
-                                            right: '0.75rem',
-                                            top: '50%',
-                                            transform: 'translateY(-50%)',
-                                            pointerEvents: 'none'
-                                        }} />
+                                        <div style={{
+                                            fontSize: '0.9rem',
+                                            fontWeight: 'bold',
+                                            color: '#1e293b',
+                                            textTransform: 'capitalize',
+                                            minWidth: '100px'
+                                        }}>
+                                            {day}
+                                        </div>
                                     </div>
 
-                                    {/* Closing Time */}
-                                    <div style={{ position: 'relative' }}>
-                                        <input
-                                            type="text"
-                                            value={openingHours[day]?.close || '08:00 AM'}
-                                            onChange={(e) => handleOpeningHoursUpdate(day, 'close', e.target.value)}
-                                            placeholder="08:00 AM"
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                paddingRight: '2.5rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #e2e8f0',
-                                                fontSize: '0.9rem',
-                                                outline: 'none',
-                                                color: '#64748b'
-                                            }}
-                                        />
-                                        <Clock size={16} color="#cbd5e1" style={{
-                                            position: 'absolute',
-                                            right: '0.75rem',
-                                            top: '50%',
-                                            transform: 'translateY(-50%)',
-                                            pointerEvents: 'none'
-                                        }} />
+                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                        {/* Opening Time */}
+                                        <div style={{ position: 'relative', flex: '1 1 120px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem' }}>OPEN</label>
+                                            <input
+                                                type="text"
+                                                value={openingHours[day]?.open || '08:00 AM'}
+                                                onChange={(e) => handleOpeningHoursUpdate(day, 'open', e.target.value)}
+                                                placeholder="08:00 AM"
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    paddingRight: '2.5rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #e2e8f0',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    color: '#64748b'
+                                                }}
+                                            />
+                                            <Clock size={16} color="#cbd5e1" style={{
+                                                position: 'absolute',
+                                                right: '0.75rem',
+                                                top: 'calc(50% + 8px)',
+                                                transform: 'translateY(-50%)',
+                                                pointerEvents: 'none'
+                                            }} />
+                                        </div>
+
+                                        {/* Closing Time */}
+                                        <div style={{ position: 'relative', flex: '1 1 120px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem' }}>CLOSE</label>
+                                            <input
+                                                type="text"
+                                                value={openingHours[day]?.close || '08:00 AM'}
+                                                onChange={(e) => handleOpeningHoursUpdate(day, 'close', e.target.value)}
+                                                placeholder="08:00 AM"
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    paddingRight: '2.5rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #e2e8f0',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    color: '#64748b'
+                                                }}
+                                            />
+                                            <Clock size={16} color="#cbd5e1" style={{
+                                                position: 'absolute',
+                                                right: '0.75rem',
+                                                top: 'calc(50% + 8px)',
+                                                transform: 'translateY(-50%)',
+                                                pointerEvents: 'none'
+                                            }} />
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -807,7 +815,7 @@ const BusinessPageConfig = ({ config, onChange }) => {
 
                 {
                     isFacilitiesOpen && (
-                        <div style={{ padding: '2rem', background: '#fff' }}>
+                        <div style={{ padding: '1rem', background: '#fff' }}>
 
                             {/* Facilities Icons */}
                             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
@@ -978,7 +986,7 @@ const BusinessPageConfig = ({ config, onChange }) => {
 
                 {
                     isContactOpen && (
-                        <div style={{ padding: '2rem', background: '#fff' }}>
+                        <div style={{ padding: '1rem', background: '#fff' }}>
 
                             {/* NAME OF PERSON */}
                             <div style={{ marginBottom: '2rem' }}>
@@ -1333,7 +1341,7 @@ const BusinessPageConfig = ({ config, onChange }) => {
 
                 {
                     isSocialOpen && (
-                        <div style={{ padding: '2rem', background: '#fff' }}>
+                        <div style={{ padding: '1rem', background: '#fff' }}>
                             {(() => {
                                 const SOCIAL_PLATFORMS = [
                                     { id: 'facebook', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877f2' },
@@ -1360,9 +1368,9 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                 return (
                                     <>
                                         {/* Active Inputs Grid */}
-                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                                        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
                                             {activePlatforms.map((platform) => (
-                                                <div key={platform.id}>
+                                                <div key={platform.id} style={{ flex: '1 1 250px' }}>
                                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                                         {platform.name}*
                                                     </label>

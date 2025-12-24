@@ -360,31 +360,33 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                 </div>
 
                 {isBasicInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* COMPANY NAME FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 COMPANY NAME*
                             </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 {/* Company Name Input */}
-                                <input
-                                    type="text"
-                                    value={basicInfo.companyName || 'Sterling & Co'}
-                                    onChange={(e) => handleBasicInfoUpdate('companyName', e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
+                                <div style={{ flex: '2 1 200px' }}>
+                                    <input
+                                        type="text"
+                                        value={basicInfo.companyName || 'Sterling & Co'}
+                                        onChange={(e) => handleBasicInfoUpdate('companyName', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                </div>
 
                                 {/* Text Color */}
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -447,7 +449,7 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                 </div>
 
                                 {/* Font */}
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -462,7 +464,8 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff'
+                                            background: '#fff',
+                                            height: '44px'
                                         }}
                                     >
                                         <option value="Lato">Lato</option>
@@ -479,24 +482,26 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 HEADLINE
                             </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 {/* Headline Input */}
-                                <input
-                                    type="text"
-                                    value={basicInfo.headline || 'Important Document'}
-                                    onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
+                                <div style={{ flex: '2 1 200px' }}>
+                                    <input
+                                        type="text"
+                                        value={basicInfo.headline || 'Important Document'}
+                                        onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                </div>
 
                                 {/* Text Color */}
-                                <div>
+                                <div style={{ flex: '1 1 120px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
@@ -559,7 +564,7 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                 </div>
 
                                 {/* Font */}
-                                <div>
+                                <div style={{ flex: '1 1 100px' }}>
                                     <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
@@ -574,7 +579,8 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff'
+                                            background: '#fff',
+                                            height: '44px'
                                         }}
                                     >
                                         <option value="Lato">Lato</option>
@@ -635,7 +641,7 @@ const LeadGenerationConfig = ({ config, onChange }) => {
 
                 {
                     isFormOpen && (
-                        <div style={{ padding: '2rem', background: '#fff' }}>
+                        <div style={{ padding: '1rem', background: '#fff' }}>
 
                             {/* Form Fields Checkboxes */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
@@ -748,8 +754,8 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                         Type your question and options
                                     </div>
                                     {customFields.map((field) => (
-                                        <div key={field.id} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                                            <div style={{ flex: 1 }}>
+                                        <div key={field.id} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', marginBottom: '1rem', flexWrap: 'wrap' }}>
+                                            <div style={{ flex: '1 1 150px' }}>
                                                 <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                                     Type
                                                 </label>
@@ -764,7 +770,8 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                                         fontSize: '0.9rem',
                                                         outline: 'none',
                                                         cursor: 'pointer',
-                                                        background: '#fff'
+                                                        background: '#fff',
+                                                        height: '44px'
                                                     }}
                                                 >
                                                     {fieldTypeOptions.map(option => (
@@ -774,7 +781,7 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                                     ))}
                                                 </select>
                                             </div>
-                                            <div style={{ flex: 2 }}>
+                                            <div style={{ flex: '2 1 200px' }}>
                                                 <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                                     Label
                                                 </label>

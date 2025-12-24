@@ -16,9 +16,9 @@ const ProductPageConfig = ({ config, onChange }) => {
     const design = config.design || {};
     const bInfo = config.basicInfo || {};
     const defaultProductImages = [
-        { id: 'def-1', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743372/item-1_fr9qst.png' },
-        { id: 'def-2', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-2_suygda.webp' },
-        { id: 'def-3', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759743370/item-3_ycglwq.webp' }
+        { id: 'def-1', url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop' },
+        { id: 'def-2', url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=600&fit=crop' },
+        { id: 'def-3', url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=600&fit=crop' }
     ];
     const basicInfo = {
         ...bInfo,
@@ -37,9 +37,9 @@ const ProductPageConfig = ({ config, onChange }) => {
     const feedback = {
         title: 'Add Your Feedback',
         ratingUrl: 'https://www.dairylandltd.com/floveredmilk/rating',
-        textColor: '#000000',
         font: 'Lato',
-        ...(config.feedback || {})
+        ...(config.feedback || {}),
+        textColor: (config.feedback?.textColor && config.feedback.textColor !== '#000000') ? config.feedback.textColor : '#ffffff'
     };
     const contact = config.contact || {};
     const content = config.content || {
@@ -336,7 +336,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                 </div>
 
                 {isBasicInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* Company Name Row */}
                         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 0.5fr', gap: '1rem', marginBottom: '1.5rem', alignItems: 'end' }}>
@@ -580,7 +580,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                 </div>
 
                 {isContentOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {(content.items || []).map((item, index) => (
                             <div key={item.id} style={{ marginBottom: '2rem' }}>
@@ -764,7 +764,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                 </div>
 
                 {isVideoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* Video Title */}
                         <div style={{ marginBottom: '1.5rem' }}>
@@ -877,40 +877,42 @@ const ProductPageConfig = ({ config, onChange }) => {
                 </div>
 
                 {isFeedbackOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* Feedback Title Row */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 0.5fr', gap: '1rem', marginBottom: '1.5rem', alignItems: 'end' }}>
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    FEEDBACK TITLE*
-                                </label>
-                                <input
-                                    type="text"
-                                    value={feedback.title || ''}
-                                    onChange={(e) => handleFeedbackUpdate('title', e.target.value)}
-                                    placeholder="Add Your Feedback"
-                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
-                                />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                <div style={{ flex: '2 1 200px' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                        FEEDBACK TITLE*
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={feedback.title || ''}
+                                        onChange={(e) => handleFeedbackUpdate('title', e.target.value)}
+                                        placeholder="Add Your Feedback"
+                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
+                                    />
+                                </div>
                             </div>
-                            <div>
+                            <div style={{ flex: '1 1 120px' }}>
                                 <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>Text Color</label>
                                 <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '42px', background: '#fff' }}>
                                     <input
                                         type="text"
-                                        value={feedback.textColor || '#000000'}
+                                        value={feedback.textColor || '#ffffff'}
                                         onChange={(e) => handleFeedbackUpdate('textColor', e.target.value)}
                                         style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.85rem', fontWeight: 'bold' }}
                                     />
                                     <input
                                         type="color"
-                                        value={feedback.textColor || '#000000'}
+                                        value={feedback.textColor || '#ffffff'}
                                         onChange={(e) => handleFeedbackUpdate('textColor', e.target.value)}
-                                        style={{ width: '24px', height: '24px', border: '1px solid #e2e8f0', borderRadius: '2px', cursor: 'pointer' }}
+                                        style={{ width: '24px', height: '24px', border: '1px solid #e2e8f0', borderRadius: '2px', cursor: 'pointer', flexShrink: 0 }}
                                     />
                                 </div>
                             </div>
-                            <div>
+                            <div style={{ flex: '1 1 100px' }}>
                                 <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>Font</label>
                                 <select
                                     value={feedback.font || 'Lato'}
@@ -925,7 +927,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                         </div>
 
                         {/* See Product Rating */}
-                        <div>
+                        <div style={{ marginTop: '1.5rem' }}>
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 SEE PRODUCT RATING
                             </label>
@@ -937,7 +939,6 @@ const ProductPageConfig = ({ config, onChange }) => {
                                 style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
                             />
                         </div>
-
                     </div>
                 )}
             </div>
@@ -963,15 +964,15 @@ const ProductPageConfig = ({ config, onChange }) => {
                 </div>
 
                 {isContactOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                    <div style={{ padding: '1rem', background: '#fff' }}>
 
                         {/* Phone */}
                         {contact.phone != null ? (
-                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'center' }}>
-                                <div style={{ width: '42px', height: '42px', border: '1px solid #1e293b', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                <div style={{ width: '42px', height: '42px', border: '1px solid #1e293b', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                     <Phone size={20} color="#1e293b" />
                                 </div>
-                                <div style={{ flex: 1, position: 'relative' }}>
+                                <div style={{ flex: '1 1 200px', position: 'relative' }}>
                                     <div style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b' }}>
                                         <Globe size={14} />
                                     </div>
@@ -983,7 +984,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                                         style={{ width: '100%', padding: '0.75rem 0.75rem 0.75rem 2.5rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
                                     />
                                 </div>
-                                <div onClick={() => handleContactUpdate('phone', null)} style={{ cursor: 'pointer', opacity: 1, padding: '0.5rem', display: 'flex', alignItems: 'center' }}>
+                                <div onClick={() => handleContactUpdate('phone', null)} style={{ cursor: 'pointer', opacity: 1, padding: '0.5rem', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                                     <X size={18} color="#ef4444" />
                                 </div>
                             </div>
@@ -1136,7 +1137,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                 )}
             </div>
 
-        </div>
+        </div >
     );
 };
 
