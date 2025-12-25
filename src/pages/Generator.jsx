@@ -100,7 +100,7 @@ const Generator = () => {
 
     // Helper function to generate QR value URL for preview/display
     const getQRValue = () => {
-        const baseUrl = import.meta.env.VITE_FRONTEND_URL || window.location.origin;
+        const baseUrl = (import.meta.env.VITE_FRONTEND_URL || window.location.origin).replace(/\/$/, '');
 
         // Priority: generatedShortId (after creation) > editingQr.shortId (edit mode) > preview
         const id = generatedShortId || (isEditing ? editingQr?.shortId : null);

@@ -109,7 +109,7 @@ const Dashboard = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const baseUrl = import.meta.env.VITE_FRONTEND_URL || window.location.origin;
+    const baseUrl = (import.meta.env.VITE_FRONTEND_URL || window.location.origin).replace(/\/$/, '');
 
     const handleDownloadClick = (qr) => {
         setDownloadingQr(qr);

@@ -34,7 +34,7 @@ const Statistics = () => {
     const [qr, setQr] = useState(null);
     const [loading, setLoading] = useState(true);
     const qrRefs = useRef({}); // For download renderer
-    const baseUrl = import.meta.env.VITE_FRONTEND_URL || window.location.origin;
+    const baseUrl = (import.meta.env.VITE_FRONTEND_URL || window.location.origin).replace(/\/$/, '');
 
     // Download Modal State
     const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
