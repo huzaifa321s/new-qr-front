@@ -747,7 +747,7 @@ const RatingConfig = ({ config, onChange }) => {
                                                         transform: 'translateY(-50%)',
                                                         width: '24px',
                                                         height: '24px',
-                                                        background: platform.gradient || platform.color,
+                                                        background: 'transparent',
                                                         borderRadius: '4px',
                                                         display: 'flex',
                                                         alignItems: 'center',
@@ -759,10 +759,9 @@ const RatingConfig = ({ config, onChange }) => {
                                                                 src={Icon}
                                                                 alt={platform.name}
                                                                 style={{
-                                                                    width: '16px',
-                                                                    height: '16px',
-                                                                    objectFit: 'contain',
-                                                                    filter: platform.id === 'snapchat' || platform.id === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                                                    width: '20px',
+                                                                    height: '20px',
+                                                                    objectFit: 'contain'
                                                                 }}
                                                             />
                                                         ) : (
@@ -812,7 +811,7 @@ const RatingConfig = ({ config, onChange }) => {
                                                 style={{
                                                     width: '48px',
                                                     height: '48px',
-                                                    background: platform.gradient || platform.color,
+                                                    background: '#fff',
                                                     borderRadius: '8px',
                                                     display: 'flex',
                                                     alignItems: 'center',
@@ -820,7 +819,8 @@ const RatingConfig = ({ config, onChange }) => {
                                                     cursor: isAdded ? 'not-allowed' : 'pointer',
                                                     opacity: isAdded ? 0.5 : 1,
                                                     transition: 'transform 0.1s',
-                                                    border: isAdded ? '2px solid #cbd5e1' : 'none'
+                                                    border: isAdded ? '2px solid #cbd5e1' : '1px solid #e2e8f0',
+                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
                                                 }}
                                                 title={isAdded ? `${platform.name} already added` : `Add ${platform.name}`}
                                                 onMouseEnter={(e) => {
@@ -835,10 +835,9 @@ const RatingConfig = ({ config, onChange }) => {
                                                         src={Icon}
                                                         alt={platform.name}
                                                         style={{
-                                                            width: '24px',
-                                                            height: '24px',
-                                                            objectFit: 'contain',
-                                                            filter: platform.id === 'snapchat' || platform.id === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                                            width: '28px',
+                                                            height: '28px',
+                                                            objectFit: 'contain'
                                                         }}
                                                     />
                                                 ) : (

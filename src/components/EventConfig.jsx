@@ -279,18 +279,18 @@ const EventConfig = ({ config, onChange }) => {
     };
 
     const socialPlatforms = [
-        { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2' },
-        { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
-        { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968830.png', color: '#1DA1F2' },
-        { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
-        { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
-        { id: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968819.png', color: '#9146FF' },
-        { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
-        { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/1051/1051330.png', color: '#FFFC00' },
-        { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
-        { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174872.png', color: '#1DB954' },
-        { id: 'telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC' },
-        { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563' }
+        { id: 'facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877F2' },
+        { id: 'instagram', icon: 'https://img.icons8.com/color/48/instagram-new--v1.png', color: '#E4405F' },
+        { id: 'twitter', icon: 'https://img.icons8.com/color/48/twitterx--v1.png', color: '#000000' },
+        { id: 'linkedin', icon: 'https://img.icons8.com/color/48/linkedin.png', color: '#0A66C2' },
+        { id: 'youtube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#FF0000' },
+        { id: 'twitch', icon: 'https://img.icons8.com/color/48/twitch.png', color: '#9146FF' },
+        { id: 'whatsapp', icon: 'https://img.icons8.com/color/48/whatsapp--v1.png', color: '#25D366' },
+        { id: 'snapchat', icon: 'https://img.icons8.com/color/48/snapchat--v1.png', color: '#FFFC00' },
+        { id: 'tiktok', icon: 'https://img.icons8.com/color/48/tiktok--v1.png', color: '#000000' },
+        { id: 'spotify', icon: 'https://img.icons8.com/color/48/spotify--v1.png', color: '#1DB954' },
+        { id: 'telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', color: '#0088CC' },
+        { id: 'website', icon: 'https://img.icons8.com/color/48/domain.png', color: '#4B5563' }
     ];
 
     const getSocialIcon = (platform) => {
@@ -1335,7 +1335,7 @@ const EventConfig = ({ config, onChange }) => {
                                                 width: '42px',
                                                 height: '42px',
                                                 borderRadius: '8px',
-                                                background: platform.color,
+                                                background: 'transparent',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
@@ -1414,14 +1414,14 @@ const EventConfig = ({ config, onChange }) => {
                                                 width: '40px',
                                                 height: '40px',
                                                 borderRadius: '8px',
-                                                background: isAdded ? '#f1f5f9' : platform.color,
+                                                background: 'transparent',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
                                                 opacity: isAdded ? 0.5 : 1,
                                                 transition: 'all 0.2s',
-                                                border: isAdded ? '1px solid #e2e8f0' : 'none'
+                                                border: 'none'
                                             }}
                                             title={platform.id}
                                         >

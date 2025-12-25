@@ -101,19 +101,19 @@ const MultipleLinksConfig = ({ config, onChange }) => {
     };
 
     const socialPlatforms = [
-        { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
-        { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2', name: 'Facebook' },
-        { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', name: 'Instagram' },
-        { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000', name: 'X (Twitter)' },
-        { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2', name: 'LinkedIn' },
-        { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000', name: 'YouTube' },
-        { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366', name: 'WhatsApp' },
-        { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00', name: 'Snapchat' },
-        { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000', name: 'TikTok' },
-        { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954', name: 'Spotify' },
-        { id: 'pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C', name: 'Pinterest' },
-        { id: 'telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC', name: 'Telegram' },
-        { id: 'line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900', name: 'Line' }
+        { id: 'website', icon: 'https://img.icons8.com/color/48/domain.png', color: '#4B5563', name: 'Website' },
+        { id: 'facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877F2', name: 'Facebook' },
+        { id: 'instagram', icon: 'https://img.icons8.com/color/48/instagram-new--v1.png', color: '#E4405F', name: 'Instagram' },
+        { id: 'twitter', icon: 'https://img.icons8.com/color/48/twitterx--v1.png', color: '#000000', name: 'X (Twitter)' },
+        { id: 'linkedin', icon: 'https://img.icons8.com/color/48/linkedin.png', color: '#0A66C2', name: 'LinkedIn' },
+        { id: 'youtube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#FF0000', name: 'YouTube' },
+        { id: 'whatsapp', icon: 'https://img.icons8.com/color/48/whatsapp--v1.png', color: '#25D366', name: 'WhatsApp' },
+        { id: 'snapchat', icon: 'https://img.icons8.com/color/48/snapchat--v1.png', color: '#FFFC00', name: 'Snapchat' },
+        { id: 'tiktok', icon: 'https://img.icons8.com/color/48/tiktok--v1.png', color: '#000000', name: 'TikTok' },
+        { id: 'spotify', icon: 'https://img.icons8.com/color/48/spotify--v1.png', color: '#1DB954', name: 'Spotify' },
+        { id: 'pinterest', icon: 'https://img.icons8.com/color/48/pinterest.png', color: '#BD081C', name: 'Pinterest' },
+        { id: 'telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', color: '#0088CC', name: 'Telegram' },
+        { id: 'line', icon: 'https://img.icons8.com/color/48/line-me.png', color: '#00B900', name: 'Line' }
     ];
 
 
@@ -478,7 +478,7 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 borderRight: '1px solid #1e293b',
-                                                background: platform.color
+                                                background: 'transparent'
                                             }}>
                                                 {typeof Icon === 'string' ? (
                                                     <img
@@ -554,12 +554,12 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                                 width: '40px',
                                                 height: '40px',
                                                 borderRadius: '8px',
-                                                background: platform.color,
+                                                background: 'transparent',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
-                                                border: '1px solid transparent', // Can be used for hover effects
+                                                border: 'none',
                                                 transition: 'transform 0.1s'
                                             }}
                                             title={platform.name}
@@ -587,7 +587,7 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                 )}
             </div>
 
-        </div>
+        </div >
     );
 };
 

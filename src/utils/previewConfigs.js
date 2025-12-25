@@ -312,7 +312,7 @@ export const passwordProtectedPreviewConfig = {
     type: 'password-protected',
     design: {
         headerImage: {
-            url: 'https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?w=400&h=200&fit=crop'
+            url: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=200&fit=crop'
         }
     }
 };

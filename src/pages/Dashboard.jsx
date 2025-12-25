@@ -1571,9 +1571,16 @@ const Dashboard = () => {
                                                             </>
                                                         )}
                                                     </div>
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: '#999', fontSize: '0.75rem' }}>
-                                                        <Calendar size={12} />
-                                                        <span>Expires At: {expiryDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: '#999', fontSize: '0.75rem' }}>
+                                                            <Calendar size={12} />
+                                                            <span>Expires At: {expiryDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                                        </div>
+                                                        {qr.scanLimitEnabled && qr.scanLimit && (qr.scanCount || (qr.scans || []).length) >= qr.scanLimit && (
+                                                            <div style={{ color: '#ef4444', fontSize: '0.75rem', fontWeight: '600' }}>
+                                                                The scan limit you set has been reached.
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
@@ -1635,7 +1642,7 @@ const Dashboard = () => {
                                                         <div style={{
                                                             fontSize: '1.75rem',
                                                             fontWeight: '700',
-                                                            color: '#000',
+                                                            color: (qr.scanLimitEnabled && qr.scanLimit && (qr.scanCount || (qr.scans || []).length) >= qr.scanLimit) ? '#ef4444' : '#000',
                                                             lineHeight: 1
                                                         }}>
                                                             {(qr.scans || []).length}

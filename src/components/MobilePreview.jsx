@@ -2652,15 +2652,16 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                         width: '50px',
                                                         height: '50px',
                                                         borderRadius: '50%',
-                                                        background: platform.gradient || platform.color,
+                                                        background: '#fff',
                                                         display: 'flex',
                                                         alignItems: 'center',
                                                         justifyContent: 'center',
-                                                        color: platform.textColor || '#fff',
+                                                        color: '#000',
                                                         cursor: 'pointer',
                                                         transition: 'transform 0.2s',
-                                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                                                        margin: '0 auto'
+                                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                                        margin: '0 auto',
+                                                        border: '1px solid #f1f5f9'
                                                     }}
                                                     onMouseEnter={(e) => {
                                                         e.currentTarget.style.transform = 'scale(1.1)';
@@ -2885,12 +2886,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             <div style={{
                                                 width: '40px',
                                                 height: '40px',
-                                                background: platform.color,
-                                                borderRadius: '12px',
+                                                background: 'transparent',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                color: platform.color === '#fffc00' ? '#000' : '#fff', // Handle bright colors
                                                 flexShrink: 0
                                             }}>
                                                 <img
@@ -3180,6 +3179,24 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         gap: '1rem'
                     }}>
                         {(() => {
+                            const BUSINESS_SOCIAL_ICONS = {
+                                facebook: 'https://cdn-icons-png.flaticon.com/512/733/733547.png',
+                                instagram: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png',
+                                twitter: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png',
+                                linkedin: 'https://cdn-icons-png.flaticon.com/512/174/174857.png',
+                                discord: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png',
+                                twitch: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png',
+                                youtube: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png',
+                                whatsapp: 'https://cdn-icons-png.flaticon.com/512/733/733585.png',
+                                snapchat: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png',
+                                tiktok: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png',
+                                pinterest: 'https://cdn-icons-png.flaticon.com/512/145/145808.png',
+                                dribbble: 'https://cdn-icons-png.flaticon.com/512/2111/2111388.png',
+                                telegram: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png',
+                                reddit: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png',
+                                spotify: 'https://cdn-icons-png.flaticon.com/512/174/174868.png',
+                            };
+
                             const socialLinks = (social && Object.values(social).some(v => v && v.trim() !== ''))
                                 ? social
                                 : {
@@ -3194,6 +3211,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 const platform = socialIconsMap.find(p => p.id === key) || socialIconsMap.find(p => p.id === 'website');
                                 if (!platform) return null;
 
+                                const iconUrl = BUSINESS_SOCIAL_ICONS[key] || platform.icon;
+
                                 return (
                                     <a key={key} href={value.startsWith('http') ? value : `https://${value}`} target="_blank" rel="noopener noreferrer" style={{
                                         display: 'flex',
@@ -3201,18 +3220,18 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         justifyContent: 'center',
                                         width: '40px',
                                         height: '40px',
-                                        background: platform.color,
+                                        background: '#fff',
                                         borderRadius: '8px',
-                                        textDecoration: 'none'
+                                        textDecoration: 'none',
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                                     }}>
                                         <img
-                                            src={platform.icon}
+                                            src={iconUrl}
                                             alt={platform.name}
                                             style={{
                                                 width: '24px',
                                                 height: '24px',
-                                                objectFit: 'contain',
-                                                filter: key === 'snapchat' || key === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                                objectFit: 'contain'
                                             }}
                                         />
                                     </a>
@@ -4867,7 +4886,6 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     {/* Social Media Footer */}
                     {(socialLinks && socialLinks.length > 0) ? (
                         <div style={{
-                            background: footerBg,
                             borderTopLeftRadius: '30px',
                             borderTopRightRadius: '30px',
                             padding: '1.5rem',
@@ -4917,7 +4935,6 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     ) : (
                         // Default Fallback if no social links
                         <div style={{
-                            background: footerBg,
                             borderTopLeftRadius: '30px',
                             borderTopRightRadius: '30px',
                             padding: '1.5rem',
@@ -4927,9 +4944,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             marginTop: 'auto'
                         }}>
                             {[
-                                { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
-                                { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2', name: 'Facebook' },
-                                { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', name: 'Instagram' }
+                                { id: 'website', icon: 'https://img.icons8.com/color/48/domain.png', color: '#4B5563', name: 'Website' },
+                                { id: 'facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877F2', name: 'Facebook' },
+                                { id: 'instagram', icon: 'https://img.icons8.com/color/48/instagram-new--v1.png', color: '#E4405F', name: 'Instagram' }
                             ].map(platform => (
                                 <div key={platform.id} style={{
                                     width: '50px',
@@ -5007,10 +5024,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                 <div style={{
                     height: '100%',
-                    overflowY: 'auto',
                     background: primaryColor,
                     display: 'flex',
-                    flexDirection: 'column'
+                    flexDirection: 'column',
+                    overflow: 'hidden'
                 }}>
                     {/* Hero Image */}
                     {headerImageUrl && (
@@ -5037,7 +5054,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         flex: 1,
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '1rem'
+                        gap: '1rem',
+                        overflowY: 'auto'
                     }}>
                         {(config.infoFields && config.infoFields.length > 0 ? config.infoFields : [
                             { id: '1', name: 'Name', value: 'Hellen Grey' },
@@ -5149,18 +5167,18 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
         // Social Platform Icons Map
         const socialPlatforms = [
-            { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2' },
-            { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
-            { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968830.png', color: '#1DA1F2' },
-            { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
-            { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
-            { id: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968819.png', color: '#9146FF' },
-            { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
-            { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/1051/1051330.png', color: '#FFFC00' },
-            { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
-            { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174872.png', color: '#1DB954' },
-            { id: 'telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC' },
-            { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563' }
+            { id: 'facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877F2' },
+            { id: 'instagram', icon: 'https://img.icons8.com/color/48/instagram-new--v1.png', color: '#E4405F' },
+            { id: 'twitter', icon: 'https://img.icons8.com/color/48/twitterx--v1.png', color: '#000000' },
+            { id: 'linkedin', icon: 'https://img.icons8.com/color/48/linkedin.png', color: '#0A66C2' },
+            { id: 'youtube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#FF0000' },
+            { id: 'twitch', icon: 'https://img.icons8.com/color/48/twitch.png', color: '#9146FF' },
+            { id: 'whatsapp', icon: 'https://img.icons8.com/color/48/whatsapp--v1.png', color: '#25D366' },
+            { id: 'snapchat', icon: 'https://img.icons8.com/color/48/snapchat--v1.png', color: '#FFFC00' },
+            { id: 'tiktok', icon: 'https://img.icons8.com/color/48/tiktok--v1.png', color: '#000000' },
+            { id: 'spotify', icon: 'https://img.icons8.com/color/48/spotify--v1.png', color: '#1DB954' },
+            { id: 'telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', color: '#0088CC' },
+            { id: 'website', icon: 'https://img.icons8.com/color/48/domain.png', color: '#4B5563' }
         ];
 
         return (
@@ -5468,15 +5486,15 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             width: '48px',
                                             height: '48px',
                                             borderRadius: '12px',
-                                            background: platform.color,
+                                            background: 'transparent',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center'
                                         }}>
                                             {typeof platform.icon === 'string' ? (
-                                                <img src={platform.icon} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+                                                <img src={platform.icon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
                                             ) : (
-                                                <platform.icon size={24} color="#fff" />
+                                                <platform.icon size={32} color={platform.color} />
                                             )}
                                         </div>
                                     </a>
