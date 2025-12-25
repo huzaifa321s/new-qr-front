@@ -268,7 +268,7 @@ const Dashboard = () => {
 
     const handleCopyUrl = (qr) => {
         // Always use the original QR data URL from database
-        const url = qr.data || `${baseUrl}/view/${qr.shortId}`;
+        const url = `${baseUrl}/view/${qr.shortId}`;
         navigator.clipboard.writeText(url);
         setCopiedId(qr._id);
         toast.success('URL Copied!');
@@ -1591,12 +1591,12 @@ const Dashboard = () => {
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                                         <Link size={14} color="#999" />
                                                         <a
-                                                            href={qr.data || `${baseUrl}/view/${qr.shortId}`}
+                                                            href={`${baseUrl}/view/${qr.shortId}`}
                                                             target="_blank"
                                                             rel="noreferrer"
                                                             style={{ color: '#000', fontSize: '0.875rem', textDecoration: 'none', fontWeight: '500' }}
                                                         >
-                                                            {qr.data || `${baseUrl}/view/${qr.shortId}`}
+                                                            {`${baseUrl}/view/${qr.shortId}`}
                                                         </a>
                                                         {copiedId === qr._id ? (
                                                             <Check size={12} color="#16a34a" />
