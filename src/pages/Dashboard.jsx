@@ -132,8 +132,8 @@ const Dashboard = () => {
             const filename = `${downloadingQr.name || 'qr-code'}.${downloadFormat}`;
 
             // ✅ USE BACKEND API FOR DOWNLOAD
-            const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-            const downloadUrl = `${backendUrl}/api/qr/download/${downloadingQr.shortId}?format=${downloadFormat}`;
+            const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/';
+            const downloadUrl = `${backendUrl}api/qr/download/${downloadingQr.shortId}?format=${downloadFormat}`;
 
             console.log('📥 Downloading from:', downloadUrl);
 
