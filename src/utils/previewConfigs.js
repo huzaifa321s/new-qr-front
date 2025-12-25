@@ -35,7 +35,7 @@ export const menuPreviewConfig = {
 export const appStorePreviewConfig = {
     type: 'app-store',
     design: {
-        color: { dark: '#0f3485', light: '#06b6d4' },
+        color: { dark: '#0f3485', light: '#ff9500' },
         logo: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' }
     },
     businessInfo: {

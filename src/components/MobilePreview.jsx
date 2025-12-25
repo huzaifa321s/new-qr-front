@@ -46,23 +46,25 @@ const AutoSlider = ({ images }) => {
 };
 
 const socialIconsMap = [
-    { id: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
-    { id: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2', name: 'Facebook' },
-    { id: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', name: 'Instagram' },
-    { id: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000', name: 'X' },
-    { id: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2', name: 'LinkedIn' },
-    { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000', name: 'TikTok' },
-    { id: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000', name: 'YouTube' },
-    { id: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366', name: 'WhatsApp' },
-    { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00', name: 'Snapchat' },
-    { id: 'discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2', name: 'Discord' },
-    { id: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF', name: 'Twitch' },
-    { id: 'telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC', name: 'Telegram' },
-    { id: 'pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C', name: 'Pinterest' },
-    { id: 'reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500', name: 'Reddit' },
-    { id: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954', name: 'Spotify' },
-    { id: 'behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF', name: 'Behance' },
-    { id: 'line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900', name: 'Line' }
+    { id: 'website', icon: 'https://img.icons8.com/color/48/domain.png', color: '#4B5563', name: 'Website' },
+    { id: 'facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877F2', name: 'Facebook' },
+    { id: 'instagram', icon: 'https://img.icons8.com/color/48/instagram-new--v1.png', color: '#E4405F', name: 'Instagram' },
+    { id: 'twitter', icon: 'https://img.icons8.com/color/48/twitterx--v1.png', color: '#000000', name: 'X' },
+    { id: 'linkedin', icon: 'https://img.icons8.com/color/48/linkedin.png', color: '#0A66C2', name: 'LinkedIn' },
+    { id: 'tiktok', icon: 'https://img.icons8.com/color/48/tiktok--v1.png', color: '#000000', name: 'TikTok' },
+    { id: 'youtube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#FF0000', name: 'YouTube' },
+    { id: 'whatsapp', icon: 'https://img.icons8.com/color/48/whatsapp--v1.png', color: '#25D366', name: 'WhatsApp' },
+    { id: 'snapchat', icon: 'https://img.icons8.com/color/48/snapchat--v1.png', color: '#FFFC00', name: 'Snapchat' },
+    { id: 'discord', icon: 'https://img.icons8.com/color/48/discord-new.png', color: '#5865F2', name: 'Discord' },
+    { id: 'twitch', icon: 'https://img.icons8.com/color/48/twitch.png', color: '#9146FF', name: 'Twitch' },
+    { id: 'telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', color: '#0088CC', name: 'Telegram' },
+    { id: 'pinterest', icon: 'https://img.icons8.com/color/48/pinterest.png', color: '#BD081C', name: 'Pinterest' },
+    { id: 'reddit', icon: 'https://img.icons8.com/color/48/reddit.png', color: '#FF4500', name: 'Reddit' },
+    { id: 'spotify', icon: 'https://img.icons8.com/color/48/spotify--v1.png', color: '#1DB954', name: 'Spotify' },
+    { id: 'behance', icon: 'https://img.icons8.com/color/48/behance.png', color: '#1769FF', name: 'Behance' },
+    { id: 'line', icon: 'https://img.icons8.com/color/48/line-me.png', color: '#00B900', name: 'Line' },
+    { id: 'dribbble', icon: 'https://img.icons8.com/color/48/dribbble.png', color: '#EA4C89', name: 'Dribbble' },
+    { id: 'tumblr', icon: 'https://img.icons8.com/color/48/tumblr.png', color: '#35465C', name: 'Tumblr' }
 ];
 
 const MobilePreview = ({ config, isLiveView = false }) => {
@@ -926,25 +928,25 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 if (!comp.data.selectedPlatforms || comp.data.selectedPlatforms.length === 0) return null;
 
                                 const platformIcons = {
-                                    'Facebook': '📘',
-                                    'Instagram': '📷',
-                                    'X': '✖️',
-                                    'LinkedIn': '💼',
-                                    'Discord': '🎮',
-                                    'Twitch': '🎬',
-                                    'Kick': '⚡',
-                                    'YouTube': '▶️',
-                                    'WhatsApp': '💬',
-                                    'Snapchat': '👻',
-                                    'TikTok': '🎵',
-                                    'Tumblr': '📝',
-                                    'Spotify': '🎧',
-                                    'Dribbble': '🏀',
-                                    'Pinterest': '📌',
-                                    'Telegram': '✈️',
-                                    'Behance': '🎨',
-                                    'Reddit': '🤖',
-                                    'Website': '🌐'
+                                    'Facebook': 'https://cdn-icons-png.flaticon.com/512/124/124010.png',
+                                    'Instagram': 'https://cdn-icons-png.flaticon.com/512/174/174855.png',
+                                    'X': 'https://cdn-icons-png.flaticon.com/512/733/733579.png',
+                                    'LinkedIn': 'https://cdn-icons-png.flaticon.com/512/174/174857.png',
+                                    'Discord': 'https://cdn-icons-png.flaticon.com/512/5968/5968756.png',
+                                    'Twitch': 'https://cdn-icons-png.flaticon.com/512/5968/5968819.png',
+                                    'Kick': 'https://res.cloudinary.com/date1bmhd/image/upload/v1735108000/kick-logo_u1zqov.png',
+                                    'YouTube': 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png',
+                                    'WhatsApp': 'https://cdn-icons-png.flaticon.com/512/733/733585.png',
+                                    'Snapchat': 'https://cdn-icons-png.flaticon.com/512/174/174870.png',
+                                    'TikTok': 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png',
+                                    'Tumblr': 'https://cdn-icons-png.flaticon.com/512/174/174872.png',
+                                    'Spotify': 'https://cdn-icons-png.flaticon.com/512/174/174868.png',
+                                    'Dribbble': 'https://cdn-icons-png.flaticon.com/512/174/174844.png',
+                                    'Pinterest': 'https://cdn-icons-png.flaticon.com/512/174/174863.png',
+                                    'Telegram': 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png',
+                                    'Behance': 'https://cdn-icons-png.flaticon.com/512/174/174837.png',
+                                    'Reddit': 'https://cdn-icons-png.flaticon.com/512/174/174866.png',
+                                    'Website': 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png'
                                 };
 
                                 return (
@@ -979,12 +981,24 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         style={{
-                                                            fontSize: '2rem',
+                                                            width: '40px',
+                                                            height: '40px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            background: '#fff',
+                                                            borderRadius: '8px',
                                                             textDecoration: 'none',
-                                                            cursor: 'pointer'
+                                                            cursor: 'pointer',
+                                                            overflow: 'hidden',
+                                                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                                                         }}
                                                     >
-                                                        {platformIcons[platform.name] || '🌐'}
+                                                        <img
+                                                            src={platformIcons[platform.name] || '🌐'}
+                                                            alt={platform.name}
+                                                            style={{ width: '24px', height: '24px', objectFit: 'contain' }}
+                                                        />
                                                     </a>
                                                 ))}
                                             </div>
@@ -1674,24 +1688,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 {socialLinks
                                     .filter(link => link.url && link.url.trim() !== '')
                                     .map((link) => {
-                                        // Social media platform mapping
-                                        const platformConfig = {
-                                            website: { icon: Globe, color: '#6366f1', name: 'Website' },
-                                            facebook: { icon: Facebook, color: '#1877f2', name: 'Facebook' },
-                                            instagram: { icon: Instagram, color: '#E1306C', gradient: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', name: 'Instagram' },
-                                            twitter: { icon: Twitter, color: '#000000', name: 'X' },
-                                            linkedin: { icon: Linkedin, color: '#0077b5', name: 'LinkedIn' },
-                                            youtube: { icon: Youtube, color: '#ff0000', name: 'YouTube' },
-                                            snapchat: { icon: Ghost, color: '#fffc00', name: 'Snapchat', textColor: '#000' },
-                                            tiktok: { icon: Music, color: '#000000', name: 'TikTok' },
-                                            spotify: { icon: Music, color: '#1db954', name: 'Spotify' },
-                                            behance: { icon: Dribbble, color: '#1769ff', name: 'Behance' },
-                                        };
-
-                                        const platform = platformConfig[link.platform];
+                                        const platform = socialIconsMap.find(p => p.id === link.platform) || socialIconsMap.find(p => p.id === 'website');
                                         if (!platform) return null;
 
-                                        const Icon = platform.icon;
                                         const url = link.url.startsWith('http') ? link.url : `https://${link.url}`;
 
                                         return (
@@ -1702,11 +1701,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                     width: '45px',
                                                     height: '45px',
                                                     borderRadius: '50%',
-                                                    background: platform.gradient || platform.color,
+                                                    background: platform.color,
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
-                                                    color: platform.textColor || '#fff',
                                                     cursor: 'pointer',
                                                     transition: 'transform 0.2s',
                                                     boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
@@ -1719,7 +1717,16 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                 }}
                                                 title={platform.name}
                                             >
-                                                <Icon size={22} color={platform.textColor || "#fff"} />
+                                                <img
+                                                    src={platform.icon}
+                                                    alt={platform.name}
+                                                    style={{
+                                                        width: '24px',
+                                                        height: '24px',
+                                                        objectFit: 'contain',
+                                                        filter: link.platform === 'snapchat' || link.platform === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                                    }}
+                                                />
                                             </div>
                                         );
                                     })}
@@ -2627,7 +2634,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                 behance: { icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF', name: 'Behance' },
                                                 pinterest: { icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C', name: 'Pinterest' },
                                                 reddit: { icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500', name: 'Reddit' },
-                                                line: { id: 'line', name: 'Line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900' }
+                                                line: { icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900', name: 'Line' },
+                                                dribbble: { icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111388.png', color: '#EA4C89', name: 'Dribbble' }
                                             };
 
                                             const platform = platformConfig[link.platform];
@@ -2821,24 +2829,24 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 // Platform configuration consistent with SocialMediaConfig.jsx
                                 // Platform configuration consistent with SocialMediaConfig.jsx
                                 const platformConfig = [
-                                    { id: 'website', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#6366f1' },
-                                    { id: 'facebook', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877f2' },
-                                    { id: 'instagram', urlKey: 'instagramUrl', textKey: 'instagramText', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
-                                    { id: 'twitter', urlKey: 'twitterUrl', textKey: 'twitterText', name: 'X (Twitter)', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000' },
-                                    { id: 'linkedin', urlKey: 'linkedinUrl', textKey: 'linkedinText', name: 'LinkedIn', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0a66c2' },
-                                    { id: 'discord', urlKey: 'discordUrl', textKey: 'discordText', name: 'Discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865f2' },
-                                    { id: 'twitch', urlKey: 'twitchUrl', textKey: 'twitchText', name: 'Twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146ff' },
-                                    { id: 'youtube', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#ff0000' },
-                                    { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25d366' },
-                                    { id: 'snapchat', urlKey: 'snapchatUrl', textKey: 'snapchatText', name: 'Snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#fffc00' },
-                                    { id: 'tiktok', urlKey: 'tiktokUrl', textKey: 'tiktokText', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
-                                    { id: 'tumblr', urlKey: 'tumblrUrl', textKey: 'tumblrText', name: 'Tumblr', icon: 'https://cdn-icons-png.flaticon.com/512/100/100611.png', color: '#35465c' },
-                                    { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1db954' },
-                                    { id: 'telegram', urlKey: 'telegramUrl', textKey: 'telegramText', name: 'Telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088cc' },
-                                    { id: 'behance', urlKey: 'behanceUrl', textKey: 'behanceText', name: 'Behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769ff' },
-                                    { id: 'pinterest', urlKey: 'pinterestUrl', textKey: 'pinterestText', name: 'Pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#e60023' },
-                                    { id: 'reddit', urlKey: 'redditUrl', textKey: 'redditText', name: 'Reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#ff4500' },
-                                    { id: 'line', urlKey: 'lineUrl', textKey: 'lineText', name: 'Line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900' },
+                                    { id: 'website', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Website', icon: 'https://img.icons8.com/color/48/domain.png', color: '#6366f1' },
+                                    { id: 'facebook', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877f2' },
+                                    { id: 'instagram', urlKey: 'instagramUrl', textKey: 'instagramText', name: 'Instagram', icon: 'https://img.icons8.com/color/48/instagram-new--v1.png', color: '#E4405F' },
+                                    { id: 'twitter', urlKey: 'twitterUrl', textKey: 'twitterText', name: 'X (Twitter)', icon: 'https://img.icons8.com/color/48/twitterx--v1.png', color: '#000000' },
+                                    { id: 'linkedin', urlKey: 'linkedinUrl', textKey: 'linkedinText', name: 'LinkedIn', icon: 'https://img.icons8.com/color/48/linkedin.png', color: '#0a66c2' },
+                                    { id: 'discord', urlKey: 'discordUrl', textKey: 'discordText', name: 'Discord', icon: 'https://img.icons8.com/color/48/discord-new.png', color: '#5865f2' },
+                                    { id: 'twitch', urlKey: 'twitchUrl', textKey: 'twitchText', name: 'Twitch', icon: 'https://img.icons8.com/color/48/twitch.png', color: '#9146ff' },
+                                    { id: 'youtube', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'YouTube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#ff0000' },
+                                    { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: 'https://img.icons8.com/color/48/whatsapp--v1.png', color: '#25d366' },
+                                    { id: 'snapchat', urlKey: 'snapchatUrl', textKey: 'snapchatText', name: 'Snapchat', icon: 'https://img.icons8.com/color/48/snapchat--v1.png', color: '#fffc00' },
+                                    { id: 'tiktok', urlKey: 'tiktokUrl', textKey: 'tiktokText', name: 'TikTok', icon: 'https://img.icons8.com/color/48/tiktok--v1.png', color: '#000000' },
+                                    { id: 'tumblr', urlKey: 'tumblrUrl', textKey: 'tumblrText', name: 'Tumblr', icon: 'https://img.icons8.com/color/48/tumblr.png', color: '#35465c' },
+                                    { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: 'https://img.icons8.com/color/48/spotify--v1.png', color: '#1db954' },
+                                    { id: 'telegram', urlKey: 'telegramUrl', textKey: 'telegramText', name: 'Telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', color: '#0088cc' },
+                                    { id: 'behance', urlKey: 'behanceUrl', textKey: 'behanceText', name: 'Behance', icon: 'https://img.icons8.com/color/48/behance.png', color: '#1769ff' },
+                                    { id: 'pinterest', urlKey: 'pinterestUrl', textKey: 'pinterestText', name: 'Pinterest', icon: 'https://img.icons8.com/color/48/pinterest.png', color: '#e60023' },
+                                    { id: 'reddit', urlKey: 'redditUrl', textKey: 'redditText', name: 'Reddit', icon: 'https://img.icons8.com/color/48/reddit.png', color: '#ff4500' },
+                                    { id: 'line', urlKey: 'lineUrl', textKey: 'lineText', name: 'Line', icon: 'https://img.icons8.com/color/48/line-me.png', color: '#00B900' },
                                 ];
 
                                 // Filter active platforms (present in social config)
@@ -2847,9 +2855,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 // Default Fallback if no platforms configured (User request: show defaults like image)
                                 if (activePlatforms.length === 0) {
                                     activePlatforms = [
-                                        { id: 'default-visit', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Visit Us Online', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#6366f1', isDefault: true },
-                                        { id: 'default-fb', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877f2', isDefault: true },
-                                        { id: 'default-yt', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'Youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#ff0000', isDefault: true }
+                                        { id: 'default-visit', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Visit Us Online', icon: 'https://img.icons8.com/color/48/domain.png', color: '#6366f1', isDefault: true },
+                                        { id: 'default-fb', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877f2', isDefault: true },
+                                        { id: 'default-yt', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'Youtube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#ff0000', isDefault: true }
                                     ];
                                 }
 
@@ -3172,25 +3180,6 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         gap: '1rem'
                     }}>
                         {(() => {
-                            const platforms = [
-                                { id: 'website', icon: Globe, color: '#6366f1' },
-                                { id: 'facebook', icon: Facebook, color: '#1877f2' },
-                                { id: 'instagram', icon: Instagram, color: '#E1306C' },
-                                { id: 'twitter', icon: Twitter, color: '#000000' },
-                                { id: 'linkedin', icon: Linkedin, color: '#0077b5' },
-                                { id: 'discord', icon: Gamepad2, color: '#5865f2' },
-                                { id: 'twitch', icon: Twitch, color: '#9146ff' },
-                                { id: 'youtube', icon: Youtube, color: '#ff0000' },
-                                { id: 'whatsapp', icon: MessageCircle, color: '#25d366' },
-                                { id: 'snapchat', icon: Ghost, color: '#fffc00', textColor: '#000' },
-                                { id: 'tiktok', icon: Music, color: '#000000' },
-                                { id: 'pinterest', icon: Github, color: '#e60023' },
-                                { id: 'dribbble', icon: Dribbble, color: '#ea4c89' },
-                                { id: 'telegram', icon: MessageSquare, color: '#0088cc' },
-                                { id: 'reddit', icon: Github, color: '#ff4500' },
-                                { id: 'spotify', icon: Music, color: '#1DB954' },
-                            ];
-
                             const socialLinks = (social && Object.values(social).some(v => v && v.trim() !== ''))
                                 ? social
                                 : {
@@ -3200,25 +3189,34 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     whatsapp: 'https://whatsapp.com'
                                 };
 
-                            return platforms.map(p => {
-                                if (socialLinks[p.id]) {
-                                    return (
-                                        <a key={p.id} href={socialLinks[p.id]} target="_blank" rel="noopener noreferrer" style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            width: '40px',
-                                            height: '40px',
-                                            background: p.color,
-                                            borderRadius: '8px',
-                                            color: p.textColor || '#fff',
-                                            textDecoration: 'none'
-                                        }}>
-                                            <p.icon size={20} />
-                                        </a>
-                                    );
-                                }
-                                return null;
+                            return Object.entries(socialLinks).map(([key, value]) => {
+                                if (!value || value.trim() === '') return null;
+                                const platform = socialIconsMap.find(p => p.id === key) || socialIconsMap.find(p => p.id === 'website');
+                                if (!platform) return null;
+
+                                return (
+                                    <a key={key} href={value.startsWith('http') ? value : `https://${value}`} target="_blank" rel="noopener noreferrer" style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        width: '40px',
+                                        height: '40px',
+                                        background: platform.color,
+                                        borderRadius: '8px',
+                                        textDecoration: 'none'
+                                    }}>
+                                        <img
+                                            src={platform.icon}
+                                            alt={platform.name}
+                                            style={{
+                                                width: '24px',
+                                                height: '24px',
+                                                objectFit: 'contain',
+                                                filter: key === 'snapchat' || key === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                            }}
+                                        />
+                                    </a>
+                                );
                             });
                         })()}
                     </div>
@@ -3697,24 +3695,28 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                         <div style={{ padding: '0 1.5rem 2rem' }}>
                             <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '1rem' }}>Social Networks</h3>
-                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                                 {[
-                                    { key: 'website', icon: Globe, color: '#4f46e5' },
-                                    { key: 'whatsapp', icon: MessageCircle, color: '#22c55e' },
-                                    { key: 'facebook', icon: Facebook, color: '#3b82f6' },
-                                    { key: 'instagram', icon: Instagram, color: '#ec4899' },
-                                    { key: 'twitter', icon: Twitter, color: '#0ea5e9' },
-                                    { key: 'linkedin', icon: Linkedin, color: '#0ea5e9' },
-                                    { key: 'tiktok', icon: Video, color: '#000000' },
-                                    { key: 'discord', icon: Gamepad2, color: '#6366f1' },
-                                    { key: 'youtube', icon: Youtube, color: '#ef4444' },
-                                    { key: 'twitch', icon: Twitch, color: '#a855f7' },
-                                    { key: 'line', icon: MessageSquare, color: '#22c55e' },
-                                    { key: 'snapchat', icon: Ghost, color: '#eab308' },
-                                    { key: 'tumblr', icon: PenTool, color: '#0f172a' },
-                                    { key: 'spotify', icon: Music, color: '#22c55e' },
-                                    { key: 'dribbble', icon: Dribbble, color: '#ea4c89' }
-                                ].map(({ key, icon: Icon, color }) => social?.[key] && (
+                                    { key: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563' },
+                                    { key: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
+                                    { key: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2' },
+                                    { key: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
+                                    { key: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000' },
+                                    { key: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
+                                    { key: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
+                                    { key: 'discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2' },
+                                    { key: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
+                                    { key: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF' },
+                                    { key: 'line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900' },
+                                    { key: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00' },
+                                    { key: 'tumblr', icon: 'https://cdn-icons-png.flaticon.com/512/100/100611.png', color: '#35465C' },
+                                    { key: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954' },
+                                    { key: 'dribbble', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111388.png', color: '#EA4C89' },
+                                    { key: 'pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C' },
+                                    { key: 'telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC' },
+                                    { key: 'behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF' },
+                                    { key: 'reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500' }
+                                ].map(({ key, icon, color }) => social?.[key] && (
                                     <div key={key} style={{
                                         width: '40px',
                                         height: '40px',
@@ -3723,10 +3725,14 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        color: '#fff',
                                         flexShrink: 0
                                     }}>
-                                        <Icon size={20} />
+                                        <img src={icon} alt={key} style={{
+                                            width: '24px',
+                                            height: '24px',
+                                            objectFit: 'contain',
+                                            filter: key === 'snapchat' || key === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                        }} />
                                     </div>
                                 ))}
                             </div>
@@ -6727,61 +6733,45 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             <div style={{ marginTop: '2rem' }}>
                                 <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '1rem' }}>Social Networks</h3>
                                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', maxHeight: '200px', overflowY: 'auto', paddingBottom: '0.5rem', scrollbarWidth: 'thin' }}>
-                                    {[
-                                        { key: 'facebook', bg: '#1877F2', icon: <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>f</span> },
-                                        { key: 'instagram', bg: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)', icon: <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>📷</span> },
-                                        { key: 'twitter', bg: '#000', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>𝕏</span> },
-                                        { key: 'linkedin', bg: '#0A66C2', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>in</span> },
-                                        { key: 'discord', bg: '#5865F2', icon: <span style={{ color: '#fff', fontSize: '16px' }}>💬</span> },
-                                        { key: 'twitch', bg: '#9146FF', icon: <span style={{ color: '#fff', fontSize: '16px' }}>📺</span> },
-                                        { key: 'line', bg: '#00B900', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>💬</span> },
-                                        { key: 'youtube', bg: '#FF0000', icon: <span style={{ color: '#fff', fontSize: '16px' }}>▶</span> },
-                                        { key: 'whatsapp', bg: '#25D366', icon: <Phone size={18} color="#fff" /> },
-                                        { key: 'snapchat', bg: '#FFFC00', icon: <span style={{ fontSize: '18px' }}>👻</span> },
-                                        { key: 'tiktok', bg: '#000', icon: <span style={{ color: '#fff', fontSize: '18px' }}>♪</span> },
-                                        { key: 'tumblr', bg: '#35465C', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>t</span> },
-                                        { key: 'spotify', bg: '#1DB954', icon: <span style={{ color: '#fff', fontSize: '16px' }}>🎵</span> },
-                                        { key: 'dribbble', bg: '#EA4C89', icon: <span style={{ color: '#fff', fontSize: '16px' }}>🏀</span> },
-                                        { key: 'pinterest', bg: '#E60023', icon: <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>P</span> },
-                                        { key: 'telegram', bg: '#0088cc', icon: <span style={{ color: '#fff', fontSize: '16px' }}>✈️</span> },
-                                        { key: 'behance', bg: '#1769FF', icon: <span style={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>Be</span> },
-                                        { key: 'reddit', bg: '#FF4500', icon: <span style={{ color: '#fff', fontSize: '16px' }}>👽</span> },
-                                        { key: 'website', bg: '#6366f1', icon: <Globe size={18} color="#fff" /> },
-                                    ].map(platform => {
-                                        const url = social[platform.key];
+                                    {socialIconsMap.map(platform => {
+                                        const url = social[platform.id];
                                         if (!url || typeof url !== 'string' || url.trim() === '') return null;
 
-                                        // Handle special case for whatsapp where input might be number only, but link usually requires protocol or just number for API
-                                        // For now assume user enters what they want.
-
-                                        // Fix link protocol if missing
                                         let href = url.trim();
                                         if (!href.startsWith('http') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
-                                            // Don't auto-add https for everything, but for social links usually safe. 
-                                            // Keeping it as is if user wants just text, but usually these are links.
-                                            // For preview visual, we just need the item.
+                                            if (platform.id === 'whatsapp') {
+                                                href = `https://wa.me/${href.replace(/\D/g, '')}`;
+                                            } else {
+                                                href = `https://${href}`;
+                                            }
                                         }
 
                                         return (
                                             <a
-                                                key={platform.key}
+                                                key={platform.id}
                                                 href={href}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 style={{
                                                     width: '40px',
                                                     height: '40px',
-                                                    background: platform.bg,
-                                                    borderRadius: '8px',
+                                                    background: '#fff',
+                                                    borderRadius: '10px',
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
                                                     textDecoration: 'none',
                                                     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                                                    flexShrink: 0
+                                                    flexShrink: 0,
+                                                    padding: '8px',
+                                                    border: '1px solid #f1f5f9'
                                                 }}
                                             >
-                                                {platform.icon}
+                                                <img
+                                                    src={platform.icon}
+                                                    alt={platform.name}
+                                                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                                                />
                                             </a>
                                         );
                                     })}

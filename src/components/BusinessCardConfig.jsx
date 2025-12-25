@@ -4,24 +4,24 @@ import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const BusinessCardConfig = ({ config, onChange }) => {
     const socialPlatforms = [
-        { id: 'facebook', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2' },
-        { id: 'instagram', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
-        { id: 'twitter', name: 'X', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000' },
-        { id: 'linkedin', name: 'LinkedIn', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
-        { id: 'discord', name: 'Discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2' },
-        { id: 'youtube', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
-        { id: 'whatsapp', name: 'WhatsApp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
-        { id: 'snapchat', name: 'Snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00' },
-        { id: 'tiktok', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
-        { id: 'spotify', name: 'Spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954' },
-        { id: 'dribbble', name: 'Dribbble', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111388.png', color: '#EA4C89' },
-        { id: 'pinterest', name: 'Pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C' },
-        { id: 'telegram', name: 'Telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC' },
-        { id: 'reddit', name: 'Reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500' },
-        { id: 'website', name: 'Website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563' },
-        { id: 'behance', name: 'Behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF' },
-        { id: 'twitch', name: 'Twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF' },
-        { id: 'line', name: 'Line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900' }
+        { id: 'facebook', name: 'Facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877F2' },
+        { id: 'instagram', name: 'Instagram', icon: 'https://img.icons8.com/color/48/instagram-new--v1.png', color: '#E4405F' },
+        { id: 'twitter', name: 'X', icon: 'https://img.icons8.com/color/48/twitterx--v1.png', color: '#000000' },
+        { id: 'linkedin', name: 'LinkedIn', icon: 'https://img.icons8.com/color/48/linkedin.png', color: '#0A66C2' },
+        { id: 'discord', name: 'Discord', icon: 'https://img.icons8.com/color/48/discord-new.png', color: '#5865F2' },
+        { id: 'youtube', name: 'YouTube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#FF0000' },
+        { id: 'whatsapp', name: 'WhatsApp', icon: 'https://img.icons8.com/color/48/whatsapp--v1.png', color: '#25D366' },
+        { id: 'snapchat', name: 'Snapchat', icon: 'https://img.icons8.com/color/48/snapchat--v1.png', color: '#FFFC00' },
+        { id: 'tiktok', name: 'TikTok', icon: 'https://img.icons8.com/color/48/tiktok--v1.png', color: '#000000' },
+        { id: 'spotify', name: 'Spotify', icon: 'https://img.icons8.com/color/48/spotify--v1.png', color: '#1DB954' },
+        { id: 'dribbble', name: 'Dribbble', icon: 'https://img.icons8.com/color/48/dribbble.png', color: '#EA4C89' },
+        { id: 'pinterest', name: 'Pinterest', icon: 'https://img.icons8.com/color/48/pinterest.png', color: '#BD081C' },
+        { id: 'telegram', name: 'Telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', color: '#0088CC' },
+        { id: 'reddit', name: 'Reddit', icon: 'https://img.icons8.com/color/48/reddit.png', color: '#FF4500' },
+        { id: 'website', name: 'Website', icon: 'https://img.icons8.com/color/48/domain.png', color: '#4B5563' },
+        { id: 'behance', name: 'Behance', icon: 'https://img.icons8.com/color/48/behance.png', color: '#1769FF' },
+        { id: 'twitch', name: 'Twitch', icon: 'https://img.icons8.com/color/48/twitch.png', color: '#9146FF' },
+        { id: 'line', name: 'Line', icon: 'https://img.icons8.com/color/48/line-me.png', color: '#00B900' }
     ];
 
     const [isDesignOpen, setIsDesignOpen] = useState(true);
@@ -967,15 +967,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#6366f1',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <Globe size={18} color="#fff" />
+                                            <img src="https://img.icons8.com/color/48/domain.png" alt="Website" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -987,7 +988,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1018,15 +1019,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#25D366',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <Phone size={18} color="#fff" />
+                                            <img src="https://img.icons8.com/color/48/whatsapp--v1.png" alt="WhatsApp" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1038,7 +1040,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1069,15 +1071,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#1877F2',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>f</span>
+                                            <img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1089,7 +1092,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1120,15 +1123,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#0A66C2',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>in</span>
+                                            <img src="https://img.icons8.com/color/48/linkedin.png" alt="LinkedIn" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1140,7 +1144,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1171,15 +1175,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#000',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>♪</span>
+                                            <img src="https://img.icons8.com/color/48/tiktok--v1.png" alt="TikTok" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1191,7 +1196,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1222,15 +1227,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>📷</span>
+                                            <img src="https://img.icons8.com/color/48/instagram-new--v1.png" alt="Instagram" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1242,7 +1248,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1273,15 +1279,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#000',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>𝕏</span>
+                                            <img src="https://img.icons8.com/color/48/twitterx--v1.png" alt="Twitter" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1293,7 +1300,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1324,15 +1331,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#5865F2',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '16px' }}>💬</span>
+                                            <img src="https://img.icons8.com/color/48/discord-new.png" alt="Discord" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1344,7 +1352,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1375,15 +1383,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#FF0000',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '16px' }}>▶</span>
+                                            <img src="https://img.icons8.com/color/48/youtube-play.png" alt="YouTube" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1395,7 +1404,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1426,15 +1435,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#9146FF',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '16px' }}>📺</span>
+                                            <img src="https://img.icons8.com/color/48/twitch.png" alt="Twitch" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1446,7 +1456,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1477,15 +1487,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#00B900',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>💬</span>
+                                            <img src="https://img.icons8.com/color/48/line-me.png" alt="Line" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1497,7 +1508,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1528,15 +1539,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#FFFC00',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ fontSize: '18px' }}>👻</span>
+                                            <img src="https://img.icons8.com/color/48/snapchat--v1.png" alt="Snapchat" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1548,7 +1560,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1579,15 +1591,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#35465C',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>t</span>
+                                            <img src="https://img.icons8.com/color/48/tumblr.png" alt="Tumblr" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1599,7 +1612,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1630,15 +1643,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#1DB954',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '16px' }}>🎵</span>
+                                            <img src="https://img.icons8.com/color/48/spotify--v1.png" alt="Spotify" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1650,7 +1664,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1681,15 +1695,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#EA4C89',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '16px' }}>🏀</span>
+                                            <img src="https://img.icons8.com/color/48/dribbble.png" alt="Dribbble" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1701,7 +1716,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1732,15 +1747,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#E60023',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>P</span>
+                                            <img src="https://img.icons8.com/color/48/pinterest.png" alt="Pinterest" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1752,7 +1768,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1783,15 +1799,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#0088cc',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '16px' }}>✈️</span>
+                                            <img src="https://img.icons8.com/color/48/telegram-app.png" alt="Telegram" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1803,7 +1820,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1834,15 +1851,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#1769FF',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>Be</span>
+                                            <img src="https://img.icons8.com/color/48/behance.png" alt="Behance" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1854,7 +1872,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button
@@ -1885,15 +1903,16 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#FF4500',
+                                            background: '#fff',
                                             borderRadius: '4px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            border: '1px solid #e2e8f0'
                                         }}>
-                                            <span style={{ color: '#fff', fontSize: '16px' }}>👽</span>
+                                            <img src="https://img.icons8.com/color/48/reddit.png" alt="Reddit" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1905,7 +1924,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#94a3b8'
+                                                color: '#1e293b'
                                             }}
                                         />
                                         <button

@@ -147,7 +147,7 @@ const AppStoreConfig = ({ config, onChange }) => {
                             <div style={{ flex: '1 1 150px' }}>
                                 <ColorPicker
                                     label="Secondary Color"
-                                    color={getValue('design.color.light') || '#f3f4f6'}
+                                    color={getValue('design.color.light') || '#ff9500'}
                                     onChange={(c) => {
                                         updateConfig('design.color.light', c);
                                     }}

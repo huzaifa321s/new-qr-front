@@ -1855,25 +1855,25 @@ const CustomConfig = ({ config, onChange }) => {
                                                 {/* Social Media Icons Grid */}
                                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(40px, 1fr))', gap: '0.75rem' }}>
                                                     {[
-                                                        { name: 'Facebook', icon: '📘', color: '#1877F2' },
-                                                        { name: 'Instagram', icon: '📷', color: '#E4405F' },
-                                                        { name: 'X', icon: '✖️', color: '#000000' },
-                                                        { name: 'LinkedIn', icon: '💼', color: '#0A66C2' },
-                                                        { name: 'Discord', icon: '🎮', color: '#5865F2' },
-                                                        { name: 'Twitch', icon: '🎬', color: '#9146FF' },
-                                                        { name: 'Kick', icon: '⚡', color: '#53FC18' },
-                                                        { name: 'YouTube', icon: '▶️', color: '#FF0000' },
-                                                        { name: 'WhatsApp', icon: '💬', color: '#25D366' },
-                                                        { name: 'Snapchat', icon: '👻', color: '#FFFC00' },
-                                                        { name: 'TikTok', icon: '🎵', color: '#000000' },
-                                                        { name: 'Tumblr', icon: '📝', color: '#35465C' },
-                                                        { name: 'Spotify', icon: '🎧', color: '#1DB954' },
-                                                        { name: 'Dribbble', icon: '🏀', color: '#EA4C89' },
-                                                        { name: 'Pinterest', icon: '📌', color: '#E60023' },
-                                                        { name: 'Telegram', icon: '✈️', color: '#26A5E4' },
-                                                        { name: 'Behance', icon: '🎨', color: '#1769FF' },
-                                                        { name: 'Reddit', icon: '🤖', color: '#FF4500' },
-                                                        { name: 'Website', icon: '🌐', color: '#6366F1' }
+                                                        { name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/124/124010.png', color: '#1877F2' },
+                                                        { name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png', color: '#E4405F' },
+                                                        { name: 'X', icon: 'https://cdn-icons-png.flaticon.com/512/733/733579.png', color: '#000000' },
+                                                        { name: 'LinkedIn', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
+                                                        { name: 'Discord', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968756.png', color: '#5865F2' },
+                                                        { name: 'Twitch', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968819.png', color: '#9146FF' },
+                                                        { name: 'Kick', icon: 'https://res.cloudinary.com/date1bmhd/image/upload/v1735108000/kick-logo_u1zqov.png', color: '#53FC18' },
+                                                        { name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
+                                                        { name: 'WhatsApp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
+                                                        { name: 'Snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/174/174870.png', color: '#FFFC00' },
+                                                        { name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
+                                                        { name: 'Tumblr', icon: 'https://cdn-icons-png.flaticon.com/512/174/174872.png', color: '#35465C' },
+                                                        { name: 'Spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954' },
+                                                        { name: 'Dribbble', icon: 'https://cdn-icons-png.flaticon.com/512/174/174844.png', color: '#EA4C89' },
+                                                        { name: 'Pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/174/174863.png', color: '#E60023' },
+                                                        { name: 'Telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#26A5E4' },
+                                                        { name: 'Behance', icon: 'https://cdn-icons-png.flaticon.com/512/174/174837.png', color: '#1769FF' },
+                                                        { name: 'Reddit', icon: 'https://cdn-icons-png.flaticon.com/512/174/174866.png', color: '#FF4500' },
+                                                        { name: 'Website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#6366F1' }
                                                     ].map(platform => {
                                                         const isSelected = comp.data.selectedPlatforms.some(p => p.name === platform.name);
                                                         return (
@@ -1884,18 +1884,18 @@ const CustomConfig = ({ config, onChange }) => {
                                                                     width: '40px',
                                                                     height: '40px',
                                                                     borderRadius: '8px',
-                                                                    background: platform.color,
+                                                                    background: '#fff',
                                                                     display: 'flex',
                                                                     alignItems: 'center',
                                                                     justifyContent: 'center',
                                                                     cursor: 'pointer',
-                                                                    fontSize: '1.2rem',
-                                                                    border: isSelected ? '3px solid #8b5cf6' : 'none',
-                                                                    boxShadow: isSelected ? '0 0 0 2px #fff, 0 0 0 4px #8b5cf6' : 'none'
+                                                                    overflow: 'hidden',
+                                                                    border: isSelected ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                                                    transition: 'all 0.2s'
                                                                 }}
                                                                 title={platform.name}
                                                             >
-                                                                {platform.icon}
+                                                                <img src={platform.icon} alt={platform.name} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
                                                             </div>
                                                         );
                                                     })}
@@ -1907,25 +1907,25 @@ const CustomConfig = ({ config, onChange }) => {
                                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1.5rem' }}>
                                                     {comp.data.selectedPlatforms.map(platform => {
                                                         const platformInfo = [
-                                                            { name: 'Facebook', icon: '📘', color: '#1877F2' },
-                                                            { name: 'Instagram', icon: '📷', color: '#E4405F' },
-                                                            { name: 'X', icon: '✖️', color: '#000000' },
-                                                            { name: 'LinkedIn', icon: '💼', color: '#0A66C2' },
-                                                            { name: 'Discord', icon: '🎮', color: '#5865F2' },
-                                                            { name: 'Twitch', icon: '🎬', color: '#9146FF' },
-                                                            { name: 'Kick', icon: '⚡', color: '#53FC18' },
-                                                            { name: 'YouTube', icon: '▶️', color: '#FF0000' },
-                                                            { name: 'WhatsApp', icon: '💬', color: '#25D366' },
-                                                            { name: 'Snapchat', icon: '👻', color: '#FFFC00' },
-                                                            { name: 'TikTok', icon: '🎵', color: '#000000' },
-                                                            { name: 'Tumblr', icon: '📝', color: '#35465C' },
-                                                            { name: 'Spotify', icon: '🎧', color: '#1DB954' },
-                                                            { name: 'Dribbble', icon: '🏀', color: '#EA4C89' },
-                                                            { name: 'Pinterest', icon: '📌', color: '#E60023' },
-                                                            { name: 'Telegram', icon: '✈️', color: '#26A5E4' },
-                                                            { name: 'Behance', icon: '🎨', color: '#1769FF' },
-                                                            { name: 'Reddit', icon: '🤖', color: '#FF4500' },
-                                                            { name: 'Website', icon: '🌐', color: '#6366F1' }
+                                                            { name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/124/124010.png' },
+                                                            { name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png' },
+                                                            { name: 'X', icon: 'https://cdn-icons-png.flaticon.com/512/733/733579.png' },
+                                                            { name: 'LinkedIn', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png' },
+                                                            { name: 'Discord', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968756.png' },
+                                                            { name: 'Twitch', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968819.png' },
+                                                            { name: 'Kick', icon: 'https://res.cloudinary.com/date1bmhd/image/upload/v1735108000/kick-logo_u1zqov.png' },
+                                                            { name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png' },
+                                                            { name: 'WhatsApp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png' },
+                                                            { name: 'Snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/174/174870.png' },
+                                                            { name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png' },
+                                                            { name: 'Tumblr', icon: 'https://cdn-icons-png.flaticon.com/512/174/174872.png' },
+                                                            { name: 'Spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png' },
+                                                            { name: 'Dribbble', icon: 'https://cdn-icons-png.flaticon.com/512/174/174844.png' },
+                                                            { name: 'Pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/174/174863.png' },
+                                                            { name: 'Telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png' },
+                                                            { name: 'Behance', icon: 'https://cdn-icons-png.flaticon.com/512/174/174837.png' },
+                                                            { name: 'Reddit', icon: 'https://cdn-icons-png.flaticon.com/512/174/174866.png' },
+                                                            { name: 'Website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png' }
                                                         ].find(p => p.name === platform.name);
 
                                                         return (
@@ -1945,7 +1945,9 @@ const CustomConfig = ({ config, onChange }) => {
                                                                         fontSize: '1.5rem',
                                                                         flexShrink: 0
                                                                     }}>
-                                                                        {platformInfo?.icon || '🌐'}
+                                                                        {platformInfo?.icon ? (
+                                                                            <img src={platformInfo.icon} alt={platform.name} style={{ width: '30px', height: '30px', objectFit: 'contain' }} />
+                                                                        ) : '🌐'}
                                                                     </div>
                                                                     <input
                                                                         type="url"
