@@ -109,7 +109,7 @@ const Dashboard = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const baseUrl = window.location.origin;
+    const baseUrl = import.meta.env.VITE_FRONTEND_URL || window.location.origin;
 
     const handleDownloadClick = (qr) => {
         setDownloadingQr(qr);
@@ -268,7 +268,7 @@ const Dashboard = () => {
 
     const handleCopyUrl = (qr) => {
         // Always use the original QR data URL from database
-        const url = qr.data || `http://localhost:3000/${qr.shortId}`;
+        const url = qr.data || `${baseUrl}/view/${qr.shortId}`;
         navigator.clipboard.writeText(url);
         setCopiedId(qr._id);
         toast.success('URL Copied!');
@@ -667,12 +667,12 @@ const Dashboard = () => {
                                         QR LINK
                                     </div>
                                     <a
-                                        href={`${window.location.origin}/view/${selectedQrForStats.shortId}`}
+                                        href={`${baseUrl}/view/${selectedQrForStats.shortId}`}
                                         target="_blank"
                                         rel="noreferrer"
                                         style={{ fontSize: '1rem', color: '#7c3aed', textDecoration: 'none', fontWeight: '500' }}
                                     >
-                                        {`${window.location.origin}/view/${selectedQrForStats.shortId}`}
+                                        {`${baseUrl}/view/${selectedQrForStats.shortId}`}
                                     </a>
                                 </div>
 
@@ -714,7 +714,7 @@ const Dashboard = () => {
                                         />
                                     ) : (
                                         <QRRenderer
-                                            value={`http://localhost:3000/${selectedQrForStats.shortId}`}
+                                            value={`${baseUrl}/view/${selectedQrForStats.shortId}`}
                                             design={selectedQrForStats.design || {}}
                                             size={160}
                                         />
@@ -1507,7 +1507,7 @@ const Dashboard = () => {
                                                         />
                                                     ) : (
                                                         <QRRenderer
-                                                            value={`http://localhost:3000/${qr.shortId}`}
+                                                            value={`${baseUrl}/view/${qr.shortId}`}
                                                             design={qr.design || {}}
                                                             size={58}
                                                             id={`qr-${qr._id}`}
@@ -1591,12 +1591,12 @@ const Dashboard = () => {
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                                         <Link size={14} color="#999" />
                                                         <a
-                                                            href={qr.data || `http://localhost:3000/${qr.shortId}`}
+                                                            href={qr.data || `${baseUrl}/view/${qr.shortId}`}
                                                             target="_blank"
                                                             rel="noreferrer"
                                                             style={{ color: '#000', fontSize: '0.875rem', textDecoration: 'none', fontWeight: '500' }}
                                                         >
-                                                            {qr.data || `http://localhost:3000/${qr.shortId}`}
+                                                            {qr.data || `${baseUrl}/view/${qr.shortId}`}
                                                         </a>
                                                         {copiedId === qr._id ? (
                                                             <Check size={12} color="#16a34a" />
