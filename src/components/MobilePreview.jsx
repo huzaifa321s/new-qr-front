@@ -2962,6 +2962,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 <div style={{ height: '100%', overflowY: 'auto', background: '#fff' }}>
                     {/* Header */}
                     <div style={{
+                        position: 'sticky',
+                        top: 0,
+                        zIndex: 10,
                         background: headerColor,
                         padding: '2rem 1rem 1rem',
                         display: 'flex',
@@ -3790,11 +3793,15 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     <div style={{ height: '100%', overflowY: 'auto', background: primaryColor }}>
                         {/* Header */}
                         <div style={{
-                            padding: '2rem 1rem 1rem',
+                            padding: '2.1rem 1rem 0.6rem',
                             display: 'flex',
                             alignItems: 'center',
                             gap: '1rem',
-                            color: '#fff'
+                            color: '#fff',
+                            position: 'sticky',
+                            top: 0,
+                            zIndex: 10,
+                            background: primaryColor
                         }}>
                             {design?.logo?.url && (
                                 <div style={{
@@ -5206,7 +5213,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         padding: '1rem 1.5rem',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'space-between'
+                        justifyContent: 'space-between',
+                        position: 'sticky',
+                        top: 0,
+                        zIndex: 10
                     }}>
                         <div style={{
                             color: companyNameColor,
@@ -5576,7 +5586,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         padding: '2rem 1.5rem 1rem',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.75rem'
+                        gap: '0.75rem',
+                        position: 'sticky',
+                        top: 0,
+                        zIndex: 10
                     }}>
                         {(() => {
                             const isLogoRemoved = design?.logo?.url === null || design?.logo?.url === '';
@@ -6846,13 +6859,13 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                 {/* Header / Cover + Hero */}
                 <div style={{
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 10,
                     background: headerColor || '#7f1d1d',
                     color: '#fff',
                     padding: '0.75rem 1rem',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                    position: 'sticky',
-                    top: 0,
-                    zIndex: 20
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ fontSize: '1rem', fontWeight: '700', letterSpacing: '-0.01em' }}>

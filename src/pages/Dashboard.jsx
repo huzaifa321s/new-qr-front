@@ -129,58 +129,44 @@ const Dashboard = () => {
         }
 
         try {
-            const filename = `${downloadingQr.name || 'qr-code'}.${downloadFormat}`;
+            const format = downloadFormat || 'png';
+            const filename = `${downloadingQr.name || 'qr-code'}.${format}`;
 
-            // ✅ USE BACKEND API FOR DOWNLOAD
-            const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/';
-            const downloadUrl = `${backendUrl}api/qr/download/${downloadingQr.shortId}?format=${downloadFormat}`;
+            // Use the same robust download logic as Statistics page
+            const apiBase = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+            const downloadUrl = `${apiBase}/api/qr/download/${downloadingQr.shortId}?format=${format}`;
 
             console.log('📥 Downloading from:', downloadUrl);
-
-            // Fetch from backend
             const response = await fetch(downloadUrl);
 
-            if (!response.ok) {
-                throw new Error(`Download failed: ${response.statusText}`);
-            }
+            if (!response.ok) throw new Error('Download failed');
 
-            // Get blob and download
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
-
             const link = document.createElement('a');
             link.download = filename;
             link.href = url;
-            link.style.display = 'none';
-
             document.body.appendChild(link);
             link.click();
 
-            // Cleanup
             setTimeout(() => {
                 document.body.removeChild(link);
                 window.URL.revokeObjectURL(url);
             }, 100);
 
             toast.success('QR code downloaded successfully!');
-
+            handleCloseDownloadModal();
         } catch (error) {
-            console.error('Download failed:', error);
+            console.error('Download error:', error);
             toast.error('Failed to download QR code');
 
-            // ❌ FALLBACK: Only use client-side if backend fails
+            // Fallback Client Side
             try {
                 await fallbackClientDownload();
             } catch (fallbackError) {
                 console.error('Fallback also failed:', fallbackError);
-                // Last resort: open blob URL
-                if (downloadingQr?.qrImageUrl) {
-                    window.open(downloadingQr.qrImageUrl, '_blank');
-                }
             }
         }
-
-        handleCloseDownloadModal();
     };
 
     // ❌ Fallback function (only if backend fails)
@@ -337,7 +323,7 @@ const Dashboard = () => {
                 if (!matchesSearch) return false;
 
                 if (activeTab === 'Dynamic') return ['url', 'dynamic-url', 'business-page', 'menu', 'business-card', 'app-store', 'video', 'pdf', 'mp3', 'image', 'social-media', 'coupon', 'feedback', 'event', 'product-page', 'lead-generation', 'rating', 'reviews', 'password-protected', 'multiple-links'].includes(qr.type);
-                if (activeTab === 'Static') return ['text', 'email', 'sms', 'wifi', 'vcard'].includes(qr.type);
+                if (activeTab === 'Static') return ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone'].includes(qr.type);
 
                 return true;
             })
@@ -495,7 +481,7 @@ const Dashboard = () => {
 
             // 2. Tab Filter
             if (activeTab === 'Dynamic') return ['url', 'dynamic-url', 'business-page', 'menu', 'business-card', 'app-store', 'video', 'pdf', 'mp3', 'image', 'social-media', 'coupon', 'feedback', 'event', 'product-page', 'lead-generation', 'rating', 'reviews', 'password-protected', 'multiple-links'].includes(qr.type);
-            if (activeTab === 'Static') return ['text', 'email', 'sms', 'wifi', 'vcard'].includes(qr.type);
+            if (activeTab === 'Static') return ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone'].includes(qr.type);
             // if (activeTab === 'Favourite') return false; 
 
             // 3. Type Filter Dropdown
@@ -545,11 +531,7 @@ const Dashboard = () => {
 
     const qrTypes = [
         { value: 'url', label: 'URL' },
-        { value: 'text', label: 'Text' },
-        { value: 'email', label: 'Email' },
-        { value: 'sms', label: 'SMS' },
-        { value: 'wifi', label: 'Wi-Fi' },
-        { value: 'vcard', label: 'vCard' },
+        { value: 'custom-type', label: 'Custom Type' },
         { value: 'business-card', label: 'Business Card' },
         { value: 'business-page', label: 'Business Page' },
         { value: 'social-media', label: 'Social Media' },
@@ -558,9 +540,7 @@ const Dashboard = () => {
         { value: 'app-store', label: 'App Store' },
         { value: 'menu', label: 'Menu' },
         { value: 'video', label: 'Video' },
-        { value: 'mp3', label: 'MP3' },
         { value: 'coupon', label: 'Coupon' },
-        { value: 'feedback', label: 'Feedback' },
         { value: 'event', label: 'Event' },
         { value: 'product-page', label: 'Product Page' },
         { value: 'lead-generation', label: 'Lead Generation' },
@@ -1461,6 +1441,8 @@ const Dashboard = () => {
                                     const expiryDate = new Date(qr.createdAt);
                                     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
 
+                                    const isStatic = ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone'].includes(qr.type);
+
                                     return (
                                         <div
                                             key={qr._id}
@@ -1507,7 +1489,7 @@ const Dashboard = () => {
                                                         />
                                                     ) : (
                                                         <QRRenderer
-                                                            value={`${baseUrl}/view/${qr.shortId}`}
+                                                            value={isStatic ? qr.data : `${baseUrl}/view/${qr.shortId}`}
                                                             design={qr.design || {}}
                                                             size={58}
                                                             id={`qr-${qr._id}`}
@@ -1585,8 +1567,8 @@ const Dashboard = () => {
                                                 </div>
                                             </div>
 
-                                            {/* URLs Section - Hidden on Mobile */}
-                                            {!isMobile && (
+                                            {/* URLs Section - Hidden on Mobile and for Static QRs */}
+                                            {!isMobile && !isStatic && (
                                                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingLeft: '1rem', borderLeft: '1px solid #f0f0f0' }}>
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                                         <Link size={14} color="#999" />
@@ -1629,9 +1611,9 @@ const Dashboard = () => {
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 gap: isMobile ? '0.5rem' : '1.5rem',
-                                                marginLeft: isMobile ? 'auto' : '0'
+                                                marginLeft: 'auto'
                                             }}>
-                                                {!isMobile && (
+                                                {!isMobile && !isStatic && (
                                                     <div style={{
                                                         display: 'flex',
                                                         flexDirection: 'column',
@@ -1655,6 +1637,28 @@ const Dashboard = () => {
                                                         }}>
                                                             Scans
                                                         </div>
+                                                    </div>
+                                                )}
+
+                                                {!isMobile && isStatic && (
+                                                    <div style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        minWidth: '100px'
+                                                    }}>
+                                                        <span style={{
+                                                            background: '#3b82f6',
+                                                            color: '#fff',
+                                                            padding: '0.4rem 0.8rem',
+                                                            borderRadius: '50px',
+                                                            fontSize: '0.75rem',
+                                                            fontWeight: '700',
+                                                            textTransform: 'uppercase',
+                                                            letterSpacing: '0.5px'
+                                                        }}>
+                                                            Static QR
+                                                        </span>
                                                     </div>
                                                 )}
 
@@ -1783,10 +1787,10 @@ const Dashboard = () => {
                                                         }}>
                                                             <div style={{ padding: '0.5rem 0' }}>
                                                                 {[
-                                                                    { icon: Edit, label: 'Edit', color: '#666', action: () => handleEditQR(qr) },
-                                                                    { icon: BarChart, label: 'Statistics', color: '#666', action: () => navigate(`/statistics/${qr._id}`) },
+                                                                    { icon: Edit, label: 'Edit', color: '#666', action: () => handleEditQR(qr), dynamicOnly: true },
+                                                                    { icon: BarChart, label: 'Statistics', color: '#666', action: () => navigate(`/statistics/${qr._id}`), dynamicOnly: true },
                                                                     { icon: Trash2, label: 'Delete', color: '#ef4444', action: () => handleDeleteClick(qr._id) }
-                                                                ].map((item, idx) => (
+                                                                ].filter(item => !item.dynamicOnly || !isStatic).map((item, idx) => (
                                                                     <button
                                                                         key={idx}
                                                                         onClick={(e) => {

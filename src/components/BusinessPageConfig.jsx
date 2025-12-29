@@ -273,7 +273,7 @@ const BusinessPageConfig = ({ config, onChange }) => {
 
                         {/* Header Options */}
                         {[
-                            'https://img.freepik.com/free-vector/hand-drawn-social-media-doodles_23-2149862823.jpg',
+                            'https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
                             'https://img.freepik.com/free-vector/social-media-marketing-concept-marketing-with-applications_23-2148421838.jpg',
                             'https://img.freepik.com/free-vector/black-white-doodle-seamless-pattern_1159-4567.jpg',
                             'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg',

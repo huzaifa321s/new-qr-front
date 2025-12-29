@@ -55,8 +55,8 @@ export const appStorePreviewConfig = {
 export const couponPreviewConfig = {
     type: 'coupon',
     design: {
-        color: { dark: '#7c3aed', light: '#ffffff' }, // Violet/Purple
-        logo: { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1735027374/uploaded_image_1766558174126_zyqvhx.png' } // Boutique logo placeholder
+        color: { dark: '#7c3aed', light: '#08B8CE' }, // Violet/Purple
+        logo: { url: 'https://picsum.photos/seed/coupon-logo/150/150' } // Boutique logo placeholder
     },
     businessInfo: {
         title: "ABC Boutique"
@@ -106,7 +106,7 @@ export const businessPagePreviewConfig = {
     design: {
         color: { header: '#0f3485', dark: '#0f3485', light: '#ffffff' }, // Dark Blue
         logo: { url: 'https://img.freepik.com/premium-vector/restaurant-logo-design-template_79169-56.jpg' }, // Restaurant logo
-        heroImage: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' // Restaurant interior
+        heroImage: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' // New working cafe image
     },
     businessInfo: {
         title: "Royal's Cafe",
@@ -223,7 +223,7 @@ export const ratingPreviewConfig = {
 export const reviewsPreviewConfig = {
     type: 'reviews',
     design: {
-        color: { header: '#2e3192', dark: '#2e3192', light: '#ffffff' },
+        color: { header: '#2e3192', dark: '#2e3192', light: '#C0E1DD' },
         logo: { url: 'https://img.freepik.com/premium-vector/luxury-hotel-logo-design-template_7492-63.jpg' },
         headerImage: { url: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=267&fit=crop' }
     },

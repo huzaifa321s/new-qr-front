@@ -57,12 +57,14 @@ const TemplateSelection = () => {
                     alignItems: 'center',
                     gap: '2rem'
                 }}>
-                    <span style={{
-                        fontSize: '0.95rem',
-                        color: '#64748b',
-                        cursor: 'pointer'
-                    }}>
-                        Free QRs
+                    <span
+                        onClick={() => navigate('/static-generator')}
+                        style={{
+                            fontSize: '0.95rem',
+                            color: '#64748b',
+                            cursor: 'pointer'
+                        }}>
+                        Static QRs
                     </span>
                     <span style={{
                         fontSize: '0.95rem',
@@ -71,13 +73,6 @@ const TemplateSelection = () => {
                         cursor: 'pointer'
                     }}>
                         Dynamic QRs
-                    </span>
-                    <span style={{
-                        fontSize: '0.95rem',
-                        color: '#64748b',
-                        cursor: 'pointer'
-                    }}>
-                        Plan
                     </span>
                 </div>
             </div>

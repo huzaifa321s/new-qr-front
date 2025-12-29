@@ -159,10 +159,10 @@ const CouponConfig = ({ config, onChange }) => {
     ];
 
     const logoOptions = [
-        { id: 'logo1', url: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=150&h=150&fit=crop' },
-        { id: 'logo2', url: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=150&h=150&fit=crop' },
-        { id: 'logo3', url: 'https://images.unsplash.com/photo-1611944212129-29977ae1398c?w=150&h=150&fit=crop' },
-        { id: 'logo4', url: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=150&h=150&fit=crop' }
+        { id: 'logo1', url: 'https://picsum.photos/seed/logo1/150/150' },
+        { id: 'logo2', url: 'https://picsum.photos/seed/logo2/150/150' },
+        { id: 'logo3', url: 'https://picsum.photos/seed/logo3/150/150' },
+        { id: 'logo4', url: 'https://picsum.photos/seed/logo4/150/150' }
     ];
 
     return (
@@ -174,7 +174,7 @@ const CouponConfig = ({ config, onChange }) => {
                     color: {
                         ...design.color,
                         dark: design.color?.dark || '#7D2AE7',
-                        light: design.color?.light || '#0BBBCE'
+                        light: design.color?.light || '#08B8CE'
                     },
                     logo: {
                         ...design.logo,
