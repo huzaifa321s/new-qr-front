@@ -249,6 +249,7 @@ const Generator = () => {
                 shareOption: editingQr.shareOption || defaultConfig.shareOption,
                 uploadPdf: editingQr.pdf || defaultConfig.uploadPdf,
                 links: editingQr.links || defaultConfig.links,
+                categories: editingQr.categories || defaultConfig.categories,
                 socialLinks: editingQr.socialLinks || defaultConfig.socialLinks,
                 infoFields: editingQr.infoFields || defaultConfig.infoFields,
                 eventSchedule: editingQr.eventSchedule || defaultConfig.eventSchedule,
@@ -423,6 +424,7 @@ const Generator = () => {
                 password,
                 passwordExpiry,
                 scanLimitEnabled,
+                categories: pageConfig.categories,
                 scanLimit: scanLimit ? Number(scanLimit) : null
             };
 

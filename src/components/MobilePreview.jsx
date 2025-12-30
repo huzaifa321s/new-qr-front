@@ -1263,6 +1263,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
         );
     }
 
+
+
     if (isSurvey) {
         return (
             <div style={{

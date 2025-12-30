@@ -75,10 +75,10 @@ const CreateWithAI = () => {
         const lowerPrompt = promptText.toLowerCase();
 
         // Type detection based on keywords
-        if (lowerPrompt.includes('rating') || lowerPrompt.includes('feedback') || lowerPrompt.includes('star') || lowerPrompt.includes('satisfaction')) {
-            return 'rating';
-        }
-        if (lowerPrompt.includes('review') && (lowerPrompt.includes('collect') || lowerPrompt.includes('customer') || lowerPrompt.includes('hotel') || lowerPrompt.includes('testimonial'))) {
+        if (lowerPrompt.includes('review') || lowerPrompt.includes('feedback') || lowerPrompt.includes('rating') || lowerPrompt.includes('star') || lowerPrompt.includes('satisfaction')) {
+            if (lowerPrompt.includes('rating') || lowerPrompt.includes('star') || (lowerPrompt.includes('feedback') && !lowerPrompt.includes('review'))) {
+                return 'rating';
+            }
             return 'reviews';
         }
         if (lowerPrompt.includes('event') || lowerPrompt.includes('festival') || lowerPrompt.includes('conference') || lowerPrompt.includes('party') || lowerPrompt.includes('meetup')) {

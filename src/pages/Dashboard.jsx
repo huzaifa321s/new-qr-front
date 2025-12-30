@@ -1148,7 +1148,7 @@ const Dashboard = () => {
                                 <Plus size={isMobile ? 24 : 16} />
                                 {!isMobile && "CREATE NEW QR"}
                             </button>
-                            {/* <button
+                            <button
                                 onClick={() => navigate('/create-ai')}
                                 style={{
                                     background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
@@ -1169,7 +1169,7 @@ const Dashboard = () => {
                             >
                                 <Sparkles size={isMobile ? 24 : 16} />
                                 {!isMobile && "CREATE WITH AI"}
-                            </button> */}
+                            </button>
                         </div>
 
                         {/* Search Bar - Full width on Mobile */}
