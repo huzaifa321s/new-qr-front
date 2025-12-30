@@ -6,6 +6,7 @@ import LandingPage from './pages/LandingPage';
 import TemplateSelection from './pages/TemplateSelection';
 import AppStoreLanding from './pages/AppStoreLanding';
 import Statistics from './pages/Statistics';
+import CreateWithAI from './pages/CreateWithAI';
 import './styles/global.css';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={<Dashboard />} />
+                <Route path="/create-ai" element={<CreateWithAI />} />
                 <Route path="/select-template" element={<TemplateSelection />} />
                 <Route path="/generator" element={<Generator />} />
                 <Route path="/static-generator" element={<StaticGenerator />} />

@@ -4,7 +4,8 @@ import axios from 'axios';
 import {
     Plus, Search, Download, Edit, Trash2, BarChart, ChevronDown,
     MoreVertical, Link, Copy, Globe, Calendar, Star, Folder, AlertTriangle, Check, X,
-    Image as ImageIcon, FileText, PenTool, ChevronLeft, ChevronRight, Menu, Sliders, Loader2
+    Image as ImageIcon, FileText, PenTool, ChevronLeft, ChevronRight, Menu, Sliders, Loader2,
+    Sparkles
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import QRRenderer from '../components/QRRenderer';
@@ -31,7 +32,7 @@ import {
 const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
 const HEATMAP_COLORS = ['#f3e8ff', '#d8b4fe', '#c084fc', '#a855f7', '#7e22ce'];
 
-const DateCustomInput = React.forwardRef(({ value, onClick, startDate, endDate }, ref) => (
+const DateCustomInput = React.forwardRef(({ value, onClick, startDate, endDate, onClear }, ref) => (
     <div
         onClick={onClick}
         ref={ref}
@@ -60,7 +61,19 @@ const DateCustomInput = React.forwardRef(({ value, onClick, startDate, endDate }
                 {endDate ? endDate.toLocaleDateString('en-CA') : 'End date'}
             </span>
         </div>
-        <Calendar size={16} color="#999" />
+        {startDate || endDate ? (
+            <div
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onClear && onClear();
+                }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2px' }}
+            >
+                <X size={16} color="#999" />
+            </div>
+        ) : (
+            <Calendar size={16} color="#999" />
+        )}
     </div>
 ));
 
@@ -1135,6 +1148,28 @@ const Dashboard = () => {
                                 <Plus size={isMobile ? 24 : 16} />
                                 {!isMobile && "CREATE NEW QR"}
                             </button>
+                            {/* <button
+                                onClick={() => navigate('/create-ai')}
+                                style={{
+                                    background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
+                                    color: '#ffffff',
+                                    border: 'none',
+                                    padding: isMobile ? '0.5rem' : '0.625rem 1.25rem',
+                                    borderRadius: isMobile ? '50%' : '6px',
+                                    fontWeight: '600',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.5rem',
+                                    fontSize: '0.875rem',
+                                    marginLeft: '1rem', // Add spacing
+                                    boxShadow: isMobile ? '0 4px 12px rgba(99, 102, 241, 0.5)' : 'none'
+                                }}
+                            >
+                                <Sparkles size={isMobile ? 24 : 16} />
+                                {!isMobile && "CREATE WITH AI"}
+                            </button> */}
                         </div>
 
                         {/* Search Bar - Full width on Mobile */}
@@ -1222,7 +1257,16 @@ const Dashboard = () => {
                                         startDate={startDate}
                                         endDate={endDate}
                                         selectsRange
-                                        customInput={<DateCustomInput startDate={startDate} endDate={endDate} />}
+                                        customInput={
+                                            <DateCustomInput
+                                                startDate={startDate}
+                                                endDate={endDate}
+                                                onClear={() => {
+                                                    setStartDate(null);
+                                                    setEndDate(null);
+                                                }}
+                                            />
+                                        }
                                     />
                                 </div>
 

@@ -4898,9 +4898,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     {/* Social Media Footer */}
                     {(socialLinks && socialLinks.length > 0) ? (
                         <div style={{
+                            background: headerBg,
                             borderTopLeftRadius: '30px',
                             borderTopRightRadius: '30px',
-                            padding: '1.5rem',
+                            padding: '0.75rem 1.5rem',
                             display: 'flex',
                             justifyContent: 'center',
                             gap: '1rem',
