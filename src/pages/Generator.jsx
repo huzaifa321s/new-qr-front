@@ -942,15 +942,18 @@ const Generator = () => {
                     justifyContent: 'center',
                     zIndex: 9999
                 }}>
-                    <div style={{
-                        backgroundColor: '#fff',
-                        borderRadius: '8px',
-                        padding: '2rem',
-                        maxWidth: '500px',
-                        width: '90%',
-                        position: 'relative',
-                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
-                    }}>
+                    <div
+                        className="modal-entry-animation"
+                        style={{
+                            backgroundColor: '#fff',
+                            borderRadius: '8px',
+                            padding: '2rem',
+                            maxWidth: '500px',
+                            width: '90%',
+                            position: 'relative',
+                            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+                        }}
+                    >
                         {/* Close button */}
                         <button
                             onClick={() => setShowUnsavedModal(false)}

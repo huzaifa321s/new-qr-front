@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
     Download, Edit, Trash2, ArrowLeft, Link as LinkIcon, Calendar, Folder, Star, Globe, Copy, Check,
-    Plus, BarChart, FileText, ChevronLeft, Bell, X, Image as ImageIcon, PenTool, Home, Smartphone
+    Plus, BarChart, FileText, ChevronLeft, Bell, X, Image as ImageIcon, PenTool, Home, Smartphone, Menu
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { io } from 'socket.io-client';
@@ -43,6 +43,16 @@ const Statistics = () => {
     // Delete Modal State
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+
+    // Responsive Sidebar State
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         const fetchQR = async () => {
@@ -204,19 +214,38 @@ const Statistics = () => {
             <Toaster position="top-right" />
 
             {/* Sidebar */}
-            <Sidebar />
+            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
             {/* Main Content */}
-            <div style={{ flex: 1, padding: '2rem 3rem', overflowY: 'auto' }}>
+            <div className="stats-main-content" style={{ flex: 1, padding: '2rem 3rem', overflowY: 'auto' }}>
                 <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-                    <button onClick={() => navigate('/')} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#7c3aed', background: 'transparent', border: 'none', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer', marginBottom: '1.5rem' }}><ChevronLeft size={16} /> Back</button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                        {isMobile && (
+                            <button
+                                onClick={() => setIsSidebarOpen(true)}
+                                style={{
+                                    background: 'none',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    color: '#666',
+                                    padding: '0.5rem',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <Menu size={24} />
+                            </button>
+                        )}
+                        <button onClick={() => navigate('/')} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#7c3aed', background: 'transparent', border: 'none', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer' }}><ChevronLeft size={16} /> Back</button>
+                    </div>
 
                     {/* Top Stats & Preview Card */}
-                    <div style={{ background: '#fff', borderRadius: '16px', padding: '2rem', boxShadow: '0 2px 4px rgba(0,0,0,0.02)', marginBottom: '2rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '2rem' }}>
+                    <div className="stats-top-card" style={{ background: '#fff', borderRadius: '16px', padding: '2rem', boxShadow: '0 2px 4px rgba(0,0,0,0.02)', marginBottom: '2rem' }}>
+                        <div className="stats-flex-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '2rem' }}>
                             {/* Left Info */}
-                            <div style={{ flex: 1, minWidth: '300px' }}>
-                                <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#111827', lineHeight: 1, marginBottom: '0.5rem' }}>{(qr.scans || []).length} <span style={{ fontSize: '1rem', color: '#9ca3af', fontWeight: 'normal' }}>Scans</span></div>
+                            <div className="stats-left-info" style={{ flex: 1, minWidth: '300px' }}>
+                                <div className="stats-scan-number" style={{ fontSize: '3rem', fontWeight: 'bold', color: '#111827', lineHeight: 1, marginBottom: '0.5rem' }}>{(qr.scans || []).length} <span style={{ fontSize: '1rem', color: '#9ca3af', fontWeight: 'normal' }}>Scans</span></div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#6b7280', marginBottom: '2rem' }}>{qr.folder ? <Folder size={16} /> : null} {qr.folder || 'No Folder'}</div>
                                 <div style={{ display: 'grid', gap: '1.5rem' }}>
                                     <div><div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '0.25rem' }}>QR LINK</div><div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><a href={`${baseUrl}/view/${qr.shortId}`} target="_blank" rel="noreferrer" style={{ color: '#7c3aed', textDecoration: 'none', fontWeight: '500' }}>{baseUrl}/view/{qr.shortId}</a><Copy size={14} color="#9ca3af" onClick={() => handleCopyLink(qr.shortId)} style={{ cursor: 'pointer' }} /></div></div>
@@ -226,12 +255,13 @@ const Statistics = () => {
                             </div>
 
                             {/* Right: QR Card + Mobile Preview */}
-                            <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+                            <div className="stats-qr-preview-container" style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
                                 {/* QR Card */}
-                                <div style={{ padding: '1rem', borderRadius: '12px', background: '#fafafa', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                                <div className="stats-qr-card" style={{ padding: '1rem', borderRadius: '12px', background: '#fafafa', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
                                     <div id={`qr-render-${qr._id}`} style={{ background: '#fff', padding: '0.5rem', borderRadius: '8px' }}>
                                         {qr.qrImageUrl ? (
                                             <img
+                                                className="stats-qr-image"
                                                 src={`${qr.qrImageUrl}?t=${Date.now()}`}
                                                 alt="QR Code"
                                                 style={{ width: '140px', height: '140px', objectFit: 'contain' }}
@@ -245,7 +275,7 @@ const Statistics = () => {
                                             />
                                         )}
                                     </div>
-                                    <div style={{ display: 'flex', gap: '0.5rem', position: 'relative' }}>
+                                    <div className="stats-action-buttons" style={{ display: 'flex', gap: '0.5rem', position: 'relative' }}>
                                         <button onClick={handleDownloadClick} title="Download" style={{ width: 32, height: 32, borderRadius: 8, border: '1px solid #e5e5e5', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#4b5563' }}><Download size={14} /></button>
                                         <button onClick={() => navigate(`/generator`, { state: { editingQr: qr, selectedType: qr.type } })} title="Edit" style={{ width: 32, height: 32, borderRadius: 8, border: '1px solid #e5e5e5', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#4b5563' }}><Edit size={14} /></button>
 
@@ -333,7 +363,7 @@ const Statistics = () => {
                                     </div>
                                 </div>
                                 {/* Mobile Preview (Small) */}
-                                <div style={{ width: '150px', height: '300px', border: '3px solid #1f2937', borderRadius: '16px', overflow: 'hidden', background: '#111827', position: 'relative' }}>
+                                <div className="stats-mobile-preview" style={{ width: '150px', height: '300px', border: '3px solid #1f2937', borderRadius: '16px', overflow: 'hidden', background: '#111827', position: 'relative' }}>
                                     <div style={{ transform: 'scale(0.45)', transformOrigin: 'top left', width: '222%', height: '222%' }}>
                                         <MobilePreview config={qr} type={qr.type} />
                                     </div>
@@ -351,7 +381,7 @@ const Statistics = () => {
                             </div>
                         </div>
 
-                        <div style={{ background: '#fff', borderRadius: '16px', padding: '2rem', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                        <div className="stats-chart-container" style={{ background: '#fff', borderRadius: '16px', padding: '2rem', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                             <div style={{ marginBottom: '2rem' }}>
                                 <h4 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.5rem 0' }}>Scan Activity</h4>
                                 <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0 }}>Track your QR code performance over time</p>
@@ -372,7 +402,7 @@ const Statistics = () => {
                                 </div>
 
                                 {/* Right: Stats Cards */}
-                                <div style={{ flex: 1, minWidth: '250px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div className="stats-cards-grid" style={{ flex: 1, minWidth: '250px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                     {/* Total Scans Card */}
                                     <div style={{ background: '#f3e8ff', borderRadius: '12px', padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
@@ -532,10 +562,10 @@ const Statistics = () => {
             {/* Download Modal - Copied from Dashboard */}
             {isDownloadModalOpen && (
                 <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-                    <div style={{ background: '#ffffff', borderRadius: '12px', width: '600px', padding: '1.5rem', position: 'relative', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
+                    <div className="download-modal-content" style={{ background: '#ffffff', borderRadius: '12px', width: '600px', padding: '1.5rem', position: 'relative', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
                         <button onClick={handleCloseDownloadModal} style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', background: 'none', border: 'none', cursor: 'pointer' }}><X size={20} color="#999" /></button>
                         <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#000', marginBottom: '1.5rem', borderBottom: '1px solid #e5e5e5', paddingBottom: '1rem' }}>Save as...</h2>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
+                        <div className="download-format-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
                             {[{ id: 'jpeg', label: 'JPEG', icon: ImageIcon, desc: 'Standard Image' }, { id: 'png', label: 'PNG', icon: ImageIcon, desc: 'Transparent' }, { id: 'svg', label: 'SVG', icon: PenTool, desc: 'Vector File' }, { id: 'pdf', label: 'PDF', icon: FileText, desc: 'Universal' }].map((fmt) => (
                                 <div key={fmt.id} onClick={() => setDownloadFormat(fmt.id)} style={{ border: `2px solid ${downloadFormat === fmt.id ? '#7c3aed' : '#e5e5e5'}`, borderRadius: '8px', padding: '1.5rem 0.5rem', textAlign: 'center', cursor: 'pointer', background: downloadFormat === fmt.id ? '#faf5ff' : '#fff' }}>
                                     <div style={{ color: '#7c3aed', marginBottom: '0.5rem', display: 'flex', justifyContent: 'center' }}><fmt.icon size={32} /></div>
@@ -552,6 +582,130 @@ const Statistics = () => {
                 @keyframes spin {
                     0% { transform: rotate(0deg); }
                     100% { transform: rotate(360deg); }
+                }
+                
+                /* Responsive Styles for Statistics Page */
+                @media (max-width: 1024px) {
+                    /* Tablet adjustments */
+                    .stats-main-content {
+                        padding: 1.5rem 2rem !important;
+                    }
+                }
+                
+                @media (max-width: 768px) {
+                    /* Mobile adjustments */
+                    .stats-main-content {
+                        padding: 1rem !important;
+                    }
+                    
+                    .stats-top-card {
+                        padding: 1.5rem !important;
+                    }
+                    
+                    .stats-flex-container {
+                        flex-direction: column !important;
+                    }
+                    
+                    .stats-left-info {
+                        min-width: 100% !important;
+                    }
+                    
+                    .stats-qr-preview-container {
+                        flex-direction: column !important;
+                        width: 100% !important;
+                        align-items: center !important;
+                    }
+                    
+                    .stats-cards-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                    
+                    .stats-chart-container {
+                        padding: 1rem !important;
+                    }
+                    
+                    .stats-table-container {
+                        overflow-x: auto !important;
+                    }
+                    
+                    .download-modal-content {
+                        width: 90% !important;
+                        max-width: 500px !important;
+                        padding: 1.25rem !important;
+                    }
+                    
+                    .download-format-grid {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    /* Small mobile adjustments */
+                    .stats-main-content {
+                        padding: 0.75rem !important;
+                    }
+                    
+                    .stats-top-card {
+                        padding: 1rem !important;
+                    }
+                    
+                    .stats-scan-number {
+                        font-size: 2rem !important;
+                    }
+                    
+                    .stats-qr-card {
+                        padding: 0.75rem !important;
+                    }
+                    
+                    .stats-qr-image {
+                        width: 120px !important;
+                        height: 120px !important;
+                    }
+                    
+                    .stats-mobile-preview {
+                        display: none !important;
+                    }
+                    
+                    .stats-chart-container {
+                        padding: 0.75rem !important;
+                    }
+                    
+                    .download-modal-content {
+                        width: 95% !important;
+                        padding: 1rem !important;
+                    }
+                    
+                    .download-format-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                    
+                    .stats-heatmap {
+                        overflow-x: auto !important;
+                    }
+                }
+                
+                @media (max-width: 320px) {
+                    /* Extra small screens */
+                    .stats-main-content {
+                        padding: 0.5rem !important;
+                    }
+                    
+                    .stats-top-card {
+                        padding: 0.75rem !important;
+                    }
+                    
+                    .stats-scan-number {
+                        font-size: 1.75rem !important;
+                    }
+                    
+                    .stats-qr-image {
+                        width: 100px !important;
+                        height: 100px !important;
+                    }
+                    
+                    .stats-action-buttons {
+                        flex-wrap: wrap !important;
+                    }
                 }
             `}</style>
         </div>

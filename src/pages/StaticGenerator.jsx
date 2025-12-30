@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { Globe, Type, Mail, MapPin, Wifi, Phone, MessageSquare, Plus, ChevronDown, ChevronUp, Check, Download, Upload, X, Eye, Loader2 } from 'lucide-react';
+import { Globe, Type, Mail, MapPin, Wifi, Phone, MessageSquare, Plus, ChevronDown, ChevronUp, Check, Download, Upload, X, Eye, Loader2, Settings } from 'lucide-react';
 import QRRenderer from '../components/QRRenderer';
 import { Toaster, toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -46,6 +46,21 @@ const socialLogos = [
     { id: 'web', src: 'https://img.icons8.com/color/96/internet.png', label: 'Web' },
 ];
 
+const moreMenuOptions = [
+    { id: 'reddit', icon: 'https://img.icons8.com/color/48/reddit.png', label: 'Reddit', placeholder: 'https://www.reddit.com/user/username' },
+    { id: 'tiktok', icon: 'https://img.icons8.com/color/48/tiktok.png', label: 'TikTok', placeholder: 'https://www.tiktok.com/@username' },
+    { id: 'snapchat', icon: 'https://img.icons8.com/color/48/snapchat-circled.png', label: 'Snapchat', placeholder: 'https://www.snapchat.com/add/username' },
+    { id: 'telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', label: 'Telegram', placeholder: 'https://t.me/username' },
+    { id: 'facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', label: 'Facebook', placeholder: 'https://www.facebook.com/username' },
+    { id: 'instagram', icon: 'https://img.icons8.com/fluency/48/instagram-new.png', label: 'Instagram', placeholder: 'https://www.instagram.com/username' },
+    { id: 'x', icon: 'https://img.icons8.com/ios-filled/48/000000/twitterx.png', label: 'X (Twitter)', placeholder: 'https://twitter.com/username' },
+    { id: 'youtube', icon: 'https://img.icons8.com/color/48/youtube-play.png', label: 'Youtube', placeholder: 'https://www.youtube.com/@username' },
+    { id: 'skype', icon: 'https://img.icons8.com/color/48/skype.png', label: 'Skype', placeholder: 'skype:username?chat' },
+    { id: 'bitcoin', icon: 'https://img.icons8.com/color/48/bitcoin.png', label: 'Bitcoin', placeholder: 'bitcoin:address' },
+    { id: 'zoom', icon: 'https://img.icons8.com/color/48/zoom.png', label: 'Zoom', placeholder: 'https://zoom.us/j/meetingId' },
+    { id: 'whatsapp', icon: 'https://img.icons8.com/color/48/whatsapp.png', label: 'Whatsapp', placeholder: 'https://wa.me/1234567890' },
+];
+
 const StaticGenerator = () => {
     const navigate = useNavigate();
     const qrRef = useRef(null);
@@ -59,6 +74,9 @@ const StaticGenerator = () => {
     const [isInfoOpen, setIsInfoOpen] = useState(true);
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isLogoOpen, setIsLogoOpen] = useState(false);
+    const [showMoreMenu, setShowMoreMenu] = useState(false);
+    const [selectedMoreOption, setSelectedMoreOption] = useState(null);
+    const [viewMode, setViewMode] = useState('generator'); // 'generator' or 'preview' for medium screens
 
     // Design states
     const [qrDesign, setQrDesign] = useState({
@@ -69,6 +87,59 @@ const StaticGenerator = () => {
         imageOptions: { hideBackgroundDots: false, imageSize: 0.4 }
     });
     const [isSaving, setIsSaving] = useState(false);
+
+    // Email states
+    const [emailRecipient, setEmailRecipient] = useState('');
+    const [emailSubject, setEmailSubject] = useState('');
+    const [emailBody, setEmailBody] = useState('');
+
+    // Phone states
+    const [phoneNumber, setPhoneNumber] = useState('');
+
+    // SMS states
+    const [smsMessage, setSmsMessage] = useState('');
+
+    // Bitcoin states
+    const [bitcoinAddress, setBitcoinAddress] = useState('');
+    const [bitcoinMessage, setBitcoinMessage] = useState('');
+
+    // WhatsApp states
+    const [whatsappNumber, setWhatsappNumber] = useState('');
+    const [whatsappMessage, setWhatsappMessage] = useState('');
+
+    // Phone number formatting helper
+    const formatPhoneNumber = (value) => {
+        const cleaned = value.replace(/\D/g, '');
+        if (cleaned.length === 0) return '';
+        if (cleaned.length <= 1) return cleaned;
+        if (cleaned.length <= 4) return `${cleaned.slice(0, 1)}-${cleaned.slice(1)}`;
+        if (cleaned.length <= 7) return `${cleaned.slice(0, 1)}-${cleaned.slice(1, 4)}-${cleaned.slice(4)}`;
+        return `${cleaned.slice(0, 1)}-${cleaned.slice(1, 4)}-${cleaned.slice(4, 7)}-${cleaned.slice(7, 11)}`;
+    };
+
+    useEffect(() => {
+        if (activeTab === 'email') {
+            const mailto = `mailto:${emailRecipient}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            setLink(mailto);
+        } else if (activeTab === 'phone') {
+            setLink(`tel:${phoneNumber}`);
+        } else if (activeTab === 'sms') {
+            setLink(`smsto:${phoneNumber}:${smsMessage}`);
+        } else if (activeTab === 'more' && selectedMoreOption?.id === 'bitcoin') {
+            setLink(`bitcoin:${bitcoinAddress}?message=${encodeURIComponent(bitcoinMessage)}`);
+        } else if (activeTab === 'more' && selectedMoreOption?.id === 'whatsapp') {
+            const cleanedNumber = whatsappNumber.replace(/\D/g, '');
+            setLink(`https://wa.me/${cleanedNumber}?text=${encodeURIComponent(whatsappMessage)}`);
+        }
+    }, [emailRecipient, emailSubject, emailBody, phoneNumber, smsMessage, activeTab, bitcoinAddress, bitcoinMessage, selectedMoreOption, whatsappNumber, whatsappMessage]);
+
+    // Update body data attribute for responsive CSS
+    useEffect(() => {
+        document.body.setAttribute('data-view-mode', viewMode);
+        return () => {
+            document.body.removeAttribute('data-view-mode');
+        };
+    }, [viewMode]);
 
     const handleLogoUpload = (e) => {
         const file = e.target.files[0];
@@ -113,6 +184,21 @@ const StaticGenerator = () => {
         }
     };
 
+    const fieldConfig = {
+        website: { title: 'ENTER WEBSITE', label: 'LINK*', placeholder: 'https://QRinsight.com/', isMultiline: false },
+        text: { title: 'ENTER TEXT', label: 'TEXT*', placeholder: 'enter text here...', isMultiline: true },
+        email: { title: 'ENTER EMAIL', label: 'EMAIL*', placeholder: 'your@email.com', isMultiline: false },
+        map: { title: 'ENTER LOCATION', label: 'LOCATION*', placeholder: 'Search for a location...', isMultiline: false },
+        wifi: { title: 'ENTER WIFI INFO', label: 'SSID / NETWORK NAME*', placeholder: 'Your network name', isMultiline: false },
+        phone: { title: 'ENTER PHONE', label: 'PHONE NUMBER*', placeholder: '+1 234 567 8900', isMultiline: false },
+        sms: { title: 'ENTER SMS', label: 'MESSAGE*', placeholder: 'Type your message here...', isMultiline: true },
+        more: { title: 'ENTER INFORMATION', label: 'DATA*', placeholder: 'Enter your data here...', isMultiline: false }
+    };
+
+    const currentConfig = (activeTab === 'more' && selectedMoreOption)
+        ? { title: `ENTER ${selectedMoreOption.label.toUpperCase()}`, label: 'LINK*', placeholder: selectedMoreOption.placeholder, isMultiline: false }
+        : (activeTab === 'email' ? { ...fieldConfig.more, title: 'ENTER INFORMATION' } : (fieldConfig[activeTab] || fieldConfig.more));
+
     return (
         <div style={{ minHeight: '100vh', background: '#f8f9fa', paddingBottom: '3rem' }}>
             <style>
@@ -129,6 +215,29 @@ const StaticGenerator = () => {
                     }
                     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
                         background: #64748b;
+                    }
+                    
+                    /* Responsive Styles */
+                    @media (max-width: 768px) {
+                        .view-mode-footer {
+                            display: block !important;
+                        }
+                        .main-content-wrapper {
+                            flex-direction: column !important;
+                            padding-bottom: 80px !important;
+                        }
+                        .generator-section {
+                            width: 100% !important;
+                        }
+                        .preview-section {
+                            width: 100% !important;
+                        }
+                        body[data-view-mode="generator"] .preview-section {
+                            display: none !important;
+                        }
+                        body[data-view-mode="preview"] .generator-section {
+                            display: none !important;
+                        }
                     }
                 `}
             </style>
@@ -148,7 +257,7 @@ const StaticGenerator = () => {
                         <div style={{ width: '32px', height: '32px', background: '#8b5cf6', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
                             <span style={{ fontWeight: 'bold' }}>QR</span>
                         </div>
-                        <span style={{ fontWeight: '800', fontSize: '1.25rem', color: '#1e293b' }}>INSIGHT</span>
+
                     </div>
                 </div>
 
@@ -156,7 +265,7 @@ const StaticGenerator = () => {
                     <span onClick={() => navigate('/static-generator')} style={{ color: '#8b5cf6', fontWeight: '600', cursor: 'pointer', fontSize: '0.9rem' }}>Static QRs</span>
                     <span onClick={() => navigate('/select-template')} style={{ color: '#64748b', cursor: 'pointer', fontSize: '0.9rem' }}>Dynamic QRs</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 16px', border: '1px solid #e2e8f0', borderRadius: '8px', cursor: 'pointer' }} onClick={() => navigate('/')}>
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" style={{ width: '24px', height: '24px', borderRadius: '50%' }} />
+
                         <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#6366f1' }}>Dashboard</span>
                     </div>
                 </div>
@@ -166,7 +275,7 @@ const StaticGenerator = () => {
                 {/* Header Title */}
                 <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                     <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#031D36', marginBottom: '0.5rem' }}>
-                        QRinsight: Static QR Code Generator
+                        Static QR Code Generator
                     </h1>
                     <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>
                         Instantly transform your content into scannable QR codes
@@ -176,17 +285,30 @@ const StaticGenerator = () => {
                 {/* Tabs */}
                 <div style={{
                     display: 'flex',
+                    flexWrap: 'wrap',
                     background: '#fff',
                     borderRadius: '12px',
                     padding: '4px',
                     boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
                     marginBottom: '2rem',
-                    overflowX: 'auto'
+                    position: 'relative',
+                    gap: '4px'
                 }}>
                     {qrTabs.map(tab => (
                         <div
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
+                            onClick={(e) => {
+                                if (tab.id === 'more') {
+                                    e.stopPropagation();
+                                    setShowMoreMenu(!showMoreMenu);
+                                } else {
+                                    setActiveTab(tab.id);
+                                    if (tab.id === 'website') setLink('https://QRinsight.com/');
+                                    else setLink('');
+                                    setShowMoreMenu(false);
+                                    if (tab.id !== 'more') setSelectedMoreOption(null);
+                                }
+                            }}
                             style={{
                                 flex: 1,
                                 display: 'flex',
@@ -204,23 +326,84 @@ const StaticGenerator = () => {
                                 minWidth: '100px'
                             }}
                         >
-                            <div style={{ color: activeTab === tab.id ? '#8b5cf6' : '#94a3b8' }}>
-                                {tab.icon}
+                            <div style={{ color: activeTab === tab.id ? '#8b5cf6' : '#94a3b8', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                {(tab.id === 'more' && selectedMoreOption) ? (
+                                    <img src={selectedMoreOption.icon} alt={selectedMoreOption.label} style={{ width: '20px', height: '20px' }} />
+                                ) : (
+                                    tab.icon
+                                )}
                             </div>
-                            <span style={{
+                            <div style={{
                                 fontSize: '0.8rem',
                                 fontWeight: activeTab === tab.id ? '600' : '500',
-                                color: activeTab === tab.id ? '#8b5cf6' : '#94a3b8'
+                                color: activeTab === tab.id ? '#8b5cf6' : '#94a3b8',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '2px'
                             }}>
-                                {tab.label}
-                            </span>
+                                {(tab.id === 'more' && selectedMoreOption) ? selectedMoreOption.label : tab.label}
+                                {tab.id === 'more' && (
+                                    <ChevronDown size={12} style={{ marginTop: '2px' }} />
+                                )}
+                            </div>
+
+                            {/* Dropdown Menu for More Tab */}
+                            {tab.id === 'more' && showMoreMenu && (
+                                <div style={{
+                                    position: 'absolute',
+                                    bottom: '100%',
+                                    right: 0,
+                                    background: '#fff',
+                                    borderRadius: '12px',
+                                    boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                                    zIndex: 50,
+                                    width: '240px',
+                                    padding: '8px',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '4px',
+                                    maxHeight: '400px',
+                                    overflowY: 'auto'
+                                }}>
+                                    {moreMenuOptions.map((option) => (
+                                        <div
+                                            key={option.id}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setActiveTab('more'); // Keep on More tab
+                                                setSelectedMoreOption(option);
+                                                setQrName(option.label);
+                                                setLink(option.placeholder.includes(':') ? option.placeholder.split(':')[0] + ':' : '');
+                                                setShowMoreMenu(false);
+                                            }}
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '12px',
+                                                padding: '10px 12px',
+                                                borderRadius: '8px',
+                                                cursor: 'pointer',
+                                                transition: 'background 0.2s',
+                                                color: '#1e293b',
+                                                fontSize: '0.9rem',
+                                                fontWeight: '500'
+                                            }}
+                                            onMouseOver={(e) => e.currentTarget.style.background = '#f1f5f9'}
+                                            onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                                        >
+                                            <img src={option.icon} alt={option.label} style={{ width: '20px', height: '20px' }} />
+                                            {option.label}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
 
-                <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+                <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start', flexDirection: 'row' }} className="main-content-wrapper">
                     <div
-                        className="custom-scrollbar"
+                        className="custom-scrollbar generator-section"
                         style={{
                             flex: 1,
                             height: '500px',
@@ -233,7 +416,7 @@ const StaticGenerator = () => {
                     >
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', paddingRight: '0.5rem' }}>
 
-                            {/* Enter Information Accordion */}
+                            {/* Dynamic Accordion */}
                             <div style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
                                 <div
                                     onClick={() => setIsInfoOpen(!isInfoOpen)}
@@ -246,7 +429,7 @@ const StaticGenerator = () => {
                                         cursor: 'pointer'
                                     }}
                                 >
-                                    <span style={{ fontSize: '0.9rem', fontWeight: '700', color: '#1e293b', letterSpacing: '0.02em' }}>ENTER INFORMATION</span>
+                                    <span style={{ fontSize: '0.9rem', fontWeight: '700', color: '#1e293b', letterSpacing: '0.02em' }}>{currentConfig.title}</span>
                                     {isInfoOpen ? <ChevronUp size={18} color="#64748b" /> : <ChevronDown size={18} color="#64748b" />}
                                 </div>
 
@@ -263,7 +446,7 @@ const StaticGenerator = () => {
                                                     width: '100%',
                                                     padding: '0.75rem',
                                                     borderRadius: '6px',
-                                                    border: '1px solid #e2e8f0',
+                                                    border: '1px solid #000',
                                                     outline: 'none',
                                                     fontSize: '0.9rem'
                                                 }}
@@ -271,21 +454,232 @@ const StaticGenerator = () => {
                                         </div>
 
                                         <div>
-                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.5rem' }}>LINK*</label>
-                                            <input
-                                                type="text"
-                                                value={link}
-                                                onChange={(e) => setLink(e.target.value)}
-                                                placeholder="https://QRinsight.com/"
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem',
-                                                    borderRadius: '6px',
-                                                    border: '1px solid #e2e8f0',
-                                                    outline: 'none',
-                                                    fontSize: '0.9rem'
-                                                }}
-                                            />
+                                            {activeTab === 'email' ? (
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                                    <div>
+                                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.5rem' }}>E-MAIL RECIPIENT*</label>
+                                                        <input
+                                                            type="text"
+                                                            value={emailRecipient}
+                                                            onChange={(e) => setEmailRecipient(e.target.value)}
+                                                            placeholder="Enter the E-mail Recipient"
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #000',
+                                                                outline: 'none',
+                                                                fontSize: '0.9rem'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.5rem' }}>SUBJECT*</label>
+                                                        <input
+                                                            type="text"
+                                                            value={emailSubject}
+                                                            onChange={(e) => setEmailSubject(e.target.value)}
+                                                            placeholder="Enter Subject"
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #000',
+                                                                outline: 'none',
+                                                                fontSize: '0.9rem'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.5rem' }}>BODY TEXT*</label>
+                                                        <textarea
+                                                            value={emailBody}
+                                                            onChange={(e) => setEmailBody(e.target.value)}
+                                                            placeholder="Enter Body Text"
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #000',
+                                                                outline: 'none',
+                                                                fontSize: '0.9rem',
+                                                                minHeight: '100px',
+                                                                resize: 'vertical'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ) : (activeTab === 'more' && selectedMoreOption?.id === 'bitcoin') ? (
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                                    <div>
+                                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.5rem' }}>RECEIVER BITCOIN ADDRESS*</label>
+                                                        <input
+                                                            type="text"
+                                                            value={bitcoinAddress}
+                                                            onChange={(e) => setBitcoinAddress(e.target.value)}
+                                                            placeholder="Write address here"
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #000',
+                                                                outline: 'none',
+                                                                fontSize: '0.9rem'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.5rem' }}>TEXT MESSAGE*</label>
+                                                        <textarea
+                                                            value={bitcoinMessage}
+                                                            onChange={(e) => setBitcoinMessage(e.target.value)}
+                                                            placeholder="Write your message here."
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #000',
+                                                                outline: 'none',
+                                                                fontSize: '0.9rem',
+                                                                minHeight: '100px',
+                                                                resize: 'vertical'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ) : (activeTab === 'more' && selectedMoreOption?.id === 'whatsapp') ? (
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                                    <div>
+                                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.5rem' }}>PHONE NUMBER*</label>
+                                                        <input
+                                                            type="text"
+                                                            value={whatsappNumber}
+                                                            onChange={(e) => setWhatsappNumber(formatPhoneNumber(e.target.value))}
+                                                            placeholder="000 000 000"
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #000',
+                                                                outline: 'none',
+                                                                fontSize: '0.9rem'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.5rem' }}>TEXT MESSAGE*</label>
+                                                        <textarea
+                                                            value={whatsappMessage}
+                                                            onChange={(e) => setWhatsappMessage(e.target.value)}
+                                                            placeholder="Enter Text Message"
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #000',
+                                                                outline: 'none',
+                                                                fontSize: '0.9rem',
+                                                                minHeight: '100px',
+                                                                resize: 'vertical'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ) : activeTab === 'sms' ? (
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                                    <div>
+                                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.5rem' }}>PHONE NUMBER*</label>
+                                                        <input
+                                                            type="text"
+                                                            value={phoneNumber}
+                                                            onChange={(e) => setPhoneNumber(formatPhoneNumber(e.target.value))}
+                                                            placeholder="e.g. 1-234-567-890"
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #000',
+                                                                outline: 'none',
+                                                                fontSize: '0.9rem'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.5rem' }}>TEXT MESSAGE*</label>
+                                                        <textarea
+                                                            value={smsMessage}
+                                                            onChange={(e) => setSmsMessage(e.target.value)}
+                                                            placeholder="Type your message here..."
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #000',
+                                                                outline: 'none',
+                                                                fontSize: '0.9rem',
+                                                                minHeight: '100px',
+                                                                resize: 'vertical'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ) : activeTab === 'phone' ? (
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                                    <div>
+                                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.5rem' }}>PHONE NUMBER*</label>
+                                                        <input
+                                                            type="text"
+                                                            value={phoneNumber}
+                                                            onChange={(e) => setPhoneNumber(formatPhoneNumber(e.target.value))}
+                                                            placeholder="e.g. 1-234-567-890"
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #000',
+                                                                outline: 'none',
+                                                                fontSize: '0.9rem'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.5rem' }}>{currentConfig.label}</label>
+                                                    {currentConfig.isMultiline ? (
+                                                        <textarea
+                                                            value={link}
+                                                            onChange={(e) => setLink(e.target.value)}
+                                                            placeholder={currentConfig.placeholder}
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #000',
+                                                                outline: 'none',
+                                                                fontSize: '0.9rem',
+                                                                minHeight: '100px',
+                                                                resize: 'vertical'
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <input
+                                                            type="text"
+                                                            value={link}
+                                                            onChange={(e) => setLink(e.target.value)}
+                                                            placeholder={currentConfig.placeholder}
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #000',
+                                                                outline: 'none',
+                                                                fontSize: '0.9rem'
+                                                            }}
+                                                        />
+                                                    )}
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 )}
@@ -772,7 +1166,7 @@ const StaticGenerator = () => {
                     </div>
 
                     {/* Right Column: Preview */}
-                    <div style={{
+                    <div className="preview-section" style={{
                         width: '380px',
                         background: '#fff',
                         borderRadius: '24px',
@@ -806,6 +1200,31 @@ const StaticGenerator = () => {
                                 size={260}
                             />
                         </div>
+
+                        {/* Scannable Content Preview (Mobile Preview) */}
+                        {(activeTab === 'phone' || activeTab === 'sms') && phoneNumber && (
+                            <div style={{
+                                width: '100%',
+                                padding: '1.25rem',
+                                background: '#f8fafc',
+                                borderRadius: '12px',
+                                border: '1px solid #e2e8f0',
+                                marginBottom: '1.5rem',
+                                textAlign: 'center'
+                            }}>
+                                <div style={{ fontSize: '0.7rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    {activeTab === 'sms' ? 'SMS Preview' : 'Phone Preview'}
+                                </div>
+                                <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b' }}>
+                                    {phoneNumber}
+                                </div>
+                                {activeTab === 'sms' && smsMessage && (
+                                    <div style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '0.5rem', fontStyle: 'italic' }}>
+                                        "{smsMessage}"
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
                         <button
                             onClick={handleSave}
@@ -841,10 +1260,65 @@ const StaticGenerator = () => {
                             {isSaving ? (
                                 <Loader2 className="animate-spin" size={20} />
                             ) : (
-                                <Download size={20} />
+                                <></>
                             )}
                             {isSaving ? 'Saving...' : 'Save QR Code'}
                         </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Generator/Preview Footer Switcher for Medium Screens */}
+            <div className="view-mode-footer" style={{
+                position: 'fixed',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                background: '#fff',
+                borderTop: '1px solid #e2e8f0',
+                display: 'none',
+                zIndex: 1000,
+                boxShadow: '0 -2px 10px rgba(0,0,0,0.05)'
+            }}>
+                <div style={{
+                    display: 'flex',
+                    maxWidth: '1200px',
+                    margin: '0 auto',
+                    gap: '0'
+                }}>
+                    <div
+                        onClick={() => setViewMode('generator')}
+                        style={{
+                            flex: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            padding: '0.75rem',
+                            cursor: 'pointer',
+                            borderBottom: viewMode === 'generator' ? '3px solid #8b5cf6' : '3px solid transparent',
+                            transition: 'all 0.2s'
+                        }}
+                    >
+                        <Settings size={20} color={viewMode === 'generator' ? '#8b5cf6' : '#64748b'} />
+                        <span style={{ fontSize: '0.75rem', fontWeight: '600', color: viewMode === 'generator' ? '#8b5cf6' : '#64748b' }}>Generator</span>
+                    </div>
+                    <div
+                        onClick={() => setViewMode('preview')}
+                        style={{
+                            flex: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            padding: '0.75rem',
+                            cursor: 'pointer',
+                            borderBottom: viewMode === 'preview' ? '3px solid #8b5cf6' : '3px solid transparent',
+                            transition: 'all 0.2s'
+                        }}
+                    >
+                        <Eye size={20} color={viewMode === 'preview' ? '#8b5cf6' : '#64748b'} />
+                        <span style={{ fontSize: '0.75rem', fontWeight: '600', color: viewMode === 'preview' ? '#8b5cf6' : '#64748b' }}>Preview</span>
                     </div>
                 </div>
             </div>

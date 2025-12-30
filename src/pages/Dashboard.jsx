@@ -71,6 +71,7 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [activeMenuId, setActiveMenuId] = useState(null);
+    const [openUpwards, setOpenUpwards] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [deleteConfirmationId, setDeleteConfirmationId] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -305,51 +306,18 @@ const Dashboard = () => {
         }
     };
 
+    // Handle clicking outside of menus and tooltips to close them
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (activeMenuId && !event.target.closest('.qr-menu-container')) {
-                setActiveMenuId(null);
+            if (!event.target.closest('.qr-menu-container')) {
+                if (activeMenuId) setActiveMenuId(null);
+                if (deleteConfirmationId) setDeleteConfirmationId(null);
             }
         };
+
         document.addEventListener('mousedown', handleClickOutside);
-        // Filter and Sort Logic
-        const filteredQrs = qrs
-            .filter(qr => {
-                const matchesSearch = searchTerm === '' ||
-                    qr.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    qr.shortId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    qr.type?.toLowerCase().includes(searchTerm.toLowerCase());
-
-                if (!matchesSearch) return false;
-
-                if (activeTab === 'Dynamic') return ['url', 'dynamic-url', 'business-page', 'menu', 'business-card', 'app-store', 'video', 'pdf', 'mp3', 'image', 'social-media', 'coupon', 'feedback', 'event', 'product-page', 'lead-generation', 'rating', 'reviews', 'password-protected', 'multiple-links'].includes(qr.type);
-                if (activeTab === 'Static') return ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone'].includes(qr.type);
-
-                return true;
-            })
-            .filter(qr => {
-                if (sortOption === 'Last 30 Days') {
-                    const thirtyDaysAgo = new Date();
-                    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-                    return new Date(qr.createdAt) >= thirtyDaysAgo;
-                }
-                return true;
-            })
-            .sort((a, b) => {
-                const dateA = new Date(a.createdAt);
-                const dateB = new Date(b.createdAt);
-                switch (sortOption) {
-                    case 'First Created': return dateA - dateB;
-                    case 'Most Scanned': return (b.scanCount || 0) - (a.scanCount || 0);
-                    case 'Last Created':
-                    case 'Last 30 Days':
-                    case 'Lifetime':
-                    default: return dateB - dateA;
-                }
-            });
-
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [activeMenuId]);
+    }, [activeMenuId, deleteConfirmationId]);
 
     useEffect(() => {
         fetchQRs();
@@ -465,6 +433,12 @@ const Dashboard = () => {
 
     const toggleMenu = (e, id) => {
         e.stopPropagation();
+        if (activeMenuId !== id) {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const spaceBelow = window.innerHeight - rect.bottom;
+            // If space below is less than menu height (approx 180px), open upwards
+            setOpenUpwards(spaceBelow < 180);
+        }
         setActiveMenuId(activeMenuId === id ? null : id);
     };
 
@@ -1774,8 +1748,8 @@ const Dashboard = () => {
                                                     {isMenuOpen && (
                                                         <div style={{
                                                             position: 'absolute',
-                                                            bottom: isMobile ? '45px' : 'auto',
-                                                            top: isMobile ? 'auto' : '45px',
+                                                            bottom: openUpwards ? '45px' : 'auto',
+                                                            top: openUpwards ? 'auto' : '45px',
                                                             right: '0',
                                                             width: '180px',
                                                             background: '#ffffff',

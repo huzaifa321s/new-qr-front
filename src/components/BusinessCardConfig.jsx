@@ -3,6 +3,8 @@ import { useState } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const BusinessCardConfig = ({ config, onChange }) => {
+
+
     const socialPlatforms = [
         { id: 'facebook', name: 'Facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877F2' },
         { id: 'instagram', name: 'Instagram', icon: 'https://img.icons8.com/color/48/instagram-new--v1.png', color: '#E4405F' },

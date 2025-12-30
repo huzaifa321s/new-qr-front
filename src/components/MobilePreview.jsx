@@ -68,7 +68,12 @@ const socialIconsMap = [
 ];
 
 const MobilePreview = ({ config, isLiveView = false }) => {
-    const { design, businessInfo, menu, timings, openingHours, social, appLinks, coupon, personalInfo, basicInfo, contact, exchange, type, facilities, socialLinks, form, customFields, thankYou, rating, uploadPdf, content, video, feedback, images } = config;
+    const { design, businessInfo, menu, timings, openingHours, social, appLinks, coupon, personalInfo, basicInfo, contact, exchange, type, facilities, socialLinks, form, customFields, thankYou, rating, video, feedback, images } = config;
+
+    // Normalize naming between frontend state and backend schema
+    const activePdf = config.uploadPdf || config.pdf || {};
+    const activeProductContent = config.content || config.productContent || {};
+    const activeDynamicUrl = config.url || config.dynamicUrl || '';
     const [showCouponModal, setShowCouponModal] = useState(false);
     const [showExchangeModal, setShowExchangeModal] = useState(false);
     const [ratingStep, setRatingStep] = useState('rating'); // 'rating', 'userInfo', 'thankYou'
@@ -934,7 +939,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     'LinkedIn': 'https://cdn-icons-png.flaticon.com/512/174/174857.png',
                                     'Discord': 'https://cdn-icons-png.flaticon.com/512/5968/5968756.png',
                                     'Twitch': 'https://cdn-icons-png.flaticon.com/512/5968/5968819.png',
-                                    'Kick': 'https://res.cloudinary.com/date1bmhd/image/upload/v1735108000/kick-logo_u1zqov.png',
+                                    'Kick': 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/kick.png',
                                     'YouTube': 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png',
                                     'WhatsApp': 'https://cdn-icons-png.flaticon.com/512/733/733585.png',
                                     'Snapchat': 'https://cdn-icons-png.flaticon.com/512/174/174870.png',
@@ -3719,25 +3724,25 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '1rem' }}>Social Networks</h3>
                             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                                 {[
-                                    { key: 'website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563' },
-                                    { key: 'whatsapp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366' },
-                                    { key: 'facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2' },
-                                    { key: 'instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F' },
-                                    { key: 'twitter', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000' },
-                                    { key: 'linkedin', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2' },
-                                    { key: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
-                                    { key: 'discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2' },
-                                    { key: 'youtube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000' },
-                                    { key: 'twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF' },
-                                    { key: 'line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900' },
-                                    { key: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00' },
-                                    { key: 'tumblr', icon: 'https://cdn-icons-png.flaticon.com/512/100/100611.png', color: '#35465C' },
-                                    { key: 'spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954' },
-                                    { key: 'dribbble', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111388.png', color: '#EA4C89' },
-                                    { key: 'pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C' },
-                                    { key: 'telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC' },
-                                    { key: 'behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF' },
-                                    { key: 'reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500' }
+                                    { key: 'website', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/domain.png', color: '#4B5563' },
+                                    { key: 'whatsapp', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/whatsapp.png', color: '#25D366' },
+                                    { key: 'facebook', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/facebook.png', color: '#1877F2' },
+                                    { key: 'instagram', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/instagram.png', color: '#E4405F' },
+                                    { key: 'twitter', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/twitter.png', color: '#000000' },
+                                    { key: 'linkedin', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/linkedin.png', color: '#0A66C2' },
+                                    { key: 'tiktok', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/tiktok.png', color: '#000000' },
+                                    { key: 'discord', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/discord.png', color: '#5865F2' },
+                                    { key: 'youtube', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/youtube.png', color: '#FF0000' },
+                                    { key: 'twitch', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/twitch.png', color: '#9146FF' },
+                                    { key: 'line', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/line.png', color: '#00B900' },
+                                    { key: 'snapchat', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/snapchat.png', color: '#FFFC00' },
+                                    { key: 'tumblr', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/tumblr.png', color: '#35465C' },
+                                    { key: 'spotify', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/spotify.png', color: '#1DB954' },
+                                    { key: 'dribbble', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/dribbble.png', color: '#EA4C89' },
+                                    { key: 'pinterest', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/pinterest.png', color: '#BD081C' },
+                                    { key: 'telegram', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/telegram.png', color: '#0088CC' },
+                                    { key: 'behance', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/behance.png', color: '#1769FF' },
+                                    { key: 'reddit', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/reddit.png', color: '#FF4500' }
                                 ].map(({ key, icon, color }) => social?.[key] && (
                                     <div key={key} style={{
                                         width: '40px',
@@ -4569,7 +4574,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
     if (isPdf) { // Changed directly using the type check variable locally or just type since I'm editing the block
         // Using a CORS-friendly PDF URL
-        const pdfUrl = uploadPdf?.pdfUrl || 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
+        const pdfUrl = activePdf?.pdfUrl || 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
 
         const handleDownloadPDF = (e) => {
             e.preventDefault();
@@ -4712,7 +4717,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
                             }}
                         >
-                            {uploadPdf?.buttonTitle || 'Download Now'}
+                            {activePdf?.buttonTitle || 'Download Now'}
                         </button>
                     </div>
 
@@ -5726,7 +5731,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                     {/* Accordions */}
                     <div style={{ padding: '0 1.5rem 1rem' }}>
-                        {(content?.items || [
+                        {(activeProductContent?.items || [
                             { id: '1', title: 'Description', text: 'The Dark, Smooth, Creaminess Of Chocolate Romances The Wholesome Goodness Of Real Cow\'S Milk.' },
                             { id: '2', title: 'Ingredient', text: '• Reduced Fat Milk\n• Milk Solids\nCocoa Powder\n• Sugar\n• Emulsifier: Vegetable Oil Origin (E471)\n• Stabilizer (E470) & Chocolate Flavor' }
                         ]).map((item) => (
@@ -5801,7 +5806,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     flexWrap: 'wrap',
                                     justifyContent: 'center'
                                 }}>
-                                    {(content?.certificates && content.certificates.length > 0 ? content.certificates : [
+                                    {(activeProductContent?.certificates && activeProductContent.certificates.length > 0 ? activeProductContent.certificates : [
                                         { id: 'def-cert-1', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759749930/ODCzvu_imfdi2.png' },
                                         { id: 'def-cert-2', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759749957/KOursE_uedyzk.png' }
                                     ]).map((cert, index) => (
@@ -5814,7 +5819,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         {/* Buy Product Button */}
                         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
                             <a
-                                href={content?.buttonLink ? (content.buttonLink.startsWith('http') ? content.buttonLink : `https://${content.buttonLink}`) : 'https://www.dairylandltd.com/'}
+                                href={activeProductContent?.buttonLink ? (activeProductContent.buttonLink.startsWith('http') ? activeProductContent.buttonLink : `https://${activeProductContent.buttonLink}`) : 'https://www.dairylandltd.com/'}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{
@@ -5832,7 +5837,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     textAlign: 'center'
                                 }}
                             >
-                                {content?.buttonText || 'Buy Product'}
+                                {activeProductContent?.buttonText || 'Buy Product'}
                             </a>
                         </div>
                     </div>
