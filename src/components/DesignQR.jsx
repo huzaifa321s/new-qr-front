@@ -323,51 +323,7 @@ const DesignQR = ({
                         </div>
                     </div>
 
-                    <div style={{ borderTop: '1px solid #f1f5f9', margin: '0' }}></div>
 
-                    {/* Background Color */}
-                    <div>
-                        <label className="label" style={{ marginBottom: '1rem', display: 'block', color: '#0f172a', fontWeight: '600', fontSize: '0.85rem' }}>BACKGROUND COLOR</label>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                            <label style={{ fontSize: '0.75rem', color: '#64748b' }}>Background Color</label>
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                border: '1px solid #e2e8f0',
-                                borderRadius: '4px',
-                                padding: '0.5rem',
-                                background: '#fff',
-                                width: '100%',
-                                maxWidth: '200px',
-                                justifyContent: 'space-between'
-                            }}>
-                                <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: '500' }}>{design?.background?.color || '#ffffff'}</span>
-                                <div style={{ position: 'relative', width: '24px', height: '24px', flexShrink: 0 }}>
-                                    <input
-                                        type="color"
-                                        value={design?.background?.color || '#ffffff'}
-                                        onChange={(e) => setDesign(prev => ({ ...prev, background: { ...prev.background, color: e.target.value } }))}
-                                        style={{
-                                            position: 'absolute',
-                                            top: 0,
-                                            left: 0,
-                                            width: '100%',
-                                            height: '100%',
-                                            opacity: 0,
-                                            cursor: 'pointer'
-                                        }}
-                                    />
-                                    <div style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        background: design?.background?.color || '#ffffff',
-                                        borderRadius: '4px',
-                                        border: '1px solid #e2e8f0'
-                                    }}></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </FormSection>
 

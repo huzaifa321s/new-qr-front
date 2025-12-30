@@ -157,11 +157,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
         const bInfo = basicInfo || config?.basicInfo || {};
         const imagesToFilter = bInfo.productImages || [];
         const filtered = imagesToFilter
-            .filter(img => {
-                const url = typeof img === 'string' ? img : img?.url;
-                return url && url.length > 5 && !url.includes('res.cloudinary.com/date1bmhd');
-            })
-            .map(img => typeof img === 'string' ? img : img.url);
+            .map(img => typeof img === 'string' ? img : img?.url)
+            .filter(url => url && url.length > 5);
         return filtered.length > 0 ? filtered : productImages;
     })();
 
@@ -2716,7 +2713,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     if (isSocial) {
         // Default values for social media preview
         const primaryColor = design?.color?.header || '#0B2D86'; // Deep Blue
-        const hasBg = !!design?.backgroundImage?.url;
+        const secondaryColor = design?.color?.secondary || '#F59E0B'; // Orange
+        // Check for header image (supporting both new headerImage and legacy backgroundImage keys)
+        const headerImageUrl = design?.headerImage?.url || design?.backgroundImage?.url;
+        const hasHeaderImage = !!headerImageUrl && headerImageUrl !== '';
+
         const hasLogo = !!design?.logo?.url;
 
         return (
@@ -2740,101 +2741,88 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 <div style={{ height: '100%', overflowY: 'auto', background: '#fff', display: 'flex', flexDirection: 'column' }}>
 
                     {/* Header Image Section */}
-                    {hasBg && (
+                    {hasHeaderImage && (
                         <div style={{
-                            height: '220px',
-                            position: 'relative',
-                            backgroundImage: `url(${design.backgroundImage.url})`,
+                            width: '100%',
+                            height: '240px',
+                            flexShrink: 0,
+                            backgroundImage: `url(${headerImageUrl})`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
-                            zIndex: 0 // Ensure it stays behind
+                            position: 'relative'
                         }}>
-
+                            {/* Gradient Overlay for better contrast if needed */}
+                            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.1)' }}></div>
                         </div>
                     )}
 
-                    {/* Overlapping Logo - Moved OUTSIDE the clipped container */}
-                    {hasLogo && (
-                        <div style={{
-                            width: '100px',
-                            height: '100px',
-                            borderRadius: '50%',
-                            background: '#fff',
-                            position: 'absolute',
-                            top: hasBg ? '170px' : '20px', // Adjust top if no header image
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            zIndex: 50, // High z-index to sit on top of everything
-                            padding: '5px',
-                            boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
-                        }}>
-                            <img
-                                src={design?.logo?.url}
-                                alt="Logo"
-                                style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
-                            />
-                        </div>
-                    )}
-
-                    {/* Curved Blue Section */}
+                    {/* Blue Content Card */}
                     <div style={{
                         flex: 1,
                         background: primaryColor,
-                        position: 'relative',
-                        padding: hasLogo
-                            ? (hasBg ? '4rem 1.5rem 2rem' : '8rem 1.5rem 2rem')
-                            : '2rem 1.5rem 2rem',
+                        borderTopLeftRadius: hasHeaderImage ? '30px' : '0',
+                        borderTopRightRadius: hasHeaderImage ? '30px' : '0',
+                        padding: '0 1.5rem 2rem',
+                        marginTop: hasHeaderImage ? '-30px' : '0', // Pull up to overlap header image if present
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        marginTop: hasBg ? '-40px' : '0px',
-                        clipPath: 'ellipse(150% 100% at 50% 100%)', // Bottom curve
-                        zIndex: 10 // Ensure content stays on top of header image
+                        position: 'relative',
+                        zIndex: 10,
+                        overflow: 'visible' // Allow logo to overflow if negative margin used
                     }}>
-                        {/* White curve at top simulation */}
-                        <div style={{
-                            position: 'absolute',
-                            top: '-50px', // Pull up
-                            left: '0',
-                            width: '100%',
-                            height: '100px',
-                            background: '#fff',
-                            borderRadius: '0 0 50% 50%', // Convex curve downwards
-                            zIndex: 1,
-                            display: 'none' // Hidden for now as clipPath handles the shape better or simpler
-                        }}></div>
 
-                        {/* Text Content */}
-                        <div style={{ textAlign: 'center', color: '#fff', marginTop: '1rem', zIndex: 2 }}>
-                            <h3 style={{
-                                margin: '0 0 0.5rem 0',
-                                fontSize: '1.25rem',
-                                fontWeight: 'bold',
-                                fontFamily: basicInfo?.headlineFont || 'Lato',
-                                color: basicInfo?.headlineColor || '#ffffff'
+                        {/* Logo - Nested inside, Relative Positioning */}
+                        {hasLogo && (
+                            <div style={{
+                                width: '110px',
+                                height: '110px',
+                                borderRadius: '50%',
+                                background: '#fff',
+                                padding: '5px',
+                                // Dynamic Margin: Pull up if header exists, push down if not
+                                marginTop: hasHeaderImage ? '-55px' : '40px',
+                                marginBottom: '1.5rem',
+                                position: 'relative',
+                                zIndex: 30,
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                                flexShrink: 0
                             }}>
-                                {basicInfo?.headline || "Connect With Us On Social Media"}
+                                <img
+                                    src={design.logo.url}
+                                    alt="Logo"
+                                    style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                                />
+                            </div>
+                        )}
+
+                        {/* Title & Description */}
+                        <div style={{ textAlign: 'center', color: '#fff', marginBottom: '2rem', width: '100%' }}>
+                            <h3 style={{
+                                margin: '0 0 0.75rem 0',
+                                fontSize: '1.4rem',
+                                fontWeight: '800',
+                                fontFamily: basicInfo?.headlineFont || 'Lato',
+                                color: basicInfo?.headlineColor || '#ffffff',
+                                letterSpacing: '-0.02em'
+                            }}>
+                                {basicInfo?.headline || "Connect With Us"}
                             </h3>
                             <p style={{
-                                margin: 0,
-                                fontSize: '0.9rem',
+                                margin: '0 auto',
+                                fontSize: '0.95rem',
                                 opacity: 0.9,
-                                lineHeight: '1.4',
-                                maxWidth: '280px'
+                                lineHeight: '1.6',
+                                maxWidth: '300px',
+                                color: '#f8fafc'
                             }}>
-                                {basicInfo?.aboutUs || "Follow us and get updates delivered to your favorite social media channel."}
+                                {basicInfo?.aboutUs || "Follow us for the latest updates on our social channels."}
                             </p>
                         </div>
-                    </div>
 
-                    {/* Social Buttons List */}
-                    <div style={{ background: '#fff', padding: '1rem' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-
-
-                            {/* Dynamic Social Links */}
+                        {/* Social Links List - White Cards */}
+                        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             {(() => {
-                                // Platform configuration consistent with SocialMediaConfig.jsx
                                 // Platform configuration consistent with SocialMediaConfig.jsx
                                 const platformConfig = [
                                     { id: 'website', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Website', icon: 'https://img.icons8.com/color/48/domain.png', color: '#6366f1' },
@@ -2870,30 +2858,31 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 }
 
                                 return activePlatforms.map((platform) => {
-                                    const Icon = platform.icon;
-                                    // Use configured text or platform name; use configured URL or # for defaults
                                     const text = social?.[platform.textKey] || platform.name;
                                     const url = social?.[platform.urlKey];
 
-                                    // Render Item
                                     return (
                                         <div
                                             key={platform.id}
                                             onClick={() => url && window.open(url.startsWith('http') ? url : `https://${url}`, '_blank')}
                                             style={{
+                                                background: '#fff',
+                                                borderRadius: '16px',
+                                                padding: '1rem',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                padding: '1rem',
-                                                borderBottom: '1px solid #f1f5f9',
                                                 gap: '1rem',
                                                 cursor: 'pointer',
+                                                boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+                                                transition: 'transform 0.2s',
                                                 textDecoration: 'none'
                                             }}
+                                            onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                                            onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                                         >
                                             <div style={{
-                                                width: '40px',
-                                                height: '40px',
-                                                background: 'transparent',
+                                                width: '42px',
+                                                height: '42px',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
@@ -2902,14 +2891,14 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                 <img
                                                     src={platform.icon}
                                                     alt={platform.name}
-                                                    style={{
-                                                        width: '24px',
-                                                        height: '24px',
-                                                        objectFit: 'contain'
-                                                    }}
+                                                    style={{ width: '30px', height: '30px', objectFit: 'contain' }}
                                                 />
                                             </div>
-                                            <span style={{ fontSize: '1rem', color: '#1e293b', fontWeight: '600' }}>{text}</span>
+                                            <span style={{ fontSize: '1rem', color: '#1e293b', fontWeight: 'bold' }}>{text}</span>
+                                            {/* Arrow Icon at end */}
+                                            <div style={{ marginLeft: 'auto', color: '#cbd5e1' }}>
+                                                <ChevronRight size={20} />
+                                            </div>
                                         </div>
                                     );
                                 });
@@ -2923,17 +2912,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     position: 'absolute',
                     bottom: '20px',
                     right: '20px',
-                    width: '50px',
-                    height: '50px',
-                    background: '#F59E0B', // Orange
+                    width: '56px',
+                    height: '56px',
+                    background: secondaryColor,
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: '#fff',
-                    boxShadow: '0 4px 6px rgba(0,0,0,0.2)',
+                    boxShadow: '0 4px 12px rgba(245, 158, 11, 0.4)',
                     cursor: 'pointer',
-                    zIndex: 10
+                    zIndex: 30
                 }}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -6967,7 +6956,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     <div style={{
                         background: '#fff',
                         marginTop: '0.6rem',
-                        padding: '1rem',
+                        padding: '1.5rem 1rem 1rem 1rem',
                         borderRadius: '16px 16px 0 0',
                         boxShadow: '0 -2px 12px rgba(0,0,0,0.06)'
                     }}>

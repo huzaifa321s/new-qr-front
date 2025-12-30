@@ -163,10 +163,21 @@ const Generator = () => {
         else if (contrast < 4.5) score -= 30;
 
         // 2. Logo Check (Weight: 20%)
-        if (design.image?.url && design.imageOptions?.imageSize > 0.35) {
-            score -= 20;
-        } else if (design.image?.url && design.imageOptions?.imageSize > 0.2) {
-            score -= 10;
+        if (design.image?.url) {
+            const size = design.imageOptions?.imageSize || 0.2;
+
+            // If logo covers > 40% (0.4), it's critical blocking risk
+            if (size >= 0.4) {
+                score -= 50;
+            }
+            // If logo covers > 30% (0.3), it's high risk
+            else if (size >= 0.3) {
+                score -= 30;
+            }
+            // If logo covers > 20% (0.2), it's moderate impact
+            else if (size > 0.2) {
+                score -= 10;
+            }
         }
 
         // 3. Data Density (Weight: 20%)

@@ -232,7 +232,7 @@ const TemplateSelection = () => {
                                         </div>
 
                                         {/* Incomplete Badge */}
-                                        {['survey', 'social-media', 'product-page', 'dynamic-url', 'image', 'video'].includes(type.id) && (
+                                        {['survey', 'product-page', 'dynamic-url', 'image', 'video'].includes(type.id) && (
                                             <div style={{
                                                 position: 'absolute',
                                                 top: '-10px',

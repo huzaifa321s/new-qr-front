@@ -332,7 +332,12 @@ const QRRenderer = forwardRef(({ value, design, size = 280, margin = 20, id }, r
                     img.onerror = resolve; // Continue even if error
                 });
 
-                const logoSizeRatio = design.imageOptions?.imageSize || 0.4;
+                // Cap the logo size to maximum 35% to ensure it doesn't cover too much of the data modules
+                // even if the user slider goes higher.
+                const userRatio = design.imageOptions?.imageSize || 0.4;
+                const safeMaxRatio = 0.35;
+                const logoSizeRatio = Math.min(userRatio, safeMaxRatio);
+
                 const logoSize = logoSizeRatio * totalSize;
                 const logoX = (totalSize - logoSize) / 2;
                 const logoY = (totalSize - logoSize) / 2;
