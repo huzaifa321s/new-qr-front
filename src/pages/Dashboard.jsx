@@ -185,8 +185,8 @@ const Dashboard = () => {
 
     // ❌ Fallback function (only if backend fails)
     const fallbackClientDownload = async () => {
-        let qrElement = document.querySelector(`#modal-qr-${downloadingQr._id} canvas, #modal-qr-${downloadingQr._id} svg`) ||
-            document.querySelector(`#qr-${downloadingQr._id} canvas, #qr-${downloadingQr._id} svg`);
+        let qrElement = document.querySelector(`#modal-qr-${downloadingQr._id} canvas, #modal-qr-${downloadingQr._id} svg, #modal-qr-${downloadingQr._id} img`) ||
+            document.querySelector(`#qr-${downloadingQr._id} canvas, #qr-${downloadingQr._id} svg, #qr-${downloadingQr._id} img`);
 
         if (!qrElement) {
             throw new Error('QR element not found');
@@ -436,7 +436,7 @@ const Dashboard = () => {
                 qrRef.current.download('png', qr.name || 'qr-code');
             } else {
                 // Fallback to the server-side download
-                window.location.href = `/api/qr/${qr.shortId}/download?format=png`;
+                window.location.href = `/api/qr/download/${qr.shortId}?format=png`;
             }
         } catch (error) {
             console.error('Download failed:', error);
@@ -1501,6 +1501,7 @@ const Dashboard = () => {
                                                 }}>
                                                     {qr.qrImageUrl ? (
                                                         <img
+                                                            id={`qr-${qr._id}`}
                                                             src={`${qr.qrImageUrl}?t=${lastUpdated}`}
                                                             alt="QR Code"
                                                             style={{
@@ -1511,7 +1512,7 @@ const Dashboard = () => {
                                                         />
                                                     ) : (
                                                         <QRRenderer
-                                                            value={isStatic ? qr.data : `${baseUrl}/view/${qr.shortId}`}
+                                                            value={isStatic ? qr.data : (qr.type === 'dynamic-url' ? `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/${qr.shortId}` : `${baseUrl}/view/${qr.shortId}`)}
                                                             design={qr.design || {}}
                                                             size={58}
                                                             id={`qr-${qr._id}`}
