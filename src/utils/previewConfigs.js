@@ -368,9 +368,9 @@ export const productPagePreviewConfig = {
         price: '95',
         currency: '₨',
         productImages: [
-            { id: 'def-1', url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop' },
-            { id: 'def-2', url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=600&fit=crop' },
-            { id: 'def-3', url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=600&fit=crop' }
+            { id: 'def-1', url: 'https://picsum.photos/seed/product1/600/600' },
+            { id: 'def-2', url: 'https://picsum.photos/seed/product2/600/600' },
+            { id: 'def-3', url: 'https://picsum.photos/seed/product3/600/600' }
         ]
     },
     content: {
@@ -379,21 +379,31 @@ export const productPagePreviewConfig = {
             { id: '2', title: 'Ingredient', text: '• Reduced Fat Milk\n• Milk Solids\nCocoa Powder\n• Sugar\n• Emulsifier: Vegetable Oil Origin (E471)\n• Stabilizer (E470) & Chocolate Flavor' }
         ],
         certificates: [
-            { id: 'def-cert-1', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759749930/ODCzvu_imfdi2.png' },
-            { id: 'def-cert-2', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759749957/KOursE_uedyzk.png' }
+            { id: 'def-cert-1', url: 'https://picsum.photos/seed/cert1/200/200' },
+            { id: 'def-cert-2', url: 'https://picsum.photos/seed/cert2/200/200' }
         ],
         buttonText: 'Buy Product',
         buttonLink: 'https://www.dairylandltd.com/'
     },
     video: {
-        title: 'Vanilla & Malai...',
-        url: 'https://www.youtube.com/watch?v=kYI9P_pkyEw'
+        title: 'Product Introduction',
+        url: 'https://www.youtube.com/watch?v=EngW7tLk6R8'
     },
     feedback: {
         title: 'Add Your Feedback',
         ratingUrl: 'https://www.dairylandltd.com/floveredmilk/rating',
         textColor: '#FFFFFF',
         font: 'Lato'
+    },
+    contact: {
+        phone: '+1 234 567 890',
+        email: 'contact@dairyland.com',
+        website: 'https://www.dairylandltd.com',
+        socials: [
+            { platform: 'facebook', url: 'https://facebook.com/dairyland' },
+            { platform: 'instagram', url: 'https://instagram.com/dairyland' },
+            { platform: 'twitter', url: 'https://twitter.com/dairyland' }
+        ]
     },
     design: {
         color: {

@@ -2,6 +2,8 @@ import { ChevronDown, ChevronUp, RefreshCw, Check, X, UploadCloud, Bold, Italic,
 import { FaWhatsapp, FaDiscord, FaTwitch, FaSnapchat, FaTiktok, FaSpotify, FaPinterest, FaTelegram, FaReddit, FaBehance, FaTumblr } from 'react-icons/fa';
 import { SiKick } from 'react-icons/si';
 import { useState, useRef } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const ProductPageConfig = ({ config, onChange }) => {
@@ -16,9 +18,9 @@ const ProductPageConfig = ({ config, onChange }) => {
     const design = config.design || {};
     const bInfo = config.basicInfo || {};
     const defaultProductImages = [
-        { id: 'def-1', url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop' },
-        { id: 'def-2', url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=600&fit=crop' },
-        { id: 'def-3', url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=600&fit=crop' }
+        { id: 'def-1', url: 'https://picsum.photos/seed/product1/600/600' },
+        { id: 'def-2', url: 'https://picsum.photos/seed/product2/600/600' },
+        { id: 'def-3', url: 'https://picsum.photos/seed/product3/600/600' }
     ];
     const basicInfo = {
         ...bInfo,
@@ -27,7 +29,7 @@ const ProductPageConfig = ({ config, onChange }) => {
         headline: bInfo.headline || '325 ml',
         price: bInfo.price || '95',
         currency: bInfo.currency || '₨',
-        productImages: (bInfo.productImages && bInfo.productImages.length > 0) ? bInfo.productImages : defaultProductImages,
+        productImages: bInfo.productImages || defaultProductImages,
     };
     const video = {
         title: 'Vanilla & Malai...',
@@ -41,15 +43,25 @@ const ProductPageConfig = ({ config, onChange }) => {
         ...(config.feedback || {}),
         textColor: (config.feedback?.textColor && config.feedback.textColor !== '#000000') ? config.feedback.textColor : '#ffffff'
     };
-    const contact = config.contact || {};
+    const contact = {
+        phone: '+1 234 567 890',
+        email: 'contact@dairyland.com',
+        website: 'https://www.dairylandltd.com',
+        socials: [
+            { platform: 'facebook', url: 'https://facebook.com/dairyland' },
+            { platform: 'instagram', url: 'https://instagram.com/dairyland' },
+            { platform: 'twitter', url: 'https://twitter.com/dairyland' }
+        ],
+        ...(config.contact || {})
+    };
     const content = config.content || {
         items: [
             { id: '1', title: 'Description', text: 'The Dark, Smooth, Creaminess Of Chocolate Romances The Wholesome Goodness Of Real Cow\'S Milk, Reigniting For The Love For A Healthy, Tasty Beverage.' },
             { id: '2', title: 'Ingredient', text: '• Reduced Fat Milk\n• Milk Solids\nCocoa Powder\n• Sugar\n• Emulsifier: Vegetable Oil Origin (E471)\n• Stabilizer (E470) & Chocolate Flavor' }
         ],
         certificates: (config.content && config.content.certificates && config.content.certificates.length > 0) ? config.content.certificates : [
-            { id: 'def-cert-1', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759749930/ODCzvu_imfdi2.png' },
-            { id: 'def-cert-2', url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1759749957/KOursE_uedyzk.png' }
+            { id: 'def-cert-1', url: 'https://picsum.photos/seed/cert1/200/200' },
+            { id: 'def-cert-2', url: 'https://picsum.photos/seed/cert2/200/200' }
         ],
         buttonText: 'Buy Product',
         buttonLink: 'https://www.dairylandltd.com/'
@@ -617,39 +629,35 @@ const ProductPageConfig = ({ config, onChange }) => {
                                     />
                                 </div>
 
-                                {/* Mock Editor */}
-                                <div style={{ border: '1px solid #1e293b', borderRadius: '4px', overflow: 'hidden' }}>
-                                    {/* Toolbar */}
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', borderBottom: '1px solid #cbd5e1', background: '#fff', flexWrap: 'wrap' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', marginRight: '0.5rem' }}>
-                                            <span style={{ fontSize: '0.8rem', color: '#64748b', marginRight: '0.25rem' }}>Normal</span>
-                                            <ChevronDown size={14} color="#64748b" />
-                                        </div>
-                                        <Bold size={16} color="#475569" style={{ cursor: 'pointer', margin: '0 4px' }} />
-                                        <Italic size={16} color="#475569" style={{ cursor: 'pointer', margin: '0 4px' }} />
-                                        <Underline size={16} color="#475569" style={{ cursor: 'pointer', margin: '0 4px' }} />
-                                        <Strikethrough size={16} color="#475569" style={{ cursor: 'pointer', margin: '0 4px' }} />
-                                        <TextQuote size={16} color="#475569" style={{ cursor: 'pointer', margin: '0 4px' }} />
-                                        <List size={16} color="#475569" style={{ cursor: 'pointer', margin: '0 4px' }} />
-                                        <ListOrdered size={16} color="#475569" style={{ cursor: 'pointer', margin: '0 4px' }} />
-                                        <Link size={16} color="#475569" style={{ cursor: 'pointer', margin: '0 4px' }} />
-                                        <ImageIcon size={16} color="#475569" style={{ cursor: 'pointer', margin: '0 4px' }} />
-                                        <Type size={16} color="#475569" style={{ cursor: 'pointer', margin: '0 4px' }} />
-                                    </div>
-                                    {/* Text Area */}
-                                    <textarea
+                                {/* React Quill Editor */}
+                                <div style={{ border: '1px solid #1e293b', borderRadius: '4px', overflow: 'hidden' }} className="quill-editor-container">
+                                    <style>
+                                        {`
+                                            .quill-editor-container .ql-toolbar.ql-snow {
+                                                border: none;
+                                                border-bottom: 1px solid #cbd5e1;
+                                                background: #fff;
+                                            }
+                                            .quill-editor-container .ql-container.ql-snow {
+                                                border: none;
+                                                min-height: 150px;
+                                                font-size: 0.9rem;
+                                                color: #000;
+                                            }
+                                        `}
+                                    </style>
+                                    <ReactQuill
+                                        theme="snow"
                                         value={item.text}
-                                        onChange={(e) => handleItemUpdate(item.id, 'text', e.target.value)}
-                                        style={{
-                                            width: '100%',
-                                            minHeight: '120px',
-                                            border: 'none',
-                                            outline: 'none',
-                                            padding: '0.75rem',
-                                            fontSize: '0.9rem',
-                                            resize: 'vertical',
-                                            fontFamily: 'inherit',
-                                            lineHeight: '1.5'
+                                        onChange={(content) => handleItemUpdate(item.id, 'text', content)}
+                                        modules={{
+                                            toolbar: [
+                                                [{ 'header': [1, 2, false] }],
+                                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                                ['link', 'image'],
+                                                ['clean']
+                                            ],
                                         }}
                                     />
                                 </div>

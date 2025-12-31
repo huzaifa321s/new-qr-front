@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import 'react-quill/dist/quill.snow.css';
 import toast from 'react-hot-toast';
 import { Phone, MapPin, Clock, Globe, Instagram, Facebook, Twitter, X, Copy, Mail, Linkedin, MessageCircle, Wifi, Armchair, Accessibility, Calendar, User, Heart, Briefcase, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Video, PenTool, Github, Send, Headphones, Pin, Bot, ChevronRight, Users, Baby, PawPrint, Plug, ParkingCircle, Bus, Car, Bed, Coffee, Martini, Utensils, Download, File, Wine, Plane, Star, ThumbsUp, ThumbsDown, Frown, Meh, Smile, Laugh, Share } from 'lucide-react';
 import { FaWhatsapp, FaDiscord, FaTwitch, FaSnapchat, FaTiktok, FaSpotify, FaPinterest, FaTelegram, FaReddit, FaBehance, FaTumblr } from 'react-icons/fa';
@@ -55,7 +56,7 @@ const socialIconsMap = [
     { id: 'youtube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#FF0000', name: 'YouTube' },
     { id: 'whatsapp', icon: 'https://img.icons8.com/color/48/whatsapp--v1.png', color: '#25D366', name: 'WhatsApp' },
     { id: 'snapchat', icon: 'https://img.icons8.com/color/48/snapchat--v1.png', color: '#FFFC00', name: 'Snapchat' },
-    { id: 'discord', icon: 'https://img.icons8.com/color/48/discord-new.png', color: '#5865F2', name: 'Discord' },
+    { id: 'discord', icon: 'https://img.icons8.com/color/48/discord-logo.png', color: '#5865F2', name: 'Discord' },
     { id: 'twitch', icon: 'https://img.icons8.com/color/48/twitch.png', color: '#9146FF', name: 'Twitch' },
     { id: 'telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', color: '#0088CC', name: 'Telegram' },
     { id: 'pinterest', icon: 'https://img.icons8.com/color/48/pinterest.png', color: '#BD081C', name: 'Pinterest' },
@@ -148,20 +149,18 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
 
     const productImages = [
-        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=600&fit=crop'
+        'https://picsum.photos/seed/product1/600/600',
+        'https://picsum.photos/seed/product2/600/600',
+        'https://picsum.photos/seed/product3/600/600'
     ];
-
     const displayProductImages = (() => {
-        const bInfo = basicInfo || config?.basicInfo || {};
-        const imagesToFilter = bInfo.productImages || [];
-        const filtered = imagesToFilter
+        // Use either config.basicInfo.productImages or falling back to defaults
+        const currentImages = config?.basicInfo?.productImages || basicInfo?.productImages || [];
+        const filtered = currentImages
             .map(img => typeof img === 'string' ? img : img?.url)
             .filter(url => url && url.length > 5);
         return filtered.length > 0 ? filtered : productImages;
     })();
-
     const [productImageIndex, setProductImageIndex] = useState(0);
 
     useEffect(() => {
@@ -5631,28 +5630,38 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             borderRadius: '12px',
                             background: '#f8fafc'
                         }}>
-                            {displayProductImages.map((img, index) => {
-                                const imgSrc = typeof img === 'string' ? img : img?.url;
-                                return (
-                                    <img
-                                        key={index}
-                                        src={imgSrc}
-                                        alt={`Product ${index + 1}`}
-                                        style={{
-                                            position: 'absolute',
-                                            top: 0,
-                                            left: 0,
+                            <div style={{
+                                display: 'flex',
+                                width: '100%',
+                                height: '100%',
+                                transition: 'transform 0.6s ease-in-out',
+                                transform: `translateX(-${productImageIndex * 100}%)`,
+                            }}>
+                                {displayProductImages.map((img, index) => {
+                                    const imgSrc = typeof img === 'string' ? img : img?.url;
+                                    return (
+                                        <div key={index} style={{
+                                            flexShrink: 0,
                                             width: '100%',
-                                            height: '100%',
-                                            objectFit: 'cover',
-                                            opacity: productImageIndex === index ? 1 : 0,
-                                            transition: 'opacity 0.6s ease-in-out',
-                                            zIndex: productImageIndex === index ? 2 : 1
-                                        }}
-                                        onError={(e) => { e.target.style.display = 'none'; }}
-                                    />
-                                );
-                            })}
+                                            height: '100%'
+                                        }}>
+                                            <img
+                                                src={imgSrc}
+                                                alt={`Product ${index + 1}`}
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    objectFit: 'cover'
+                                                }}
+                                                onError={(e) => {
+                                                    console.error('Image load failed:', imgSrc);
+                                                    e.target.src = 'https://picsum.photos/seed/error/600/600';
+                                                }}
+                                            />
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
                         {/* Dots */}
                         <div style={{
@@ -5662,7 +5671,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             transform: 'translateX(-50%)',
                             display: 'flex',
                             gap: '0.6rem',
-                            zIndex: 10
+                            zIndex: 10,
                         }}>
                             {displayProductImages.map((_, index) => (
                                 <div
@@ -5671,8 +5680,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         width: index === productImageIndex ? '20px' : '8px',
                                         height: '8px',
                                         borderRadius: '4px',
-                                        background: index === productImageIndex ? secondaryColor : 'rgba(0,0,0,0.2)',
-                                        transition: 'all 0.3s'
+                                        background: index === productImageIndex ? secondaryColor : 'rgba(0,0,0,0.5)',
+                                        transition: 'all 0.3s',
+
+
                                     }}
                                 />
                             ))}
@@ -5756,10 +5767,13 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         borderBottomRightRadius: '8px',
                                         fontSize: '0.875rem',
                                         color: '#000',
-                                        lineHeight: '1.6',
-                                        whiteSpace: 'pre-wrap'
+                                        lineHeight: '1.6'
                                     }}>
-                                        {item.text}
+                                        <div
+                                            className="quill-content ql-editor"
+                                            style={{ padding: 0 }}
+                                            dangerouslySetInnerHTML={{ __html: item.text }}
+                                        />
                                     </div>
                                 )}
                             </div>
@@ -5820,7 +5834,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     background: secondaryColor,
                                     border: 'none',
                                     borderRadius: '8px',
-                                    padding: '0.875rem 1.5rem',
+                                    padding: '10px 40px',
                                     color: '#fff',
                                     fontWeight: 'bold',
                                     fontSize: '1.1rem',
@@ -5879,7 +5893,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 <iframe
                                     width="100%"
                                     height="180"
-                                    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                                    src="https://www.youtube.com/embed/EngW7tLk6R8"
                                     title="Product Video"
                                     frameBorder="0"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -5949,33 +5963,33 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             </h3>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                 {contact?.phone && (
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
                                         <div style={{
-                                            width: '32px', height: '32px', borderRadius: '4px', background: '#031D36', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                            width: '32px', height: '32px', borderRadius: '4px', background: '#031D36', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
                                         }}>
                                             <Phone size={18} color="#fff" />
                                         </div>
-                                        <span style={{ fontSize: '0.95rem', color: '#000' }}>{contact.phone}</span>
+                                        <span style={{ fontSize: '0.95rem', color: '#000', wordBreak: 'break-word', overflowWrap: 'break-word', paddingTop: '4px' }}>{contact.phone}</span>
                                     </div>
                                 )}
                                 {contact?.email && (
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
                                         <div style={{
-                                            width: '32px', height: '32px', borderRadius: '4px', background: '#031D36', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                            width: '32px', height: '32px', borderRadius: '4px', background: '#031D36', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
                                         }}>
                                             <Mail size={18} color="#fff" />
                                         </div>
-                                        <span style={{ fontSize: '0.95rem', color: '#000' }}>{contact.email}</span>
+                                        <span style={{ fontSize: '0.95rem', color: '#000', wordBreak: 'break-word', overflowWrap: 'break-word', paddingTop: '4px' }}>{contact.email}</span>
                                     </div>
                                 )}
                                 {contact?.website && (
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
                                         <div style={{
-                                            width: '32px', height: '32px', borderRadius: '4px', background: '#031D36', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                            width: '32px', height: '32px', borderRadius: '4px', background: '#031D36', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
                                         }}>
                                             <Globe size={18} color="#fff" />
                                         </div>
-                                        <span style={{ fontSize: '0.95rem', color: '#000' }}>{contact.website}</span>
+                                        <span style={{ fontSize: '0.95rem', color: '#000', wordBreak: 'break-word', overflowWrap: 'break-word', paddingTop: '4px' }}>{contact.website}</span>
                                     </div>
                                 )}
                             </div>
@@ -6019,7 +6033,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                 }}
                                             />
                                         ) : (
-                                            React.cloneElement(iconObj.icon, { color: iconObj.color, size: 32 })
+                                            iconObj.icon
                                         )}
                                     </a>
                                 );
