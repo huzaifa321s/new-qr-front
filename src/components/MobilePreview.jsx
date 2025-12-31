@@ -2907,22 +2907,58 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 </div>
 
                 {/* Floating Share Button */}
-                <div style={{
-                    position: 'absolute',
-                    bottom: '20px',
-                    right: '20px',
-                    width: '56px',
-                    height: '56px',
-                    background: secondaryColor,
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#fff',
-                    boxShadow: '0 4px 12px rgba(245, 158, 11, 0.4)',
-                    cursor: 'pointer',
-                    zIndex: 30
-                }}>
+                <div
+                    onClick={async () => {
+                        // Only work in live mode
+                        if (!isLiveView) return;
+
+                        const baseUrl = (import.meta.env.VITE_FRONTEND_URL || window.location.origin).replace(/\/$/, '');
+                        const shareUrl = config.shortId ? `${baseUrl}/view/${config.shortId}` : window.location.href;
+                        const shareTitle = basicInfo?.headline || "Connect With Us";
+                        const shareText = config.shareOption?.shareMessage || basicInfo?.aboutUs || "Follow us for the latest updates on our social channels.";
+
+                        // Check if Web Share API is supported (typically on mobile)
+                        if (navigator.share) {
+                            try {
+                                await navigator.share({
+                                    title: shareTitle,
+                                    text: shareText,
+                                    url: shareUrl,
+                                });
+                            } catch (err) {
+                                // User cancelled or error occurred
+                                if (err.name !== 'AbortError') {
+                                    console.error('Error sharing:', err);
+                                }
+                            }
+                        } else {
+                            // Fallback for desktop - copy URL to clipboard
+                            try {
+                                await navigator.clipboard.writeText(shareUrl);
+                                // You can add a toast notification here if needed
+                                alert('Link copied to clipboard!');
+                            } catch (err) {
+                                console.error('Failed to copy:', err);
+                            }
+                        }
+                    }}
+                    style={{
+                        position: 'absolute',
+                        bottom: '20px',
+                        right: '20px',
+                        width: '56px',
+                        height: '56px',
+                        background: secondaryColor,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#fff',
+                        boxShadow: '0 4px 12px rgba(245, 158, 11, 0.4)',
+                        cursor: isLiveView ? 'pointer' : 'not-allowed',
+                        opacity: isLiveView ? 1 : 0.5,
+                        zIndex: 30
+                    }}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         <path d="M6 15C7.65685 15 9 13.6569 9 12C9 10.3431 7.65685 9 6 9C4.34315 9 3 10.3431 3 12C3 13.6569 4.34315 15 6 15Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -4976,19 +5012,54 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         right: '20px',
                         zIndex: 20
                     }}>
-                        <button style={{
-                            width: '56px',
-                            height: '56px',
-                            borderRadius: '50%',
-                            background: headerBg,
-                            border: 'none',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: '#fff',
-                            cursor: 'pointer',
-                            boxShadow: '0 10px 25px -5px rgba(0,0,0,0.3)'
-                        }}>
+                        <button
+                            onClick={async () => {
+                                // Only work in live mode
+                                if (!isLiveView) return;
+
+                                const baseUrl = (import.meta.env.VITE_FRONTEND_URL || window.location.origin).replace(/\/$/, '');
+                                const shareUrl = config.shortId ? `${baseUrl}/view/${config.shortId}` : window.location.href;
+                                const shareTitle = basicInfo?.headline || businessInfo?.title || "Check out my links";
+                                const shareText = config.share?.message || basicInfo?.aboutUs || "Follow us and get updates delivered to your favorite social media channel.";
+
+                                // Check if Web Share API is supported (typically on mobile)
+                                if (navigator.share) {
+                                    try {
+                                        await navigator.share({
+                                            title: shareTitle,
+                                            text: shareText,
+                                            url: shareUrl,
+                                        });
+                                    } catch (err) {
+                                        // User cancelled or error occurred
+                                        if (err.name !== 'AbortError') {
+                                            console.error('Error sharing:', err);
+                                        }
+                                    }
+                                } else {
+                                    // Fallback for desktop - copy URL to clipboard
+                                    try {
+                                        await navigator.clipboard.writeText(shareUrl);
+                                        alert('Link copied to clipboard!');
+                                    } catch (err) {
+                                        console.error('Failed to copy:', err);
+                                    }
+                                }
+                            }}
+                            style={{
+                                width: '56px',
+                                height: '56px',
+                                borderRadius: '50%',
+                                background: headerBg,
+                                border: 'none',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: '#fff',
+                                cursor: isLiveView ? 'pointer' : 'not-allowed',
+                                opacity: isLiveView ? 1 : 0.5,
+                                boxShadow: '0 10px 25px -5px rgba(0,0,0,0.3)'
+                            }}>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <circle cx="18" cy="5" r="3"></circle>
                                 <circle cx="6" cy="12" r="3"></circle>
@@ -5715,7 +5786,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 </h2>
                                 <p style={{
                                     fontSize: '0.875rem',
-                                    color: '#000',
+                                    color: basicInfo?.titleTextColor || '#000',
                                     margin: 0,
                                     opacity: 0.8
                                 }}>
@@ -5725,7 +5796,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             <div style={{
                                 fontSize: '1.25rem',
                                 fontWeight: 'bold',
-                                color: '#000'
+                                color: basicInfo?.titleTextColor || '#000'
                             }}>
                                 {basicInfo?.currency || 'Rs'} {basicInfo?.price || '95'}
                             </div>

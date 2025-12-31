@@ -8,6 +8,7 @@ const MultipleLinksConfig = ({ config, onChange }) => {
 
     const [isLinksOpen, setIsLinksOpen] = useState(false);
     const [isSocialOpen, setIsSocialOpen] = useState(false);
+    const [isShareOpen, setIsShareOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
     useEffect(() => {
@@ -98,6 +99,17 @@ const MultipleLinksConfig = ({ config, onChange }) => {
     const handleSocialLinkRemove = (id) => {
         const newLinks = socialLinks.filter(link => link.id !== id);
         onChange(prev => ({ ...prev, socialLinks: newLinks }));
+    };
+
+    // Share Handlers
+    const handleShareUpdate = (key, value) => {
+        onChange(prev => ({
+            ...prev,
+            share: {
+                ...prev.share,
+                [key]: value
+            }
+        }));
     };
 
     const socialPlatforms = [
@@ -583,6 +595,81 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                             </div>
                         </div>
 
+                    </div>
+                )}
+            </div>
+
+            {/* SHARE ACCORDION */}
+            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
+                <div
+                    onClick={() => setIsShareOpen(!isShareOpen)}
+                    style={{
+                        padding: '1.5rem',
+                        background: '#f8fafc',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        borderBottom: isShareOpen ? '1px solid #e2e8f0' : 'none'
+                    }}
+                >
+                    <div>
+                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SHARE</div>
+                    </div>
+                    {isShareOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
+                </div>
+
+                {isShareOpen && (
+                    <div style={{ padding: isMobile ? '1rem' : '2rem', background: '#fff' }}>
+                        {/* Share Message */}
+                        <div>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                SHARE MESSAGE
+                            </label>
+                            <div style={{ position: 'relative' }}>
+                                <input
+                                    type="text"
+                                    value={config.share?.message || ''}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (value.length <= 50) {
+                                            handleShareUpdate('message', value);
+                                        }
+                                    }}
+                                    placeholder="Check out my links!"
+                                    maxLength={50}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        paddingRight: '3.5rem',
+                                        borderRadius: '4px',
+                                        border: (config.share?.message || '').length >= 50 ? '1px solid #ef4444' : '1px solid #1e293b',
+                                        fontSize: '0.9rem',
+                                        outline: 'none',
+                                        color: '#000'
+                                    }}
+                                />
+                                <div style={{
+                                    position: 'absolute',
+                                    right: '0.75rem',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    fontSize: '0.75rem',
+                                    color: (config.share?.message || '').length >= 50 ? '#ef4444' : '#64748b',
+                                    fontWeight: '500'
+                                }}>
+                                    {(config.share?.message || '').length}/50
+                                </div>
+                            </div>
+                            {(config.share?.message || '').length >= 50 && (
+                                <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.5rem', fontWeight: 'bold' }}>
+                                    Max characters length is 50
+                                </div>
+                            )}
+                            <div style={{ fontSize: '0.7rem', color: '#64748b', marginTop: '0.5rem' }}>
+                                This message will be shared along with the mobile preview link.
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

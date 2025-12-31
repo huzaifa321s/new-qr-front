@@ -458,7 +458,6 @@ const Dashboard = () => {
         }
         setActiveMenuId(activeMenuId === id ? null : id);
     };
-
     // Filter and Sort Logic
     const filteredQrs = qrs
         .filter(qr => {
@@ -471,7 +470,7 @@ const Dashboard = () => {
             if (!matchesSearch) return false;
 
             // 2. Tab Filter
-            if (activeTab === 'Dynamic') return ['url', 'dynamic-url', 'business-page', 'menu', 'business-card', 'app-store', 'video', 'pdf', 'mp3', 'image', 'social-media', 'coupon', 'feedback', 'event', 'product-page', 'lead-generation', 'rating', 'reviews', 'password-protected', 'multiple-links'].includes(qr.type);
+            if (activeTab === 'Dynamic') return ['url', 'dynamic-url', 'business-page', 'bio-page', 'menu', 'business-card', 'app-store', 'video', 'pdf', 'mp3', 'image', 'social-media', 'coupon', 'feedback', 'event', 'product-page', 'lead-generation', 'rating', 'reviews', 'password-protected', 'multiple-links'].includes(qr.type);
             if (activeTab === 'Static') return ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone'].includes(qr.type);
             // if (activeTab === 'Favourite') return false; 
 
@@ -520,11 +519,13 @@ const Dashboard = () => {
             }
         });
 
+    console.log("qr.type", filteredQrs);
     const qrTypes = [
         { value: 'url', label: 'URL' },
         { value: 'custom-type', label: 'Custom Type' },
         { value: 'business-card', label: 'Business Card' },
         { value: 'business-page', label: 'Business Page' },
+        { value: 'bio-page', label: 'Bio Page' },
         { value: 'social-media', label: 'Social Media' },
         { value: 'image', label: 'Image' },
         { value: 'pdf', label: 'PDF' },
