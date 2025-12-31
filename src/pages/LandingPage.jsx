@@ -75,7 +75,7 @@ const LandingPage = () => {
                     animation: 'spin 1s linear infinite'
                 }}></div>
             </div>
-            <h2 style={{ color: '#1e293b', fontSize: '1.25rem', fontWeight: '600', margin: '0 0 0.5rem 0' }}>Live Mobile Preview Loading...</h2>
+         <h2 style={{ color: '#1e293b', fontSize: '1.25rem', fontWeight: '600', margin: '0 0 0.5rem 0' }}>Loading...</h2>
             <p style={{ color: '#64748b', fontSize: '0.975rem' }}>Preparing your experience</p>
 
             <style>{`
@@ -174,3 +174,4 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+
