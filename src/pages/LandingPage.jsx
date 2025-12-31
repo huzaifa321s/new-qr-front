@@ -14,7 +14,18 @@ const LandingPage = () => {
             try {
                 // Fetch QR Data
                 const res = await axios.get(`/api/qr/${shortId}`);
-                setQrData(res.data);
+                const data = res.data;
+                setQrData(data);
+
+                // Handle direct redirection for dynamic-url type (for legacy QRs)
+                if (data.type === 'dynamic-url' && data.dynamicUrl) {
+                    let target = data.dynamicUrl;
+                    if (!target.startsWith('http')) {
+                        target = `https://${target}`;
+                    }
+                    window.location.href = target;
+                    return;
+                }
 
                 // Track Scan if not redirected (no ?scanned=true) and not already tracked
                 const searchParams = new URLSearchParams(location.search);

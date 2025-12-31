@@ -127,8 +127,9 @@ const Generator = () => {
         // While generating, we still want the preview to animate
         const extraHash = isGenerating ? `?loading=${loadingHash}` : '';
 
-        if (['app-store', 'menu', 'business-page', 'custom-type', 'coupon', 'business-card', 'bio-page', 'lead-generation', 'rating', 'reviews', 'social-media', 'pdf', 'multiple-links', 'password-protected', 'event', 'product-page', 'video', 'image'].includes(selectedType)) {
-            return `${baseUrl}/view/${id}${extraHash}`;
+        if (['app-store', 'menu', 'business-page', 'custom-type', 'coupon', 'business-card', 'bio-page', 'lead-generation', 'rating', 'reviews', 'social-media', 'pdf', 'multiple-links', 'password-protected', 'event', 'product-page', 'video', 'image', 'dynamic-url'].includes(selectedType)) {
+            const backendUrl = import.meta.env.VITE_API_URL || (window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin.replace(':5173', ':3000'));
+            return `${backendUrl}/${id}${extraHash}`;
         } else {
             const backendUrl = import.meta.env.VITE_API_URL || (window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin.replace(':5173', ':3000'));
             return `${backendUrl}/${id}${extraHash}`;
@@ -379,14 +380,8 @@ const Generator = () => {
             let qrDataUrl = 'https://placeholder.com';
 
             if (isEditing) {
-                const baseUrl = import.meta.env.VITE_FRONTEND_URL || window.location.origin;
-
-                if (['app-store', 'menu', 'business-page', 'custom-type', 'coupon', 'business-card', 'bio-page', 'lead-generation', 'rating', 'reviews', 'social-media', 'pdf', 'multiple-links', 'password-protected', 'event', 'product-page', 'video', 'image'].includes(selectedType)) {
-                    qrDataUrl = `${baseUrl}/view/${editingQr.shortId}`;
-                } else {
-                    const backendUrl = import.meta.env.VITE_API_URL || (window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin.replace(':5173', ':3000'));
-                    qrDataUrl = `${backendUrl}/${editingQr.shortId}`;
-                }
+                const backendUrl = import.meta.env.VITE_API_URL || (window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin.replace(':5173', ':3000'));
+                qrDataUrl = `${backendUrl}/${editingQr.shortId}`;
             }
             // For new QRs, backend will generate correct URL in createDynamicQR
 
