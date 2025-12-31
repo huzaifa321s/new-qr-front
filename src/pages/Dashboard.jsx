@@ -217,7 +217,11 @@ const Dashboard = () => {
             document.body.removeChild(link);
         }
     };
-
+    console.log("Environment Variables Check:", {
+        VITE_API_URL: import.meta.env.VITE_API_URL,
+        VITE_FRONTEND_URL: import.meta.env.VITE_FRONTEND_URL,
+        AllEnv: import.meta.env
+    });
 
     const handleEditUrlClick = (qr) => {
         setEditingUrlQr(qr);
