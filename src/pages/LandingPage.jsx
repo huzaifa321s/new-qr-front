@@ -75,8 +75,8 @@ const LandingPage = () => {
                     animation: 'spin 1s linear infinite'
                 }}></div>
             </div>
-            <h2 style={{ color: '#1e293b', fontSize: '1.25rem', fontWeight: '600', margin: '0 0 0.5rem 0' }}>Redirecting you</h2>
-            <p style={{ color: '#64748b', fontSize: '0.975rem' }}>Please wait a moment...</p>
+            <h2 style={{ color: '#1e293b', fontSize: '1.25rem', fontWeight: '600', margin: '0 0 0.5rem 0' }}>Live Mobile Preview Loading...</h2>
+            <p style={{ color: '#64748b', fontSize: '0.975rem' }}>Preparing your experience</p>
 
             <style>{`
                 @keyframes spin {
@@ -146,7 +146,8 @@ const LandingPage = () => {
                         animation: 'spin 1.2s linear infinite'
                     }}></div>
                 </div>
-                <h2 style={{ color: '#1e293b', fontSize: '1.125rem', fontWeight: '600' }}>Redirecting...</h2>
+                <h2 style={{ color: '#1e293b', fontSize: '1.125rem', fontWeight: '600' }}>Redirecting you...</h2>
+                <p style={{ color: '#64748b', fontSize: '0.875rem', marginTop: '0.5rem' }}>Please wait a moment</p>
                 <style>{`
                     @keyframes spin {
                         0% { transform: rotate(0deg); }
