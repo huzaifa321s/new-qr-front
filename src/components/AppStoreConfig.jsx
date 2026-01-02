@@ -46,7 +46,8 @@ const AppStoreConfig = ({ config, onChange }) => {
             const formData = new FormData();
             formData.append('video', file);
 
-            const res = await axios.post('http://localhost:3000/api/upload/video', formData, {
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const res = await axios.post(`${baseUrl}/api/upload/video`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
