@@ -477,7 +477,8 @@ const Dashboard = () => {
     };
 
     const handleEditQR = (qr) => {
-        if (qr.isDynamic) {
+        const staticTypes = ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone', 'more'];
+        if (!staticTypes.includes(qr.type)) {
             navigate('/generator', { state: { editingQr: qr, selectedType: qr.type } });
         } else {
             navigate('/static-generator', { state: { editingQr: qr } });
