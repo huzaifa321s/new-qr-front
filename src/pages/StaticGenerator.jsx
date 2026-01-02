@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Globe, Type, Mail, MapPin, Wifi, Phone, MessageSquare, Plus, ChevronDown, ChevronUp, Check, Download, Upload, X, Eye, Loader2, Settings } from 'lucide-react';
 import QRRenderer from '../components/QRRenderer';
 import { Toaster, toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const qrTabs = [
     { id: 'website', icon: <Globe size={20} />, label: 'Website' },
@@ -63,6 +63,9 @@ const moreMenuOptions = [
 
 const StaticGenerator = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const editingQr = location.state?.editingQr;
+    const isEditing = !!editingQr;
     const qrRef = useRef(null);
     const fileInputRef = useRef(null);
     const [activeTab, setActiveTab] = useState('website');
@@ -106,6 +109,75 @@ const StaticGenerator = () => {
     // WhatsApp states
     const [whatsappNumber, setWhatsappNumber] = useState('');
     const [whatsappMessage, setWhatsappMessage] = useState('');
+
+    // Populate state if editing
+    useEffect(() => {
+        if (editingQr) {
+            setQrName(editingQr.name || '');
+            setActiveTab(editingQr.type || 'website');
+            setLink(editingQr.data || '');
+            if (editingQr.design) {
+                setQrDesign(prev => ({
+                    ...prev,
+                    ...editingQr.design,
+                    dots: { ...prev.dots, ...(editingQr.design.dots || {}) },
+                    cornersSquare: { ...prev.cornersSquare, ...(editingQr.design.cornersSquare || {}) },
+                    cornersDot: { ...prev.cornersDot, ...(editingQr.design.cornersDot || {}) },
+                    image: { ...prev.image, ...(editingQr.design.image || {}) },
+                    imageOptions: { ...prev.imageOptions, ...(editingQr.design.imageOptions || {}) }
+                }));
+            }
+
+            // Specific parsing for complex fields
+            const data = editingQr.data || '';
+            if (editingQr.type === 'email' && data.startsWith('mailto:')) {
+                const url = new URL(data);
+                setEmailRecipient(url.pathname);
+                setEmailSubject(url.searchParams.get('subject') || '');
+                setEmailBody(url.searchParams.get('body') || '');
+            } else if (editingQr.type === 'phone' && data.startsWith('tel:')) {
+                setPhoneNumber(data.replace('tel:', ''));
+            } else if (editingQr.type === 'sms' && data.startsWith('smsto:')) {
+                const parts = data.split(':');
+                if (parts.length >= 3) {
+                    setPhoneNumber(parts[1]);
+                    setSmsMessage(parts.slice(2).join(':'));
+                } else if (parts.length === 2) {
+                    setPhoneNumber(parts[1]);
+                }
+            } else if (editingQr.type === 'more') {
+                if (data.startsWith('bitcoin:')) {
+                    const url = new URL(data);
+                    setBitcoinAddress(url.pathname);
+                    setBitcoinMessage(url.searchParams.get('message') || '');
+                    const option = moreMenuOptions.find(opt => opt.id === 'bitcoin');
+                    setSelectedMoreOption(option);
+                } else if (data.startsWith('https://wa.me/')) {
+                    const url = new URL(data);
+                    setWhatsappNumber(url.pathname.replace('/', ''));
+                    setWhatsappMessage(url.searchParams.get('text') || '');
+                    const option = moreMenuOptions.find(opt => opt.id === 'whatsapp');
+                    setSelectedMoreOption(option);
+                } else {
+                    // Find matching social media option
+                    const option = moreMenuOptions.find(opt => {
+                        // Check if it's the exact placeholder or matches the base URL
+                        if (opt.placeholder === data) return true;
+                        try {
+                            const optUrl = new URL(opt.placeholder);
+                            const dataUrl = new URL(data);
+                            return optUrl.hostname === dataUrl.hostname;
+                        } catch (e) {
+                            return false;
+                        }
+                    });
+                    if (option) {
+                        setSelectedMoreOption(option);
+                    }
+                }
+            }
+        }
+    }, [editingQr]);
 
     // Phone number formatting helper
     const formatPhoneNumber = (value) => {
@@ -173,8 +245,13 @@ const StaticGenerator = () => {
                 design: qrDesign
             };
 
-            await axios.post('/api/qr/static', payload);
-            toast.success('Static QR Code saved successfully!');
+            if (isEditing) {
+                await axios.put(`/api/qr/${editingQr._id}`, payload);
+                toast.success('Static QR Code updated successfully!');
+            } else {
+                await axios.post('/api/qr/static', payload);
+                toast.success('Static QR Code saved successfully!');
+            }
             navigate('/');
         } catch (error) {
             console.error('Error saving static QR:', error);
@@ -241,7 +318,7 @@ const StaticGenerator = () => {
                     }
                 `}
             </style>
-            <Toaster position="top-right" />
+            <Toaster position="top-center" />
 
             {/* Top Navbar */}
             <div style={{
@@ -373,7 +450,7 @@ const StaticGenerator = () => {
                                                 setActiveTab('more'); // Keep on More tab
                                                 setSelectedMoreOption(option);
                                                 setQrName(option.label);
-                                                setLink(option.placeholder.includes(':') ? option.placeholder.split(':')[0] + ':' : '');
+                                                setLink(option.placeholder);
                                                 setShowMoreMenu(false);
                                             }}
                                             style={{

@@ -212,7 +212,7 @@ const Statistics = () => {
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f7fa', fontFamily: 'sans-serif' }}>
-            <Toaster position="top-right" />
+            <Toaster position="top-center" />
 
             {/* Sidebar */}
             <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />

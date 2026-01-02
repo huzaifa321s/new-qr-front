@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import toast from 'react-hot-toast';
 import { Phone, MapPin, Clock, Globe, Instagram, Facebook, Twitter, X, Copy, Mail, Linkedin, MessageCircle, Wifi, Armchair, Accessibility, Calendar, User, Heart, Briefcase, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Video, PenTool, Github, Send, Headphones, Pin, Bot, ChevronRight, Users, Baby, PawPrint, Plug, ParkingCircle, Bus, Car, Bed, Coffee, Martini, Utensils, Download, File, Wine, Plane, Star, ThumbsUp, ThumbsDown, Frown, Meh, Smile, Laugh, Share } from 'lucide-react';
@@ -56,7 +56,7 @@ const socialIconsMap = [
     { id: 'youtube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#FF0000', name: 'YouTube' },
     { id: 'whatsapp', icon: 'https://img.icons8.com/color/48/whatsapp--v1.png', color: '#25D366', name: 'WhatsApp' },
     { id: 'snapchat', icon: 'https://img.icons8.com/color/48/snapchat--v1.png', color: '#FFFC00', name: 'Snapchat' },
-    { id: 'discord', icon: 'https://img.icons8.com/color/48/discord-logo.png', color: '#5865F2', name: 'Discord' },
+    { id: 'discord', icon: 'https://img.icons8.com/color/48/discord-new.png', color: '#5865F2', name: 'Discord' },
     { id: 'twitch', icon: 'https://img.icons8.com/color/48/twitch.png', color: '#9146FF', name: 'Twitch' },
     { id: 'telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', color: '#0088CC', name: 'Telegram' },
     { id: 'pinterest', icon: 'https://img.icons8.com/color/48/pinterest.png', color: '#BD081C', name: 'Pinterest' },
@@ -82,6 +82,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
     const [surveyStep, setSurveyStep] = useState('language'); // 'language', 'survey', 'thankYou'
     const [selectedLanguage, setSelectedLanguage] = useState('English');
     const [selectedMenuTab, setSelectedMenuTab] = useState('');
+    const [isMapHovered, setIsMapHovered] = useState(false);
+    const timingsRef = useRef(null);
 
     const defaultCategories = [
         {
@@ -933,7 +935,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     'Instagram': 'https://cdn-icons-png.flaticon.com/512/174/174855.png',
                                     'X': 'https://cdn-icons-png.flaticon.com/512/733/733579.png',
                                     'LinkedIn': 'https://cdn-icons-png.flaticon.com/512/174/174857.png',
-                                    'Discord': 'https://cdn-icons-png.flaticon.com/512/5968/5968756.png',
+                                    'Discord': 'https://img.icons8.com/color/48/discord-new.png',
                                     'Twitch': 'https://cdn-icons-png.flaticon.com/512/5968/5968819.png',
                                     'Kick': 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/kick.png',
                                     'YouTube': 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png',
@@ -1214,7 +1216,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 { id: 'github', icon: 'https://cdn-icons-png.flaticon.com/512/733/733553.png', color: '#333333' },
                                 { id: 'snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00', textColor: '#000' },
                                 { id: 'dribbble', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111388.png', color: '#ea4c89' },
-                                { id: 'discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2' },
+                                { id: 'discord', icon: 'https://img.icons8.com/color/512/discord-new.png', color: '#5865F2' },
                                 { id: 'pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#bd081c' },
                                 { id: 'tiktok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000' },
                                 { id: 'reddit', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111589.png', color: '#ff4500' }
@@ -1402,43 +1404,89 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             </div>
                         </div>
 
-                        {/* Next Button */}
-                        <div style={{ padding: '0 1.5rem 1.5rem', display: 'flex', justifyContent: 'flex-end' }}>
-                            <button
-                                onClick={() => setSurveyStep('survey')}
-                                style={{
-                                    width: '60px',
-                                    height: '60px',
-                                    borderRadius: '50%',
-                                    background: design?.color?.header || '#10b981',
-                                    border: 'none',
-                                    color: '#fff',
-                                    fontSize: '1.5rem',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    boxShadow: `0 4px 6px -1px ${design?.color?.header || '#10b981'}40`
-                                }}
-                            >
-                                ›
-                            </button>
-                        </div>
-
-                        {/* Illustration with Background */}
+                        {/* Next Button Container with Overlap */}
                         <div style={{
                             marginTop: 'auto',
-                            padding: '2rem 1rem 1rem',
                             position: 'relative',
-                            background: design?.color?.light || '#68D87F',
-                            borderTopLeftRadius: '30px',
-                            borderTopRightRadius: '30px'
+                            zIndex: 10
                         }}>
-                            <img
-                                src={design?.illustration || 'https://img.freepik.com/free-vector/customer-survey-concept-illustration_114360-5321.jpg'}
-                                alt="Survey Illustration"
-                                style={{ width: '100%', height: 'auto', objectFit: 'contain', borderRadius: '12px' }}
-                            />
+                            {/* Floating Next Button */}
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                marginBottom: '-30px', // overlaps the footer
+                                position: 'relative',
+                                zIndex: 20
+                            }}>
+                                <button
+                                    onClick={() => setSurveyStep('survey')}
+                                    style={{
+                                        width: '60px',
+                                        height: '60px',
+                                        borderRadius: '50%',
+                                        background: design?.color?.header || '#10b981',
+                                        border: '4px solid #fff', // White border for 'cutout' effect
+                                        color: '#fff',
+                                        fontSize: '1.5rem',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                                        transition: 'transform 0.2s ease',
+                                    }}
+                                    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                                    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                >
+                                    <ChevronRight size={32} strokeWidth={3} />
+                                </button>
+                            </div>
+
+                            {/* Illustration with Background */}
+                            <div style={{
+                                padding: '4rem 1.5rem 2rem', // Increased top padding to accommodate button
+                                position: 'relative',
+                                background: design?.color?.header || '#10b981',
+                                borderTopLeftRadius: '40px',
+                                borderTopRightRadius: '40px',
+                                overflow: 'hidden'
+                            }}>
+                                {/* Decorative Circles/Shapes in Background */}
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '-50px',
+                                    left: '-50px',
+                                    width: '150px',
+                                    height: '150px',
+                                    borderRadius: '50%',
+                                    background: 'rgba(255, 255, 255, 0.1)',
+                                    pointerEvents: 'none'
+                                }} />
+                                <div style={{
+                                    position: 'absolute',
+                                    bottom: '-20px',
+                                    right: '-20px',
+                                    width: '100px',
+                                    height: '100px',
+                                    borderRadius: '50%',
+                                    background: 'rgba(255, 255, 255, 0.1)',
+                                    pointerEvents: 'none'
+                                }} />
+
+                                <img
+                                    src={design?.illustration || 'https://img.freepik.com/free-vector/customer-survey-concept-illustration_114360-5321.jpg'}
+                                    alt="Survey Illustration"
+                                    style={{
+                                        width: '100%',
+                                        height: 'auto',
+                                        objectFit: 'contain',
+                                        borderRadius: '20px',
+                                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                                        background: '#fff',
+                                        padding: '10px'
+                                    }}
+                                />
+                            </div>
                         </div>
                     </div>
                 )}
@@ -1480,6 +1528,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         type="text"
                                         style={{
                                             width: '100%',
+                                            maxWidth: '100%',
+                                            boxSizing: 'border-box',
                                             padding: '0.75rem',
                                             border: '1px solid #cbd5e1',
                                             borderRadius: '8px',
@@ -1499,6 +1549,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         type="text"
                                         style={{
                                             width: '100%',
+                                            maxWidth: '100%',
+                                            boxSizing: 'border-box',
                                             padding: '0.75rem',
                                             border: '1px solid #cbd5e1',
                                             borderRadius: '8px',
@@ -1514,7 +1566,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem', textAlign: selectedLanguage === 'Urdu' ? 'right' : 'left' }}>
                                         {selectedLanguage === 'Urdu' ? 'موبائل نمبر 3' : '3 Mobile No'}
                                     </label>
-                                    <div style={{ display: 'flex', gap: '0.5rem', direction: 'ltr' }}>
+                                    <div style={{ display: 'flex', gap: '0.5rem', direction: 'ltr', maxWidth: '100%' }}>
                                         <div style={{
                                             display: 'flex',
                                             alignItems: 'center',
@@ -1522,7 +1574,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             padding: '0.75rem',
                                             border: '1px solid #cbd5e1',
                                             borderRadius: '8px',
-                                            background: '#f8fafc'
+                                            background: '#f8fafc',
+                                            flexShrink: 0
                                         }}>
                                             <span style={{ fontSize: '1.2rem' }}>🇵🇰</span>
                                             <span style={{ fontSize: '0.9rem', color: '#475569' }}>+92</span>
@@ -1531,6 +1584,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             type="tel"
                                             style={{
                                                 flex: 1,
+                                                minWidth: 0, // Prevents flex item from overflowing
+                                                width: '100%', // Ensures it takes available space
+                                                boxSizing: 'border-box',
                                                 padding: '0.75rem',
                                                 border: '1px solid #cbd5e1',
                                                 borderRadius: '8px',
@@ -1592,7 +1648,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     onClick={() => setSurveyStep('thankYou')}
                                     style={{
                                         width: '100%',
-                                        background: '#10b981',
+                                        background: design?.color?.header || '#10b981',
                                         border: 'none',
                                         color: '#fff',
                                         padding: '1rem',
@@ -2605,54 +2661,50 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 Rate Again
                             </button>
 
-                            {/* Social Icons - Grid Layout (3 rows, 4 columns) */}
+                            {/* Social Icons - Flex Wrap Layout (3 icons per row) */}
                             {socialLinks && socialLinks.length > 0 && socialLinks.some(link => link.url && link.url.trim() !== '') && (
                                 <div style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(4, 1fr)',
-                                    gap: '0.75rem',
+                                    display: 'flex',
+                                    flexWrap: 'wrap',
+                                    justifyContent: 'center',
+                                    gap: '1rem',
                                     width: '100%',
-                                    maxWidth: '280px',
-                                    margin: '0 auto'
+                                    marginTop: '1rem'
                                 }}>
                                     {socialLinks
                                         .filter(link => link.url && link.url.trim() !== '')
                                         .map((link) => {
                                             // Social media platform mapping
                                             const platformConfig = {
-                                                website: { icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#4B5563', name: 'Website' },
-                                                facebook: { icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877F2', name: 'Facebook' },
-                                                instagram: { icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', name: 'Instagram' },
-                                                twitter: { icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000', name: 'X' },
-                                                linkedin: { icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0A66C2', name: 'LinkedIn' },
-                                                discord: { icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865F2', name: 'Discord' },
-                                                twitch: { icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146FF', name: 'Twitch' },
-                                                youtube: { icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#FF0000', name: 'YouTube' },
-                                                whatsapp: { icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25D366', name: 'WhatsApp' },
-                                                snapchat: { icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#FFFC00', name: 'Snapchat', textColor: '#000' },
-                                                tiktok: { icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000', name: 'TikTok' },
-                                                tumblr: { icon: 'https://cdn-icons-png.flaticon.com/512/100/100611.png', color: '#35465C', name: 'Tumblr' },
-                                                spotify: { icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1DB954', name: 'Spotify' },
-                                                telegram: { icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088CC', name: 'Telegram' },
-                                                behance: { icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769FF', name: 'Behance' },
-                                                pinterest: { icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#BD081C', name: 'Pinterest' },
-                                                reddit: { icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#FF4500', name: 'Reddit' },
-                                                line: { icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900', name: 'Line' },
-                                                dribbble: { icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111388.png', color: '#EA4C89', name: 'Dribbble' }
+                                                website: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/domain.png', color: '#4B5563', name: 'Website' },
+                                                facebook: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/facebook.png', color: '#1877F2', name: 'Facebook' },
+                                                instagram: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/instagram.png', color: '#E4405F', name: 'Instagram' },
+                                                twitter: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/twitter.png', color: '#000000', name: 'X' },
+                                                linkedin: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/linkedin.png', color: '#0A66C2', name: 'LinkedIn' },
+                                                discord: { icon: 'https://img.icons8.com/color/48/discord-new.png', color: '#5865F2', name: 'Discord' },
+                                                twitch: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/twitch.png', color: '#9146FF', name: 'Twitch' },
+                                                youtube: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/youtube.png', color: '#FF0000', name: 'YouTube' },
+                                                whatsapp: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/whatsapp.png', color: '#25D366', name: 'WhatsApp' },
+                                                snapchat: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/snapchat.png', color: '#FFFC00', name: 'Snapchat', textColor: '#000' },
+                                                tiktok: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/tiktok.png', color: '#000000', name: 'TikTok' },
+                                                tumblr: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/tumblr.png', color: '#35465C', name: 'Tumblr' },
+                                                spotify: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/spotify.png', color: '#1DB954', name: 'Spotify' },
+                                                telegram: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/telegram.png', color: '#0088CC', name: 'Telegram' },
+                                                behance: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/behance.png', color: '#1769FF', name: 'Behance' },
+                                                pinterest: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/pinterest.png', color: '#BD081C', name: 'Pinterest' },
+                                                reddit: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/reddit.png', color: '#FF4500', name: 'Reddit' },
+                                                line: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/line.png', color: '#00B900', name: 'Line' },
+                                                dribbble: { icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/dribbble.png', color: '#EA4C89', name: 'Dribbble' }
                                             };
-
                                             const platform = platformConfig[link.platform];
                                             if (!platform) return null;
-
-                                            const Icon = platform.icon;
                                             const url = link.url.startsWith('http') ? link.url : `https://${link.url}`;
-
                                             return (
                                                 <div
                                                     key={link.id}
                                                     onClick={() => window.open(url, '_blank')}
                                                     style={{
-                                                        width: '50px',
+                                                        width: 'calc(33.33% - 0.75rem)',
                                                         height: '50px',
                                                         borderRadius: '50%',
                                                         background: '#fff',
@@ -2663,7 +2715,6 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                         cursor: 'pointer',
                                                         transition: 'transform 0.2s',
                                                         boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                                                        margin: '0 auto',
                                                         border: '1px solid #f1f5f9'
                                                     }}
                                                     onMouseEnter={(e) => {
@@ -2674,11 +2725,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                     }}
                                                     title={platform.name}
                                                 >
-                                                    {typeof platform.icon === 'string' ? (
-                                                        <img src={platform.icon} alt={platform.name} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
-                                                    ) : (
-                                                        <Icon size={24} color={platform.textColor || "#fff"} />
-                                                    )}
+                                                    <img src={platform.icon} alt={platform.name} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
                                                 </div>
                                             );
                                         })}
@@ -2826,17 +2873,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 const platformConfig = [
                                     { id: 'website', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Website', icon: 'https://img.icons8.com/color/48/domain.png', color: '#6366f1' },
                                     { id: 'facebook', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877f2' },
-                                    { id: 'instagram', urlKey: 'instagramUrl', textKey: 'instagramText', name: 'Instagram', icon: 'https://img.icons8.com/color/48/instagram-new--v1.png', color: '#E4405F' },
+                                    { id: 'instagram', urlKey: 'instagramUrl', textKey: 'instagramText', name: 'Instagram', icon: 'https://img.icons8.com/color/48/instagram-new.png', color: '#E4405F' },
                                     { id: 'twitter', urlKey: 'twitterUrl', textKey: 'twitterText', name: 'X (Twitter)', icon: 'https://img.icons8.com/color/48/twitterx--v1.png', color: '#000000' },
                                     { id: 'linkedin', urlKey: 'linkedinUrl', textKey: 'linkedinText', name: 'LinkedIn', icon: 'https://img.icons8.com/color/48/linkedin.png', color: '#0a66c2' },
                                     { id: 'discord', urlKey: 'discordUrl', textKey: 'discordText', name: 'Discord', icon: 'https://img.icons8.com/color/48/discord-new.png', color: '#5865f2' },
                                     { id: 'twitch', urlKey: 'twitchUrl', textKey: 'twitchText', name: 'Twitch', icon: 'https://img.icons8.com/color/48/twitch.png', color: '#9146ff' },
                                     { id: 'youtube', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'YouTube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#ff0000' },
-                                    { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: 'https://img.icons8.com/color/48/whatsapp--v1.png', color: '#25d366' },
+                                    { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: 'https://img.icons8.com/color/48/whatsapp.png', color: '#25d366' },
                                     { id: 'snapchat', urlKey: 'snapchatUrl', textKey: 'snapchatText', name: 'Snapchat', icon: 'https://img.icons8.com/color/48/snapchat--v1.png', color: '#fffc00' },
-                                    { id: 'tiktok', urlKey: 'tiktokUrl', textKey: 'tiktokText', name: 'TikTok', icon: 'https://img.icons8.com/color/48/tiktok--v1.png', color: '#000000' },
+                                    { id: 'tiktok', urlKey: 'tiktokUrl', textKey: 'tiktokText', name: 'TikTok', icon: 'https://img.icons8.com/color/48/tiktok.png', color: '#000000' },
                                     { id: 'tumblr', urlKey: 'tumblrUrl', textKey: 'tumblrText', name: 'Tumblr', icon: 'https://img.icons8.com/color/48/tumblr.png', color: '#35465c' },
-                                    { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: 'https://img.icons8.com/color/48/spotify--v1.png', color: '#1db954' },
+                                    { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: 'https://img.icons8.com/color/48/spotify.png', color: '#1db954' },
                                     { id: 'telegram', urlKey: 'telegramUrl', textKey: 'telegramText', name: 'Telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', color: '#0088cc' },
                                     { id: 'behance', urlKey: 'behanceUrl', textKey: 'behanceText', name: 'Behance', icon: 'https://img.icons8.com/color/48/behance.png', color: '#1769ff' },
                                     { id: 'pinterest', urlKey: 'pinterestUrl', textKey: 'pinterestText', name: 'Pinterest', icon: 'https://img.icons8.com/color/48/pinterest.png', color: '#e60023' },
@@ -3203,14 +3250,14 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                     {/* Social Media Footer */}
                     <div style={{
-                        background: '#0B2D86',
+                        background: headerColor,
                         borderRadius: '50% 50% 0 0 / 20px 20px 0 0',
                         padding: '3rem 1.5rem 2rem',
                         marginTop: 'auto',
                         display: 'flex',
                         justifyContent: 'center',
                         flexWrap: 'wrap',
-                        gap: '1rem'
+                        gap: '0.75rem'
                     }}>
                         {(() => {
                             const BUSINESS_SOCIAL_ICONS = {
@@ -3218,7 +3265,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 instagram: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png',
                                 twitter: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png',
                                 linkedin: 'https://cdn-icons-png.flaticon.com/512/174/174857.png',
-                                discord: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png',
+                                discord: 'https://img.icons8.com/color/512/discord-new.png',
                                 twitch: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png',
                                 youtube: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png',
                                 whatsapp: 'https://cdn-icons-png.flaticon.com/512/733/733585.png',
@@ -3252,19 +3299,20 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        width: '40px',
-                                        height: '40px',
+                                        width: '36px',
+                                        height: '36px',
                                         background: '#fff',
                                         borderRadius: '8px',
                                         textDecoration: 'none',
-                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                        padding: '5px'
                                     }}>
                                         <img
                                             src={iconUrl}
                                             alt={platform.name}
                                             style={{
-                                                width: '24px',
-                                                height: '24px',
+                                                width: '100%',
+                                                height: '100%',
                                                 objectFit: 'contain'
                                             }}
                                         />
@@ -3739,7 +3787,18 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         </div>
                                         <div>
                                             <div style={{ fontSize: '1rem', color: '#1e293b', marginBottom: '0.25rem' }}>{contact?.address}</div>
-                                            <div style={{ color: headerColor, fontWeight: '600', fontSize: '0.9rem', cursor: 'pointer' }}>Go to Map</div>
+                                            <div
+                                                onMouseEnter={() => setIsMapHovered(true)}
+                                                onMouseLeave={() => setIsMapHovered(false)}
+                                                style={{
+                                                    color: headerColor,
+                                                    fontWeight: '600',
+                                                    fontSize: '0.9rem',
+                                                    cursor: 'pointer',
+                                                    textDecoration: isMapHovered ? 'underline' : 'none'
+                                                }}>
+                                                Go to Map
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -3757,7 +3816,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     { key: 'twitter', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/twitter.png', color: '#000000' },
                                     { key: 'linkedin', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/linkedin.png', color: '#0A66C2' },
                                     { key: 'tiktok', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/tiktok.png', color: '#000000' },
-                                    { key: 'discord', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/discord.png', color: '#5865F2' },
+                                    { key: 'discord', icon: 'https://img.icons8.com/color/48/discord-new.png', color: '#5865F2' },
                                     { key: 'youtube', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/youtube.png', color: '#FF0000' },
                                     { key: 'twitch', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/twitch.png', color: '#9146FF' },
                                     { key: 'line', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/line.png', color: '#00B900' },
@@ -3784,7 +3843,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             width: '24px',
                                             height: '24px',
                                             objectFit: 'contain',
-                                            filter: key === 'snapchat' || key === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                            filter: 'none'
                                         }} />
                                     </div>
                                 ))}
@@ -4178,8 +4237,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             borderRadius: '8px',
                                             padding: '1rem 1.5rem',
                                             display: 'flex',
+                                            display: 'flex',
                                             alignItems: 'center',
-                                            justifyContent: 'space-between',
+                                            justifyContent: 'center',
+                                            gap: '1rem',
                                             cursor: 'pointer',
                                             transition: 'all 0.2s'
                                         }}
@@ -4949,21 +5010,24 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             }
                                         }}
                                         style={{
-                                            width: '50px',
-                                            height: '50px',
-                                            borderRadius: '12px',
+                                            width: '36px',
+                                            height: '36px',
+                                            borderRadius: '8px',
+                                            background: '#fff',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            cursor: 'pointer'
+                                            cursor: 'pointer',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                            padding: '5px'
                                         }}
                                     >
                                         <img
                                             src={Icon}
                                             alt={platform.name}
                                             style={{
-                                                width: '28px',
-                                                height: '28px',
+                                                width: '100%',
+                                                height: '100%',
                                                 objectFit: 'contain'
                                             }}
                                         />
@@ -5530,7 +5594,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     </div>
 
                     <div style={{
-                        background: primaryColor,
+                        background: headerColor,
                         padding: '1.5rem',
                         textAlign: 'center',
                         color: '#fff'
@@ -5560,18 +5624,20 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         style={{ textDecoration: 'none' }}
                                     >
                                         <div style={{
-                                            width: '48px',
-                                            height: '48px',
-                                            borderRadius: '12px',
-                                            background: 'transparent',
+                                            width: '36px',
+                                            height: '36px',
+                                            borderRadius: '8px',
+                                            background: '#fff',
                                             display: 'flex',
                                             alignItems: 'center',
-                                            justifyContent: 'center'
+                                            justifyContent: 'center',
+                                            padding: '5px',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                                         }}>
                                             {typeof platform.icon === 'string' ? (
-                                                <img src={platform.icon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+                                                <img src={platform.icon} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                             ) : (
-                                                <platform.icon size={32} color={platform.color} />
+                                                <platform.icon size={24} color={platform.color} />
                                             )}
                                         </div>
                                     </a>
@@ -5618,6 +5684,142 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             </div>
                             <span style={{ fontSize: '1rem', fontWeight: 'bold' }}>Share</span>
                         </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+
+
+    if (isLeadGeneration) {
+        const primaryColor = design?.color?.header || '#6F0101';
+        const activeForm = form || { fullName: true, email: true };
+
+        const formFields = [
+            { id: 'fullName', label: 'Full Name', type: 'text' },
+            { id: 'contactNumber', label: 'Contact Number', type: 'tel' },
+            { id: 'organizationName', label: 'Organization Name', type: 'text' },
+            { id: 'email', label: 'Email', type: 'email' },
+            { id: 'jobTitle', label: 'Job Title', type: 'text' },
+            { id: 'website', label: 'Website', type: 'url' }
+        ];
+
+        return (
+            <div style={{
+                width: isLiveView ? '100%' : '320px',
+                maxWidth: isLiveView ? '480px' : 'none',
+                height: isLiveView ? '100vh' : '640px',
+                background: '#fff',
+                borderRadius: isLiveView ? '0' : '40px',
+                border: isLiveView ? 'none' : '12px solid #1e293b',
+                overflow: 'hidden',
+                position: 'relative',
+                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                margin: isLiveView ? '0 auto' : '0 auto',
+                display: 'flex',
+                flexDirection: 'column'
+            }}>
+                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
+
+                <div style={{ height: '100%', overflowY: 'auto', background: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
+                    {/* Header Image */}
+                    <div style={{ position: 'relative', height: '200px', background: primaryColor }}>
+                        {(design?.headerImage?.url) ? (
+                            <img src={design.headerImage.url} alt="Header" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            </div>
+                        )}
+                    </div>
+
+                    <div style={{ flex: 1, padding: '1.5rem', marginTop: '-40px', position: 'relative', zIndex: 10 }}>
+                        <div style={{ background: '#fff', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }}>
+                            {leadGenStep === 'form' ? (
+                                <>
+                                    <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
+                                        <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: basicInfo?.companyNameColor || '#000', fontFamily: basicInfo?.companyNameFont, margin: '0 0 0.5rem 0' }}>
+                                            {basicInfo?.companyName || 'Company Name'}
+                                        </h2>
+                                        <h3 style={{ fontSize: '1rem', fontWeight: '600', color: basicInfo?.headlineColor || '#475569', fontFamily: basicInfo?.headlineFont, margin: '0 0 0.5rem 0' }}>
+                                            {basicInfo?.headline || 'Headline'}
+                                        </h3>
+                                        <p style={{ fontSize: '0.875rem', color: basicInfo?.descriptionColor || '#64748b', fontFamily: basicInfo?.descriptionFont, lineHeight: '1.5', margin: 0 }}>
+                                            {basicInfo?.description || 'Description'}
+                                        </p>
+                                    </div>
+
+                                    <form onSubmit={(e) => { e.preventDefault(); setLeadGenStep('thankYou'); }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                            {formFields.filter(f => activeForm[f.id]).map(field => (
+                                                <div key={field.id}>
+                                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.4rem' }}>{field.label}</label>
+                                                    <input
+                                                        type={field.type}
+                                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none' }}
+                                                        placeholder={`Enter ${field.label}`}
+                                                    />
+                                                </div>
+                                            ))}
+
+                                            {customFields && customFields.map(field => (
+                                                <div key={field.id}>
+                                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.4rem' }}>{field.label || 'Question'}</label>
+                                                    <input
+                                                        type="text"
+                                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none' }}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <button type="submit" style={{ width: '100%', padding: '1rem', background: primaryColor, color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '1rem', marginTop: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+                                            Submit
+                                        </button>
+                                    </form>
+                                </>
+                            ) : (
+                                <div style={{ textAlign: 'center', padding: '2rem 0' }}>
+                                    <div style={{
+                                        width: '80px',
+                                        height: '80px',
+                                        background: '#dcfce7',
+                                        borderRadius: '50%',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        margin: '0 auto 1.5rem'
+                                    }}>
+                                        <ThumbsUp size={40} color="#16a34a" />
+                                    </div>
+                                    <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '1rem' }}>
+                                        {thankYou?.title || 'Thank You!'}
+                                    </h3>
+                                    <p style={{ color: '#64748b', lineHeight: '1.6' }}>
+                                        {thankYou?.message || 'Your information has been submitted successfully.'}
+                                    </p>
+                                    {thankYou?.buttonLink && (
+                                        <a
+                                            href={thankYou.buttonLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{
+                                                marginTop: '2rem',
+                                                display: 'inline-block',
+                                                padding: '0.875rem 2rem',
+                                                background: primaryColor,
+                                                color: '#fff',
+                                                textDecoration: 'none',
+                                                borderRadius: '50px',
+                                                fontWeight: 'bold'
+                                            }}
+                                        >
+                                            {thankYou.buttonText || 'Visit Website'}
+                                        </a>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -7015,18 +7217,20 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                         {businessInfo?.description || 'We aim to provide fresh and healthy snacks people on the go.'}
                                     </p>
                                     <div style={{ marginTop: '0.25rem' }}>
-                                        <button style={{
-                                            background: secondaryColor,
-                                            color: headerColor || '#7f1d1d',
-                                            border: 'none',
-                                            borderRadius: '6px',
-                                            padding: '0.5rem 0.9rem',
-                                            fontWeight: '800',
-                                            fontSize: '0.85rem',
-                                            letterSpacing: '0.02em',
-                                            cursor: 'pointer',
-                                            boxShadow: '0 4px 10px rgba(0,0,0,0.15)'
-                                        }}>
+                                        <button
+                                            onClick={() => timingsRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                                            style={{
+                                                background: secondaryColor,
+                                                color: headerColor || '#7f1d1d',
+                                                border: 'none',
+                                                borderRadius: '6px',
+                                                padding: '0.5rem 0.9rem',
+                                                fontWeight: '800',
+                                                fontSize: '0.85rem',
+                                                letterSpacing: '0.02em',
+                                                cursor: 'pointer',
+                                                boxShadow: '0 4px 10px rgba(0,0,0,0.15)'
+                                            }}>
                                             TIMINGS
                                         </button>
                                     </div>
@@ -7181,11 +7385,13 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 )}
 
                 {/* Timings Section */}
-                <div style={{
-                    background: '#fff',
-                    padding: '1rem',
-                    marginTop: '1.5rem',
-                }}>
+                <div
+                    ref={timingsRef}
+                    style={{
+                        background: '#fff',
+                        padding: '1rem',
+                        marginTop: '1.5rem',
+                    }}>
                     <h3 style={{
                         fontSize: '0.8rem',
                         fontWeight: '800',

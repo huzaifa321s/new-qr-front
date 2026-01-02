@@ -34,9 +34,9 @@ const EventConfig = ({ config, onChange }) => {
         ]
     };
     const socialLinks = config.socialLinks || [
-        { id: 1, platform: 'website', url: '' },
-        { id: 2, platform: 'instagram', url: '' },
-        { id: 3, platform: 'facebook', url: '' }
+        { id: 1, platform: 'website', url: 'https://www.sterlingco.com' },
+        { id: 2, platform: 'instagram', url: 'https://instagram.com/sterlingco' },
+        { id: 3, platform: 'facebook', url: 'https://facebook.com/sterlingco' }
     ];
 
     // Default colors from screenshot
@@ -257,13 +257,21 @@ const EventConfig = ({ config, onChange }) => {
         }));
     };
 
-    const handleAddSocial = (platform) => {
-        const newLink = {
-            id: Date.now(),
-            platform,
-            url: ''
-        };
-        handleSocialUpdate([...socialLinks, newLink]);
+    const handleAddSocial = (platformId) => {
+        const existingLink = socialLinks.find(link => link.platform === platformId);
+
+        if (existingLink) {
+            // Remove if exists (Toggle Off)
+            handleRemoveSocial(existingLink.id);
+        } else {
+            // Add if doesn't exist (Toggle On)
+            const newLink = {
+                id: Date.now(),
+                platform: platformId,
+                url: ''
+            };
+            handleSocialUpdate([...socialLinks, newLink]);
+        }
     };
 
     const handleRemoveSocial = (id) => {
@@ -1414,14 +1422,14 @@ const EventConfig = ({ config, onChange }) => {
                                                 width: '40px',
                                                 height: '40px',
                                                 borderRadius: '8px',
-                                                background: 'transparent',
+                                                background: isAdded ? 'rgba(34, 197, 94, 0.1)' : 'transparent',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
-                                                opacity: isAdded ? 0.5 : 1,
+                                                border: isAdded ? '1px solid #22c55e' : 'none',
                                                 transition: 'all 0.2s',
-                                                border: 'none'
+                                                position: 'relative'
                                             }}
                                             title={platform.id}
                                         >
@@ -1432,11 +1440,30 @@ const EventConfig = ({ config, onChange }) => {
                                                     style={{
                                                         width: '20px',
                                                         height: '20px',
-                                                        objectFit: 'contain'
+                                                        objectFit: 'contain',
+                                                        opacity: isAdded ? 0.7 : 1
                                                     }}
                                                 />
                                             ) : (
-                                                <Icon size={20} color={isAdded ? '#94a3b8' : '#fff'} />
+                                                <Icon size={20} color={isAdded ? '#22c55e' : '#fff'} />
+                                            )}
+                                            {isAdded && (
+                                                <div style={{
+                                                    position: 'absolute',
+                                                    top: '-5px',
+                                                    right: '-5px',
+                                                    background: '#22c55e',
+                                                    borderRadius: '50%',
+                                                    width: '18px',
+                                                    height: '18px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    border: '2px solid #fff',
+                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                                }}>
+                                                    <Check size={10} color="#fff" />
+                                                </div>
                                             )}
                                         </div>
                                     );

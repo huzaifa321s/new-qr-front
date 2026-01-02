@@ -106,6 +106,8 @@ const Dashboard = () => {
     const [selectedTypeFilter, setSelectedTypeFilter] = useState('All types');
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [isTypeFilterOpen, setIsTypeFilterOpen] = useState(false);
+    const typeFilterRef = useRef(null);
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
@@ -116,6 +118,16 @@ const Dashboard = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (typeFilterRef.current && !typeFilterRef.current.contains(event.target)) {
+                setIsTypeFilterOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -444,8 +456,32 @@ const Dashboard = () => {
         }
     };
 
+    const isMatchingMoreType = (data, type) => {
+        if (!data) return false;
+        const lowData = data.toLowerCase();
+        switch (type) {
+            case 'reddit': return lowData.includes('reddit.com');
+            case 'tiktok': return lowData.includes('tiktok.com');
+            case 'snapchat': return lowData.includes('snapchat.com');
+            case 'telegram': return lowData.includes('t.me') || lowData.includes('telegram.org');
+            case 'facebook': return lowData.includes('facebook.com');
+            case 'instagram': return lowData.includes('instagram.com');
+            case 'x': return lowData.includes('twitter.com') || lowData.includes('x.com');
+            case 'youtube': return lowData.includes('youtube.com') || lowData.includes('youtu.be');
+            case 'skype': return lowData.startsWith('skype:');
+            case 'bitcoin': return lowData.startsWith('bitcoin:');
+            case 'zoom': return lowData.includes('zoom.us');
+            case 'whatsapp': return lowData.includes('wa.me') || lowData.includes('whatsapp.com');
+            default: return false;
+        }
+    };
+
     const handleEditQR = (qr) => {
-        navigate('/generator', { state: { editingQr: qr, selectedType: qr.type } });
+        if (qr.isDynamic) {
+            navigate('/generator', { state: { editingQr: qr, selectedType: qr.type } });
+        } else {
+            navigate('/static-generator', { state: { editingQr: qr } });
+        }
     };
 
     const toggleMenu = (e, id) => {
@@ -471,12 +507,18 @@ const Dashboard = () => {
 
             // 2. Tab Filter
             if (activeTab === 'Dynamic') return ['url', 'dynamic-url', 'business-page', 'bio-page', 'menu', 'business-card', 'app-store', 'video', 'pdf', 'mp3', 'image', 'social-media', 'coupon', 'feedback', 'event', 'product-page', 'lead-generation', 'rating', 'reviews', 'password-protected', 'multiple-links'].includes(qr.type);
-            if (activeTab === 'Static') return ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone'].includes(qr.type);
+            if (activeTab === 'Static') return ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone', 'more'].includes(qr.type);
             // if (activeTab === 'Favourite') return false; 
 
             // 3. Type Filter Dropdown
             if (selectedTypeFilter !== 'All types') {
-                if (qr.type !== selectedTypeFilter) return false;
+                const selectedOption = qrTypes.find(t => t.value === selectedTypeFilter);
+                if (selectedOption?.isMore) {
+                    if (qr.type !== 'more') return false;
+                    if (!isMatchingMoreType(qr.data, selectedTypeFilter)) return false;
+                } else {
+                    if (qr.type !== selectedTypeFilter) return false;
+                }
             }
 
             return true;
@@ -521,6 +563,7 @@ const Dashboard = () => {
 
     console.log("qr.type", filteredQrs);
     const qrTypes = [
+        // Dynamic Types
         { value: 'url', label: 'URL' },
         { value: 'custom-type', label: 'Custom Type' },
         { value: 'business-card', label: 'Business Card' },
@@ -540,12 +583,35 @@ const Dashboard = () => {
         { value: 'reviews', label: 'Reviews' },
         { value: 'password-protected', label: 'Password Protected' },
         { value: 'multiple-links', label: 'Multiple Links' },
-        { value: 'dynamic-url', label: 'Dynamic URL' }
+        { value: 'dynamic-url', label: 'Dynamic URL' },
+        // Static Types
+        { value: 'website', label: 'Website', isStatic: true },
+        { value: 'text', label: 'Text', isStatic: true },
+        { value: 'email', label: 'Email', isStatic: true },
+        { value: 'sms', label: 'SMS', isStatic: true },
+        { value: 'wifi', label: 'WiFi', isStatic: true },
+        { value: 'vcard', label: 'vCard', isStatic: true },
+        { value: 'phone', label: 'Phone', isStatic: true },
+        { value: 'map', label: 'Map', isStatic: true },
+        { value: 'static', label: 'Static', isStatic: true },
+        // "More" Sub-types
+        { value: 'reddit', label: 'Reddit', isStatic: true, isMore: true },
+        { value: 'tiktok', label: 'TikTok', isStatic: true, isMore: true },
+        { value: 'snapchat', label: 'Snapchat', isStatic: true, isMore: true },
+        { value: 'telegram', label: 'Telegram', isStatic: true, isMore: true },
+        { value: 'facebook', label: 'Facebook', isStatic: true, isMore: true },
+        { value: 'instagram', label: 'Instagram', isStatic: true, isMore: true },
+        { value: 'x', label: 'X (Twitter)', isStatic: true, isMore: true },
+        { value: 'youtube', label: 'Youtube', isStatic: true, isMore: true },
+        { value: 'skype', label: 'Skype', isStatic: true, isMore: true },
+        { value: 'bitcoin', label: 'Bitcoin', isStatic: true, isMore: true },
+        { value: 'zoom', label: 'Zoom', isStatic: true, isMore: true },
+        { value: 'whatsapp', label: 'Whatsapp', isStatic: true, isMore: true }
     ].sort((a, b) => a.label.localeCompare(b.label));
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f7fa', fontFamily: 'sans-serif' }}>
-            <Toaster position="top-right" />
+            <Toaster position="top-center" />
 
             {/* Sidebar */}
             <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
@@ -1202,10 +1268,9 @@ const Dashboard = () => {
                         {/* Filters Row - Replaced by icon on Mobile */}
                         {!isMobile ? (
                             <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                                <div style={{ position: 'relative' }}>
-                                    <select
-                                        value={selectedTypeFilter}
-                                        onChange={(e) => setSelectedTypeFilter(e.target.value)}
+                                <div style={{ position: 'relative' }} ref={typeFilterRef}>
+                                    <div
+                                        onClick={() => setIsTypeFilterOpen(!isTypeFilterOpen)}
                                         style={{
                                             padding: '0.5rem 2rem 0.5rem 0.75rem',
                                             border: '1px solid #ddd',
@@ -1214,16 +1279,97 @@ const Dashboard = () => {
                                             color: '#666',
                                             background: '#fff',
                                             cursor: 'pointer',
-                                            appearance: 'none',
-                                            minWidth: '150px'
+                                            minWidth: '160px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            gap: '0.5rem',
+                                            userSelect: 'none'
                                         }}
                                     >
-                                        <option value="All types">All types</option>
-                                        {qrTypes.map(type => (
-                                            <option key={type.value} value={type.value}>{type.label}</option>
-                                        ))}
-                                    </select>
-                                    <ChevronDown size={14} style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', color: '#666', pointerEvents: 'none' }} />
+                                        <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            {selectedTypeFilter === 'All types' ? 'All types' : (qrTypes.find(t => t.value === selectedTypeFilter)?.label || selectedTypeFilter)}
+                                        </span>
+                                        <ChevronDown size={14} style={{ flexShrink: 0, transition: 'transform 0.2s', transform: isTypeFilterOpen ? 'rotate(180deg)' : 'none' }} />
+                                    </div>
+
+                                    {isTypeFilterOpen && (
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: '100%',
+                                            left: 0,
+                                            marginTop: '4px',
+                                            width: '220px',
+                                            background: '#fff',
+                                            border: '1px solid #e5e5e5',
+                                            borderRadius: '8px',
+                                            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                                            zIndex: 1000,
+                                            maxHeight: '400px',
+                                            overflowY: 'auto',
+                                            padding: '4px'
+                                        }}>
+                                            <div
+                                                onClick={() => {
+                                                    setSelectedTypeFilter('All types');
+                                                    setIsTypeFilterOpen(false);
+                                                }}
+                                                style={{
+                                                    padding: '0.625rem 0.75rem',
+                                                    borderRadius: '6px',
+                                                    fontSize: '0.875rem',
+                                                    cursor: 'pointer',
+                                                    background: selectedTypeFilter === 'All types' ? '#f3f4f6' : 'transparent',
+                                                    color: selectedTypeFilter === 'All types' ? '#7c3aed' : '#374151',
+                                                    fontWeight: selectedTypeFilter === 'All types' ? '600' : '400'
+                                                }}
+                                                onMouseEnter={(e) => { if (selectedTypeFilter !== 'All types') e.currentTarget.style.background = '#f9fafb' }}
+                                                onMouseLeave={(e) => { if (selectedTypeFilter !== 'All types') e.currentTarget.style.background = 'transparent' }}
+                                            >
+                                                All types
+                                            </div>
+                                            <div style={{ height: '1px', background: '#f3f4f6', margin: '4px 0' }} />
+                                            {qrTypes.map(type => (
+                                                <div
+                                                    key={type.value}
+                                                    onClick={() => {
+                                                        setSelectedTypeFilter(type.value);
+                                                        setIsTypeFilterOpen(false);
+                                                    }}
+                                                    style={{
+                                                        padding: '0.625rem 0.75rem',
+                                                        borderRadius: '6px',
+                                                        fontSize: '0.875rem',
+                                                        cursor: 'pointer',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'space-between',
+                                                        gap: '0.5rem',
+                                                        background: selectedTypeFilter === type.value ? '#f3f4f6' : 'transparent',
+                                                        color: selectedTypeFilter === type.value ? '#7c3aed' : '#374151',
+                                                        fontWeight: selectedTypeFilter === type.value ? '600' : '400'
+                                                    }}
+                                                    onMouseEnter={(e) => { if (selectedTypeFilter !== type.value) e.currentTarget.style.background = '#f9fafb' }}
+                                                    onMouseLeave={(e) => { if (selectedTypeFilter !== type.value) e.currentTarget.style.background = 'transparent' }}
+                                                >
+                                                    <span>{type.label}</span>
+                                                    {type.isStatic && (
+                                                        <span style={{
+                                                            fontSize: '0.65rem',
+                                                            background: '#e0e7ff',
+                                                            color: '#4338ca',
+                                                            padding: '2px 6px',
+                                                            borderRadius: '4px',
+                                                            fontWeight: '700',
+                                                            textTransform: 'uppercase'
+                                                        }}>
+                                                            Static
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div style={{ position: 'relative' }}>
@@ -1464,7 +1610,7 @@ const Dashboard = () => {
                                     const expiryDate = new Date(qr.createdAt);
                                     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
 
-                                    const isStatic = ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone'].includes(qr.type);
+                                    const isStatic = ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone', 'more'].includes(qr.type);
 
                                     return (
                                         <div
@@ -2078,27 +2224,73 @@ const Dashboard = () => {
                                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#333', marginBottom: '0.75rem' }}>
                                         Filter by Type
                                     </label>
-                                    <div style={{ position: 'relative' }}>
-                                        <select
-                                            value={selectedTypeFilter}
-                                            onChange={(e) => setSelectedTypeFilter(e.target.value)}
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '0.5rem',
+                                        maxHeight: '300px',
+                                        overflowY: 'auto',
+                                        padding: '4px',
+                                        border: '1px solid #ddd',
+                                        borderRadius: '12px',
+                                        background: '#f9fafb'
+                                    }}>
+                                        <div
+                                            onClick={() => setSelectedTypeFilter('All types')}
                                             style={{
-                                                width: '100%',
-                                                padding: '0.75rem 2rem 0.75rem 1rem',
-                                                border: '1px solid #ddd',
-                                                borderRadius: '12px',
-                                                fontSize: '1rem',
-                                                color: '#333',
-                                                background: '#fff',
-                                                appearance: 'none'
+                                                padding: '0.75rem 1rem',
+                                                borderRadius: '8px',
+                                                fontSize: '0.9rem',
+                                                background: selectedTypeFilter === 'All types' ? '#7c3aed' : '#fff',
+                                                color: selectedTypeFilter === 'All types' ? '#fff' : '#333',
+                                                fontWeight: selectedTypeFilter === 'All types' ? '600' : '400',
+                                                border: '1px solid',
+                                                borderColor: selectedTypeFilter === 'All types' ? '#7c3aed' : '#e5e5e5',
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center'
                                             }}
                                         >
-                                            <option value="All types">All types</option>
-                                            {qrTypes.map(type => (
-                                                <option key={type.value} value={type.value}>{type.label}</option>
-                                            ))}
-                                        </select>
-                                        <ChevronDown size={18} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: '#666', pointerEvents: 'none' }} />
+                                            All types
+                                            {selectedTypeFilter === 'All types' && <Check size={16} />}
+                                        </div>
+                                        {qrTypes.map(type => (
+                                            <div
+                                                key={type.value}
+                                                onClick={() => setSelectedTypeFilter(type.value)}
+                                                style={{
+                                                    padding: '0.75rem 1rem',
+                                                    borderRadius: '8px',
+                                                    fontSize: '0.9rem',
+                                                    background: selectedTypeFilter === type.value ? '#7c3aed' : '#fff',
+                                                    color: selectedTypeFilter === type.value ? '#fff' : '#333',
+                                                    fontWeight: selectedTypeFilter === type.value ? '600' : '400',
+                                                    border: '1px solid',
+                                                    borderColor: selectedTypeFilter === type.value ? '#7c3aed' : '#e5e5e5',
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    alignItems: 'center'
+                                                }}
+                                            >
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                    {type.label}
+                                                    {type.isStatic && (
+                                                        <span style={{
+                                                            fontSize: '0.6rem',
+                                                            background: selectedTypeFilter === type.value ? 'rgba(255,255,255,0.2)' : '#e0e7ff',
+                                                            color: selectedTypeFilter === type.value ? '#fff' : '#4338ca',
+                                                            padding: '2px 6px',
+                                                            borderRadius: '4px',
+                                                            fontWeight: '700',
+                                                            textTransform: 'uppercase'
+                                                        }}>
+                                                            Static
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                {selectedTypeFilter === type.value && <Check size={16} />}
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
 
@@ -2156,10 +2348,37 @@ const Dashboard = () => {
                                                 fontSize: '1rem',
                                                 display: 'flex',
                                                 justifyContent: 'space-between',
-                                                alignItems: 'center'
+                                                alignItems: 'center',
+                                                background: '#fff'
                                             }}>
-                                                <span>{startDate ? `${startDate.toLocaleDateString()} - ${endDate ? endDate.toLocaleDateString() : '...'}` : 'Select dates'}</span>
-                                                <Calendar size={18} color="#666" />
+                                                <span style={{ color: startDate ? '#000' : '#666', fontWeight: startDate ? '500' : '400' }}>
+                                                    {startDate ? `${startDate.toLocaleDateString()} - ${endDate ? endDate.toLocaleDateString() : '...'}` : 'Select dates'}
+                                                </span>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                    {(startDate || endDate) && (
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setStartDate(null);
+                                                                setEndDate(null);
+                                                            }}
+                                                            style={{
+                                                                background: '#f3f4f6',
+                                                                border: 'none',
+                                                                borderRadius: '50%',
+                                                                width: '24px',
+                                                                height: '24px',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                cursor: 'pointer'
+                                                            }}
+                                                        >
+                                                            <X size={14} color="#666" />
+                                                        </button>
+                                                    )}
+                                                    <Calendar size={18} color="#666" />
+                                                </div>
                                             </div>
                                         }
                                     />

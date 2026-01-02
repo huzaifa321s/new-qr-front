@@ -147,23 +147,32 @@ const BusinessPageConfig = ({ config, onChange }) => {
         }));
     };
 
-    const handleSocialUpdate = (key, value) => {
+    const handleSocialToggle = (platformId) => {
         onChange(prev => {
             const currentSocial = (prev.social && Object.keys(prev.social).length > 0)
-                ? prev.social
+                ? { ...prev.social }
                 : {
                     facebook: 'https://facebook.com',
                     instagram: 'https://instagram.com',
                     twitter: 'https://twitter.com',
                     whatsapp: 'https://whatsapp.com'
                 };
-            return {
-                ...prev,
-                social: {
-                    ...currentSocial,
-                    [key]: value
-                }
-            };
+
+            if (currentSocial[platformId] !== undefined) {
+                // Remove if exists
+                const newSocial = { ...currentSocial };
+                delete newSocial[platformId];
+                return { ...prev, social: newSocial };
+            } else {
+                // Add if not exists
+                return {
+                    ...prev,
+                    social: {
+                        ...currentSocial,
+                        [platformId]: ''
+                    }
+                };
+            }
         });
     };
 
@@ -1392,7 +1401,16 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                                         <input
                                                             type="text"
                                                             value={social[platform.id] || ''}
-                                                            onChange={(e) => handleSocialUpdate(platform.id, e.target.value)}
+                                                            onChange={(e) => {
+                                                                const val = e.target.value;
+                                                                onChange(prev => ({
+                                                                    ...prev,
+                                                                    social: {
+                                                                        ...(prev.social || social),
+                                                                        [platform.id]: val
+                                                                    }
+                                                                }));
+                                                            }}
                                                             placeholder="https://"
                                                             style={{
                                                                 flex: 1,
@@ -1405,7 +1423,7 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                                             }}
                                                         />
                                                         <button
-                                                            onClick={() => handleSocialUpdate(platform.id, undefined)}
+                                                            onClick={() => handleSocialToggle(platform.id)}
                                                             style={{
                                                                 background: 'none',
                                                                 border: 'none',
@@ -1429,32 +1447,54 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                                 ADD MORE
                                             </div>
                                             <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
-                                                Click on the icon to add a social media profile.
+                                                Select a social media profile to add.
                                             </div>
 
                                             {/* Social Media Icons Grid */}
                                             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                                                {availablePlatforms.map((platform) => (
-                                                    <div
-                                                        key={platform.id}
-                                                        onClick={() => handleSocialUpdate(platform.id, '')}
-                                                        style={{
-                                                            width: '40px',
-                                                            height: '40px',
-                                                            borderRadius: '8px',
-                                                            border: `1px solid #e2e8f0`,
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            cursor: 'pointer',
-                                                            transition: 'all 0.2s',
-                                                            background: '#fff',
-                                                            overflow: 'hidden'
-                                                        }}
-                                                    >
-                                                        <img src={platform.icon} alt={platform.name} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
-                                                    </div>
-                                                ))}
+                                                {SOCIAL_PLATFORMS.map((platform) => {
+                                                    const isAdded = social[platform.id] !== undefined;
+                                                    return (
+                                                        <div
+                                                            key={platform.id}
+                                                            onClick={() => handleSocialToggle(platform.id)}
+                                                            style={{
+                                                                width: '40px',
+                                                                height: '40px',
+                                                                borderRadius: '8px',
+                                                                border: isAdded ? '1px solid #22c55e' : `1px solid #e2e8f0`,
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                cursor: 'pointer',
+                                                                transition: 'all 0.2s',
+                                                                background: isAdded ? 'rgba(34, 197, 94, 0.1)' : '#fff',
+                                                                overflow: 'hidden',
+                                                                position: 'relative'
+                                                            }}
+                                                        >
+                                                            <img src={platform.icon} alt={platform.name} style={{ width: '20px', height: '20px', objectFit: 'contain', opacity: isAdded ? 0.7 : 1 }} />
+                                                            {isAdded && (
+                                                                <div style={{
+                                                                    position: 'absolute',
+                                                                    top: '-5px',
+                                                                    right: '-5px',
+                                                                    background: '#22c55e',
+                                                                    borderRadius: '50%',
+                                                                    width: '18px',
+                                                                    height: '18px',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center',
+                                                                    border: '2px solid #fff',
+                                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                                                }}>
+                                                                    <Check size={10} color="#fff" />
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                })}
                                             </div>
                                         </div >
                                     </>

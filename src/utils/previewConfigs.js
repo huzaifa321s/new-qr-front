@@ -256,8 +256,16 @@ export const socialMediaPreviewConfig = {
         backgroundImage: { url: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=267&fit=crop' }
     },
     basicInfo: {
-        headline: "Connect With Us On Social Media",
-        aboutUs: "Follow us and get updates delivered to your favorite social media channel."
+        headline: "Connect With Us",
+        aboutUs: "Follow us for the latest updates on our social channels."
+    },
+    social: {
+        websiteUrl: '',
+        websiteText: 'Visit Us Online',
+        facebookUrl: '',
+        facebookText: 'Facebook',
+        youtubeUrl: '',
+        youtubeText: 'YouTube'
     }
 };
 
@@ -331,9 +339,9 @@ export const eventPreviewConfig = {
         website: 'http://www.sterlingco.com/tickets'
     },
     socialLinks: [
-        { id: 1, platform: 'website', url: '' },
-        { id: 2, platform: 'instagram', url: '' },
-        { id: 3, platform: 'facebook', url: '' }
+        { id: 1, platform: 'website', url: 'https://www.sterlingco.com' },
+        { id: 2, platform: 'instagram', url: 'https://instagram.com/sterlingco' },
+        { id: 3, platform: 'facebook', url: 'https://facebook.com/sterlingco' }
     ],
     venue: {
         location: '1000 Marketplace Ave. NY, 10001, United States'

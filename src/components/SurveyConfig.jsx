@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Trash2, Globe, Facebook, Instagram, Twitter, Linkedin, Youtube, Music, Ghost, MessageCircle, Send, Dribbble, Github, GripVertical } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const SurveyConfig = ({ config, onChange }) => {
@@ -11,20 +11,112 @@ const SurveyConfig = ({ config, onChange }) => {
 
     const design = config.design || {};
     const basicInfo = config.basicInfo || {};
+
+    // Initialize default values from placeholders
+    useEffect(() => {
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+            // This ensures it runs, but we should be careful about "onChange" loop.
+            // Actually, we just check if keys exist.
+        }
+
+        const updates = {};
+        let hasUpdates = false;
+
+        if (!basicInfo.organizationName) {
+            updates.organizationName = 'Luxury Hotels';
+            hasUpdates = true;
+        }
+        if (!basicInfo.description) {
+            updates.description = 'We aim to provide fresh and healthy snacks for people on the go.';
+            hasUpdates = true;
+        }
+        if (!basicInfo.website) {
+            updates.website = 'https://www.luxerhotels.com';
+            hasUpdates = true;
+        }
+
+        // Check for survey languages
+        const surveyUpdates = {};
+        let hasSurveyUpdates = false;
+
+        const currentLanguages = config.survey?.languages;
+        if (!currentLanguages || currentLanguages.length === 0) {
+            surveyUpdates.languages = ['English', 'Urdu'];
+            hasSurveyUpdates = true;
+        }
+
+        if (hasUpdates || hasSurveyUpdates) {
+            onChange(prev => {
+                const newState = { ...prev };
+
+                if (hasUpdates) {
+                    newState.basicInfo = {
+                        ...prev.basicInfo,
+                        ...updates
+                    };
+                }
+
+                if (hasSurveyUpdates) {
+                    newState.survey = {
+                        ...prev.survey,
+                        ...surveyUpdates
+                    };
+                }
+
+                return newState;
+            });
+        }
+    }, []); // Run once on mount
+
     const defaultSurveyQuestions = [
         {
             id: 1,
             type: 'Options',
             questions: {
                 'English': 'Branch Name',
-                'Urdu': 'برانچ کا نام'
+                'Urdu': 'برانچ کا نام',
+                'Arabic': 'اسم الفرع',
+                'Spanish': 'Nombre de la Sucursal',
+                'French': 'Nom de la Succursale',
+                'German': 'Filialname',
+                'Chinese': '分店名称',
+                'Japanese': '支店名',
+                'Korean': '지점명',
+                'Russian': 'Название филиала',
+                'Portuguese': 'Nome da Agência',
+                'Italian': 'Nome della Filiale',
+                'Dutch': 'Filiaalnaam',
+                'Turkish': 'Şube Adı',
+                'Hindi': 'शाखा का नाम',
+                'Bengali': 'শাখার নাম',
+                'Vietnamese': 'Tên chi nhánh',
+                'Thai': 'ชื่อสาขา',
+                'Indonesian': 'Nama Cabang',
+                'Malay': 'Nama Cawangan',
+                'Polish': 'Nazwa Oddziału',
+                'Ukrainian': 'Назва філії',
+                'Romanian': 'Numele Filialei',
+                'Greek': 'Όνομα Υποκαταστήματος',
+                'Czech': 'Název pobočky',
+                'Swedish': 'Filialnamn',
+                'Norwegian': 'Filialnavn',
+                'Danish': 'Filialnavn',
+                'Finnish': 'Sivukonttorin nimi',
+                'Hungarian': 'Fiók neve'
             },
             options: [
                 {
                     id: 101,
                     labels: {
                         'English': 'Digital',
-                        'Urdu': 'ڈیجیٹل'
+                        'Urdu': 'ڈیجیٹل',
+                        'Arabic': 'رقمي',
+                        'Spanish': 'Digital',
+                        'French': 'Numérique',
+                        'German': 'Digital',
+                        'Chinese': '数字',
+                        'Japanese': 'デジタル',
+                        'Korean': '디지털'
                     }
                 }
             ]
@@ -34,7 +126,15 @@ const SurveyConfig = ({ config, onChange }) => {
             type: 'Text',
             questions: {
                 'English': 'Name of the Customer',
-                'Urdu': 'صارف کا نام'
+                'Urdu': 'صارف کا نام',
+                'Arabic': 'اسم العميل',
+                'Spanish': 'Nombre del Cliente',
+                'French': 'Nom du Client',
+                'German': 'Kundenname',
+                'Chinese': '客户姓名',
+                'Japanese': '顧客名',
+                'Korean': '고객 이름',
+                'Russian': 'Имя клиента'
             },
             options: []
         },
@@ -43,7 +143,15 @@ const SurveyConfig = ({ config, onChange }) => {
             type: 'Phone Number',
             questions: {
                 'English': 'Mobile No',
-                'Urdu': 'موبائل نمبر'
+                'Urdu': 'موبائل نمبر',
+                'Arabic': 'رقم الهاتف المحمول',
+                'Spanish': 'Número de Móvil',
+                'French': 'Numéro de Portable',
+                'German': 'Handynummer',
+                'Chinese': '手机号码',
+                'Japanese': '携帯電話番号',
+                'Korean': '휴대전화 번호',
+                'Russian': 'Номер мобильного телефона'
             },
             options: []
         },
@@ -52,7 +160,15 @@ const SurveyConfig = ({ config, onChange }) => {
             type: 'Rating',
             questions: {
                 'English': 'How much are you satisfied with the Environment and other facilities?',
-                'Urdu': 'کیا آپ ماحول اور دیگر سہولیات سے کتنے مطمئن ہیں؟'
+                'Urdu': 'کیا آپ ماحول اور دیگر سہولیات سے کتنے مطمئن ہیں؟',
+                'Arabic': 'كم أنت راضٍ عن البيئة والمرافق الأخرى؟',
+                'Spanish': '¿Qué tan satisfecho está con el ambiente y otras instalaciones?',
+                'French': 'Dans quelle mesure êtes-vous satisfait de l\'environnement et des autres installations ?',
+                'German': 'Wie zufrieden sind Sie mit der Umgebung und anderen Einrichtungen?',
+                'Chinese': '您对环境和其他设施有多满意？',
+                'Japanese': '環境やその他の施設にどの程度満足していますか？',
+                'Korean': '환경 및 기타 시설에 얼마나 만족하십니까?',
+                'Russian': 'Насколько вы удовлетворены обстановкой и другими удобствами?'
             },
             options: []
         },
@@ -61,7 +177,15 @@ const SurveyConfig = ({ config, onChange }) => {
             type: 'Rating',
             questions: {
                 'English': 'How much are you satisfied with the knowledge capacity of staff regarding different services being offered?',
-                'Urdu': 'کیا آپ عملہ کی جانب سے پیش کی جانے والی مختلف خدمات سے متعلق معلومات فراہمی سے کتنے مطمئن ہیں؟'
+                'Urdu': 'کیا آپ عملہ کی جانب سے پیش کی جانے والی مختلف خدمات سے متعلق معلومات فراہمی سے کتنے مطمئن ہیں؟',
+                'Arabic': 'كم أنت راضٍ عن المعرفة لدى الموظفين بخصوص الخدمات المختلفة المقدمة؟',
+                'Spanish': '¿Qué tan satisfecho está con el conocimiento del personal sobre los diferentes servicios ofrecidos?',
+                'French': 'Dans quelle mesure êtes-vous satisfait des connaissances du personnel concernant les différents services offerts ?',
+                'German': 'Wie zufrieden sind Sie mit dem Fachwissen des Personals bezüglich der angebotenen Dienstleistungen?',
+                'Chinese': '您对员工关于提供的不同服务的知识能力有多满意？',
+                'Japanese': '提供されているさまざまなサービスに関するスタッフの知識にどの程度満足していますか？',
+                'Korean': '제공되는 다양한 서비스에 대한 직원의 지식 수준에 얼마나 만족하십니까?',
+                'Russian': 'Насколько вы удовлетворены знаниями персонала о предоставляемых услугах?'
             },
             options: []
         },
@@ -70,21 +194,45 @@ const SurveyConfig = ({ config, onChange }) => {
             type: 'Radio',
             questions: {
                 'English': 'Will you recommend us?',
-                'Urdu': 'کیا آپ ہمیں تجویز کریں گے؟'
+                'Urdu': 'کیا آپ ہمیں تجویز کریں گے؟',
+                'Arabic': 'هل ستوصي بنا؟',
+                'Spanish': '¿Nos recomendaría?',
+                'French': 'Nous recommanderiez-vous ?',
+                'German': 'Würden Sie uns weiterempfehlen?',
+                'Chinese': '你会推荐我们吗？',
+                'Japanese': '私たちを推薦しますか？',
+                'Korean': '우리를 추천하시겠습니까?',
+                'Russian': 'Вы порекомендуете нас?'
             },
             options: [
                 {
                     id: 601,
                     labels: {
                         'English': 'Yes',
-                        'Urdu': 'جی ہاں'
+                        'Urdu': 'جی ہاں',
+                        'Arabic': 'نعم',
+                        'Spanish': 'Sí',
+                        'French': 'Oui',
+                        'German': 'Ja',
+                        'Chinese': '是',
+                        'Japanese': 'はい',
+                        'Korean': '예',
+                        'Russian': 'Да'
                     }
                 },
                 {
                     id: 602,
                     labels: {
                         'English': 'No',
-                        'Urdu': 'جی نہیں'
+                        'Urdu': 'جی نہیں',
+                        'Arabic': 'لا',
+                        'Spanish': 'No',
+                        'French': 'Non',
+                        'German': 'Nein',
+                        'Chinese': '否',
+                        'Japanese': 'いいえ',
+                        'Korean': '아니요',
+                        'Russian': 'Нет'
                     }
                 }
             ]
@@ -142,7 +290,7 @@ const SurveyConfig = ({ config, onChange }) => {
                 ...prev,
                 survey: {
                     ...prev.survey,
-                    languages: [...(prev.survey?.languages || []), language]
+                    languages: [...(prev.survey?.languages || ['English', 'Urdu']), language]
                 }
             }));
         }
@@ -153,7 +301,7 @@ const SurveyConfig = ({ config, onChange }) => {
             ...prev,
             survey: {
                 ...prev.survey,
-                languages: (prev.survey?.languages || []).filter(l => l !== language)
+                languages: (prev.survey?.languages || ['English', 'Urdu']).filter(l => l !== language)
             }
         }));
     };
@@ -179,7 +327,7 @@ const SurveyConfig = ({ config, onChange }) => {
             ...prev,
             survey: {
                 ...prev.survey,
-                questions: [...(prev.survey?.questions || []), newQuestion]
+                questions: [...(prev.survey?.questions || defaultSurveyQuestions), newQuestion]
             }
         }));
     };
@@ -189,7 +337,7 @@ const SurveyConfig = ({ config, onChange }) => {
             ...prev,
             survey: {
                 ...prev.survey,
-                questions: (prev.survey?.questions || []).filter(q => q.id !== questionId)
+                questions: (prev.survey?.questions || defaultSurveyQuestions).filter(q => q.id !== questionId)
             }
         }));
     };
@@ -199,7 +347,7 @@ const SurveyConfig = ({ config, onChange }) => {
             ...prev,
             survey: {
                 ...prev.survey,
-                questions: (prev.survey?.questions || []).map(q =>
+                questions: (prev.survey?.questions || defaultSurveyQuestions).map(q =>
                     q.id === questionId ? { ...q, type } : q
                 )
             }
@@ -211,7 +359,7 @@ const SurveyConfig = ({ config, onChange }) => {
             ...prev,
             survey: {
                 ...prev.survey,
-                questions: (prev.survey?.questions || []).map(q =>
+                questions: (prev.survey?.questions || defaultSurveyQuestions).map(q =>
                     q.id === questionId ? {
                         ...q,
                         questions: { ...q.questions, [language]: text }
@@ -226,7 +374,7 @@ const SurveyConfig = ({ config, onChange }) => {
             ...prev,
             survey: {
                 ...prev.survey,
-                questions: (prev.survey?.questions || []).map(q =>
+                questions: (prev.survey?.questions || defaultSurveyQuestions).map(q =>
                     q.id === questionId ? {
                         ...q,
                         options: [...(q.options || []), { id: Date.now(), labels: {} }]
@@ -241,7 +389,7 @@ const SurveyConfig = ({ config, onChange }) => {
             ...prev,
             survey: {
                 ...prev.survey,
-                questions: (prev.survey?.questions || []).map(q =>
+                questions: (prev.survey?.questions || defaultSurveyQuestions).map(q =>
                     q.id === questionId ? {
                         ...q,
                         options: (q.options || []).filter(o => o.id !== optionId)
@@ -256,7 +404,7 @@ const SurveyConfig = ({ config, onChange }) => {
             ...prev,
             survey: {
                 ...prev.survey,
-                questions: (prev.survey?.questions || []).map(q =>
+                questions: (prev.survey?.questions || defaultSurveyQuestions).map(q =>
                     q.id === questionId ? {
                         ...q,
                         options: (q.options || []).map(o =>
@@ -423,7 +571,6 @@ const SurveyConfig = ({ config, onChange }) => {
                                         type="text"
                                         value={basicInfo.organizationName || ''}
                                         onChange={(e) => handleBasicInfoUpdate('organizationName', e.target.value)}
-                                        placeholder="Luxury Hotels"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
@@ -530,7 +677,6 @@ const SurveyConfig = ({ config, onChange }) => {
                                     <textarea
                                         value={basicInfo.description || ''}
                                         onChange={(e) => handleBasicInfoUpdate('description', e.target.value)}
-                                        placeholder="We aim to provide fresh and healthy snacks for people on the go."
                                         rows={3}
                                         style={{
                                             width: '100%',
@@ -638,7 +784,6 @@ const SurveyConfig = ({ config, onChange }) => {
                                 type="text"
                                 value={basicInfo.website || ''}
                                 onChange={(e) => handleBasicInfoUpdate('website', e.target.value)}
-                                placeholder="https://www.luxerhotels.com"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
@@ -745,7 +890,8 @@ const SurveyConfig = ({ config, onChange }) => {
                                                 background: '#f1f5f9',
                                                 padding: '0.25rem 0.5rem',
                                                 borderRadius: '4px',
-                                                fontSize: '0.85rem'
+                                                fontSize: '0.85rem',
+                                                color: '#000000'
                                             }}>
                                                 {languageData && (
                                                     <img

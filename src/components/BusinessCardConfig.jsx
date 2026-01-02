@@ -6,24 +6,25 @@ const BusinessCardConfig = ({ config, onChange }) => {
 
 
     const socialPlatforms = [
-        { id: 'facebook', name: 'Facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877F2' },
-        { id: 'instagram', name: 'Instagram', icon: 'https://img.icons8.com/color/48/instagram-new--v1.png', color: '#E4405F' },
-        { id: 'twitter', name: 'X', icon: 'https://img.icons8.com/color/48/twitterx--v1.png', color: '#000000' },
-        { id: 'linkedin', name: 'LinkedIn', icon: 'https://img.icons8.com/color/48/linkedin.png', color: '#0A66C2' },
-        { id: 'discord', name: 'Discord', icon: 'https://img.icons8.com/color/48/discord-logo.png', color: '#5865F2' },
-        { id: 'youtube', name: 'YouTube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#FF0000' },
-        { id: 'whatsapp', name: 'WhatsApp', icon: 'https://img.icons8.com/color/48/whatsapp--v1.png', color: '#25D366' },
-        { id: 'snapchat', name: 'Snapchat', icon: 'https://img.icons8.com/color/48/snapchat--v1.png', color: '#FFFC00' },
-        { id: 'tiktok', name: 'TikTok', icon: 'https://img.icons8.com/color/48/tiktok--v1.png', color: '#000000' },
-        { id: 'spotify', name: 'Spotify', icon: 'https://img.icons8.com/color/48/spotify--v1.png', color: '#1DB954' },
-        { id: 'dribbble', name: 'Dribbble', icon: 'https://img.icons8.com/color/48/dribbble.png', color: '#EA4C89' },
-        { id: 'pinterest', name: 'Pinterest', icon: 'https://img.icons8.com/color/48/pinterest.png', color: '#BD081C' },
-        { id: 'telegram', name: 'Telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', color: '#0088CC' },
-        { id: 'reddit', name: 'Reddit', icon: 'https://img.icons8.com/color/48/reddit.png', color: '#FF4500' },
-        { id: 'website', name: 'Website', icon: 'https://img.icons8.com/color/48/domain.png', color: '#4B5563' },
-        { id: 'behance', name: 'Behance', icon: 'https://img.icons8.com/color/48/behance.png', color: '#1769FF' },
-        { id: 'twitch', name: 'Twitch', icon: 'https://img.icons8.com/color/48/twitch.png', color: '#9146FF' },
-        { id: 'line', name: 'Line', icon: 'https://img.icons8.com/color/48/line-me.png', color: '#00B900' }
+        { id: 'facebook', name: 'Facebook', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/facebook.png', color: '#1877F2' },
+        { id: 'instagram', name: 'Instagram', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/instagram.png', color: '#E4405F' },
+        { id: 'twitter', name: 'X', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/twitter.png', color: '#000000' },
+        { id: 'linkedin', name: 'LinkedIn', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/linkedin.png', color: '#0A66C2' },
+        { id: 'discord', name: 'Discord', icon: 'https://img.icons8.com/color/48/discord-new.png', color: '#5865F2' },
+        { id: 'youtube', name: 'YouTube', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/youtube.png', color: '#FF0000' },
+        { id: 'whatsapp', name: 'WhatsApp', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/whatsapp.png', color: '#25D366' },
+        { id: 'snapchat', name: 'Snapchat', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/snapchat.png', color: '#FFFC00' },
+        { id: 'tiktok', name: 'TikTok', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/tiktok.png', color: '#000000' },
+        { id: 'spotify', name: 'Spotify', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/spotify.png', color: '#1DB954' },
+        { id: 'dribbble', name: 'Dribbble', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/dribbble.png', color: '#EA4C89' },
+        { id: 'pinterest', name: 'Pinterest', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/pinterest.png', color: '#BD081C' },
+        { id: 'telegram', name: 'Telegram', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/telegram.png', color: '#0088CC' },
+        { id: 'reddit', name: 'Reddit', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/reddit.png', color: '#FF4500' },
+        { id: 'website', name: 'Website', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/domain.png', color: '#4B5563' },
+        { id: 'behance', name: 'Behance', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/behance.png', color: '#1769FF' },
+        { id: 'twitch', name: 'Twitch', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/twitch.png', color: '#9146FF' },
+        { id: 'line', name: 'Line', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/line.png', color: '#00B900' },
+        { id: 'tumblr', name: 'Tumblr', icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/tumblr.png', color: '#35465C' }
     ];
 
     const [isDesignOpen, setIsDesignOpen] = useState(true);
@@ -1030,7 +1031,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/whatsapp--v1.png" alt="WhatsApp" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/whatsapp.png" alt="WhatsApp" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1082,7 +1083,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/facebook.png" alt="Facebook" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1134,7 +1135,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/linkedin.png" alt="LinkedIn" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/linkedin.png" alt="LinkedIn" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1186,7 +1187,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/tiktok--v1.png" alt="TikTok" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/tiktok.png" alt="TikTok" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1238,7 +1239,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/instagram-new--v1.png" alt="Instagram" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/instagram.png" alt="Instagram" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1290,7 +1291,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/twitterx--v1.png" alt="Twitter" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/twitter.png" alt="Twitter" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1342,7 +1343,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/discord-new.png" alt="Discord" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/discord.png" alt="Discord" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1394,7 +1395,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/youtube-play.png" alt="YouTube" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/youtube.png" alt="YouTube" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1446,7 +1447,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/twitch.png" alt="Twitch" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/twitch.png" alt="Twitch" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1498,7 +1499,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/line-me.png" alt="Line" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/line.png" alt="Line" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1550,7 +1551,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/snapchat--v1.png" alt="Snapchat" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/snapchat.png" alt="Snapchat" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1602,7 +1603,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/tumblr.png" alt="Tumblr" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/tumblr.png" alt="Tumblr" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1654,7 +1655,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/spotify--v1.png" alt="Spotify" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/spotify.png" alt="Spotify" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1706,7 +1707,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/dribbble.png" alt="Dribbble" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/dribbble.png" alt="Dribbble" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1758,7 +1759,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/pinterest.png" alt="Pinterest" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/pinterest.png" alt="Pinterest" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1810,7 +1811,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/telegram-app.png" alt="Telegram" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/telegram.png" alt="Telegram" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1862,7 +1863,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/behance.png" alt="Behance" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/behance.png" alt="Behance" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1914,7 +1915,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             flexShrink: 0,
                                             border: '1px solid #e2e8f0'
                                         }}>
-                                            <img src="https://img.icons8.com/color/48/reddit.png" alt="Reddit" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                                            <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/reddit.png" alt="Reddit" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
                                         <input
                                             type="text"
@@ -1975,6 +1976,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             justifyContent: 'center',
                                             cursor: 'pointer',
                                             transition: 'transform 0.2s',
+                                            position: 'relative'
                                         }}
                                         onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
                                         onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
@@ -1986,9 +1988,27 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                                 width: '24px',
                                                 height: '24px',
                                                 objectFit: 'contain',
-                                                filter: platform.id === 'snapchat' || platform.id === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                                filter: 'none'
                                             }}
                                         />
+                                        {social[platform.id] && (
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: '-6px',
+                                                right: '-6px',
+                                                background: '#22c55e',
+                                                borderRadius: '50%',
+                                                width: '18px',
+                                                height: '18px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                border: '2px solid #fff',
+                                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                            }}>
+                                                <Check size={10} color="#fff" strokeWidth={4} />
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>

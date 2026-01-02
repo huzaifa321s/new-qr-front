@@ -252,7 +252,6 @@ const Generator = () => {
                 facilities: editingQr.facilities || defaultConfig.facilities,
                 exchange: editingQr.exchange || defaultConfig.exchange,
                 openingHours: editingQr.openingHours || defaultConfig.openingHours,
-                basicInfo: editingQr.basicInfo || defaultConfig.basicInfo,
                 form: editingQr.form || defaultConfig.form,
                 customFields: editingQr.customFields || defaultConfig.customFields,
                 thankYou: editingQr.thankYou || defaultConfig.thankYou,
@@ -266,7 +265,6 @@ const Generator = () => {
                 infoFields: editingQr.infoFields || defaultConfig.infoFields,
                 eventSchedule: editingQr.eventSchedule || defaultConfig.eventSchedule,
                 venue: editingQr.venue || defaultConfig.venue,
-                facilities: editingQr.facilities || defaultConfig.facilities,
                 contactInfo: editingQr.contactInfo || defaultConfig.contactInfo,
                 content: editingQr.productContent || defaultConfig.content,
                 video: editingQr.video || defaultConfig.video,
@@ -493,7 +491,7 @@ const Generator = () => {
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
-            <Toaster position="top-right" />
+            <Toaster position="top-center" />
             {/* Left Panel */}
             <div style={{
                 flex: 1,

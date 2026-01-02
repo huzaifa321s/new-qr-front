@@ -202,7 +202,7 @@ const CreateWithAI = () => {
 
     return (
         <div style={{ minHeight: '100vh', background: '#f8fafc', display: 'flex' }}>
-            <Toaster position="top-right" />
+            <Toaster position="top-center" />
 
             {/* Left Panel - Input */}
             <div style={{ flex: 1, padding: '3rem', maxWidth: '800px', margin: '0 auto', overflowY: 'auto' }}>

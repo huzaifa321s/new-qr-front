@@ -114,7 +114,7 @@ const SocialMediaConfig = ({ config, onChange }) => {
         });
     };
 
-    const handleToggleSocial = (urlKey, textKey) => {
+    const handleToggleSocial = (urlKey, textKey, defaultText) => {
         onChange(prev => {
             const newSocial = { ...prev.social };
             if (newSocial[urlKey] !== undefined) {
@@ -124,7 +124,7 @@ const SocialMediaConfig = ({ config, onChange }) => {
             } else {
                 // Select
                 newSocial[urlKey] = '';
-                newSocial[textKey] = '';
+                newSocial[textKey] = defaultText || '';
             }
             return { ...prev, social: newSocial };
         });
@@ -141,24 +141,24 @@ const SocialMediaConfig = ({ config, onChange }) => {
     };
 
     const platformConfig = [
-        { id: 'website', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Website', icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png', color: '#6366f1', placeholder: 'https://techoid.com', defaultText: 'Visit Us Online' },
-        { id: 'facebook', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: 'https://cdn-icons-png.flaticon.com/512/733/733547.png', color: '#1877f2', placeholder: 'https://facebook.com/techoid' },
-        { id: 'instagram', urlKey: 'instagramUrl', textKey: 'instagramText', name: 'Instagram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png', color: '#E4405F', placeholder: 'https://instagram.com/techoid' },
-        { id: 'twitter', urlKey: 'twitterUrl', textKey: 'twitterText', name: 'X (Twitter)', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670151.png', color: '#000000', placeholder: 'https://x.com/techoid' },
-        { id: 'linkedin', urlKey: 'linkedinUrl', textKey: 'linkedinText', name: 'LinkedIn', icon: 'https://cdn-icons-png.flaticon.com/512/174/174857.png', color: '#0a66c2', placeholder: 'https://linkedin.com/in/techoid' },
-        { id: 'discord', urlKey: 'discordUrl', textKey: 'discordText', name: 'Discord', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670157.png', color: '#5865f2', placeholder: 'https://discord.gg/techoid' },
-        { id: 'twitch', urlKey: 'twitchUrl', textKey: 'twitchText', name: 'Twitch', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', color: '#9146ff', placeholder: 'https://twitch.tv/techoid' },
-        { id: 'youtube', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', color: '#ff0000', placeholder: 'https://youtube.com/@techoid' },
-        { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: 'https://cdn-icons-png.flaticon.com/512/733/733585.png', color: '#25d366', placeholder: '15555551234' },
-        { id: 'snapchat', urlKey: 'snapchatUrl', textKey: 'snapchatText', name: 'Snapchat', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111615.png', color: '#fffc00', placeholder: 'https://snapchat.com/add/techoid' },
-        { id: 'tiktok', urlKey: 'tiktokUrl', textKey: 'tiktokText', name: 'TikTok', icon: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', color: '#000000', placeholder: 'https://tiktok.com/@techoid' },
-        { id: 'tumblr', urlKey: 'tumblrUrl', textKey: 'tumblrText', name: 'Tumblr', icon: 'https://cdn-icons-png.flaticon.com/512/100/100611.png', color: '#35465c', placeholder: 'https://techoid.tumblr.com' },
-        { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: 'https://cdn-icons-png.flaticon.com/512/174/174868.png', color: '#1db954', placeholder: 'https://open.spotify.com/user/techoid' },
-        { id: 'telegram', urlKey: 'telegramUrl', textKey: 'telegramText', name: 'Telegram', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png', color: '#0088cc', placeholder: 'https://t.me/techoid' },
-        { id: 'behance', urlKey: 'behanceUrl', textKey: 'behanceText', name: 'Behance', icon: 'https://cdn-icons-png.flaticon.com/512/733/733541.png', color: '#1769ff', placeholder: 'https://behance.net/techoid' },
-        { id: 'pinterest', urlKey: 'pinterestUrl', textKey: 'pinterestText', name: 'Pinterest', icon: 'https://cdn-icons-png.flaticon.com/512/145/145808.png', color: '#e60023', placeholder: 'https://pinterest.com/techoid' },
-        { id: 'reddit', urlKey: 'redditUrl', textKey: 'redditText', name: 'Reddit', icon: 'https://cdn-icons-png.flaticon.com/512/3670/3670154.png', color: '#ff4500', placeholder: 'https://reddit.com/user/techoid' },
-        { id: 'line', urlKey: 'lineUrl', textKey: 'lineText', name: 'Line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900', placeholder: 'https://line.me/ti/p/techoid' },
+        { id: 'website', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Website', icon: 'https://img.icons8.com/color/48/domain.png', color: '#6366f1', placeholder: 'https://techoid.com', defaultText: 'Visit Us Online' },
+        { id: 'facebook', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877f2', placeholder: 'https://facebook.com/techoid', defaultText: 'Facebook' },
+        { id: 'instagram', urlKey: 'instagramUrl', textKey: 'instagramText', name: 'Instagram', icon: 'https://img.icons8.com/color/48/instagram-new.png', color: '#E4405F', placeholder: 'https://instagram.com/techoid', defaultText: 'Instagram' },
+        { id: 'twitter', urlKey: 'twitterUrl', textKey: 'twitterText', name: 'X (Twitter)', icon: 'https://img.icons8.com/color/48/twitterx--v1.png', color: '#000000', placeholder: 'https://x.com/techoid', defaultText: 'X' },
+        { id: 'linkedin', urlKey: 'linkedinUrl', textKey: 'linkedinText', name: 'LinkedIn', icon: 'https://img.icons8.com/color/48/linkedin.png', color: '#0a66c2', placeholder: 'https://linkedin.com/in/techoid', defaultText: 'LinkedIn' },
+        { id: 'discord', urlKey: 'discordUrl', textKey: 'discordText', name: 'Discord', icon: 'https://img.icons8.com/color/48/discord-new-2.png', color: '#5865f2', placeholder: 'https://discord.gg/techoid', defaultText: 'Discord' },
+        { id: 'twitch', urlKey: 'twitchUrl', textKey: 'twitchText', name: 'Twitch', icon: 'https://img.icons8.com/color/48/twitch.png', color: '#9146ff', placeholder: 'https://twitch.tv/techoid', defaultText: 'Twitch' },
+        { id: 'youtube', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'YouTube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#ff0000', placeholder: 'https://youtube.com/@techoid', defaultText: 'YouTube' },
+        { id: 'whatsapp', urlKey: 'whatsappUrl', textKey: 'whatsappText', name: 'WhatsApp', icon: 'https://img.icons8.com/color/48/whatsapp.png', color: '#25d366', placeholder: '15555551234', defaultText: 'WhatsApp' },
+        { id: 'snapchat', urlKey: 'snapchatUrl', textKey: 'snapchatText', name: 'Snapchat', icon: 'https://img.icons8.com/color/48/snapchat--v1.png', color: '#fffc00', placeholder: 'https://snapchat.com/add/techoid', defaultText: 'Snapchat' },
+        { id: 'tiktok', urlKey: 'tiktokUrl', textKey: 'tiktokText', name: 'TikTok', icon: 'https://img.icons8.com/color/48/tiktok.png', color: '#000000', placeholder: 'https://tiktok.com/@techoid', defaultText: 'TikTok' },
+        { id: 'tumblr', urlKey: 'tumblrUrl', textKey: 'tumblrText', name: 'Tumblr', icon: 'https://img.icons8.com/color/48/tumblr.png', color: '#35465c', placeholder: 'https://techoid.tumblr.com', defaultText: 'Tumblr' },
+        { id: 'spotify', urlKey: 'spotifyUrl', textKey: 'spotifyText', name: 'Spotify', icon: 'https://img.icons8.com/color/48/spotify.png', color: '#1db954', placeholder: 'https://open.spotify.com/user/techoid', defaultText: 'Spotify' },
+        { id: 'telegram', urlKey: 'telegramUrl', textKey: 'telegramText', name: 'Telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', color: '#0088cc', placeholder: 'https://t.me/techoid', defaultText: 'Telegram' },
+        { id: 'behance', urlKey: 'behanceUrl', textKey: 'behanceText', name: 'Behance', icon: 'https://img.icons8.com/color/48/behance.png', color: '#1769ff', placeholder: 'https://behance.net/techoid', defaultText: 'Behance' },
+        { id: 'pinterest', urlKey: 'pinterestUrl', textKey: 'pinterestText', name: 'Pinterest', icon: 'https://img.icons8.com/color/48/pinterest.png', color: '#e60023', placeholder: 'https://pinterest.com/techoid', defaultText: 'Pinterest' },
+        { id: 'reddit', urlKey: 'redditUrl', textKey: 'redditText', name: 'Reddit', icon: 'https://img.icons8.com/color/48/reddit.png', color: '#ff4500', placeholder: 'https://reddit.com/user/techoid', defaultText: 'Reddit' },
+        { id: 'line', urlKey: 'lineUrl', textKey: 'lineText', name: 'Line', icon: 'https://img.icons8.com/color/48/line-me.png', color: '#00B900', placeholder: 'https://line.me/ti/p/techoid', defaultText: 'Line' },
     ];
 
     const palettes = [
@@ -390,7 +390,7 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                     {/* Headline Input */}
                                     <input
                                         type="text"
-                                        value={basicInfo.headline || "Connect With Us On Social Media"}
+                                        value={basicInfo.headline || "Connect With Us"}
                                         onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
                                         style={{
                                             width: '100%',
@@ -499,7 +499,7 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                 ABOUT US
                             </label>
                             <textarea
-                                value={basicInfo.aboutUs || "Follow us and get updates delivered to your favorite social media channel."}
+                                value={basicInfo.aboutUs || "Follow us for the latest updates on our social channels."}
                                 onChange={(e) => handleBasicInfoUpdate('aboutUs', e.target.value)}
                                 rows={3}
                                 style={{
@@ -656,7 +656,7 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                     return (
                                         <div
                                             key={platform.id}
-                                            onClick={() => handleToggleSocial(platform.urlKey, platform.textKey)}
+                                            onClick={() => handleToggleSocial(platform.urlKey, platform.textKey, platform.defaultText || platform.name)}
                                             style={{
                                                 width: '48px',
                                                 height: '48px',

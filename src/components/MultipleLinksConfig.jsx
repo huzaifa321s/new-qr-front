@@ -83,10 +83,30 @@ const MultipleLinksConfig = ({ config, onChange }) => {
         onChange(prev => ({ ...prev, links: newLinks }));
     };
 
-    const handleSocialLinkAdd = (platform) => {
-        // Avoid duplicates if desired, or allow multiple
-        const newLink = { id: Date.now().toString(), platform, url: '' };
-        onChange(prev => ({ ...prev, socialLinks: [...(prev.socialLinks || []), newLink] }));
+    const handleSocialLinkAdd = (platformId) => {
+        onChange(prev => {
+            const currentSocialLinks = prev.socialLinks || [];
+            const existingLink = currentSocialLinks.find(link => link.platform === platformId);
+
+            if (existingLink) {
+                // Remove if already exists (Toggle Off)
+                return {
+                    ...prev,
+                    socialLinks: currentSocialLinks.filter(link => link.platform !== platformId)
+                };
+            } else {
+                // Add if it doesn't exist (Toggle On)
+                const newLink = {
+                    id: Date.now().toString(),
+                    platform: platformId,
+                    url: ''
+                };
+                return {
+                    ...prev,
+                    socialLinks: [...currentSocialLinks, newLink]
+                };
+            }
+        });
     };
 
     const handleSocialLinkUpdate = (id, value) => {
@@ -558,6 +578,7 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                                 {socialPlatforms.map((platform) => {
                                     const Icon = platform.icon;
+                                    const isSelected = socialLinks.some(link => link.platform === platform.id);
                                     return (
                                         <div
                                             key={platform.id}
@@ -566,13 +587,14 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                                 width: '40px',
                                                 height: '40px',
                                                 borderRadius: '8px',
-                                                background: 'transparent',
+                                                background: isSelected ? 'rgba(34, 197, 94, 0.1)' : 'transparent',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
-                                                border: 'none',
-                                                transition: 'transform 0.1s'
+                                                border: isSelected ? '1px solid #22c55e' : 'none',
+                                                transition: 'all 0.2s',
+                                                position: 'relative'
                                             }}
                                             title={platform.name}
                                         >
@@ -583,11 +605,30 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                                     style={{
                                                         width: '20px',
                                                         height: '20px',
-                                                        objectFit: 'contain'
+                                                        objectFit: 'contain',
+                                                        opacity: isSelected ? 0.7 : 1
                                                     }}
                                                 />
                                             ) : (
                                                 <Icon size={20} color="#fff" />
+                                            )}
+                                            {isSelected && (
+                                                <div style={{
+                                                    position: 'absolute',
+                                                    top: '-5px',
+                                                    right: '-5px',
+                                                    background: '#22c55e',
+                                                    borderRadius: '50%',
+                                                    width: '18px',
+                                                    height: '18px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    border: '2px solid #fff',
+                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                                }}>
+                                                    <Check size={10} color="#fff" />
+                                                </div>
                                             )}
                                         </div>
                                     );
