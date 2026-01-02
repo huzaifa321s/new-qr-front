@@ -32,7 +32,7 @@ const ImageUploadModal = ({ isOpen, onClose, onSave, tempImage, fileName, type =
             const res = await axios.post(`${baseUrl}api/upload/${type}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
-
+            console.log('res.data.url', res.data.url)
             onSave(res.data.url);
             onClose();
         } catch (err) {
