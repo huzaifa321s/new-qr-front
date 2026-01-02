@@ -176,9 +176,9 @@ const CouponConfig = ({ config, onChange }) => {
                         dark: design.color?.dark || '#7D2AE7',
                         light: design.color?.light || '#08B8CE'
                     },
-                    logo: {
-                        ...design.logo,
-                        url: design.logo?.url
+                    couponLogo: {
+                        ...design.couponLogo,
+                        url: design.couponLogo?.url
                     }
                 }}
                 onChange={handleDesignSectionUpdate}
@@ -186,7 +186,7 @@ const CouponConfig = ({ config, onChange }) => {
                 onToggle={() => setIsDesignOpen(!isDesignOpen)}
                 colorKeys={{ primary: 'color.dark', secondary: 'color.light' }}
                 palettes={palettes}
-                logoKey="logo.url"
+                logoKey="couponLogo.url"
                 logoOptions={logoOptions}
                 logoLabel="LOGO"
                 logoHelpText="128x128px, 1:1 Ratio"

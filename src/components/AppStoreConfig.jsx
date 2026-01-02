@@ -83,6 +83,7 @@ const AppStoreConfig = ({ config, onChange }) => {
                                     <div
                                         key={idx}
                                         onClick={() => {
+                                            console.log('config ==', config)
                                             const newConfig = JSON.parse(JSON.stringify(config));
                                             newConfig.design = newConfig.design || {};
                                             newConfig.design.color = newConfig.design.color || {};
@@ -162,7 +163,7 @@ const AppStoreConfig = ({ config, onChange }) => {
                         <label className="label" style={{ marginBottom: '0.5rem', display: 'block' }}>LOGO</label>
                         <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '1rem' }}>128x128px, 1:1 Ratio</div>
                         {(() => {
-                            const currentUrl = getValue('design.logo.url');
+                            const currentUrl = getValue('design.appLogo.url');
                             const presets = [
                                 { id: 'app1', url: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=150&h=150&fit=crop' },
                                 { id: 'app2', url: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=150&h=150&fit=crop' },
@@ -175,7 +176,7 @@ const AppStoreConfig = ({ config, onChange }) => {
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                     {/* 1. Remove Button */}
                                     <button
-                                        onClick={() => updateConfig('design.logo.url', '')}
+                                        onClick={() => updateConfig('design.appLogo.url', '')}
                                         style={{
                                             minWidth: '80px',
                                             height: '80px',
@@ -202,7 +203,7 @@ const AppStoreConfig = ({ config, onChange }) => {
                                         return (
                                             <div
                                                 key={item.id}
-                                                onClick={() => updateConfig('design.logo.url', item.url)}
+                                                onClick={() => updateConfig('design.appLogo.url', item.url)}
                                                 style={{
                                                     minWidth: '80px',
                                                     height: '80px',
@@ -347,14 +348,14 @@ const AppStoreConfig = ({ config, onChange }) => {
                                 setIsLogoModalOpen(false);
                                 setTempLogoImage(null);
                             }}
-                            onSave={(url) => updateConfig('design.logo.url', url)}
+                            onSave={(url) => updateConfig('design.appLogo.url', url)}
                             tempImage={tempLogoImage}
                             fileName={logoFileName}
                             type="logo"
                         />
 
                         {/* Modal for Custom Logo Preview */}
-                        {isModalOpen && getValue('design.logo.url') && (
+                        {isModalOpen && getValue('design.appLogo.url') && (
                             <div
                                 style={{
                                     position: 'fixed',

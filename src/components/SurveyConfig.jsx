@@ -520,9 +520,9 @@ const SurveyConfig = ({ config, onChange }) => {
                         header: design.color?.header || '#2B853E',
                         light: design.color?.light || '#68D87F'
                     },
-                    logo: {
-                        ...design.logo,
-                        url: design.logo?.url
+                    surveyLogo: {
+                        ...design.surveyLogo,
+                        url: design.surveyLogo?.url
                     }
                 }}
                 onChange={handleDesignSectionUpdate}
@@ -530,7 +530,7 @@ const SurveyConfig = ({ config, onChange }) => {
                 onToggle={() => setIsDesignOpen(!isDesignOpen)}
                 colorKeys={{ primary: 'color.header', secondary: 'color.light' }}
                 palettes={palettes}
-                logoKey="logo.url"
+                logoKey="surveyLogo.url"
                 logoOptions={logoOptions}
                 logoLabel="YOUR LOGO"
                 logoHelpText="128x128px, 1:1 Ratio"

@@ -1285,7 +1285,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 {surveyStep === 'language' && (
                     <div style={{ height: '100%', overflowY: 'auto', background: '#fff', display: 'flex', flexDirection: 'column' }}>
                         {/* Logo */}
-                        {design?.logo?.url && (
+                        {(design?.surveyLogo?.url || design?.logo?.url) && (
                             <div style={{ padding: '3rem 1rem 1rem', display: 'flex', justifyContent: 'center' }}>
                                 <div style={{
                                     width: '100px',
@@ -1299,7 +1299,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     justifyContent: 'center'
                                 }}>
                                     <img
-                                        src={design.logo.url}
+                                        src={design?.surveyLogo?.url || design?.logo?.url}
                                         alt="Logo"
                                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />
@@ -1674,7 +1674,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 {surveyStep === 'thankYou' && (
                     <div style={{ height: '100%', overflowY: 'auto', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem 1.5rem' }}>
                         {/* Logo */}
-                        {design?.logo?.url && (
+                        {(design?.surveyLogo?.url || design?.logo?.url) && (
                             <div style={{ marginBottom: '2rem' }}>
                                 <div style={{
                                     width: '100px',
@@ -1687,7 +1687,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     overflow: 'hidden'
                                 }}>
                                     <img
-                                        src={design.logo.url}
+                                        src={design?.surveyLogo?.url || design?.logo?.url}
                                         alt="Logo"
                                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />
@@ -2764,7 +2764,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
         const headerImageUrl = design?.headerImage?.url || design?.backgroundImage?.url;
         const hasHeaderImage = !!headerImageUrl && headerImageUrl !== '';
 
-        const hasLogo = !!design?.logo?.url;
+        const hasLogo = !!(design?.socialLogo?.url || design?.logo?.url);
 
         return (
             <div style={{
@@ -2835,7 +2835,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 flexShrink: 0
                             }}>
                                 <img
-                                    src={design.logo.url}
+                                    src={design?.socialLogo?.url || design?.logo?.url}
                                     alt="Logo"
                                     style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
                                 />
@@ -3059,7 +3059,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         }}>
                             {businessInfo?.companyName || "Royal's Cafe"}
                         </h2>
-                        {design?.logo?.url && (
+                        {(design?.businessLogo?.url || design?.logo?.url) && (
                             <div style={{
                                 width: '40px',
                                 height: '40px',
@@ -3070,7 +3070,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 justifyContent: 'center',
                                 padding: '5px'
                             }}>
-                                <img src={design.logo.url} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                                <img src={design?.businessLogo?.url || design?.logo?.url} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                             </div>
                         )}
                     </div>
@@ -3893,7 +3893,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             zIndex: 10,
                             background: primaryColor
                         }}>
-                            {design?.logo?.url && (
+                            {(design?.couponLogo?.url || design?.logo?.url) && (
                                 <div style={{
                                     width: '50px',
                                     height: '50px',
@@ -3904,7 +3904,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     alignItems: 'center',
                                     justifyContent: 'center'
                                 }}>
-                                    <img src={design.logo.url} alt="Logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                                    <img src={design?.couponLogo?.url || design?.logo?.url} alt="Logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                                 </div>
                             )}
                             <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0, color: businessInfo?.titleColor || '#fff', fontFamily: businessInfo?.titleFont || 'Lato' }}>{businessInfo?.title}</h2>
@@ -4710,7 +4710,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     }}>
                         {/* Logo and Company Name */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                            {design?.logo?.url && (
+                            {(design?.pdfLogo?.url || design?.logo?.url) && (
                                 <div style={{
                                     width: '50px',
                                     height: '50px',
@@ -4723,7 +4723,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     overflow: 'hidden'
                                 }}>
                                     <img
-                                        src={design.logo.url}
+                                        src={design?.pdfLogo?.url || design?.logo?.url}
                                         alt="Logo"
                                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />
@@ -6870,7 +6870,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         borderBottomRightRadius: '50% 20%',
                         textAlign: 'center'
                     }}>
-                        {design?.logo?.url && (
+                        {(design?.appLogo?.url || design?.logo?.url) && (
                             <div style={{
                                 width: '80px',
                                 height: '80px',
@@ -6882,7 +6882,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 justifyContent: 'center',
                                 marginBottom: '1rem'
                             }}>
-                                <img src={design.logo.url} alt="Logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                                <img src={design?.appLogo?.url || design?.logo?.url} alt="Logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                             </div>
                         )}
                         <div style={{ marginTop: '10px' }}>
@@ -6908,7 +6908,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         </div>
                     </div>
 
-                    <div style={{ marginTop: design?.logo?.url ? '80px' : '2rem', textAlign: 'center', padding: '0 1.5rem' }}>
+                    <div style={{ marginTop: (design?.appLogo?.url || design?.logo?.url) ? '80px' : '2rem', textAlign: 'center', padding: '0 1.5rem' }}>
                         <h3 style={{
                             margin: '0 0 0.5rem 0',
                             fontSize: '1.25rem',
@@ -7155,7 +7155,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         <div style={{ fontSize: '1rem', fontWeight: '700', letterSpacing: '-0.01em' }}>
                             {businessInfo?.title || "Bob's Cafe"}
                         </div>
-                        {(design?.logo?.url || typeof design?.logo === 'string') && (
+                        {(design?.menuLogo?.url || design?.menuLogo || design?.logo?.url || typeof design?.logo === 'string') && (
                             <div style={{
                                 width: '38px',
                                 height: '38px',
@@ -7168,7 +7168,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 overflow: 'hidden'
                             }}>
                                 <img
-                                    src={design?.logo?.url || design?.logo}
+                                    src={design?.menuLogo?.url || design?.menuLogo || design?.logo?.url || design?.logo}
                                     alt="Logo"
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                 />

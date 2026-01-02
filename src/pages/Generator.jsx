@@ -208,7 +208,7 @@ const Generator = () => {
     // Populating state if editing
     useEffect(() => {
         const defaultConfig = getPreviewConfig(selectedType) || {};
-
+        console.log('defaultconfig', defaultConfig)
         if (editingQr) {
             setQrName(editingQr.name || '');
             setPassword(editingQr.password || '');
@@ -383,13 +383,16 @@ const Generator = () => {
             }
             // For new QRs, backend will generate correct URL in createDynamicQR
 
+            // Exclude preview-specific logos from QR code design
+            const { logo, surveyLogo, socialLogo, couponLogo, businessLogo, pdfLogo, appLogo, ...pageDesignForQR } = pageConfig.design || {};
+
             const payload = {
                 type: selectedType,
                 qrImage: qrImageBase64,
                 data: qrDataUrl,
                 design: {
-                    ...pageConfig.design,
-                    ...qrDesign,
+                    ...pageDesignForQR,  // Only page design without preview logos
+                    ...qrDesign,          // QR design (includes image.url for QR embedding)
                 },
                 businessInfo: pageConfig.businessInfo,
                 menu: pageConfig.menu,

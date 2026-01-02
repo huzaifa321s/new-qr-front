@@ -144,9 +144,9 @@ const PDFConfig = ({ config, onChange }) => {
                         header: design.color?.header || '#0B2D86',
                         light: design.color?.light || '#FFA800'
                     },
-                    logo: {
-                        ...design.logo,
-                        url: design.logo?.url
+                    pdfLogo: {
+                        ...design.pdfLogo,
+                        url: design.pdfLogo?.url
                     }
                 }}
                 onChange={handleDesignSectionUpdate}
@@ -154,7 +154,7 @@ const PDFConfig = ({ config, onChange }) => {
                 onToggle={() => setIsDesignOpen(!isDesignOpen)}
                 colorKeys={{ primary: 'color.header', secondary: 'color.light' }}
                 palettes={palettes}
-                logoKey="logo.url"
+                logoKey="pdfLogo.url"
                 logoOptions={logoOptions}
                 logoLabel="LOGO"
                 logoHelpText="128x128px, 1:1 Ratio"
