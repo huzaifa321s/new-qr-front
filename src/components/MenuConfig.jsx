@@ -162,7 +162,8 @@ const MenuConfig = ({ config, onChange }) => {
         try {
             const formData = new FormData();
             formData.append('image', file);
-            const res = await axios.post('http://localhost:3000/api/upload/image', formData, {
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/';
+            const res = await axios.post(`${baseUrl}api/upload/image`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             handleProductChange(catId, prodId, 'image', res.data.url);
