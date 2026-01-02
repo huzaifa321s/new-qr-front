@@ -28,8 +28,8 @@ const ImageUploadModal = ({ isOpen, onClose, onSave, tempImage, fileName, type =
             const name = (fileName || 'image').replace(/\.[^/.]+$/, "") + ".jpg";
             formData.append(type, croppedImageBlob, name);
 
-            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-            const res = await axios.post(`${baseUrl}/api/upload/${type}`, formData, {
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/';
+            const res = await axios.post(`${baseUrl}api/upload/${type}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
