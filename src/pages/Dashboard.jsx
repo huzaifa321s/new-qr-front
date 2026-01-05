@@ -495,6 +495,53 @@ const Dashboard = () => {
         }
         setActiveMenuId(activeMenuId === id ? null : id);
     };
+    const qrTypes = [
+        // Dynamic Types
+        { value: 'url', label: 'URL' },
+        { value: 'custom-type', label: 'Custom Type' },
+        { value: 'business-card', label: 'Business Card' },
+        { value: 'business-page', label: 'Business Page' },
+        { value: 'bio-page', label: 'Bio Page' },
+        { value: 'social-media', label: 'Social Media' },
+        { value: 'image', label: 'Image' },
+        { value: 'pdf', label: 'PDF' },
+        { value: 'app-store', label: 'App Store' },
+        { value: 'menu', label: 'Menu' },
+        { value: 'video', label: 'Video' },
+        { value: 'coupon', label: 'Coupon' },
+        { value: 'event', label: 'Event' },
+        { value: 'product-page', label: 'Product Page' },
+        { value: 'lead-generation', label: 'Lead Generation' },
+        { value: 'rating', label: 'Rating' },
+        { value: 'reviews', label: 'Reviews' },
+        { value: 'password-protected', label: 'Password Protected' },
+        { value: 'multiple-links', label: 'Multiple Links' },
+        { value: 'dynamic-url', label: 'Dynamic URL' },
+        // Static Types
+        { value: 'website', label: 'Website', isStatic: true },
+        { value: 'text', label: 'Text', isStatic: true },
+        { value: 'email', label: 'Email', isStatic: true },
+        { value: 'sms', label: 'SMS', isStatic: true },
+        { value: 'wifi', label: 'WiFi', isStatic: true },
+        { value: 'vcard', label: 'vCard', isStatic: true },
+        { value: 'phone', label: 'Phone', isStatic: true },
+        { value: 'map', label: 'Map', isStatic: true },
+        { value: 'static', label: 'Static', isStatic: true },
+        // "More" Sub-types
+        { value: 'reddit', label: 'Reddit', isStatic: true, isMore: true },
+        { value: 'tiktok', label: 'TikTok', isStatic: true, isMore: true },
+        { value: 'snapchat', label: 'Snapchat', isStatic: true, isMore: true },
+        { value: 'telegram', label: 'Telegram', isStatic: true, isMore: true },
+        { value: 'facebook', label: 'Facebook', isStatic: true, isMore: true },
+        { value: 'instagram', label: 'Instagram', isStatic: true, isMore: true },
+        { value: 'x', label: 'X (Twitter)', isStatic: true, isMore: true },
+        { value: 'youtube', label: 'Youtube', isStatic: true, isMore: true },
+        { value: 'skype', label: 'Skype', isStatic: true, isMore: true },
+        { value: 'bitcoin', label: 'Bitcoin', isStatic: true, isMore: true },
+        { value: 'zoom', label: 'Zoom', isStatic: true, isMore: true },
+        { value: 'whatsapp', label: 'Whatsapp', isStatic: true, isMore: true }
+    ].sort((a, b) => a.label.localeCompare(b.label));
+
     // Filter and Sort Logic
     const filteredQrs = qrs
         .filter(qr => {
@@ -563,52 +610,7 @@ const Dashboard = () => {
         });
 
     console.log("qr.type", filteredQrs);
-    const qrTypes = [
-        // Dynamic Types
-        { value: 'url', label: 'URL' },
-        { value: 'custom-type', label: 'Custom Type' },
-        { value: 'business-card', label: 'Business Card' },
-        { value: 'business-page', label: 'Business Page' },
-        { value: 'bio-page', label: 'Bio Page' },
-        { value: 'social-media', label: 'Social Media' },
-        { value: 'image', label: 'Image' },
-        { value: 'pdf', label: 'PDF' },
-        { value: 'app-store', label: 'App Store' },
-        { value: 'menu', label: 'Menu' },
-        { value: 'video', label: 'Video' },
-        { value: 'coupon', label: 'Coupon' },
-        { value: 'event', label: 'Event' },
-        { value: 'product-page', label: 'Product Page' },
-        { value: 'lead-generation', label: 'Lead Generation' },
-        { value: 'rating', label: 'Rating' },
-        { value: 'reviews', label: 'Reviews' },
-        { value: 'password-protected', label: 'Password Protected' },
-        { value: 'multiple-links', label: 'Multiple Links' },
-        { value: 'dynamic-url', label: 'Dynamic URL' },
-        // Static Types
-        { value: 'website', label: 'Website', isStatic: true },
-        { value: 'text', label: 'Text', isStatic: true },
-        { value: 'email', label: 'Email', isStatic: true },
-        { value: 'sms', label: 'SMS', isStatic: true },
-        { value: 'wifi', label: 'WiFi', isStatic: true },
-        { value: 'vcard', label: 'vCard', isStatic: true },
-        { value: 'phone', label: 'Phone', isStatic: true },
-        { value: 'map', label: 'Map', isStatic: true },
-        { value: 'static', label: 'Static', isStatic: true },
-        // "More" Sub-types
-        { value: 'reddit', label: 'Reddit', isStatic: true, isMore: true },
-        { value: 'tiktok', label: 'TikTok', isStatic: true, isMore: true },
-        { value: 'snapchat', label: 'Snapchat', isStatic: true, isMore: true },
-        { value: 'telegram', label: 'Telegram', isStatic: true, isMore: true },
-        { value: 'facebook', label: 'Facebook', isStatic: true, isMore: true },
-        { value: 'instagram', label: 'Instagram', isStatic: true, isMore: true },
-        { value: 'x', label: 'X (Twitter)', isStatic: true, isMore: true },
-        { value: 'youtube', label: 'Youtube', isStatic: true, isMore: true },
-        { value: 'skype', label: 'Skype', isStatic: true, isMore: true },
-        { value: 'bitcoin', label: 'Bitcoin', isStatic: true, isMore: true },
-        { value: 'zoom', label: 'Zoom', isStatic: true, isMore: true },
-        { value: 'whatsapp', label: 'Whatsapp', isStatic: true, isMore: true }
-    ].sort((a, b) => a.label.localeCompare(b.label));
+
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f7fa', fontFamily: 'sans-serif' }}>
@@ -782,6 +784,7 @@ const Dashboard = () => {
                                                 cursor: 'pointer',
                                                 transition: 'all 0.2s'
                                             }}
+
                                             onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#7c3aed'; e.currentTarget.style.color = '#7c3aed'; }}
                                             onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#e5e5e5'; e.currentTarget.style.color = '#666'; }}
                                         >
@@ -1925,12 +1928,16 @@ const Dashboard = () => {
                                                                     }}>
                                                                     No
                                                                 </button>
+                                                                {console.log("dddd", qr._id)}
                                                                 <button
                                                                     onClick={confirmDelete}
-                                                                    disabled={isDeleting}
+                                                                    disabled={isDeleting || String(qr._id) === '6954c3238ed008ead9300b3c' || String(qr._id) === '6954c3818ed008ead9300c25'}
                                                                     style={{
-                                                                        padding: '0.4rem 1rem', borderRadius: '6px', border: 'none', background: '#ef4444',
-                                                                        color: '#fff', fontSize: '0.85rem', cursor: isDeleting ? 'not-allowed' : 'pointer', fontWeight: '500',
+                                                                        padding: '0.4rem 1rem', borderRadius: '6px', border: 'none',
+                                                                        background: (isDeleting || String(qr._id) === '6954c3238ed008ead9300b3c' || String(qr._id) === '6954c3818ed008ead9300c25') ? '#fca5a5' : '#ef4444',
+                                                                        color: '#fff', fontSize: '0.85rem',
+                                                                        cursor: (isDeleting || String(qr._id) === '6954c3238ed008ead9300b3c' || String(qr._id) === '6954c3818ed008ead9300c25') ? 'not-allowed' : 'pointer',
+                                                                        fontWeight: '500',
                                                                         minWidth: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center',
                                                                         opacity: isDeleting ? 0.8 : 1
                                                                     }}>

@@ -30,7 +30,8 @@ const ImageUploadModal = ({ isOpen, onClose, onSave, tempImage, fileName, type =
             console.log('croppedimage', croppedImageBlob)
             console.log('type', type)
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/';
-            const res = await axios.post(`${baseUrl}api/upload/logo`, formData, {
+            console.log('baseUrl', baseUrl)
+            const res = await axios.post(`${baseUrl}api/upload/${type}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             console.log('res.data.url', res)
