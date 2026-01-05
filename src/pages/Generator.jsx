@@ -383,15 +383,12 @@ const Generator = () => {
             }
             // For new QRs, backend will generate correct URL in createDynamicQR
 
-            // Exclude preview-specific logos from QR code design
-            const { logo, surveyLogo, socialLogo, couponLogo, businessLogo, pdfLogo, appLogo, ...pageDesignForQR } = pageConfig.design || {};
-
             const payload = {
                 type: selectedType,
                 qrImage: qrImageBase64,
                 data: qrDataUrl,
                 design: {
-                    ...pageDesignForQR,  // Only page design without preview logos
+                    ...(pageConfig.design || {}),
                     ...qrDesign,          // QR design (includes image.url for QR embedding)
                 },
                 businessInfo: pageConfig.businessInfo,

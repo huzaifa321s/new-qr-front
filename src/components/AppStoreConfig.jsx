@@ -83,7 +83,6 @@ const AppStoreConfig = ({ config, onChange }) => {
                                     <div
                                         key={idx}
                                         onClick={() => {
-                                            console.log('config ==', config)
                                             const newConfig = JSON.parse(JSON.stringify(config));
                                             newConfig.design = newConfig.design || {};
                                             newConfig.design.color = newConfig.design.color || {};
