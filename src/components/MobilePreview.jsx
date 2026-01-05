@@ -2848,6 +2848,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         <div style={{ textAlign: 'center', color: '#fff', marginBottom: '2rem', width: '100%' }}>
                             <h3 style={{
                                 margin: '0 0 0.75rem 0',
+                                paddingTop: '1.5rem',
                                 fontSize: '1.4rem',
                                 fontWeight: '800',
                                 fontFamily: basicInfo?.headlineFont || 'Lato',
@@ -4239,9 +4240,8 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                             borderRadius: '8px',
                                             padding: '1rem 1.5rem',
                                             display: 'flex',
-                                            display: 'flex',
                                             alignItems: 'center',
-                                            justifyContent: 'center',
+                                            justifyContent: 'space-between',
                                             gap: '1rem',
                                             cursor: 'pointer',
                                             transition: 'all 0.2s'

@@ -345,6 +345,19 @@ const Generator = () => {
         setHasUnsavedChanges(currentStateStr !== initialStateStr);
     }, [pageConfig, qrDesign, qrName, initialState]);
 
+    // Prevent accidental reload if unsaved changes
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }, [hasUnsavedChanges]);
+
     useEffect(() => {
         if (!qrDesign || !getQRValue()) return;
         const result = calculateScannability(qrDesign, getQRValue());

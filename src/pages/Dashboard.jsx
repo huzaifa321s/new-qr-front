@@ -148,16 +148,43 @@ const Dashboard = () => {
         setDownloadingQr(null);
     };
 
+    const getQRValue = (qr) => {
+        if (!qr) return '';
+        const staticTypes = ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone', 'more'];
+        const isStatic = staticTypes.includes(qr.type) || isMatchingMoreType(qr.data, qr.type);
+        
+        if (isStatic) return qr.data;
+        if (qr.type === 'dynamic-url') {
+             return `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/${qr.shortId}`;
+        }
+        return `${baseUrl}/view/${qr.shortId}`;
+    };
+
     const handleRunDownload = async () => {
         if (!downloadingQr) {
             handleCloseDownloadModal();
             return;
         }
 
-        try {
-            const format = downloadFormat || 'png';
-            const filename = `${downloadingQr.name || 'qr-code'}.${format}`;
+        const format = downloadFormat || 'png';
+        const filename = `${downloadingQr.name || 'qr-code'}.${format}`;
 
+        // 🟢 Client-Side Download for ALL formats (Ensures Visual Consistency & High Quality)
+        // Now using the hidden High-Res renderer
+        if (format === 'svg' || format === 'pdf' || format === 'png' || format === 'jpeg' || format === 'jpg') {
+            try {
+                await downloadClientSide();
+                toast.success('QR code downloaded successfully!');
+                handleCloseDownloadModal();
+            } catch (error) {
+                console.error('Client-side download error:', error);
+                toast.error('Failed to download QR code');
+            }
+            return;
+        }
+
+        // 🔵 Fallback / Legacy Backend Download (Kept just in case, but unused for now)
+        try {
             // Use the same robust download logic as Statistics page
             const apiBase = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
             const downloadUrl = `${apiBase}/api/qr/download/${downloadingQr.shortId}?format=${format}`;
@@ -185,20 +212,31 @@ const Dashboard = () => {
         } catch (error) {
             console.error('Download error:', error);
             toast.error('Failed to download QR code');
-
-            // Fallback Client Side
-            try {
-                await fallbackClientDownload();
-            } catch (fallbackError) {
-                console.error('Fallback also failed:', fallbackError);
-            }
         }
     };
 
-    // ❌ Fallback function (only if backend fails)
-    const fallbackClientDownload = async () => {
-        let qrElement = document.querySelector(`#modal-qr-${downloadingQr._id} canvas, #modal-qr-${downloadingQr._id} svg, #modal-qr-${downloadingQr._id} img`) ||
-            document.querySelector(`#qr-${downloadingQr._id} canvas, #qr-${downloadingQr._id} svg, #qr-${downloadingQr._id} img`);
+    // ✅ Client-Side Download Logic (Uses html-to-image on High-Res Hidden Element)
+    const downloadClientSide = async () => {
+        // Target the High-Res hidden container
+        let qrElement = document.querySelector(`#hidden-qr-${downloadingQr._id} canvas`);
+
+        if (!qrElement) {
+             // If canvas not found directly, try finding the wrapper and then the canvas inside
+             const wrapper = document.getElementById(`hidden-qr-${downloadingQr._id}`);
+             if (wrapper) {
+                 qrElement = wrapper.querySelector('canvas');
+             }
+        }
+
+        if (!qrElement) {
+            // Fallback to visible elements if hidden one fails
+             qrElement = document.querySelector(`#modal-qr-${downloadingQr._id} canvas, #modal-qr-${downloadingQr._id} svg, #modal-qr-${downloadingQr._id} img`) ||
+                document.querySelector(`#qr-${downloadingQr._id} canvas, #qr-${downloadingQr._id} svg, #qr-${downloadingQr._id} img`);
+             
+             if (!qrElement) {
+                qrElement = document.getElementById(`modal-qr-${downloadingQr._id}`) || document.getElementById(`qr-${downloadingQr._id}`);
+             }
+        }
 
         if (!qrElement) {
             throw new Error('QR element not found');
@@ -216,6 +254,39 @@ const Dashboard = () => {
 
             pdf.addImage(dataUrl, 'PNG', x, 10, pdfWidth, pdfHeight);
             pdf.save(filename);
+        } else if (downloadFormat === 'svg') {
+            // Manual SVG Construction to ensure correct size and centering
+            // We wrap the High-Res PNG inside an SVG container
+            
+            // 1. Get PNG Data URL from the High-Res Canvas
+            // Note: html-to-image/toPng works, but standard canvas.toDataURL is faster for simple canvas
+            let dataUrl;
+            if (qrElement instanceof HTMLCanvasElement) {
+                dataUrl = qrElement.toDataURL('image/png');
+            } else {
+                // If it's not a canvas (e.g. wrapper div), convert it to PNG first
+                dataUrl = await toPng(qrElement);
+            }
+            
+            const size = 512; // Reduced size as per user request (was 1024)
+            
+            // 2. Create a clean SVG string embedding the PNG
+            const svgContent = `
+<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <image href="${dataUrl}" x="0" y="0" width="${size}" height="${size}" />
+</svg>`;
+            
+            // 3. Trigger Download
+            const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
         } else {
             const dataUrl = downloadFormat === 'jpg' || downloadFormat === 'jpeg'
                 ? await toJpeg(qrElement, { quality: 0.95 })
@@ -2193,6 +2264,21 @@ const Dashboard = () => {
                 )
             }
 
+            {/* Hidden High-Res QR for Download Generation */}
+            <div style={{ position: 'absolute', left: '-9999px', top: '-9999px', opacity: 0, pointerEvents: 'none' }}>
+                {downloadingQr && (
+                    <div id={`hidden-qr-${downloadingQr._id}`} style={{ width: '1024px', height: '1024px' }}>
+                        <QRRenderer
+                            value={getQRValue(downloadingQr)}
+                            design={downloadingQr.design || {}}
+                            size={1024} // High Resolution (4x standard)
+                            id={`high-res-qr-${downloadingQr._id}`}
+                            margin={downloadingQr.design?.margin || 20}
+                        />
+                    </div>
+                )}
+            </div>
+            
             {/* Filters Drawer (Mobile Only) */}
             {
                 isMobile && isFilterDrawerOpen && (

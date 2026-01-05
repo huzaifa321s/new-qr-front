@@ -163,7 +163,7 @@ export const bioPagePreviewConfig = {
 export const surveyPreviewConfig = {
     type: 'survey',
     design: {
-        logo: { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1735627705/lead-gen-default-logo_z6j5n1.png' }, // Professional logo
+        logo: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' }, // Professional logo
         illustration: 'https://img.freepik.com/free-vector/customer-survey-concept-illustration_114360-5321.jpg' // Survey illustration
     },
     businessInfo: {

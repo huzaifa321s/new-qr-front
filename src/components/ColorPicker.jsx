@@ -7,7 +7,7 @@ const ColorPicker = ({ label, color, onChange }) => {
     const [showPicker, setShowPicker] = React.useState(false);
 
     return (
-        <div style={{ marginBottom: '1rem' }}>
+        <div style={{ marginBottom: '1rem', position: 'relative' }}>
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#64748b', marginBottom: '0.5rem' }}>
                 {label}
             </label>
@@ -57,7 +57,7 @@ const ColorPicker = ({ label, color, onChange }) => {
                 </div>
             </div>
             {showPicker && (
-                <div style={{ position: 'absolute', zIndex: 10, marginTop: '0.5rem' }}>
+                <div style={{ position: 'absolute', zIndex: 1000, top: '100%', left: 0 }}>
                     <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, left: 0 }} onClick={() => setShowPicker(false)} />
                     <SketchPicker color={color} onChange={(c) => onChange(c.hex)} />
                 </div>
