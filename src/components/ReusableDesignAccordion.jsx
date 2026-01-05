@@ -352,7 +352,7 @@ const ReusableDesignAccordion = ({
                                     onClick={() => {
                                         if (logoKey.includes('.')) {
                                             const keys = logoKey.split('.');
-                                            onChange(keys[0], { ...getValue(keys[0]), [keys[1]]: '' });
+                                            onChange(keys[0], { ...getValue(keys[0]), [keys[1]]: null });
                                         } else {
                                             onChange(logoKey, null);
                                         }

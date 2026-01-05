@@ -194,9 +194,9 @@ const SocialMediaConfig = ({ config, onChange }) => {
                         header: design.color?.header || '#0B2D86',
                         light: design.color?.light || '#FFA800'
                     },
-                    socialLogo: {
-                        ...design.socialLogo,
-                        url: design.socialLogo?.url
+                    logo: {
+                        ...design.logo,
+                        url: design.logo?.url
                     }
                 }}
                 onChange={handleDesignSectionUpdate}
@@ -204,7 +204,7 @@ const SocialMediaConfig = ({ config, onChange }) => {
                 onToggle={() => setIsDesignOpen(!isDesignOpen)}
                 colorKeys={{ primary: 'color.header', secondary: 'color.light' }}
                 palettes={palettes}
-                logoKey="socialLogo.url"
+                logoKey="logo.url"
                 logoOptions={logoOptions}
             >
                 {/* BACKGROUND IMAGE SECTION */}

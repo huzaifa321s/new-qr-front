@@ -221,6 +221,8 @@ const QRRenderer = forwardRef(({ value, design, size = 280, margin = 20, id }, r
                         else if (style === 'teardrop-tl') radii = [0, r, r, r]; // TL Sharp
                         else if (style === 'leaf-top-right') radii = [r, 0, r, r]; // Legacy support
                         else if (style === 'leaf-top-left') radii = [0, r, r, r];
+                        else if (style === 'leaf-bottom-left') radii = [r, 0, r, 0]; // Opposite diagonal
+                        else if (style === 'leaf-bottom-right') radii = [0, r, 0, r]; // Right diagonal
                         else radii = [0, r, 0, r]; // Default diagonal
 
                         // Fallback for ball leaf styles

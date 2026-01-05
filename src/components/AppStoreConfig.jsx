@@ -175,7 +175,7 @@ const AppStoreConfig = ({ config, onChange }) => {
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                     {/* 1. Remove Button */}
                                     <button
-                                        onClick={() => updateConfig('design.appLogo.url', '')}
+                                        onClick={() => updateConfig('design.appLogo.url', null)}
                                         style={{
                                             minWidth: '80px',
                                             height: '80px',

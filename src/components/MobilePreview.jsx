@@ -1285,7 +1285,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                 {surveyStep === 'language' && (
                     <div style={{ height: '100%', overflowY: 'auto', background: '#fff', display: 'flex', flexDirection: 'column' }}>
                         {/* Logo */}
-                        {(design?.surveyLogo?.url || design?.logo?.url) && (
+                        {design?.logo?.url && (
                             <div style={{ padding: '3rem 1rem 1rem', display: 'flex', justifyContent: 'center' }}>
                                 <div style={{
                                     width: '100px',
@@ -1299,7 +1299,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     justifyContent: 'center'
                                 }}>
                                     <img
-                                        src={design?.surveyLogo?.url || design?.logo?.url}
+                                        src={design.logo.url}
                                         alt="Logo"
                                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />
@@ -1673,8 +1673,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
                 {surveyStep === 'thankYou' && (
                     <div style={{ height: '100%', overflowY: 'auto', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem 1.5rem' }}>
-                        {/* Logo */}
-                        {(design?.surveyLogo?.url || design?.logo?.url) && (
+                        {(design?.surveyLogo?.url || (design?.surveyLogo?.url !== null && design?.surveyLogo?.url !== '' && design?.logo?.url)) && (
                             <div style={{ marginBottom: '2rem' }}>
                                 <div style={{
                                     width: '100px',
@@ -1735,62 +1734,64 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         {/* Footer Message - Removed duplicate */}
 
                         {/* Social Icons - Only show selected ones with URLs */}
-                        {socialLinks && socialLinks.length > 0 && socialLinks.some(link => link.url && link.url.trim() !== '') && (
-                            <div style={{
-                                display: 'flex',
-                                gap: '0.75rem',
-                                marginBottom: '2rem',
-                                justifyContent: 'center',
-                                flexWrap: 'wrap',
-                                alignItems: 'center'
-                            }}>
-                                {socialLinks
-                                    .filter(link => link.url && link.url.trim() !== '')
-                                    .map((link) => {
-                                        const platform = socialIconsMap.find(p => p.id === link.platform) || socialIconsMap.find(p => p.id === 'website');
-                                        if (!platform) return null;
+                        {
+                            socialLinks && socialLinks.length > 0 && socialLinks.some(link => link.url && link.url.trim() !== '') && (
+                                <div style={{
+                                    display: 'flex',
+                                    gap: '0.75rem',
+                                    marginBottom: '2rem',
+                                    justifyContent: 'center',
+                                    flexWrap: 'wrap',
+                                    alignItems: 'center'
+                                }}>
+                                    {socialLinks
+                                        .filter(link => link.url && link.url.trim() !== '')
+                                        .map((link) => {
+                                            const platform = socialIconsMap.find(p => p.id === link.platform) || socialIconsMap.find(p => p.id === 'website');
+                                            if (!platform) return null;
 
-                                        const url = link.url.startsWith('http') ? link.url : `https://${link.url}`;
+                                            const url = link.url.startsWith('http') ? link.url : `https://${link.url}`;
 
-                                        return (
-                                            <div
-                                                key={link.id}
-                                                onClick={() => window.open(url, '_blank')}
-                                                style={{
-                                                    width: '45px',
-                                                    height: '45px',
-                                                    borderRadius: '50%',
-                                                    background: platform.color,
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    cursor: 'pointer',
-                                                    transition: 'transform 0.2s',
-                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                                                }}
-                                                onMouseEnter={(e) => {
-                                                    e.currentTarget.style.transform = 'scale(1.1)';
-                                                }}
-                                                onMouseLeave={(e) => {
-                                                    e.currentTarget.style.transform = 'scale(1)';
-                                                }}
-                                                title={platform.name}
-                                            >
-                                                <img
-                                                    src={platform.icon}
-                                                    alt={platform.name}
+                                            return (
+                                                <div
+                                                    key={link.id}
+                                                    onClick={() => window.open(url, '_blank')}
                                                     style={{
-                                                        width: '24px',
-                                                        height: '24px',
-                                                        objectFit: 'contain',
-                                                        filter: link.platform === 'snapchat' || link.platform === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                                        width: '45px',
+                                                        height: '45px',
+                                                        borderRadius: '50%',
+                                                        background: platform.color,
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        cursor: 'pointer',
+                                                        transition: 'transform 0.2s',
+                                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                                                     }}
-                                                />
-                                            </div>
-                                        );
-                                    })}
-                            </div>
-                        )}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.transform = 'scale(1.1)';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.transform = 'scale(1)';
+                                                    }}
+                                                    title={platform.name}
+                                                >
+                                                    <img
+                                                        src={platform.icon}
+                                                        alt={platform.name}
+                                                        style={{
+                                                            width: '24px',
+                                                            height: '24px',
+                                                            objectFit: 'contain',
+                                                            filter: link.platform === 'snapchat' || link.platform === 'line' ? 'none' : 'brightness(0) invert(1)'
+                                                        }}
+                                                    />
+                                                </div>
+                                            );
+                                        })}
+                                </div>
+                            )
+                        }
 
                         {/* Illustration */}
                         <div style={{ marginTop: 'auto', width: '100%' }}>
@@ -1800,9 +1801,10 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 style={{ width: '100%', height: 'auto', objectFit: 'contain', borderRadius: '12px' }}
                             />
                         </div>
-                    </div>
-                )}
-            </div>
+                    </div >
+                )
+                }
+            </div >
         );
     }
 
@@ -2764,7 +2766,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
         const headerImageUrl = design?.headerImage?.url || design?.backgroundImage?.url;
         const hasHeaderImage = !!headerImageUrl && headerImageUrl !== '';
 
-        const hasLogo = !!(design?.socialLogo?.url || design?.logo?.url);
+        const hasLogo = !!(design?.logo?.url);
 
         return (
             <div style={{
@@ -2835,7 +2837,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 flexShrink: 0
                             }}>
                                 <img
-                                    src={design?.socialLogo?.url || design?.logo?.url}
+                                    src={design.logo.url}
                                     alt="Logo"
                                     style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
                                 />
@@ -3059,7 +3061,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         }}>
                             {businessInfo?.companyName || "Royal's Cafe"}
                         </h2>
-                        {(design?.businessLogo?.url || design?.logo?.url) && (
+                        {design?.logo?.url && (
                             <div style={{
                                 width: '40px',
                                 height: '40px',
@@ -3070,7 +3072,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 justifyContent: 'center',
                                 padding: '5px'
                             }}>
-                                <img src={design?.businessLogo?.url || design?.logo?.url} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                                <img src={design.logo.url} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                             </div>
                         )}
                     </div>
@@ -3893,7 +3895,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                             zIndex: 10,
                             background: primaryColor
                         }}>
-                            {(design?.couponLogo?.url || design?.logo?.url) && (
+                            {design?.logo?.url && (
                                 <div style={{
                                     width: '50px',
                                     height: '50px',
@@ -3904,7 +3906,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     alignItems: 'center',
                                     justifyContent: 'center'
                                 }}>
-                                    <img src={design?.couponLogo?.url || design?.logo?.url} alt="Logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                                    <img src={design.logo.url} alt="Logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                                 </div>
                             )}
                             <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0, color: businessInfo?.titleColor || '#fff', fontFamily: businessInfo?.titleFont || 'Lato' }}>{businessInfo?.title}</h2>
@@ -4710,7 +4712,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     }}>
                         {/* Logo and Company Name */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                            {(design?.pdfLogo?.url || design?.logo?.url) && (
+                            {design?.logo?.url && (
                                 <div style={{
                                     width: '50px',
                                     height: '50px',
@@ -4723,7 +4725,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                     overflow: 'hidden'
                                 }}>
                                     <img
-                                        src={design?.pdfLogo?.url || design?.logo?.url}
+                                        src={design.logo.url}
                                         alt="Logo"
                                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />
@@ -5692,139 +5694,6 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
 
 
-    if (isLeadGeneration) {
-        const primaryColor = design?.color?.header || '#6F0101';
-        const activeForm = form || { fullName: true, email: true };
-
-        const formFields = [
-            { id: 'fullName', label: 'Full Name', type: 'text' },
-            { id: 'contactNumber', label: 'Contact Number', type: 'tel' },
-            { id: 'organizationName', label: 'Organization Name', type: 'text' },
-            { id: 'email', label: 'Email', type: 'email' },
-            { id: 'jobTitle', label: 'Job Title', type: 'text' },
-            { id: 'website', label: 'Website', type: 'url' }
-        ];
-
-        return (
-            <div style={{
-                width: isLiveView ? '100%' : '320px',
-                maxWidth: isLiveView ? '480px' : 'none',
-                height: isLiveView ? '100vh' : '640px',
-                background: '#fff',
-                borderRadius: isLiveView ? '0' : '40px',
-                border: isLiveView ? 'none' : '12px solid #1e293b',
-                overflow: 'hidden',
-                position: 'relative',
-                boxShadow: isLiveView ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                margin: isLiveView ? '0 auto' : '0 auto',
-                display: 'flex',
-                flexDirection: 'column'
-            }}>
-                {!isLiveView && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '24px', background: '#1e293b', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px', zIndex: 20 }}></div>}
-
-                <div style={{ height: '100%', overflowY: 'auto', background: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
-                    {/* Header Image */}
-                    <div style={{ position: 'relative', height: '200px', background: primaryColor }}>
-                        {(design?.headerImage?.url) ? (
-                            <img src={design.headerImage.url} alt="Header" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        ) : (
-                            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            </div>
-                        )}
-                    </div>
-
-                    <div style={{ flex: 1, padding: '1.5rem', marginTop: '-40px', position: 'relative', zIndex: 10 }}>
-                        <div style={{ background: '#fff', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }}>
-                            {leadGenStep === 'form' ? (
-                                <>
-                                    <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
-                                        <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: basicInfo?.companyNameColor || '#000', fontFamily: basicInfo?.companyNameFont, margin: '0 0 0.5rem 0' }}>
-                                            {basicInfo?.companyName || 'Company Name'}
-                                        </h2>
-                                        <h3 style={{ fontSize: '1rem', fontWeight: '600', color: basicInfo?.headlineColor || '#475569', fontFamily: basicInfo?.headlineFont, margin: '0 0 0.5rem 0' }}>
-                                            {basicInfo?.headline || 'Headline'}
-                                        </h3>
-                                        <p style={{ fontSize: '0.875rem', color: basicInfo?.descriptionColor || '#64748b', fontFamily: basicInfo?.descriptionFont, lineHeight: '1.5', margin: 0 }}>
-                                            {basicInfo?.description || 'Description'}
-                                        </p>
-                                    </div>
-
-                                    <form onSubmit={(e) => { e.preventDefault(); setLeadGenStep('thankYou'); }}>
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                            {formFields.filter(f => activeForm[f.id]).map(field => (
-                                                <div key={field.id}>
-                                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.4rem' }}>{field.label}</label>
-                                                    <input
-                                                        type={field.type}
-                                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none' }}
-                                                        placeholder={`Enter ${field.label}`}
-                                                    />
-                                                </div>
-                                            ))}
-
-                                            {customFields && customFields.map(field => (
-                                                <div key={field.id}>
-                                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.4rem' }}>{field.label || 'Question'}</label>
-                                                    <input
-                                                        type="text"
-                                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none' }}
-                                                    />
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        <button type="submit" style={{ width: '100%', padding: '1rem', background: primaryColor, color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '1rem', marginTop: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-                                            Submit
-                                        </button>
-                                    </form>
-                                </>
-                            ) : (
-                                <div style={{ textAlign: 'center', padding: '2rem 0' }}>
-                                    <div style={{
-                                        width: '80px',
-                                        height: '80px',
-                                        background: '#dcfce7',
-                                        borderRadius: '50%',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        margin: '0 auto 1.5rem'
-                                    }}>
-                                        <ThumbsUp size={40} color="#16a34a" />
-                                    </div>
-                                    <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '1rem' }}>
-                                        {thankYou?.title || 'Thank You!'}
-                                    </h3>
-                                    <p style={{ color: '#64748b', lineHeight: '1.6' }}>
-                                        {thankYou?.message || 'Your information has been submitted successfully.'}
-                                    </p>
-                                    {thankYou?.buttonLink && (
-                                        <a
-                                            href={thankYou.buttonLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            style={{
-                                                marginTop: '2rem',
-                                                display: 'inline-block',
-                                                padding: '0.875rem 2rem',
-                                                background: primaryColor,
-                                                color: '#fff',
-                                                textDecoration: 'none',
-                                                borderRadius: '50px',
-                                                fontWeight: 'bold'
-                                            }}
-                                        >
-                                            {thankYou.buttonText || 'Visit Website'}
-                                        </a>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
 
     if (type === 'product-page') {
         const primaryColor = design?.color?.header || '#FFB03E';
@@ -6870,7 +6739,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         borderBottomRightRadius: '50% 20%',
                         textAlign: 'center'
                     }}>
-                        {(design?.appLogo?.url || design?.logo?.url) && (
+                        {(design?.appLogo?.url || (design?.appLogo?.url !== null && design?.appLogo?.url !== '' && design?.logo?.url)) && (
                             <div style={{
                                 width: '80px',
                                 height: '80px',
@@ -6908,7 +6777,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         </div>
                     </div>
 
-                    <div style={{ marginTop: (design?.appLogo?.url || design?.logo?.url) ? '80px' : '2rem', textAlign: 'center', padding: '0 1.5rem' }}>
+                    <div style={{ marginTop: (design?.appLogo?.url || (design?.appLogo?.url !== null && design?.appLogo?.url !== '' && design?.logo?.url)) ? '80px' : '2rem', textAlign: 'center', padding: '0 1.5rem' }}>
                         <h3 style={{
                             margin: '0 0 0.5rem 0',
                             fontSize: '1.25rem',
@@ -7155,7 +7024,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         <div style={{ fontSize: '1rem', fontWeight: '700', letterSpacing: '-0.01em' }}>
                             {businessInfo?.title || "Bob's Cafe"}
                         </div>
-                        {(design?.menuLogo?.url || design?.menuLogo || design?.logo?.url || typeof design?.logo === 'string') && (
+                        {design?.logo?.url && (
                             <div style={{
                                 width: '38px',
                                 height: '38px',
@@ -7168,7 +7037,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 overflow: 'hidden'
                             }}>
                                 <img
-                                    src={design?.menuLogo?.url || design?.menuLogo || design?.logo?.url || design?.logo}
+                                    src={design.logo.url}
                                     alt="Logo"
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                 />

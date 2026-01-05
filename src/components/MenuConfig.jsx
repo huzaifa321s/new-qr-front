@@ -288,7 +288,7 @@ const MenuConfig = ({ config, onChange }) => {
                 onToggle={() => setIsDesignOpen(!isDesignOpen)}
                 colorKeys={{ primary: 'primaryColor', secondary: 'secondaryColor' }}
                 palettes={palettes}
-                logoKey="menuLogo"
+                logoKey="logo.url"
                 showLogo={true}
                 logoLabel="LOGO"
                 logoOptions={logos}

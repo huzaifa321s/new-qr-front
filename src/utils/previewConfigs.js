@@ -56,7 +56,7 @@ export const couponPreviewConfig = {
     type: 'coupon',
     design: {
         color: { dark: '#7c3aed', light: '#08B8CE' }, // Violet/Purple
-        logo: { url: 'https://picsum.photos/seed/coupon-logo/150/150' } // Boutique logo placeholder
+        logo: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' } // High-quality boutique logo
     },
     businessInfo: {
         title: "ABC Boutique"
@@ -105,7 +105,7 @@ export const businessPagePreviewConfig = {
     type: 'business-page',
     design: {
         color: { header: '#0f3485', dark: '#0f3485', light: '#ffffff' }, // Dark Blue
-        logo: { url: 'https://img.freepik.com/premium-vector/restaurant-logo-design-template_79169-56.jpg' }, // Restaurant logo
+        logo: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' }, // Quality restaurant logo
         heroImage: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' // New working cafe image
     },
     businessInfo: {
@@ -163,7 +163,7 @@ export const bioPagePreviewConfig = {
 export const surveyPreviewConfig = {
     type: 'survey',
     design: {
-        logo: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' }, // 3D character
+        logo: { url: 'https://res.cloudinary.com/date1bmhd/image/upload/v1735627705/lead-gen-default-logo_z6j5n1.png' }, // Professional logo
         illustration: 'https://img.freepik.com/free-vector/customer-survey-concept-illustration_114360-5321.jpg' // Survey illustration
     },
     businessInfo: {
@@ -176,7 +176,7 @@ export const leadGenerationPreviewConfig = {
     type: 'lead-generation',
     design: {
         color: { header: '#7f1d1d', dark: '#7f1d1d', light: '#ffffff' }, // Dark Red/Maroon
-        logo: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' }, // 3D character
+        logo: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' }, // Professional logo
         headerImage: { url: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=267&fit=crop' } // Default header image
     },
     basicInfo: {
@@ -252,7 +252,7 @@ export const reviewsPreviewConfig = {
 export const socialMediaPreviewConfig = {
     type: 'social-media',
     design: {
-        logo: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' },
+        logo: { url: 'https://img.freepik.com/premium-photo/3d-avatar-boy-character_914455-603.jpg' }, // Professional logo
         backgroundImage: { url: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=267&fit=crop' }
     },
     basicInfo: {

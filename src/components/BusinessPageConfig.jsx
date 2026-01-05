@@ -238,9 +238,9 @@ const BusinessPageConfig = ({ config, onChange }) => {
                         header: design.color?.header || '#0B2D86',
                         light: design.color?.light || '#FFA800'
                     },
-                    businessLogo: {
-                        ...design.businessLogo,
-                        url: design.businessLogo?.url
+                    logo: {
+                        ...design.logo,
+                        url: design.logo?.url
                     }
                 }}
                 onChange={handleDesignSectionUpdate}
@@ -248,7 +248,7 @@ const BusinessPageConfig = ({ config, onChange }) => {
                 onToggle={() => setIsDesignOpen(!isDesignOpen)}
                 colorKeys={{ primary: 'color.header', secondary: 'color.light' }}
                 palettes={palettes}
-                logoKey="businessLogo.url"
+                logoKey="logo.url"
                 logoOptions={pictureOptions}
                 logoLabel="LOGO"
                 logoHelpText="128x128px, 1:1 Ratio"
