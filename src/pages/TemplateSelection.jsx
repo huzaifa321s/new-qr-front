@@ -82,10 +82,10 @@ const TemplateSelection = () => {
                 onClick={() => navigate('/')}
                 style={{
                     position: 'absolute',
-                    top: '6rem',
-                    left: '2rem',
-                    width: '50px',
-                    height: '50px',
+                    top: isMobile ? '4.25rem' : '6rem',
+                    left: isMobile ? '1rem' : '2rem',
+                    width: isMobile ? '40px' : '50px',
+                    height: isMobile ? '40px' : '50px',
                     borderRadius: '50%',
                     background: '#e0e7ff',
                     border: 'none',
@@ -95,10 +95,11 @@ const TemplateSelection = () => {
                     cursor: 'pointer',
                     color: '#6366f1',
                     transition: 'all 0.2s',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+                    zIndex: 10
                 }}
             >
-                <ArrowLeft size={20} />
+                <ArrowLeft size={isMobile ? 18 : 20} />
             </button>
 
             <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '2rem' }}>
