@@ -26,15 +26,15 @@ const ImageUploadModal = ({ isOpen, onClose, onSave, tempImage, fileName, type =
 
             const formData = new FormData();
             const name = (fileName || 'image').replace(/\.[^/.]+$/, "") + ".jpg";
-            formData.append(type, croppedImageBlob, name);
+            formData.append('image', croppedImageBlob, name);
             console.log('croppedimage', croppedImageBlob)
             console.log('type', type)
-            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/';
-            const res = await axios.post(`${baseUrl}api/upload/${type}`, formData, {
+            const baseUrl = 'http://localhost:3000/';
+            const res = await axios.post(`${baseUrl}api/upload/logo`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             console.log('res.data.url', res)
-            onSave(res.url);
+            onSave(res.data.url);
             onClose();
         } catch (err) {
             console.error('Upload failed:', err);
