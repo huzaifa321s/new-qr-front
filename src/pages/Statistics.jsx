@@ -335,7 +335,7 @@ const Statistics = () => {
                                             rel="noreferrer"
                                             style={{ color: '#7c3aed', textDecoration: 'none', fontWeight: '500' }}
                                         >
-                                            {qr.type === 'dynamic-url' ? `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/${qr.shortId}` : `${baseUrl}/view/${qr.shortId}`}
+                                            {qr.type === 'dynamic-url' ? `${import.meta.env.VITE_API_URL || 'http://localhost:3000/'}${qr.shortId}` : `${baseUrl}/view/${qr.shortId}`}
                                         </a><Copy size={14} color="#9ca3af" onClick={() => handleCopyLink(qr.shortId)} style={{ cursor: 'pointer' }} /></div></div>
                                     <div><div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '0.25rem' }}>CREATED</div><div style={{ color: '#1f2937', fontSize: '0.875rem' }}>{new Date(qr.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div></div>
                                     <div><div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '0.25rem' }}>TYPE</div><div style={{ display: 'inline-block', padding: '0.25rem 0.75rem', background: '#f3e8ff', color: '#7c3aed', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '600', textTransform: 'capitalize' }}>{qr.type.replace('-', ' ')}</div></div>
