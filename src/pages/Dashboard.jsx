@@ -152,10 +152,10 @@ const Dashboard = () => {
         if (!qr) return '';
         const staticTypes = ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone', 'more'];
         const isStatic = staticTypes.includes(qr.type) || isMatchingMoreType(qr.data, qr.type);
-        
+
         if (isStatic) return qr.data;
         if (qr.type === 'dynamic-url') {
-             return `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/${qr.shortId}`;
+            return `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/${qr.shortId}`;
         }
         return `${baseUrl}/view/${qr.shortId}`;
     };
@@ -221,21 +221,21 @@ const Dashboard = () => {
         let qrElement = document.querySelector(`#hidden-qr-${downloadingQr._id} canvas`);
 
         if (!qrElement) {
-             // If canvas not found directly, try finding the wrapper and then the canvas inside
-             const wrapper = document.getElementById(`hidden-qr-${downloadingQr._id}`);
-             if (wrapper) {
-                 qrElement = wrapper.querySelector('canvas');
-             }
+            // If canvas not found directly, try finding the wrapper and then the canvas inside
+            const wrapper = document.getElementById(`hidden-qr-${downloadingQr._id}`);
+            if (wrapper) {
+                qrElement = wrapper.querySelector('canvas');
+            }
         }
 
         if (!qrElement) {
             // Fallback to visible elements if hidden one fails
-             qrElement = document.querySelector(`#modal-qr-${downloadingQr._id} canvas, #modal-qr-${downloadingQr._id} svg, #modal-qr-${downloadingQr._id} img`) ||
+            qrElement = document.querySelector(`#modal-qr-${downloadingQr._id} canvas, #modal-qr-${downloadingQr._id} svg, #modal-qr-${downloadingQr._id} img`) ||
                 document.querySelector(`#qr-${downloadingQr._id} canvas, #qr-${downloadingQr._id} svg, #qr-${downloadingQr._id} img`);
-             
-             if (!qrElement) {
+
+            if (!qrElement) {
                 qrElement = document.getElementById(`modal-qr-${downloadingQr._id}`) || document.getElementById(`qr-${downloadingQr._id}`);
-             }
+            }
         }
 
         if (!qrElement) {
@@ -257,7 +257,7 @@ const Dashboard = () => {
         } else if (downloadFormat === 'svg') {
             // Manual SVG Construction to ensure correct size and centering
             // We wrap the High-Res PNG inside an SVG container
-            
+
             // 1. Get PNG Data URL from the High-Res Canvas
             // Note: html-to-image/toPng works, but standard canvas.toDataURL is faster for simple canvas
             let dataUrl;
@@ -267,19 +267,19 @@ const Dashboard = () => {
                 // If it's not a canvas (e.g. wrapper div), convert it to PNG first
                 dataUrl = await toPng(qrElement);
             }
-            
+
             const size = 512; // Reduced size as per user request (was 1024)
-            
+
             // 2. Create a clean SVG string embedding the PNG
             const svgContent = `
 <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
     <image href="${dataUrl}" x="0" y="0" width="${size}" height="${size}" />
 </svg>`;
-            
+
             // 3. Trigger Download
             const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
             const url = URL.createObjectURL(blob);
-            
+
             const link = document.createElement('a');
             link.download = filename;
             link.href = url;
@@ -2037,7 +2037,9 @@ const Dashboard = () => {
                                                             <div style={{ padding: '0.5rem 0' }}>
                                                                 {[
                                                                     { icon: Edit, label: 'Edit', color: '#666', action: () => handleEditQR(qr), dynamicOnly: true },
-                                                                    { icon: BarChart, label: 'Statistics', color: '#666', action: () => navigate(`/statistics/${qr._id}`), dynamicOnly: true },
+                                                                    ...(String(qr._id) !== '6954c3238ed008ead9300b3c' && String(qr._id) !== '6954c3818ed008ead9300c25'
+                                                                        ? [{ icon: BarChart, label: 'Statistics', color: '#666', action: () => navigate(`/statistics/${qr._id}`), dynamicOnly: true }]
+                                                                        : []),
                                                                     { icon: Trash2, label: 'Delete', color: '#ef4444', action: () => handleDeleteClick(qr._id) }
                                                                 ].filter(item => !item.dynamicOnly || !isStatic).map((item, idx) => (
                                                                     <button
@@ -2278,7 +2280,7 @@ const Dashboard = () => {
                     </div>
                 )}
             </div>
-            
+
             {/* Filters Drawer (Mobile Only) */}
             {
                 isMobile && isFilterDrawerOpen && (
