@@ -320,7 +320,10 @@ const Dashboard = () => {
 
     const handleUpdateUrl = async () => {
         if (!editingUrlQr) return;
-
+        if (String(editingUrlQr._id) === '6954c3238ed008ead9300b3c' || String(editingUrlQr._id) === '6954c3818ed008ead9300c25') {
+            toast.error('You cannot update this QR code');
+            return;
+        }
         // Basic validation
         if (!tempShortId.trim()) {
             toast.error('Short ID cannot be empty');
@@ -2036,10 +2039,8 @@ const Dashboard = () => {
                                                         }}>
                                                             <div style={{ padding: '0.5rem 0' }}>
                                                                 {[
-                                                                    { icon: Edit, label: 'Edit', color: '#666', action: () => handleEditQR(qr), dynamicOnly: true },
-                                                                    ...(String(qr._id) !== '6954c3238ed008ead9300b3c' && String(qr._id) !== '6954c3818ed008ead9300c25'
-                                                                        ? [{ icon: BarChart, label: 'Statistics', color: '#666', action: () => navigate(`/statistics/${qr._id}`), dynamicOnly: true }]
-                                                                        : []),
+                                                                    ...(String(qr._id) !== '6954c3238ed008ead9300b3c' && String(qr._id) !== '6954c3818ed008ead9300c25' ? [{ icon: Edit, label: 'Edit', color: '#666', action: () => handleEditQR(qr), dynamicOnly: true }] : []),
+                                                                    ...(String(qr._id) !== '6954c3238ed008ead9300b3c' && String(qr._id) !== '6954c3818ed008ead9300c25' ? [{ icon: BarChart, label: 'Statistics', color: '#666', action: () => navigate(`/statistics/${qr._id}`), dynamicOnly: true }] : []),
                                                                     { icon: Trash2, label: 'Delete', color: '#ef4444', action: () => handleDeleteClick(qr._id) }
                                                                 ].filter(item => !item.dynamicOnly || !isStatic).map((item, idx) => (
                                                                     <button
