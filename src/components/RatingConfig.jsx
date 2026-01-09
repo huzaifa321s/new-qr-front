@@ -3,7 +3,7 @@ import { useState } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 import ImageUploadModal from './ImageUploadModal';
 
-const RatingConfig = ({ config, onChange }) => {
+const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isRatingOpen, setIsRatingOpen] = useState(false);
@@ -90,6 +90,13 @@ const RatingConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key];
+                return newErrors;
+            });
+        }
     };
 
     const handleRatingUpdate = (key, value) => {
@@ -100,6 +107,13 @@ const RatingConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key];
+                return newErrors;
+            });
+        }
     };
 
     const handleSocialUpdate = (key, value) => {
@@ -394,11 +408,16 @@ const RatingConfig = ({ config, onChange }) => {
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: `1px solid ${errors.name ? '#ef4444' : '#1e293b'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
                                     />
+                                    {errors.name && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.name}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* Text Color */}
@@ -507,11 +526,16 @@ const RatingConfig = ({ config, onChange }) => {
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #06b6d4',
+                                    border: `1px solid ${errors.website ? '#ef4444' : '#06b6d4'}`,
                                     fontSize: '0.9rem',
                                     outline: 'none'
                                 }}
                             />
+                            {errors.website && (
+                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                    {errors.website}
+                                </p>
+                            )}
                         </div>
 
                     </div>
@@ -557,11 +581,16 @@ const RatingConfig = ({ config, onChange }) => {
                                         width: '100%',
                                         padding: '0.75rem',
                                         borderRadius: '4px',
-                                        border: '1px solid #1e293b',
+                                        border: `1px solid ${errors.question ? '#ef4444' : '#1e293b'}`,
                                         fontSize: '0.9rem',
                                         outline: 'none'
                                     }}
                                 />
+                                {errors.question && (
+                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                        {errors.question}
+                                    </p>
+                                )}
                             </div>
 
                             {/* RATING TYPE OPTIONS */}

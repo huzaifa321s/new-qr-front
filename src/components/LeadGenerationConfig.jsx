@@ -3,7 +3,7 @@ import { useState } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 import ImageUploadModal from './ImageUploadModal';
 
-const LeadGenerationConfig = ({ config, onChange }) => {
+const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isFormOpen, setIsFormOpen] = useState(false);
@@ -91,6 +91,13 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key];
+                return newErrors;
+            });
+        }
     };
 
     const handleFormFieldToggle = (field) => {
@@ -101,6 +108,13 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                 [field]: !prev.form?.[field]
             }
         }));
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.form;
+                return newErrors;
+            });
+        }
     };
 
     const handleThankYouUpdate = (key, value) => {
@@ -111,6 +125,13 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key === 'message' ? 'message' : key];
+                return newErrors;
+            });
+        }
     };
 
     const handleAddCustomField = () => {
@@ -123,6 +144,13 @@ const LeadGenerationConfig = ({ config, onChange }) => {
             ...prev,
             customFields: [...(prev.customFields || []), newField]
         }));
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.form;
+                return newErrors;
+            });
+        }
     };
 
     const handleCustomFieldUpdate = (id, field, value) => {
@@ -141,6 +169,13 @@ const LeadGenerationConfig = ({ config, onChange }) => {
             ...prev,
             customFields: updatedFields
         }));
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.form;
+                return newErrors;
+            });
+        }
     };
 
     const fieldTypeOptions = [
@@ -372,17 +407,23 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                 <div style={{ flex: '2 1 200px' }}>
                                     <input
                                         type="text"
-                                        value={basicInfo.companyName || 'Sterling & Co'}
+                                        value={basicInfo.companyName || ''}
                                         onChange={(e) => handleBasicInfoUpdate('companyName', e.target.value)}
+                                        placeholder="Sterling & Co"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: `1px solid ${errors.companyName ? '#ef4444' : '#1e293b'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
                                     />
+                                    {errors.companyName && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.companyName}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* Text Color */}
@@ -487,8 +528,9 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                 <div style={{ flex: '2 1 200px' }}>
                                     <input
                                         type="text"
-                                        value={basicInfo.headline || 'Important Document'}
+                                        value={basicInfo.headline || ''}
                                         onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
+                                        placeholder="Important Document"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
@@ -598,8 +640,9 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                 DESCRIPTION
                             </label>
                             <textarea
-                                value={basicInfo.description || 'Download this document today.'}
+                                value={basicInfo.description || ''}
                                 onChange={(e) => handleBasicInfoUpdate('description', e.target.value)}
+                                placeholder="Download this document today."
                                 rows={3}
                                 style={{
                                     width: '100%',
@@ -824,6 +867,14 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                 </div>
                             )}
 
+                            {errors.form && (
+                                <div style={{ marginBottom: '1.5rem', padding: '0.75rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px' }}>
+                                    <p style={{ color: '#ef4444', fontSize: '0.85rem', textAlign: 'center', margin: 0, fontWeight: '600' }}>
+                                        {errors.form}
+                                    </p>
+                                </div>
+                            )}
+
                             {/* Add Customized Button */}
                             <button
                                 onClick={handleAddCustomField}
@@ -888,13 +939,18 @@ const LeadGenerationConfig = ({ config, onChange }) => {
                                         width: '100%',
                                         padding: '0.75rem',
                                         borderRadius: '4px',
-                                        border: '1px solid #1e293b',
+                                        border: `1px solid ${errors.message ? '#ef4444' : '#1e293b'}`,
                                         fontSize: '0.9rem',
                                         outline: 'none',
                                         resize: 'vertical',
                                         fontFamily: 'inherit'
                                     }}
                                 />
+                                {errors.message && (
+                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                        {errors.message}
+                                    </p>
+                                )}
                             </div>
 
                             {/* BUTTON TEXT FIELD */}

@@ -1,7 +1,7 @@
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
 
-const DynamicUrlConfig = ({ config, onChange }) => {
+const DynamicUrlConfig = ({ config, onChange, error, setError }) => {
     const [isInfoOpen, setIsInfoOpen] = useState(true);
 
     const url = config.url || '';
@@ -11,6 +11,7 @@ const DynamicUrlConfig = ({ config, onChange }) => {
             ...prev,
             url: value
         }));
+        if (setError) setError('');
     };
 
     return (
@@ -52,12 +53,17 @@ const DynamicUrlConfig = ({ config, onChange }) => {
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: `1px solid ${error ? '#ef4444' : '#1e293b'}`,
                                     fontSize: '0.9rem',
                                     outline: 'none',
                                     color: '#1e293b'
                                 }}
                             />
+                            {error && (
+                                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                                    {error}
+                                </p>
+                            )}
                         </div>
                     </div>
                 )}

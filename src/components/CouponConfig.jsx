@@ -3,7 +3,7 @@ import { useState, useRef } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 import ImageUploadModal from './ImageUploadModal';
 
-const CouponConfig = ({ config, onChange }) => {
+const CouponConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isCouponOpen, setIsCouponOpen] = useState(false);
@@ -128,6 +128,10 @@ const CouponConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        // Clear error for company name
+        if (key === 'title' && setErrors) {
+            setErrors(prev => ({ ...prev, companyName: '' }));
+        }
     };
 
     const handleCouponUpdate = (key, value) => {
@@ -138,6 +142,20 @@ const CouponConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        // Clear specific field errors
+        if (setErrors) {
+            const errorMap = {
+                title: 'headline',
+                offer: 'description',
+                code: 'couponCode',
+                expiry: 'effectiveDate',
+                buttonTitle: 'buttonTitle',
+                callToAction: 'callToAction'
+            };
+            if (errorMap[key]) {
+                setErrors(prev => ({ ...prev, [errorMap[key]]: '' }));
+            }
+        }
     };
 
     const palettes = [
@@ -413,11 +431,16 @@ const CouponConfig = ({ config, onChange }) => {
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: `1px solid ${errors.companyName ? '#ef4444' : '#1e293b'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
                                     />
+                                    {errors.companyName && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                                            {errors.companyName}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div style={{ flex: '1 1 120px' }}>
@@ -521,11 +544,16 @@ const CouponConfig = ({ config, onChange }) => {
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: `1px solid ${errors.headline ? '#ef4444' : '#1e293b'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
                                     />
+                                    {errors.headline && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                                            {errors.headline}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div style={{ flex: '1 1 120px' }}>
@@ -628,13 +656,18 @@ const CouponConfig = ({ config, onChange }) => {
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: `1px solid ${errors.description ? '#ef4444' : '#1e293b'}`,
                                     fontSize: '0.9rem',
                                     outline: 'none',
                                     resize: 'vertical',
                                     fontFamily: 'inherit'
                                 }}
                             />
+                            {errors.description && (
+                                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                                    {errors.description}
+                                </p>
+                            )}
                         </div>
 
                     </div>
@@ -678,11 +711,16 @@ const CouponConfig = ({ config, onChange }) => {
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: `1px solid ${errors.couponCode ? '#ef4444' : '#1e293b'}`,
                                     fontSize: '0.9rem',
                                     outline: 'none'
                                 }}
                             />
+                            {errors.couponCode && (
+                                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                                    {errors.couponCode}
+                                </p>
+                            )}
                         </div>
 
                         {/* COUPON EFFECTIVE DATE */}
@@ -698,12 +736,17 @@ const CouponConfig = ({ config, onChange }) => {
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: `1px solid ${errors.effectiveDate ? '#ef4444' : '#1e293b'}`,
                                     fontSize: '0.9rem',
                                     outline: 'none',
                                     color: '#000'
                                 }}
                             />
+                            {errors.effectiveDate && (
+                                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                                    {errors.effectiveDate}
+                                </p>
+                            )}
                         </div>
 
                         {/* TERMS & CONDITIONS */}
@@ -735,18 +778,23 @@ const CouponConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={coupon.buttonTitle || 'Redeem Now'}
+                                value={coupon.buttonTitle || ''}
                                 onChange={(e) => handleCouponUpdate('buttonTitle', e.target.value)}
                                 placeholder="Redeem Now"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: `1px solid ${errors.buttonTitle ? '#ef4444' : '#1e293b'}`,
                                     fontSize: '0.9rem',
                                     outline: 'none'
                                 }}
                             />
+                            {errors.buttonTitle && (
+                                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                                    {errors.buttonTitle}
+                                </p>
+                            )}
                         </div>
 
                         {/* CALL TO ACTION */}
@@ -756,17 +804,23 @@ const CouponConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={coupon.callToAction || 'https://www.abcbotique.com'}
+                                value={coupon.callToAction || ''}
                                 onChange={(e) => handleCouponUpdate('callToAction', e.target.value)}
+                                placeholder="https://www.abcbotique.com"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: `1px solid ${errors.callToAction ? '#ef4444' : '#1e293b'}`,
                                     fontSize: '0.9rem',
                                     outline: 'none'
                                 }}
                             />
+                            {errors.callToAction && (
+                                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                                    {errors.callToAction}
+                                </p>
+                            )}
                         </div>
 
                         {/* LOCATION */}

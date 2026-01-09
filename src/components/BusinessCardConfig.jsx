@@ -2,7 +2,7 @@ import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Phone, Mail, 
 import { useState } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
-const BusinessCardConfig = ({ config, onChange }) => {
+const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
 
     const socialPlatforms = [
@@ -121,6 +121,15 @@ const BusinessCardConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        // Clear error when user updates a social media channel
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key]; // Clear field-specific error
+                delete newErrors.general; // Clear general error
+                return newErrors;
+            });
+        }
     };
 
     const handleExchangeUpdate = (key, value) => {
@@ -966,7 +975,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Website*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.website ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1010,6 +1019,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.website && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.website}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1018,7 +1032,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Whatsapp*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.whatsapp ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1062,6 +1076,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.whatsapp && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.whatsapp}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1070,7 +1089,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Facebook*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.facebook ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1114,6 +1133,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.facebook && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.facebook}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1122,7 +1146,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Linkedin*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.linkedin ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1166,6 +1190,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.linkedin && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.linkedin}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1174,7 +1203,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Tiktok*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.tiktok ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1218,6 +1247,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.tiktok && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.tiktok}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1226,7 +1260,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Instagram*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.instagram ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1270,6 +1304,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.instagram && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.instagram}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1278,7 +1317,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Twitter (X)*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.twitter ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1322,6 +1361,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.twitter && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.twitter}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1330,7 +1374,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Discord*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.discord ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1374,6 +1418,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.discord && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.discord}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1382,7 +1431,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         YouTube*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.youtube ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1426,6 +1475,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.youtube && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.youtube}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1434,7 +1488,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Twitch*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.twitch ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1478,6 +1532,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.twitch && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.twitch}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1486,7 +1545,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Line*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.line ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1530,6 +1589,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.line && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.line}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1538,7 +1602,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Snapchat*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.snapchat ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1582,6 +1646,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.snapchat && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.snapchat}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1590,7 +1659,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Tumblr*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.tumblr ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1634,6 +1703,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.tumblr && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.tumblr}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1642,7 +1716,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Spotify*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.spotify ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1686,6 +1760,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.spotify && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.spotify}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1694,7 +1773,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Dribbble*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.dribbble ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1738,6 +1817,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.dribbble && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.dribbble}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1746,7 +1830,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Pinterest*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.pinterest ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1790,6 +1874,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.pinterest && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.pinterest}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1798,7 +1887,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Telegram*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.telegram ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1842,6 +1931,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.telegram && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.telegram}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1850,7 +1944,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Behance*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.behance ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1894,6 +1988,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.behance && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.behance}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -1902,7 +2001,7 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                         Reddit*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.reddit ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
@@ -1946,6 +2045,11 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                             <X size={16} />
                                         </button>
                                     </div>
+                                    {errors.reddit && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.reddit}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -2013,6 +2117,22 @@ const BusinessCardConfig = ({ config, onChange }) => {
                                 ))}
                             </div>
                         </div>
+
+                        {/* Error Message */}
+                        {errors.general && (
+                            <div style={{
+                                marginTop: '1rem',
+                                padding: '0.75rem',
+                                background: '#fee2e2',
+                                border: '1px solid #ef4444',
+                                borderRadius: '4px',
+                                color: '#991b1b',
+                                fontSize: '0.875rem',
+                                fontWeight: '500'
+                            }}>
+                                {errors.general}
+                            </div>
+                        )}
 
                     </div>
                 )}

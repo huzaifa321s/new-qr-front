@@ -103,30 +103,30 @@ const Statistics = () => {
         const staticTypes = ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone', 'more'];
         // Helper to check for "more" types if needed, borrowing logic from Dashboard
         const isMatchingMoreType = (data, type) => {
-             if (!data) return false;
-             const lowData = data.toLowerCase();
-             switch (type) {
-                 case 'reddit': return lowData.includes('reddit.com');
-                 case 'tiktok': return lowData.includes('tiktok.com');
-                 case 'snapchat': return lowData.includes('snapchat.com');
-                 case 'telegram': return lowData.includes('t.me') || lowData.includes('telegram.org');
-                 case 'facebook': return lowData.includes('facebook.com');
-                 case 'instagram': return lowData.includes('instagram.com');
-                 case 'x': return lowData.includes('twitter.com') || lowData.includes('x.com');
-                 case 'youtube': return lowData.includes('youtube.com') || lowData.includes('youtu.be');
-                 case 'skype': return lowData.startsWith('skype:');
-                 case 'bitcoin': return lowData.startsWith('bitcoin:');
-                 case 'zoom': return lowData.includes('zoom.us');
-                 case 'whatsapp': return lowData.includes('wa.me') || lowData.includes('whatsapp.com');
-                 default: return false;
-             }
+            if (!data) return false;
+            const lowData = data.toLowerCase();
+            switch (type) {
+                case 'reddit': return lowData.includes('reddit.com');
+                case 'tiktok': return lowData.includes('tiktok.com');
+                case 'snapchat': return lowData.includes('snapchat.com');
+                case 'telegram': return lowData.includes('t.me') || lowData.includes('telegram.org');
+                case 'facebook': return lowData.includes('facebook.com');
+                case 'instagram': return lowData.includes('instagram.com');
+                case 'x': return lowData.includes('twitter.com') || lowData.includes('x.com');
+                case 'youtube': return lowData.includes('youtube.com') || lowData.includes('youtu.be');
+                case 'skype': return lowData.startsWith('skype:');
+                case 'bitcoin': return lowData.startsWith('bitcoin:');
+                case 'zoom': return lowData.includes('zoom.us');
+                case 'whatsapp': return lowData.includes('wa.me') || lowData.includes('whatsapp.com');
+                default: return false;
+            }
         };
 
         const isStatic = staticTypes.includes(qr.type) || isMatchingMoreType(qr.data, qr.type);
-        
+
         if (isStatic) return qr.data;
         if (qr.type === 'dynamic-url') {
-             return `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/${qr.shortId}`;
+            return `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/${qr.shortId}`;
         }
         return `${baseUrl}/view/${qr.shortId}`;
     };
@@ -141,10 +141,10 @@ const Statistics = () => {
             // For PNG/JPEG, we can try using the Backend API first if preferred,
             // but for consistency with the Dashboard fix (especially for SVG/PDF consistency),
             // we will shift to Client-Side generation for all formats or at least prioritize it for visual consistency.
-            
+
             // However, the Dashboard logic uses Client-Side for everything to ensure WYSIWYG.
             // Let's implement the same logic here: Client-Side via High-Res Hidden Element.
-            
+
             await downloadClientSide();
             toast.success('QR code downloaded successfully!');
         } catch (error) {
@@ -159,21 +159,21 @@ const Statistics = () => {
         let qrElement = document.querySelector(`#hidden-qr-${qr._id} canvas`);
 
         if (!qrElement) {
-             // If canvas not found directly, try finding the wrapper and then the canvas inside
-             const wrapper = document.getElementById(`hidden-qr-${qr._id}`);
-             if (wrapper) {
-                 qrElement = wrapper.querySelector('canvas');
-             }
+            // If canvas not found directly, try finding the wrapper and then the canvas inside
+            const wrapper = document.getElementById(`hidden-qr-${qr._id}`);
+            if (wrapper) {
+                qrElement = wrapper.querySelector('canvas');
+            }
         }
 
         if (!qrElement) {
             // Fallback to visible elements if hidden one fails
-             qrElement = document.querySelector(`#qr-render-${qr._id} canvas, #qr-render-${qr._id} svg, #qr-render-${qr._id} img`) ||
+            qrElement = document.querySelector(`#qr-render-${qr._id} canvas, #qr-render-${qr._id} svg, #qr-render-${qr._id} img`) ||
                 document.querySelector(`#qr-${qr._id} canvas, #qr-${qr._id} svg, #qr-${qr._id} img`);
-             
-             if (!qrElement) {
+
+            if (!qrElement) {
                 qrElement = document.getElementById(`qr-render-${qr._id}`) || document.getElementById(`qr-${qr._id}`);
-             }
+            }
         }
 
         if (!qrElement) {
@@ -195,7 +195,7 @@ const Statistics = () => {
         } else if (downloadFormat === 'svg') {
             // Manual SVG Construction to ensure correct size and centering
             // We wrap the High-Res PNG inside an SVG container
-            
+
             // 1. Get PNG Data URL from the High-Res Canvas
             let dataUrl;
             if (qrElement instanceof HTMLCanvasElement) {
@@ -203,19 +203,19 @@ const Statistics = () => {
             } else {
                 dataUrl = await toPng(qrElement);
             }
-            
+
             const size = 512; // Reduced size as per user request (consistent with Dashboard)
-            
+
             // 2. Create a clean SVG string embedding the PNG
             const svgContent = `
 <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
     <image href="${dataUrl}" x="0" y="0" width="${size}" height="${size}" />
 </svg>`;
-            
+
             // 3. Trigger Download
             const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
             const url = URL.createObjectURL(blob);
-            
+
             const link = document.createElement('a');
             link.download = filename;
             link.href = url;
@@ -335,7 +335,7 @@ const Statistics = () => {
                                             rel="noreferrer"
                                             style={{ color: '#7c3aed', textDecoration: 'none', fontWeight: '500' }}
                                         >
-                                            {qr.type === 'dynamic-url' ? `${import.meta.env.VITE_API_URL || 'http://localhost:3000/'}${qr.shortId}` : `${baseUrl}/view/${qr.shortId}`}
+                                            {qr.type === 'dynamic-url' ? `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/${qr.shortId}` : `${baseUrl}/view/${qr.shortId}`}
                                         </a><Copy size={14} color="#9ca3af" onClick={() => handleCopyLink(qr.shortId)} style={{ cursor: 'pointer' }} /></div></div>
                                     <div><div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '0.25rem' }}>CREATED</div><div style={{ color: '#1f2937', fontSize: '0.875rem' }}>{new Date(qr.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div></div>
                                     <div><div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '0.25rem' }}>TYPE</div><div style={{ display: 'inline-block', padding: '0.25rem 0.75rem', background: '#f3e8ff', color: '#7c3aed', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '600', textTransform: 'capitalize' }}>{qr.type.replace('-', ' ')}</div></div>

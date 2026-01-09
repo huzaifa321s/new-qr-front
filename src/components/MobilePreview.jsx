@@ -2897,13 +2897,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 // Filter active platforms (present in social config)
                                 let activePlatforms = platformConfig.filter(p => social?.[p.urlKey] !== undefined);
 
-                                // Default Fallback if no platforms configured (User request: show defaults like image)
+                                // No fallback - show empty state if no platforms configured
                                 if (activePlatforms.length === 0) {
-                                    activePlatforms = [
-                                        { id: 'default-visit', urlKey: 'websiteUrl', textKey: 'websiteText', name: 'Visit Us Online', icon: 'https://img.icons8.com/color/48/domain.png', color: '#6366f1', isDefault: true },
-                                        { id: 'default-fb', urlKey: 'facebookUrl', textKey: 'facebookText', name: 'Facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877f2', isDefault: true },
-                                        { id: 'default-yt', urlKey: 'youtubeUrl', textKey: 'youtubeText', name: 'Youtube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#ff0000', isDefault: true }
-                                    ];
+                                    activePlatforms = [];
                                 }
 
                                 return activePlatforms.map((platform) => {
@@ -3281,14 +3277,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                 spotify: 'https://cdn-icons-png.flaticon.com/512/174/174868.png',
                             };
 
-                            const socialLinks = (social && Object.values(social).some(v => v && v.trim() !== ''))
-                                ? social
-                                : {
-                                    facebook: 'https://facebook.com',
-                                    instagram: 'https://instagram.com',
-                                    twitter: 'https://twitter.com',
-                                    whatsapp: 'https://whatsapp.com'
-                                };
+                            const socialLinks = social || {};
 
                             return Object.entries(socialLinks).map(([key, value]) => {
                                 if (!value || value.trim() === '') return null;

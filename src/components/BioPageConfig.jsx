@@ -2,7 +2,7 @@ import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Phone, Mail, 
 import { useState } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
-const BioPageConfig = ({ config, onChange }) => {
+const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isContactOpen, setIsContactOpen] = useState(false);
@@ -93,6 +93,14 @@ const BioPageConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        // Clear error when user updates a basic info field
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key];
+                return newErrors;
+            });
+        }
     };
 
     const handleContactUpdate = (key, value) => {
@@ -122,6 +130,16 @@ const BioPageConfig = ({ config, onChange }) => {
                 }
             };
         });
+
+        // Clear error when user updates a social field
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key];
+                delete newErrors.general; // Also clear general error when any social field is updated or added
+                return newErrors;
+            });
+        }
     };
 
     const palettes = [
@@ -254,17 +272,22 @@ const BioPageConfig = ({ config, onChange }) => {
                                     <input
                                         type="text"
                                         value={basicInfo.name || ''}
-                                        onChange={(e) => basicInfo.name === undefined ? handleBasicInfoUpdate('name', e.target.value) : handleBasicInfoUpdate('name', e.target.value)}
+                                        onChange={(e) => handleBasicInfoUpdate('name', e.target.value)}
                                         placeholder="Hellen Grey"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: `1px solid ${errors.name ? '#ef4444' : '#1e293b'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
                                     />
+                                    {errors.name && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.name}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* Text Color */}
@@ -357,11 +380,16 @@ const BioPageConfig = ({ config, onChange }) => {
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: `1px solid ${errors.companyName ? '#ef4444' : '#1e293b'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
                                     />
+                                    {errors.companyName && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.companyName}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* Text Color */}
@@ -902,11 +930,16 @@ const BioPageConfig = ({ config, onChange }) => {
                                                         flex: 1,
                                                         padding: '0.75rem',
                                                         borderRadius: '8px',
-                                                        border: '1px solid #e2e8f0',
+                                                        border: `1px solid ${errors[platform.id] ? '#ef4444' : '#e2e8f0'}`,
                                                         fontSize: '0.9rem',
                                                         outline: 'none'
                                                     }}
                                                 />
+                                                {errors[platform.id] && (
+                                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', width: '100%', paddingLeft: '3.5rem' }}>
+                                                        {errors[platform.id]}
+                                                    </p>
+                                                )}
                                                 <div
                                                     onClick={() => handleSocialUpdate(platform.id, null)}
                                                     style={{ cursor: 'pointer', padding: '0.5rem', color: '#94a3b8' }}
@@ -988,6 +1021,13 @@ const BioPageConfig = ({ config, onChange }) => {
                             </div>
                         </div>
 
+                        {errors.general && (
+                            <div style={{ marginTop: '1rem', padding: '0.75rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px' }}>
+                                <p style={{ color: '#ef4444', fontSize: '0.85rem', textAlign: 'center', margin: 0, fontWeight: '600' }}>
+                                    {errors.general}
+                                </p>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

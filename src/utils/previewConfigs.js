@@ -94,10 +94,10 @@ export const businessCardPreviewConfig = {
         mapUrl: "#"
     },
     social: {
-        website: true,
-        whatsapp: true,
-        facebook: true,
-        linkedin: true
+        website: '',
+        whatsapp: '',
+        facebook: '',
+        linkedin: ''
     }
 };
 
@@ -131,6 +131,12 @@ export const businessPagePreviewConfig = {
         phone: "15555551234",
         email: "Hellen@gmail.com",
         website: "https://Hellengrey.com"
+    },
+    social: {
+        facebook: 'https://facebook.com',
+        instagram: 'https://instagram.com',
+        twitter: 'https://twitter.com',
+        whatsapp: 'https://whatsapp.com'
     }
 };
 

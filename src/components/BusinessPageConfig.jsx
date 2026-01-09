@@ -5,7 +5,7 @@ import { useState, useRef } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 import ImageUploadModal from './ImageUploadModal';
 
-const BusinessPageConfig = ({ config, onChange }) => {
+const BusinessPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isOpeningHoursOpen, setIsOpeningHoursOpen] = useState(false);
@@ -36,14 +36,7 @@ const BusinessPageConfig = ({ config, onChange }) => {
         ? config.facilities
         : ['wifi', 'parking', 'restaurant'];
     const contact = config.contact || {};
-    const social = (config.social && Object.keys(config.social).length > 0)
-        ? config.social
-        : {
-            facebook: 'https://facebook.com',
-            instagram: 'https://instagram.com',
-            twitter: 'https://twitter.com',
-            whatsapp: 'https://whatsapp.com'
-        };
+    const social = config.social || {};
 
     const primaryColor = design.color?.header || '#0B2D86';
     const secondaryColor = design.color?.light || '#FFA800';
@@ -149,14 +142,7 @@ const BusinessPageConfig = ({ config, onChange }) => {
 
     const handleSocialToggle = (platformId) => {
         onChange(prev => {
-            const currentSocial = (prev.social && Object.keys(prev.social).length > 0)
-                ? { ...prev.social }
-                : {
-                    facebook: 'https://facebook.com',
-                    instagram: 'https://instagram.com',
-                    twitter: 'https://twitter.com',
-                    whatsapp: 'https://whatsapp.com'
-                };
+            const currentSocial = prev.social || {};
 
             if (currentSocial[platformId] !== undefined) {
                 // Remove if exists
@@ -165,6 +151,15 @@ const BusinessPageConfig = ({ config, onChange }) => {
                 return { ...prev, social: newSocial };
             } else {
                 // Add if not exists
+                // Clear error when user adds a channel
+                if (setErrors) {
+                    setErrors(prev => {
+                        const newErrors = { ...prev };
+                        delete newErrors[platformId]; // Clear field-specific error
+                        delete newErrors.general; // Clear general error
+                        return newErrors;
+                    });
+                }
                 return {
                     ...prev,
                     social: {
@@ -1413,13 +1408,22 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                                                         [platform.id]: val
                                                                     }
                                                                 }));
+                                                                // Clear error when user types
+                                                                if (setErrors) {
+                                                                    setErrors(prev => {
+                                                                        const newErrors = { ...prev };
+                                                                        delete newErrors[platform.id];
+                                                                        delete newErrors.general;
+                                                                        return newErrors;
+                                                                    });
+                                                                }
                                                             }}
                                                             placeholder="https://"
                                                             style={{
                                                                 flex: 1,
                                                                 padding: '0.75rem',
                                                                 borderRadius: '8px',
-                                                                border: '1px solid #1e293b',
+                                                                border: `1px solid ${errors[platform.id] ? '#ef4444' : '#1e293b'}`,
                                                                 fontSize: '0.9rem',
                                                                 outline: 'none',
                                                                 color: '#334155'
@@ -1440,6 +1444,11 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                                             </div>
                                                         </button>
                                                     </div>
+                                                    {errors[platform.id] && (
+                                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                                            {errors[platform.id]}
+                                                        </p>
+                                                    )}
                                                 </div>
                                             ))}
                                         </div>
@@ -1503,6 +1512,22 @@ const BusinessPageConfig = ({ config, onChange }) => {
                                     </>
                                 );
                             })()}
+
+                            {/* Error Message */}
+                            {errors.general && (
+                                <div style={{
+                                    marginTop: '1rem',
+                                    padding: '0.75rem',
+                                    background: '#fee2e2',
+                                    border: '1px solid #ef4444',
+                                    borderRadius: '4px',
+                                    color: '#991b1b',
+                                    fontSize: '0.875rem',
+                                    fontWeight: '500'
+                                }}>
+                                    {errors.general}
+                                </div>
+                            )}
                         </div>
                     )
                 }

@@ -48,6 +48,13 @@ const Generator = () => {
     const [scanLimit, setScanLimit] = useState('');
     const [qrNameError, setQrNameError] = useState('');
     const qrNameRef = useRef(null);
+    const [dynamicUrlError, setDynamicUrlError] = useState('');
+    const [couponErrors, setCouponErrors] = useState({});
+    const [businessCardErrors, setBusinessCardErrors] = useState({});
+    const [businessPageErrors, setBusinessPageErrors] = useState({});
+    const [bioPageErrors, setBioPageErrors] = useState({});
+    const [leadGenErrors, setLeadGenErrors] = useState({});
+    const [ratingErrors, setRatingErrors] = useState({});
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedShortId, setGeneratedShortId] = useState(null); // Store shortId after creation
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -497,6 +504,323 @@ const Generator = () => {
                 }
             }
         }
+
+        if (selectedType === 'dynamic-url') {
+            const url = (pageConfig?.url || '').trim();
+            if (!url) {
+                setDynamicUrlError('URL is required');
+                return;
+            }
+            // Basic URL validation
+            try {
+                new URL(url);
+            } catch (_) {
+                setDynamicUrlError('Please enter a valid URL');
+                return;
+            }
+            // Clear error if valid
+            setDynamicUrlError('');
+        }
+
+        if (selectedType === 'coupon') {
+            const errors = {};
+            const businessInfo = pageConfig?.businessInfo || {};
+            const coupon = pageConfig?.coupon || {};
+
+            // Validate Company Name
+            if (!businessInfo.title?.trim()) {
+                errors.companyName = 'Company name is required';
+            }
+
+            // Validate Headline
+            if (!coupon.title?.trim()) {
+                errors.headline = 'Headline is required';
+            }
+
+            // Validate Description
+            if (!coupon.offer?.trim()) {
+                errors.description = 'Description is required';
+            }
+
+            // Validate Coupon Code
+            if (!coupon.code?.trim()) {
+                errors.couponCode = 'Coupon code is required';
+            }
+
+            // Validate Effective Date
+            if (!coupon.expiry?.trim()) {
+                errors.effectiveDate = 'Effective date is required';
+            }
+
+            // Validate Button Title
+            if (!coupon.buttonTitle?.trim()) {
+                errors.buttonTitle = 'Button title is required';
+            }
+
+            // Validate Call to Action
+            const callToAction = (coupon.callToAction || '').trim();
+            if (!callToAction) {
+                errors.callToAction = 'Call to action is required';
+            } else {
+                // Validate URL format
+                try {
+                    new URL(callToAction);
+                } catch (_) {
+                    errors.callToAction = 'Please enter a valid URL';
+                }
+            }
+
+            // If there are errors, set them and prevent navigation
+            if (Object.keys(errors).length > 0) {
+                setCouponErrors(errors);
+                toast.error('Please fill in all required fields');
+                return;
+            }
+
+            // Clear errors if valid
+            setCouponErrors({});
+        }
+
+
+        if (selectedType === 'business-card') {
+            const social = pageConfig?.social || {};
+            const errors = {};
+
+            // Check if at least one social media channel has a value
+            const filledChannels = Object.entries(social).filter(([key, value]) => value && value.trim() !== '');
+
+            if (filledChannels.length === 0) {
+                setBusinessCardErrors({ general: 'At least one social media channel is required' });
+                toast.error('Please add at least one social media channel');
+                return;
+            }
+
+            // Validate each filled channel's URL
+            const channelNames = {
+                website: 'Website',
+                whatsapp: 'WhatsApp',
+                facebook: 'Facebook',
+                instagram: 'Instagram',
+                linkedin: 'LinkedIn',
+                twitter: 'Twitter',
+                youtube: 'YouTube',
+                snapchat: 'Snapchat',
+                tiktok: 'TikTok',
+                pinterest: 'Pinterest',
+                telegram: 'Telegram',
+                reddit: 'Reddit',
+                behance: 'Behance',
+                dribbble: 'Dribbble',
+                spotify: 'Spotify',
+                twitch: 'Twitch',
+                discord: 'Discord',
+                line: 'Line',
+                tumblr: 'Tumblr'
+            };
+
+            filledChannels.forEach(([key, value]) => {
+                try {
+                    new URL(value.trim());
+                } catch (_) {
+                    const channelName = channelNames[key] || key;
+                    errors[key] = `${channelName} URL is not valid`;
+                }
+            });
+
+            // If there are URL validation errors, prevent navigation
+            if (Object.keys(errors).length > 0) {
+                setBusinessCardErrors(errors);
+                toast.error('Please fix invalid URLs in social media channels');
+                return;
+            }
+
+            // Clear errors if valid
+            setBusinessCardErrors({});
+        }
+
+
+        if (selectedType === 'business-page') {
+            const social = pageConfig?.social || {};
+            const errors = {};
+
+            // Check if at least one social media channel has a value
+            const filledChannels = Object.entries(social).filter(([key, value]) => value && value.trim() !== '');
+
+            if (filledChannels.length === 0) {
+                setBusinessPageErrors({ general: 'At least one social media channel is required' });
+                toast.error('Please add at least one social media channel');
+                return;
+            }
+
+            // Validate each filled channel's URL
+            const channelNames = {
+                facebook: 'Facebook',
+                instagram: 'Instagram',
+                twitter: 'X',
+                linkedin: 'LinkedIn',
+                discord: 'Discord',
+                twitch: 'Twitch',
+                youtube: 'YouTube',
+                whatsapp: 'WhatsApp',
+                snapchat: 'Snapchat',
+                tiktok: 'TikTok',
+                pinterest: 'Pinterest',
+                dribbble: 'Dribbble',
+                telegram: 'Telegram',
+                reddit: 'Reddit',
+                spotify: 'Spotify'
+            };
+
+            filledChannels.forEach(([key, value]) => {
+                try {
+                    new URL(value.trim());
+                } catch (_) {
+                    const channelName = channelNames[key] || key;
+                    errors[key] = `${channelName} URL is not valid`;
+                }
+            });
+
+            // If there are URL validation errors, prevent navigation
+            if (Object.keys(errors).length > 0) {
+                setBusinessPageErrors(errors);
+                toast.error('Please fix invalid URLs in social media channels');
+                return;
+            }
+
+            // Clear errors if valid
+            setBusinessPageErrors({});
+        }
+
+        if (selectedType === 'bio-page') {
+            const basicInfo = pageConfig?.basicInfo || {};
+            const social = pageConfig?.social || {};
+            const errors = {};
+
+            if (!basicInfo.name || !basicInfo.name.trim()) {
+                errors.name = 'Name is required';
+            } else if (basicInfo.name.length > 20) {
+                errors.name = 'Name must be 20 characters or less';
+            }
+
+            if (!basicInfo.companyName || !basicInfo.companyName.trim()) {
+                errors.companyName = 'Company name is required';
+            }
+
+            // Validate social media URLs
+            const channelNames = {
+                facebook: 'Facebook',
+                instagram: 'Instagram',
+                twitter: 'X (Twitter)',
+                linkedin: 'LinkedIn',
+                youtube: 'YouTube',
+                whatsapp: 'WhatsApp',
+                spotify: 'Spotify',
+                website: 'Website',
+                twitch: 'Twitch',
+                github: 'GitHub',
+                snapchat: 'Snapchat',
+                dribbble: 'Dribbble',
+                discord: 'Discord',
+                pinterest: 'Pinterest',
+                tiktok: 'TikTok',
+                reddit: 'Reddit'
+            };
+
+            const filledChannels = Object.entries(social).filter(([key, value]) => value && value.trim() !== '');
+
+            if (filledChannels.length === 0) {
+                errors.general = 'At least one social media channel is required';
+            }
+
+            filledChannels.forEach(([key, value]) => {
+                try {
+                    new URL(value.trim());
+                } catch (_) {
+                    const channelName = channelNames[key] || key;
+                    errors[key] = `${channelName} URL is not valid`;
+                }
+            });
+
+            if (Object.keys(errors).length > 0) {
+                setBioPageErrors(errors);
+                if (errors.name) {
+                    toast.error(errors.name);
+                } else if (errors.companyName) {
+                    toast.error(errors.companyName);
+                } else if (errors.general) {
+                    toast.error(errors.general);
+                } else {
+                    toast.error('Please fix invalid URLs in social media channels');
+                }
+                return;
+            }
+
+            setBioPageErrors({});
+        }
+
+        if (selectedType === 'lead-generation') {
+            const basicInfo = pageConfig?.basicInfo || {};
+            const thankYou = pageConfig?.thankYou || {};
+            const errors = {};
+
+            if (!basicInfo.companyName || !basicInfo.companyName.trim()) {
+                errors.companyName = 'Company name is required';
+            }
+
+            if (!thankYou.message || !thankYou.message.trim()) {
+                errors.message = 'Thank you message is required';
+            }
+
+            const form = pageConfig?.form || {};
+            const customFields = pageConfig?.customFields || [];
+            const hasAnyField = Object.values(form).some(v => v === true) || customFields.length > 0;
+
+            if (!hasAnyField) {
+                errors.form = 'At least one form field is required';
+            }
+
+            if (Object.keys(errors).length > 0) {
+                setLeadGenErrors(errors);
+                const firstError = errors.companyName || errors.message || errors.form;
+                toast.error(firstError);
+                return;
+            }
+
+            setLeadGenErrors({});
+        }
+
+        if (selectedType === 'rating') {
+            const basicInfo = pageConfig?.basicInfo || {};
+            const rating = pageConfig?.rating || {};
+            const errors = {};
+
+            if (!basicInfo.name || !basicInfo.name.trim()) {
+                errors.name = 'Name is required';
+            }
+
+            if (!basicInfo.website || !basicInfo.website.trim()) {
+                errors.website = 'Website is required';
+            } else {
+                const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+                if (!urlPattern.test(basicInfo.website)) {
+                    errors.website = 'Invalid URL format';
+                }
+            }
+
+            if (!rating.question || !rating.question.trim()) {
+                errors.question = 'Question is required';
+            }
+
+            if (Object.keys(errors).length > 0) {
+                setRatingErrors(errors);
+                const firstError = errors.name || errors.website || errors.question;
+                toast.error(firstError);
+                return;
+            }
+
+            setRatingErrors({});
+        }
+
         setActiveStep('design');
     };
 
@@ -588,6 +912,8 @@ const Generator = () => {
                                 <CouponConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    errors={couponErrors}
+                                    setErrors={setCouponErrors}
                                 />
                             )}
 
@@ -595,6 +921,8 @@ const Generator = () => {
                                 <BusinessCardConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    errors={businessCardErrors}
+                                    setErrors={setBusinessCardErrors}
                                 />
                             )}
 
@@ -602,6 +930,8 @@ const Generator = () => {
                                 <BusinessPageConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    errors={businessPageErrors}
+                                    setErrors={setBusinessPageErrors}
                                 />
                             )}
 
@@ -609,6 +939,8 @@ const Generator = () => {
                                 <BioPageConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    errors={bioPageErrors}
+                                    setErrors={setBioPageErrors}
                                 />
                             )}
 
@@ -623,6 +955,8 @@ const Generator = () => {
                                 <LeadGenerationConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    errors={leadGenErrors}
+                                    setErrors={setLeadGenErrors}
                                 />
                             )}
 
@@ -630,6 +964,8 @@ const Generator = () => {
                                 <RatingConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    errors={ratingErrors}
+                                    setErrors={setRatingErrors}
                                 />
                             )}
 
@@ -686,6 +1022,8 @@ const Generator = () => {
                                 <DynamicUrlConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    error={dynamicUrlError}
+                                    setError={setDynamicUrlError}
                                 />
                             )}
 
