@@ -3,7 +3,7 @@ import { useState } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 import ImageUploadModal from './ImageUploadModal';
 
-const SocialMediaConfig = ({ config, onChange }) => {
+const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isSocialOpen, setIsSocialOpen] = useState(false);
@@ -93,6 +93,14 @@ const SocialMediaConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        // Clear error when user updates a basic info field
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key];
+                return newErrors;
+            });
+        }
     };
 
     const handleSocialUpdate = (key, value) => {
@@ -103,6 +111,15 @@ const SocialMediaConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        // Clear general error and specific field error when any social field is updated
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.general;
+                delete newErrors[key];
+                return newErrors;
+            });
+        }
     };
 
     const handleDeleteSocial = (urlKey, textKey) => {
@@ -112,6 +129,14 @@ const SocialMediaConfig = ({ config, onChange }) => {
             delete newSocial[textKey];
             return { ...prev, social: newSocial };
         });
+        // Clear general error
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.general;
+                return newErrors;
+            });
+        }
     };
 
     const handleToggleSocial = (urlKey, textKey, defaultText) => {
@@ -128,6 +153,14 @@ const SocialMediaConfig = ({ config, onChange }) => {
             }
             return { ...prev, social: newSocial };
         });
+        // Clear general error
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.general;
+                return newErrors;
+            });
+        }
     };
 
     const handleShareOptionUpdate = (key, value) => {
@@ -394,17 +427,23 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                     {/* Headline Input */}
                                     <input
                                         type="text"
-                                        value={basicInfo.headline || "Connect With Us"}
+                                        value={basicInfo.headline || ""}
                                         onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
+                                        placeholder="Connect With Us"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: `1px solid ${errors.headline ? '#ef4444' : '#1e293b'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
                                     />
+                                    {errors.headline && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.headline}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -503,8 +542,9 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                 ABOUT US
                             </label>
                             <textarea
-                                value={basicInfo.aboutUs || "Follow us for the latest updates on our social channels."}
+                                value={basicInfo.aboutUs || ""}
                                 onChange={(e) => handleBasicInfoUpdate('aboutUs', e.target.value)}
+                                placeholder="Follow us for the latest updates on our social channels."
                                 rows={3}
                                 style={{
                                     width: '100%',
@@ -588,15 +628,15 @@ const SocialMediaConfig = ({ config, onChange }) => {
                                                             width: '100%',
                                                             padding: '0.75rem 0.75rem 0.75rem 3rem',
                                                             borderRadius: '4px',
-                                                            border: isUrlInvalid ? '1px solid #ef4444' : '1px solid #e2e8f0',
+                                                            border: errors[platform.urlKey] ? '1px solid #ef4444' : '1px solid #e2e8f0',
                                                             fontSize: '0.9rem',
                                                             outline: 'none'
                                                         }}
                                                     />
                                                 </div>
-                                                {isUrlInvalid && (
+                                                {errors[platform.urlKey] && (
                                                     <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.25rem' }}>
-                                                        Please enter a valid URL (starting with http/https).
+                                                        {errors[platform.urlKey]}
                                                     </div>
                                                 )}
                                             </div>
@@ -652,6 +692,21 @@ const SocialMediaConfig = ({ config, onChange }) => {
                             <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
                                 Click on the icon to add a social media profile.
                             </div>
+                            {errors.general && (
+                                <div style={{
+                                    background: '#fee2e2',
+                                    color: '#ef4444',
+                                    padding: '0.75rem',
+                                    borderRadius: '6px',
+                                    fontSize: '0.85rem',
+                                    marginBottom: '1.5rem',
+                                    border: '1px solid #fecaca',
+                                    fontWeight: '500',
+                                    textAlign: 'center'
+                                }}>
+                                    {errors.general}
+                                </div>
+                            )}
 
                             {/* Social Media Icons Grid */}
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(48px, 1fr))', gap: '0.75rem' }}>

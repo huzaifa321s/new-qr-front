@@ -2,7 +2,7 @@ import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Plus } from '
 import { useState, useRef } from 'react';
 import ImageUploadModal from './ImageUploadModal';
 
-const PasswordProtectedConfig = ({ config, onChange }) => {
+const PasswordProtectedConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
 
     const [isInfoOpen, setIsInfoOpen] = useState(false);
@@ -40,16 +40,70 @@ const PasswordProtectedConfig = ({ config, onChange }) => {
             field.id === id ? { ...field, [key]: value } : field
         );
         onChange(prev => ({ ...prev, infoFields: newFields }));
+
+        // Clear specific error for this field
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                if (newErrors.infoFields && typeof newErrors.infoFields === 'object') {
+                    const fieldErrors = { ...newErrors.infoFields };
+                    if (fieldErrors[id]) {
+                        const itemErrors = { ...fieldErrors[id] };
+                        delete itemErrors[key];
+                        if (Object.keys(itemErrors).length === 0) {
+                            delete fieldErrors[id];
+                        } else {
+                            fieldErrors[id] = itemErrors;
+                        }
+
+                        if (Object.keys(fieldErrors).length === 0) {
+                            delete newErrors.infoFields;
+                        } else {
+                            newErrors.infoFields = fieldErrors;
+                        }
+                    }
+                }
+                return newErrors;
+            });
+        }
     };
 
     const handleAddField = () => {
         const newField = { id: Date.now().toString(), name: '', value: '' };
         onChange(prev => ({ ...prev, infoFields: [...infoFields, newField] }));
+
+        // Clear general infoFields error when a field is added
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                if (typeof newErrors.infoFields === 'string') {
+                    delete newErrors.infoFields;
+                }
+                return newErrors;
+            });
+        }
     };
 
     const handleRemoveField = (id) => {
         const newFields = infoFields.filter(field => field.id !== id);
         onChange(prev => ({ ...prev, infoFields: newFields }));
+
+        // Clear error for this removed field
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                if (newErrors.infoFields && typeof newErrors.infoFields === 'object') {
+                    const fieldErrors = { ...newErrors.infoFields };
+                    delete fieldErrors[id];
+                    if (Object.keys(fieldErrors).length === 0) {
+                        delete newErrors.infoFields;
+                    } else {
+                        newErrors.infoFields = fieldErrors;
+                    }
+                }
+                return newErrors;
+            });
+        }
     };
 
     const handleColorUpdate = (colorKey, value) => {
@@ -496,10 +550,17 @@ const PasswordProtectedConfig = ({ config, onChange }) => {
                 {isInfoOpen && (
                     <div style={{ padding: '2rem', background: '#fff' }}>
 
+                        {/* General Error Message */}
+                        {typeof errors.infoFields === 'string' && (
+                            <div style={{ color: '#ef4444', fontSize: '0.85rem', marginBottom: '1.5rem', fontWeight: 'bold' }}>
+                                {errors.infoFields}
+                            </div>
+                        )}
+
                         {infoFields.map((field) => (
-                            <div key={field.id} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.5rem', marginBottom: '1.5rem', alignItems: 'end' }}>
+                            <div key={field.id} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.5rem', marginBottom: '2rem', alignItems: 'start' }}>
                                 {/* Field Name Input */}
-                                <div>
+                                <div style={{ position: 'relative' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         FIELD NAME*
                                     </label>
@@ -512,18 +573,23 @@ const PasswordProtectedConfig = ({ config, onChange }) => {
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: `1px solid ${errors.infoFields && errors.infoFields[field.id]?.name ? '#ef4444' : '#1e293b'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             fontWeight: 'bold',
                                             color: '#000'
                                         }}
                                     />
+                                    {errors.infoFields && errors.infoFields[field.id]?.name && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                            {errors.infoFields[field.id].name}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* Field Info Input & Delete */}
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                    <div style={{ flex: 1 }}>
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'start' }}>
+                                    <div style={{ flex: 1, position: 'relative' }}>
                                         <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                             FIELD INFORMATION*
                                         </label>
@@ -536,13 +602,18 @@ const PasswordProtectedConfig = ({ config, onChange }) => {
                                                 width: '100%',
                                                 padding: '0.75rem',
                                                 borderRadius: '4px',
-                                                border: '1px solid #1e293b',
+                                                border: `1px solid ${errors.infoFields && errors.infoFields[field.id]?.value ? '#ef4444' : '#1e293b'}`,
                                                 fontSize: '0.9rem',
                                                 outline: 'none',
                                                 fontWeight: '500',
                                                 color: '#000'
                                             }}
                                         />
+                                        {errors.infoFields && errors.infoFields[field.id]?.value && (
+                                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                                {errors.infoFields[field.id].value}
+                                            </p>
+                                        )}
                                     </div>
                                     <div
                                         onClick={() => handleRemoveField(field.id)}
@@ -555,7 +626,8 @@ const PasswordProtectedConfig = ({ config, onChange }) => {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             cursor: 'pointer',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            marginTop: '2.2rem'
                                         }}
                                     >
                                         <X size={14} color="#cbd5e1" />

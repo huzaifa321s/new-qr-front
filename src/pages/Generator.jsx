@@ -54,7 +54,14 @@ const Generator = () => {
     const [businessPageErrors, setBusinessPageErrors] = useState({});
     const [bioPageErrors, setBioPageErrors] = useState({});
     const [leadGenErrors, setLeadGenErrors] = useState({});
+    const [reviewsErrors, setReviewsErrors] = useState({});
     const [ratingErrors, setRatingErrors] = useState({});
+    const [socialMediaErrors, setSocialMediaErrors] = useState({});
+    const [pdfErrors, setPdfErrors] = useState({});
+    const [multipleLinksErrors, setMultipleLinksErrors] = useState({});
+    const [passwordProtectedErrors, setPasswordProtectedErrors] = useState({});
+    const [eventErrors, setEventErrors] = useState({});
+    const [productErrors, setProductErrors] = useState({});
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedShortId, setGeneratedShortId] = useState(null); // Store shortId after creation
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -627,10 +634,24 @@ const Generator = () => {
                 }
             });
 
-            // If there are URL validation errors, prevent navigation
+            // Validate Exchange Contact fields
+            const exchange = pageConfig?.exchange || {};
+            const standardFields = ['fullName', 'contactNumber', 'organization', 'email', 'jobTitle', 'website'];
+            const hasSelectedStandardField = standardFields.some(field => exchange[field] === true);
+            const hasCustomFields = exchange.customFields && exchange.customFields.length > 0;
+
+            if (!hasSelectedStandardField && !hasCustomFields) {
+                errors.exchange = 'At least one contact field is required in Exchange Contact';
+            }
+
+            // If there are URL validation errors or exchange errors, prevent navigation
             if (Object.keys(errors).length > 0) {
                 setBusinessCardErrors(errors);
-                toast.error('Please fix invalid URLs in social media channels');
+                if (errors.exchange) {
+                    toast.error(errors.exchange);
+                } else {
+                    toast.error('Please fix invalid URLs in social media channels');
+                }
                 return;
             }
 
@@ -811,14 +832,520 @@ const Generator = () => {
                 errors.question = 'Question is required';
             }
 
+            const socialLinks = pageConfig?.socialLinks || [];
+            if (socialLinks.length === 0) {
+                errors.socialLinks = 'At least one social media channel is required';
+            } else {
+                socialLinks.forEach(link => {
+                    if (link.url && link.url.trim() !== '') {
+                        try {
+                            new URL(link.url.trim());
+                        } catch (_) {
+                            errors[link.id] = 'Please enter a valid URL';
+                        }
+                    } else if (!link.url || link.url.trim() === '') {
+                        errors[link.id] = 'URL is required';
+                    }
+                });
+            }
+
             if (Object.keys(errors).length > 0) {
                 setRatingErrors(errors);
-                const firstError = errors.name || errors.website || errors.question;
+                const hasUrlErrors = socialLinks.some(link => errors[link.id]);
+                const firstError = errors.name || errors.website || errors.question || errors.socialLinks || (hasUrlErrors ? 'Please fix invalid URLs in social media channels' : null);
                 toast.error(firstError);
                 return;
             }
 
             setRatingErrors({});
+        }
+
+        if (selectedType === 'reviews') {
+            const basicInfo = pageConfig?.basicInfo || {};
+            const errors = {};
+
+            if (!basicInfo.organizationName || !basicInfo.organizationName.trim()) {
+                errors.organizationName = 'Organization name is required';
+            }
+
+            if (!basicInfo.title || !basicInfo.title.trim()) {
+                errors.title = 'Title is required';
+            }
+
+            if (!basicInfo.website || !basicInfo.website.trim()) {
+                errors.website = 'Website is required';
+            } else {
+                const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+                if (!urlPattern.test(basicInfo.website)) {
+                    errors.website = 'Invalid URL format';
+                }
+            }
+
+            const social = pageConfig?.social || {};
+            const filledChannels = Object.entries(social).filter(([key, value]) => value && value.trim() !== '');
+
+            if (filledChannels.length === 0) {
+                errors.socialLinks = 'At least one social media channel is required';
+            }
+
+            // Validate individual social media URLs
+            const channelNames = {
+                website: 'Website',
+                facebook: 'Facebook',
+                instagram: 'Instagram',
+                twitter: 'X',
+                linkedin: 'LinkedIn',
+                tiktok: 'TikTok',
+                youtube: 'YouTube',
+                whatsapp: 'WhatsApp',
+                snapchat: 'Snapchat',
+                discord: 'Discord',
+                twitch: 'Twitch',
+                telegram: 'Telegram',
+                pinterest: 'Pinterest',
+                reddit: 'Reddit',
+                spotify: 'Spotify',
+                behance: 'Behance',
+                line: 'Line'
+            };
+
+            filledChannels.forEach(([key, value]) => {
+                try {
+                    new URL(value.trim());
+                } catch (_) {
+                    const channelName = channelNames[key] || key;
+                    errors[key] = `${channelName} URL is not valid`;
+                }
+            });
+
+            const categories = pageConfig?.categories || [];
+            categories.forEach((cat) => {
+                if (!cat.name || !cat.name.trim()) {
+                    errors[`category_${cat.id}`] = 'Category name is required';
+                }
+
+                if (!cat.subcategories || cat.subcategories.length === 0) {
+                    errors[`category_${cat.id}_subcategories`] = 'At least one subcategory is required';
+                } else {
+                    cat.subcategories.forEach((sub, subIndex) => {
+                        if (!sub || !sub.trim()) {
+                            errors[`subcategory_${cat.id}_${subIndex}`] = 'Subcategory name is required';
+                        }
+                    });
+                }
+            });
+
+            if (Object.keys(errors).length > 0) {
+                setReviewsErrors(errors);
+                const hasUrlErrors = filledChannels.some(([key]) => errors[key]);
+                const hasCategoryErrors = categories.some(cat => errors[`category_${cat.id}`]);
+                const hasSubcategoryErrors = categories.some(cat => (cat.subcategories || []).some((_, i) => errors[`subcategory_${cat.id}_${i}`]));
+                const hasNoSubcategoryErrors = categories.some(cat => errors[`category_${cat.id}_subcategories`]);
+
+                const firstError = errors.organizationName ||
+                    errors.title ||
+                    errors.website ||
+                    errors.socialLinks ||
+                    (hasUrlErrors ? 'Please fix invalid URLs in social media channels' : null) ||
+                    (hasCategoryErrors ? 'Category name is required' : null) ||
+                    (hasNoSubcategoryErrors ? 'Each category must have at least one subcategory' : null) ||
+                    (hasSubcategoryErrors ? 'Subcategory name is required' : null);
+
+                toast.error(firstError);
+                return;
+            }
+
+            setReviewsErrors({});
+        }
+
+        if (selectedType === 'social-media') {
+            const errors = {};
+            const basicInfo = pageConfig?.basicInfo || {};
+
+            if (!basicInfo.headline || !basicInfo.headline.trim()) {
+                errors.headline = 'Headline is required';
+            }
+
+            const social = pageConfig?.social || {};
+            const filledChannels = Object.entries(social).filter(([key, value]) => value !== undefined && value !== null);
+
+            if (filledChannels.length === 0) {
+                errors.general = 'At least one social media profile is required';
+            } else {
+                // Validate each individual channel's URL
+                filledChannels.forEach(([key, value]) => {
+                    // Only validate if it's a URL key (e.g., websiteUrl, facebookUrl)
+                    if (key.endsWith('Url')) {
+                        if (!value || value.trim() === '') {
+                            errors[key] = 'URL is required';
+                        } else {
+                            try {
+                                const url = new URL(value.trim());
+                                if (!['http:', 'https:'].includes(url.protocol)) {
+                                    errors[key] = 'Please enter a valid URL (starting with http/https)';
+                                }
+                            } catch (_) {
+                                errors[key] = 'Please enter a valid URL';
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (Object.keys(errors).length > 0) {
+                setSocialMediaErrors(errors);
+                const hasUrlErrors = filledChannels.some(([key]) => errors[key]);
+                const firstError = errors.headline || errors.general || (hasUrlErrors ? 'Please fix invalid URLs in social media channels' : null);
+                if (firstError) toast.error(firstError);
+                return;
+            }
+
+            setSocialMediaErrors({});
+        }
+
+        if (selectedType === 'pdf') {
+            const errors = {};
+            const basicInfo = pageConfig?.basicInfo || {};
+            const uploadPdf = pageConfig?.uploadPdf || {};
+
+            if (!basicInfo.companyName || !basicInfo.companyName.trim()) {
+                errors.companyName = 'Company name is required';
+            }
+
+            if (!basicInfo.pdfTitle || !basicInfo.pdfTitle.trim()) {
+                errors.pdfTitle = 'PDF Title is required';
+            }
+
+            if (!uploadPdf.pdfTitle || !uploadPdf.pdfTitle.trim()) {
+                errors.uploadPdfTitle = 'PDF Title is required';
+            }
+
+            if (!uploadPdf.pdfUrl && !uploadPdf.uploadedFile) {
+                errors.pdfSource = 'Please provide a PDF URL or upload a file';
+            }
+
+            if (!uploadPdf.buttonTitle || !uploadPdf.buttonTitle.trim()) {
+                errors.buttonTitle = 'Button Title is required';
+            }
+
+            if (Object.keys(errors).length > 0) {
+                setPdfErrors(errors);
+                const firstError = errors.companyName || errors.pdfTitle || errors.uploadPdfTitle || errors.pdfSource || errors.buttonTitle;
+                toast.error(firstError);
+                return;
+            }
+
+            setPdfErrors({});
+        }
+
+        if (selectedType === 'multiple-links') {
+            const errors = {};
+            const basicInfo = pageConfig?.basicInfo || {};
+            const socialLinks = pageConfig?.socialLinks || [];
+
+            if (!basicInfo.headline || !basicInfo.headline.trim()) {
+                errors.headline = 'Headline is required';
+            }
+
+            if (socialLinks.length === 0) {
+                errors.socialLinks = 'At least one social media channel is required';
+            } else {
+                const socialErrors = {};
+                socialLinks.forEach(link => {
+                    if (!link.url || !link.url.trim()) {
+                        socialErrors[link.id] = 'URL is required';
+                    } else {
+                        try {
+                            const url = new URL(link.url);
+                            if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+                                socialErrors[link.id] = 'URL must start with http:// or https://';
+                            }
+                        } catch (e) {
+                            socialErrors[link.id] = 'Please enter a valid URL';
+                        }
+                    }
+                });
+                if (Object.keys(socialErrors).length > 0) {
+                    errors.socialLinks = socialErrors;
+                }
+            }
+
+            const links = pageConfig?.links || [];
+            if (links.length === 0) {
+                errors.links = 'At least one link is required';
+            } else {
+                const linkErrors = {};
+                links.forEach(link => {
+                    const itemErrors = {};
+                    if (!link.title || !link.title.trim()) {
+                        itemErrors.title = 'Title is required';
+                    }
+                    if (!link.url || !link.url.trim()) {
+                        itemErrors.url = 'URL is required';
+                    } else {
+                        try {
+                            const url = new URL(link.url);
+                            if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+                                itemErrors.url = 'URL must start with http:// or https://';
+                            }
+                        } catch (e) {
+                            itemErrors.url = 'Please enter a valid URL';
+                        }
+                    }
+                    if (Object.keys(itemErrors).length > 0) {
+                        linkErrors[link.id] = itemErrors;
+                    }
+                });
+                if (Object.keys(linkErrors).length > 0) {
+                    errors.links = linkErrors;
+                }
+            }
+
+            if (Object.keys(errors).length > 0) {
+                setMultipleLinksErrors(errors);
+                const firstError = errors.headline ||
+                    (typeof errors.socialLinks === 'string' ? errors.socialLinks : (errors.socialLinks ? Object.values(errors.socialLinks)[0] : null)) ||
+                    (typeof errors.links === 'string' ? errors.links : (errors.links ? Object.values(Object.values(errors.links)[0])[0] : null));
+                toast.error(firstError);
+                return;
+            }
+
+            setMultipleLinksErrors({});
+        }
+
+        if (selectedType === 'event') {
+            const errors = {};
+            if (!pageConfig.businessInfo?.companyName) {
+                errors.businessInfo = { ...errors.businessInfo, companyName: 'Organization Name is required' };
+            }
+            if (!pageConfig.businessInfo?.headline) {
+                errors.businessInfo = { ...errors.businessInfo, headline: 'Event Name is required' };
+            }
+            if (!pageConfig.venue?.location) {
+                errors.venue = { ...errors.venue, location: 'Location is required' };
+            }
+            if (!pageConfig.facilities || pageConfig.facilities.length === 0) {
+                errors.facilities = 'At least one facility must be selected';
+            }
+
+            const socialLinks = pageConfig?.socialLinks || [];
+            if (socialLinks.length === 0) {
+                errors.socialLinks = 'At least one social media channel is required';
+            } else {
+                const socialErrors = {};
+                socialLinks.forEach(link => {
+                    if (!link.url || !link.url.trim()) {
+                        socialErrors[link.id] = 'URL is required';
+                    } else {
+                        try {
+                            const url = new URL(link.url);
+                            if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+                                socialErrors[link.id] = 'URL must start with http:// or https://';
+                            }
+                        } catch (e) {
+                            socialErrors[link.id] = 'Please enter a valid URL';
+                        }
+                    }
+                });
+                if (Object.keys(socialErrors).length > 0) {
+                    errors.socialLinks = socialErrors;
+                }
+            }
+
+            if (Object.keys(errors).length > 0) {
+                setEventErrors(errors);
+                const firstError = errors.businessInfo?.companyName ||
+                    errors.businessInfo?.headline ||
+                    errors.venue?.location ||
+                    errors.facilities ||
+                    (typeof errors.socialLinks === 'string' ? errors.socialLinks : (errors.socialLinks ? Object.values(errors.socialLinks)[0] : null));
+                toast.error(firstError);
+                return;
+            }
+            setEventErrors({});
+        }
+
+        if (selectedType === 'password-protected') {
+            const errors = {};
+            const infoFields = pageConfig?.infoFields || [];
+
+            if (infoFields.length === 0) {
+                errors.infoFields = 'At least one information field is required';
+            } else {
+                const fieldErrors = {};
+                infoFields.forEach(field => {
+                    const itemErrors = {};
+                    if (!field.name || !field.name.trim()) {
+                        itemErrors.name = 'Field Name is required';
+                    }
+                    if (!field.value || !field.value.trim()) {
+                        itemErrors.value = 'Field Information is required';
+                    }
+                    if (Object.keys(itemErrors).length > 0) {
+                        fieldErrors[field.id] = itemErrors;
+                    }
+                });
+                if (Object.keys(fieldErrors).length > 0) {
+                    errors.infoFields = fieldErrors;
+                }
+            }
+
+            if (Object.keys(errors).length > 0) {
+                setPasswordProtectedErrors(errors);
+                const firstError = typeof errors.infoFields === 'string'
+                    ? errors.infoFields
+                    : Object.values(Object.values(errors.infoFields)[0])[0];
+                toast.error(firstError);
+                return;
+            }
+
+            setPasswordProtectedErrors({});
+        }
+
+        if (selectedType === 'product-page') {
+            const errors = {};
+            if (!pageConfig.basicInfo?.companyName || !pageConfig.basicInfo.companyName.trim()) {
+                errors.companyName = 'Company Name is required';
+            }
+            if (!pageConfig.basicInfo?.productTitle || !pageConfig.basicInfo.productTitle.trim()) {
+                errors.productTitle = 'Product Title is required';
+            }
+            if (!pageConfig.basicInfo?.price || !pageConfig.basicInfo.price.trim()) {
+                errors.price = 'Price is required';
+            }
+            if (!pageConfig.basicInfo?.currency || !pageConfig.basicInfo.currency.trim()) {
+                errors.currency = 'Currency is required';
+            }
+
+            const items = pageConfig.content?.items || [];
+            const itemErrors = {};
+            items.forEach(item => {
+                if (!item.title || !item.title.trim()) {
+                    itemErrors[item.id] = 'Title is required';
+                }
+            });
+
+            if (Object.keys(itemErrors).length > 0) {
+                errors.content = itemErrors;
+            }
+
+            if (!pageConfig.content?.buttonText || !pageConfig.content.buttonText.trim()) {
+                errors.buttonText = 'Button Text is required';
+            }
+
+            if (!pageConfig.content?.buttonLink || !pageConfig.content.buttonLink.trim()) {
+                errors.buttonLink = 'Button Link is required';
+            } else {
+                try {
+                    new URL(pageConfig.content.buttonLink.trim());
+                } catch (_) {
+                    errors.buttonLink = 'Please enter a valid URL (starting with http/https)';
+                }
+            }
+
+            if (!pageConfig.video?.title || !pageConfig.video.title.trim()) {
+                errors.videoTitle = 'Video Title is required';
+            }
+
+            if (!pageConfig.video?.url || !pageConfig.video.url.trim()) {
+                errors.videoUrl = 'Video Link or Upload is required';
+            }
+
+            if (!pageConfig.feedback?.title || !pageConfig.feedback.title.trim()) {
+                errors.feedbackTitle = 'Feedback Title is required';
+            }
+
+            // Contact Validation
+            const contact = pageConfig.contact || {};
+            console.log('DEBUG: Contact Object:', JSON.stringify(contact, null, 2));
+
+            const contactErrors = {};
+            let hasAtLeastOneContact = false;
+
+            // Helper for URL validation
+            const isValidUrl = (string) => {
+                try {
+                    new URL(string);
+                    return true;
+                } catch (_) {
+                    return false;
+                }
+            };
+
+            // Helper for Email validation
+            const isValidEmail = (email) => {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            };
+
+            // Check Phone
+            if (contact.phone !== null && contact.phone !== undefined) {
+                console.log('DEBUG: Checking Phone:', contact.phone);
+                hasAtLeastOneContact = true;
+                if (!String(contact.phone).trim()) {
+                    contactErrors.phone = 'Phone number cannot be empty';
+                }
+            }
+
+            // Check Email
+            if (contact.email !== null && contact.email !== undefined) {
+                console.log('DEBUG: Checking Email:', contact.email);
+                hasAtLeastOneContact = true;
+                if (!String(contact.email).trim()) {
+                    contactErrors.email = 'Email cannot be empty';
+                } else if (!isValidEmail(contact.email)) {
+                    contactErrors.email = 'Please enter a valid email address';
+                }
+            }
+
+            // Check Website
+            if (contact.website !== null && contact.website !== undefined) {
+                console.log('DEBUG: Checking Website:', contact.website);
+                hasAtLeastOneContact = true;
+                if (!String(contact.website).trim()) {
+                    contactErrors.website = 'Website URL cannot be empty';
+                } else if (!isValidUrl(contact.website)) {
+                    contactErrors.website = 'Please enter a valid URL (starting with http/https)';
+                }
+            }
+
+            // Check Socials
+            if (contact.socials && Array.isArray(contact.socials) && contact.socials.length > 0) {
+                hasAtLeastOneContact = true;
+                contact.socials.forEach(social => {
+                    if (!social.url || !String(social.url).trim()) {
+                        contactErrors[`social_${social.platform}`] = (`${social.platform} URL cannot be empty`);
+                    } else if (!isValidUrl(social.url)) {
+                        contactErrors[`social_${social.platform}`] = (`Please enter a valid URL for ${social.platform}`);
+                    }
+                });
+            }
+
+            if (!hasAtLeastOneContact) {
+                errors.contactGeneral = 'Please add at least one contact method';
+            }
+
+            if (Object.keys(contactErrors).length > 0) {
+                errors.contact = contactErrors;
+            }
+
+            if (Object.keys(errors).length > 0) {
+                setProductErrors(errors);
+                const firstError = errors.companyName ||
+                    errors.productTitle ||
+                    errors.currency ||
+                    errors.price ||
+                    (errors.content ? Object.values(errors.content)[0] : null) ||
+                    errors.buttonText ||
+                    errors.buttonLink ||
+                    errors.videoTitle ||
+                    errors.videoUrl ||
+                    errors.feedbackTitle ||
+                    errors.contactGeneral ||
+                    (errors.contact ? Object.values(errors.contact)[0] : null);
+                toast.error(firstError);
+                return;
+            }
+            setProductErrors({});
         }
 
         setActiveStep('design');
@@ -973,6 +1500,8 @@ const Generator = () => {
                                 <ReviewsConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    errors={reviewsErrors}
+                                    setErrors={setReviewsErrors}
                                 />
                             )}
 
@@ -980,6 +1509,8 @@ const Generator = () => {
                                 <SocialMediaConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    errors={socialMediaErrors}
+                                    setErrors={setSocialMediaErrors}
                                 />
                             )}
 
@@ -987,6 +1518,8 @@ const Generator = () => {
                                 <PDFConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    errors={pdfErrors}
+                                    setErrors={setPdfErrors}
                                 />
                             )}
 
@@ -994,6 +1527,8 @@ const Generator = () => {
                                 <MultipleLinksConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    errors={multipleLinksErrors}
+                                    setErrors={setMultipleLinksErrors}
                                 />
                             )}
 
@@ -1008,6 +1543,8 @@ const Generator = () => {
                                 <PasswordProtectedConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    errors={passwordProtectedErrors}
+                                    setErrors={setPasswordProtectedErrors}
                                 />
                             )}
 
@@ -1015,6 +1552,8 @@ const Generator = () => {
                                 <EventConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    errors={eventErrors}
+                                    setErrors={setEventErrors}
                                 />
                             )}
 
@@ -1045,6 +1584,8 @@ const Generator = () => {
                                 <ProductPageConfig
                                     config={pageConfig}
                                     onChange={setPageConfig}
+                                    errors={productErrors}
+                                    setErrors={setProductErrors}
                                 />
                             )}
 

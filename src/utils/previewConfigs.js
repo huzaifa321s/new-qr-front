@@ -98,6 +98,15 @@ export const businessCardPreviewConfig = {
         whatsapp: '',
         facebook: '',
         linkedin: ''
+    },
+    exchange: {
+        fullName: true,
+        contactNumber: true,
+        organization: true,
+        email: true,
+        jobTitle: false,
+        website: false,
+        customFields: []
     }
 };
 

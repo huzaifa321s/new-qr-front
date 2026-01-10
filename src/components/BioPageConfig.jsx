@@ -906,7 +906,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b', marginBottom: '0.5rem' }}>
                                                 {platform.label}*
                                             </label>
-                                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap', width: '100%' }}>
                                                 <div style={{
                                                     width: '42px',
                                                     height: '42px',
@@ -935,11 +935,6 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                         outline: 'none'
                                                     }}
                                                 />
-                                                {errors[platform.id] && (
-                                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', width: '100%', paddingLeft: '3.5rem' }}>
-                                                        {errors[platform.id]}
-                                                    </p>
-                                                )}
                                                 <div
                                                     onClick={() => handleSocialUpdate(platform.id, null)}
                                                     style={{ cursor: 'pointer', padding: '0.5rem', color: '#94a3b8' }}
@@ -957,6 +952,11 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                     </div>
                                                 </div>
                                             </div>
+                                            {errors[platform.id] && (
+                                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', width: '100%', paddingLeft: '3.5rem' }}>
+                                                    {errors[platform.id]}
+                                                </p>
+                                            )}
                                         </div>
                                     );
                                 }

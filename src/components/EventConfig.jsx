@@ -2,7 +2,7 @@ import { ChevronDown, ChevronUp, UploadCloud, X, Check, ArrowRightLeft, Clock, P
 import { useState, useRef } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
-const EventConfig = ({ config, onChange }) => {
+const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isScheduleOpen, setIsScheduleOpen] = useState(false);
@@ -131,6 +131,16 @@ const EventConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+
+        if (setErrors && errors.businessInfo?.[key]) {
+            setErrors(prev => ({
+                ...prev,
+                businessInfo: {
+                    ...prev.businessInfo,
+                    [key]: null
+                }
+            }));
+        }
     };
 
     const handleScheduleUpdate = (key, value) => {
@@ -176,6 +186,16 @@ const EventConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+
+        if (setErrors && errors.venue?.[key]) {
+            setErrors(prev => ({
+                ...prev,
+                venue: {
+                    ...prev.venue,
+                    [key]: null
+                }
+            }));
+        }
     };
 
     const handleFacilitiesUpdate = (facilityName) => {
@@ -188,6 +208,13 @@ const EventConfig = ({ config, onChange }) => {
             ...prev,
             facilities: updatedFacilities
         }));
+
+        if (setErrors && errors.facilities && updatedFacilities.length > 0) {
+            setErrors(prev => ({
+                ...prev,
+                facilities: null
+            }));
+        }
     };
 
     // Facility Icons Map
@@ -271,12 +298,30 @@ const EventConfig = ({ config, onChange }) => {
                 url: ''
             };
             handleSocialUpdate([...socialLinks, newLink]);
+
+            if (setErrors && typeof errors.socialLinks === 'string') {
+                setErrors(prev => ({
+                    ...prev,
+                    socialLinks: null
+                }));
+            }
         }
     };
 
     const handleRemoveSocial = (id) => {
         const updatedLinks = socialLinks.filter(link => link.id !== id);
         handleSocialUpdate(updatedLinks);
+
+        if (setErrors && errors.socialLinks?.[id]) {
+            setErrors(prev => {
+                const newSocialErrors = { ...prev.socialLinks };
+                delete newSocialErrors[id];
+                return {
+                    ...prev,
+                    socialLinks: Object.keys(newSocialErrors).length > 0 ? newSocialErrors : null
+                };
+            });
+        }
     };
 
     const handleSocialLinkChange = (id, url) => {
@@ -284,6 +329,17 @@ const EventConfig = ({ config, onChange }) => {
             link.id === id ? { ...link, url } : link
         );
         handleSocialUpdate(updatedLinks);
+
+        if (setErrors && errors.socialLinks?.[id]) {
+            setErrors(prev => {
+                const newSocialErrors = { ...prev.socialLinks };
+                delete newSocialErrors[id];
+                return {
+                    ...prev,
+                    socialLinks: Object.keys(newSocialErrors).length > 0 ? newSocialErrors : null
+                };
+            });
+        }
     };
 
     const socialPlatforms = [
@@ -540,18 +596,24 @@ const EventConfig = ({ config, onChange }) => {
                                     </label>
                                     <input
                                         type="text"
-                                        value={businessInfo.companyName || 'Sterling & Co.'}
+                                        value={businessInfo.companyName || ''}
                                         onChange={(e) => handleBusinessInfoUpdate('companyName', e.target.value)}
+                                        placeholder="Sterling & Co."
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: errors.businessInfo?.companyName ? '1px solid #ef4444' : '1px solid #1e293b',
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             color: '#1e293b'
                                         }}
                                     />
+                                    {errors.businessInfo?.companyName && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                            {errors.businessInfo.companyName}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div style={{ flex: '1 1 120px' }}>
@@ -649,18 +711,24 @@ const EventConfig = ({ config, onChange }) => {
                                     </label>
                                     <input
                                         type="text"
-                                        value={businessInfo.headline || '4th Annual Company Meetup'}
+                                        value={businessInfo.headline || ''}
                                         onChange={(e) => handleBusinessInfoUpdate('headline', e.target.value)}
+                                        placeholder="4th Annual Company Meetup"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: errors.businessInfo?.headline ? '1px solid #ef4444' : '1px solid #1e293b',
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             color: '#1e293b'
                                         }}
                                     />
+                                    {errors.businessInfo?.headline && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                            {errors.businessInfo.headline}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div style={{ flex: '1 1 120px' }}>
@@ -755,8 +823,9 @@ const EventConfig = ({ config, onChange }) => {
                                 DESCRIPTION
                             </label>
                             <textarea
-                                value={businessInfo.description || 'We aim to provide fresh and healthy snacks people on the go.'}
+                                value={businessInfo.description || ''}
                                 onChange={(e) => handleBusinessInfoUpdate('description', e.target.value)}
+                                placeholder="We aim to provide fresh and healthy snacks people on the go."
                                 rows={4}
                                 style={{
                                     width: '100%',
@@ -781,8 +850,9 @@ const EventConfig = ({ config, onChange }) => {
                                 </label>
                                 <input
                                     type="text"
-                                    value={businessInfo.button || 'Get Tickets'}
+                                    value={businessInfo.button || ''}
                                     onChange={(e) => handleBusinessInfoUpdate('button', e.target.value)}
+                                    placeholder="Get Tickets"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -802,8 +872,9 @@ const EventConfig = ({ config, onChange }) => {
                                 </label>
                                 <input
                                     type="text"
-                                    value={businessInfo.website || 'http://www.sterlingco.com/tickets'}
+                                    value={businessInfo.website || ''}
                                     onChange={(e) => handleBusinessInfoUpdate('website', e.target.value)}
+                                    placeholder="http://www.sterlingco.com/tickets"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
@@ -1030,18 +1101,24 @@ const EventConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={venue.location || '1000 Marketplace Ave. NY, 10001, United States'}
+                                value={venue.location || ''}
                                 onChange={(e) => handleVenueUpdate('location', e.target.value)}
+                                placeholder="1000 Marketplace Ave. NY, 10001, United States"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: errors.venue?.location ? '1px solid #ef4444' : '1px solid #1e293b',
                                     fontSize: '0.9rem',
                                     outline: 'none',
                                     color: '#1e293b'
                                 }}
                             />
+                            {errors.venue?.location && (
+                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                    {errors.venue.location}
+                                </p>
+                            )}
                         </div>
                     </div>
                 )}
@@ -1069,7 +1146,7 @@ const EventConfig = ({ config, onChange }) => {
 
                 {isFacilitiesOpen && (
                     <div style={{ padding: '1rem', background: '#fff' }}>
-                        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', border: errors.facilities ? '1px solid #ef4444' : 'none', padding: errors.facilities ? '1rem' : '0', borderRadius: '8px' }}>
                             {facilityIcons.map((item) => {
                                 const Icon = item.icon;
                                 const isSelected = facilities.includes(item.id);
@@ -1088,16 +1165,17 @@ const EventConfig = ({ config, onChange }) => {
                                     >
                                         <Icon
                                             size={24}
-                                            color={isSelected ? '#3b82f6' : '#94a3b8'} // Blue for active as per commonly seen selected states, or stick to purple? Image shows icons in blueish color.
-                                        // Actually image shows they are blue: #2563eb or similar.
-                                        // Screenshot icons are blue: Wifi, Plug, Wheelchair..
-                                        // Some are grey: Bed, Coffee...
-                                        // So existing ones are blue, non-existing grey.
+                                            color={isSelected ? '#3b82f6' : '#94a3b8'}
                                         />
                                     </div>
                                 );
                             })}
                         </div>
+                        {errors.facilities && (
+                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                {errors.facilities}
+                            </p>
+                        )}
                     </div>
                 )}
             </div>
@@ -1132,8 +1210,9 @@ const EventConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={contactInfo.personName || 'Hellen Grey'}
+                                value={contactInfo.personName || ''}
                                 onChange={(e) => handleContactUpdate('personName', e.target.value)}
+                                placeholder="Hellen Grey"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
@@ -1153,8 +1232,9 @@ const EventConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={contactInfo.designation || 'Event Manager'}
+                                value={contactInfo.designation || ''}
                                 onChange={(e) => handleContactUpdate('designation', e.target.value)}
+                                placeholder="Event Manager"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
@@ -1328,73 +1408,89 @@ const EventConfig = ({ config, onChange }) => {
 
                         {/* Active Inputs */}
                         <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+                            {typeof errors.socialLinks === 'string' && (
+                                <div style={{ width: '100%', marginBottom: '1rem' }}>
+                                    <p style={{ color: '#ef4444', fontSize: '0.75rem' }}>
+                                        {errors.socialLinks}
+                                    </p>
+                                </div>
+                            )}
                             {socialLinks.map(link => {
                                 const platform = socialPlatforms.find(p => p.id === link.platform);
                                 if (!platform) return null;
                                 const Icon = platform.icon;
+                                const error = errors.socialLinks?.[link.id];
                                 return (
                                     <div key={link.id} style={{ flex: '1 1 200px' }}>
                                         <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b', marginBottom: '0.5rem', textTransform: 'capitalize' }}>
                                             {link.platform}*
                                         </label>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                            {/* Icon */}
-                                            <div style={{
-                                                width: '42px',
-                                                height: '42px',
-                                                borderRadius: '8px',
-                                                background: 'transparent',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                flexShrink: 0
-                                            }}>
-                                                {typeof Icon === 'string' ? (
-                                                    <img
-                                                        src={Icon}
-                                                        alt=""
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                {/* Icon */}
+                                                <div style={{
+                                                    width: '42px',
+                                                    height: '42px',
+                                                    borderRadius: '8px',
+                                                    background: 'transparent',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    border: '1px solid #1e293b',
+                                                    flexShrink: 0
+                                                }}>
+                                                    {typeof Icon === 'string' ? (
+                                                        <img
+                                                            src={Icon}
+                                                            alt=""
+                                                            style={{
+                                                                width: '24px',
+                                                                height: '24px',
+                                                                objectFit: 'contain'
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <Icon size={24} color="#fff" />
+                                                    )}
+                                                </div>
+
+                                                {/* Input */}
+                                                <div style={{ flex: 1, display: 'flex', alignItems: 'center', border: error ? '1px solid #ef4444' : '1px solid #e2e8f0', borderRadius: '4px', paddingRight: '0.5rem' }}>
+                                                    <input
+                                                        type="text"
+                                                        value={link.url}
+                                                        onChange={(e) => handleSocialLinkChange(link.id, e.target.value)}
+                                                        placeholder="https://"
                                                         style={{
-                                                            width: '24px',
-                                                            height: '24px',
-                                                            objectFit: 'contain'
+                                                            width: '100%',
+                                                            padding: '0.75rem',
+                                                            border: 'none',
+                                                            outline: 'none',
+                                                            fontSize: '0.9rem',
+                                                            color: '#1e293b',
+                                                            background: 'transparent'
                                                         }}
                                                     />
-                                                ) : (
-                                                    <Icon size={24} color="#fff" />
-                                                )}
-                                            </div>
-
-                                            {/* Input */}
-                                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', border: '1px solid #e2e8f0', borderRadius: '4px', paddingRight: '0.5rem' }}>
-                                                <input
-                                                    type="text"
-                                                    value={link.url}
-                                                    onChange={(e) => handleSocialLinkChange(link.id, e.target.value)}
-                                                    placeholder="https://"
-                                                    style={{
-                                                        width: '100%',
-                                                        padding: '0.75rem',
-                                                        border: 'none',
-                                                        outline: 'none',
-                                                        fontSize: '0.9rem',
-                                                        color: '#1e293b',
-                                                        background: 'transparent'
-                                                    }}
-                                                />
-                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                                    <X
-                                                        size={14}
-                                                        color="#cbd5e1"
-                                                        style={{ cursor: 'pointer' }}
-                                                        onClick={() => handleRemoveSocial(link.id)}
-                                                    />
-                                                    <ArrowRightLeft
-                                                        size={14}
-                                                        color="#cbd5e1"
-                                                        style={{ cursor: 'pointer', transform: 'rotate(90deg)' }}
-                                                    />
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                                                        <X
+                                                            size={14}
+                                                            color="#cbd5e1"
+                                                            style={{ cursor: 'pointer' }}
+                                                            onClick={() => handleRemoveSocial(link.id)}
+                                                        />
+                                                        <ArrowRightLeft
+                                                            size={14}
+                                                            color="#cbd5e1"
+                                                            style={{ cursor: 'pointer', transform: 'rotate(90deg)' }}
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
+                                            {error && (
+                                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginLeft: '3.5rem' }}>
+                                                    {error}
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                 );

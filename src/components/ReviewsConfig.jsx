@@ -23,7 +23,7 @@ const socialIconsMap = [
     { id: 'line', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111491.png', color: '#00B900', name: 'Line' }
 ];
 
-const ReviewsConfig = ({ config, onChange }) => {
+const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -115,6 +115,14 @@ const ReviewsConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        // Clear error when user updates the field
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key];
+                return newErrors;
+            });
+        }
     };
 
     const handleCategoryUpdate = (categoryId, field, value) => {
@@ -124,6 +132,15 @@ const ReviewsConfig = ({ config, onChange }) => {
                 cat.id === categoryId ? { ...cat, [field]: value } : cat
             )
         }));
+
+        // Clear category error when user updates the name
+        if (field === 'name' && setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[`category_${categoryId}`];
+                return newErrors;
+            });
+        }
     };
 
     const handleSubcategoryUpdate = (categoryId, subcategoryIndex, value) => {
@@ -140,6 +157,15 @@ const ReviewsConfig = ({ config, onChange }) => {
                     : cat
             )
         }));
+
+        // Clear subcategory name error
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[`subcategory_${categoryId}_${subcategoryIndex}`];
+                return newErrors;
+            });
+        }
     };
 
     const handleAddSubcategory = (categoryId) => {
@@ -147,10 +173,19 @@ const ReviewsConfig = ({ config, onChange }) => {
             ...prev,
             categories: prev.categories.map(cat =>
                 cat.id === categoryId
-                    ? { ...cat, subcategories: [...cat.subcategories, ''] }
+                    ? { ...cat, subcategories: [...(cat.subcategories || []), ''] }
                     : cat
             )
         }));
+
+        // Clear "at least one subcategory required" error
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[`category_${categoryId}_subcategories`];
+                return newErrors;
+            });
+        }
     };
 
     const handleAddCategory = () => {
@@ -170,7 +205,7 @@ const ReviewsConfig = ({ config, onChange }) => {
         }));
     };
 
-    const handleDeleteSubcategory = (categoryId, subcategoryIndex) => {
+    const handleRemoveSubcategory = (categoryId, subcategoryIndex) => {
         onChange(prev => ({
             ...prev,
             categories: prev.categories.map(cat =>
@@ -192,6 +227,16 @@ const ReviewsConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+
+        // Clear general socialLinks error and individual platform error
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.socialLinks;
+                delete newErrors[key];
+                return newErrors;
+            });
+        }
     };
 
     const handleToggleSocial = (platformId) => {
@@ -207,6 +252,16 @@ const ReviewsConfig = ({ config, onChange }) => {
                 social: newSocial
             };
         });
+
+        // Clear general socialLinks error and individual platform error
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.socialLinks;
+                delete newErrors[platformId];
+                return newErrors;
+            });
+        }
     };
 
     const palettes = [
@@ -445,17 +500,23 @@ const ReviewsConfig = ({ config, onChange }) => {
                                 <div style={{ flex: '2 1 200px' }}>
                                     <input
                                         type="text"
-                                        value={basicInfo.organizationName || 'LUXURY HOTELS'}
+                                        value={basicInfo.organizationName || ''}
                                         onChange={(e) => handleBasicInfoUpdate('organizationName', e.target.value)}
+                                        placeholder="LUXURY HOTELS"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: `1px solid ${errors.organizationName ? '#ef4444' : '#1e293b'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
                                     />
+                                    {errors.organizationName && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.organizationName}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* Text Color */}
@@ -542,17 +603,23 @@ const ReviewsConfig = ({ config, onChange }) => {
                                 <div style={{ flex: '2 1 200px' }}>
                                     <input
                                         type="text"
-                                        value={basicInfo.title || 'Give us your feedback'}
+                                        value={basicInfo.title || ''}
                                         onChange={(e) => handleBasicInfoUpdate('title', e.target.value)}
+                                        placeholder="Give us your feedback"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: `1px solid ${errors.title ? '#ef4444' : '#1e293b'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
                                     />
+                                    {errors.title && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.title}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* Text Color */}
@@ -635,8 +702,9 @@ const ReviewsConfig = ({ config, onChange }) => {
                                 DESCRIPTION
                             </label>
                             <textarea
-                                value={basicInfo.description || 'We aim to provide fresh and healthy snacks people on the go.'}
+                                value={basicInfo.description || ''}
                                 onChange={(e) => handleBasicInfoUpdate('description', e.target.value)}
+                                placeholder="We aim to provide fresh and healthy snacks people on the go."
                                 rows={3}
                                 style={{
                                     width: '100%',
@@ -658,17 +726,23 @@ const ReviewsConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={basicInfo.website || 'https://www.hotelparadise.com'}
+                                value={basicInfo.website || ''}
                                 onChange={(e) => handleBasicInfoUpdate('website', e.target.value)}
+                                placeholder="https://www.hotelparadise.com"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: `1px solid ${errors.website ? '#ef4444' : '#1e293b'}`,
                                     fontSize: '0.9rem',
                                     outline: 'none'
                                 }}
                             />
+                            {errors.website && (
+                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                    {errors.website}
+                                </p>
+                            )}
                         </div>
 
                     </div>
@@ -717,11 +791,16 @@ const ReviewsConfig = ({ config, onChange }) => {
                                                 flex: 1,
                                                 padding: '0.75rem',
                                                 borderRadius: '4px',
-                                                border: '1px solid #1e293b',
+                                                border: `1px solid ${errors[`category_${category.id}`] ? '#ef4444' : '#1e293b'}`,
                                                 fontSize: '0.9rem',
                                                 outline: 'none'
                                             }}
                                         />
+                                        {errors[`category_${category.id}`] && (
+                                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', width: '100%' }}>
+                                                {errors[`category_${category.id}`]}
+                                            </p>
+                                        )}
                                         {/* Delete Category Icon */}
                                         <div
                                             onClick={() => handleDeleteCategory(category.id)}
@@ -746,54 +825,59 @@ const ReviewsConfig = ({ config, onChange }) => {
                                     </div>
                                 </div>
 
-                                {/* Subcategories */}
-                                {category.subcategories && category.subcategories.length > 0 && (
-                                    <div style={{ marginBottom: '1rem' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                            SUBCATEGORIES:
-                                        </label>
+                                <div style={{ marginBottom: '1rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                        SUBCATEGORIES:
+                                    </label>
+                                    {errors[`category_${category.id}_subcategories`] && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginBottom: '0.5rem' }}>
+                                            {errors[`category_${category.id}_subcategories`]}
+                                        </p>
+                                    )}
 
-                                        {category.subcategories.map((subcategory, subIndex) => (
-                                            <div key={subIndex} style={{ marginBottom: '0.75rem', display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                                                <input
-                                                    type="text"
-                                                    value={subcategory || ''}
-                                                    onChange={(e) => handleSubcategoryUpdate(category.id, subIndex, e.target.value)}
-                                                    placeholder="Staff"
-                                                    style={{
-                                                        flex: 1,
-                                                        padding: '0.75rem',
-                                                        borderRadius: '4px',
-                                                        border: '1px solid #1e293b',
-                                                        fontSize: '0.9rem',
-                                                        outline: 'none'
-                                                    }}
-                                                />
-                                                {/* Delete Subcategory Icon */}
-                                                <div
-                                                    onClick={() => handleDeleteSubcategory(category.id, subIndex)}
-                                                    style={{
-                                                        width: '28px',
-                                                        height: '28px',
-                                                        borderRadius: '50%',
-                                                        background: '#f1f5f9',
-                                                        color: '#64748b',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        cursor: 'pointer',
-                                                        transition: 'all 0.2s',
-                                                        flexShrink: 0
-                                                    }}
-                                                    onMouseOver={(e) => e.currentTarget.style.background = '#e2e8f0'}
-                                                    onMouseOut={(e) => e.currentTarget.style.background = '#f1f5f9'}
-                                                >
-                                                    <X size={16} />
+                                    {category.subcategories && category.subcategories.length > 0 && (
+                                        category.subcategories.map((subcategory, subIndex) => (
+                                            <div key={subIndex} style={{ marginBottom: '0.75rem' }}>
+                                                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                                    <input
+                                                        type="text"
+                                                        value={subcategory || ''}
+                                                        onChange={(e) => handleSubcategoryUpdate(category.id, subIndex, e.target.value)}
+                                                        placeholder="Staff"
+                                                        style={{
+                                                            flex: 1,
+                                                            padding: '0.75rem',
+                                                            borderRadius: '4px',
+                                                            border: `1px solid ${errors[`subcategory_${category.id}_${subIndex}`] ? '#ef4444' : '#1e293b'}`,
+                                                            fontSize: '0.9rem',
+                                                            outline: 'none'
+                                                        }}
+                                                    />
+                                                    <div
+                                                        onClick={() => handleRemoveSubcategory(category.id, subIndex)}
+                                                        style={{
+                                                            width: '28px',
+                                                            height: '28px',
+                                                            borderRadius: '50%',
+                                                            border: '1px solid #e2e8f0',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            cursor: 'pointer',
+                                                            flexShrink: 0
+                                                        }}>
+                                                        <X size={14} color="#94a3b8" />
+                                                    </div>
                                                 </div>
+                                                {errors[`subcategory_${category.id}_${subIndex}`] && (
+                                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                                        {errors[`subcategory_${category.id}_${subIndex}`]}
+                                                    </p>
+                                                )}
                                             </div>
-                                        ))}
-                                    </div>
-                                )}
+                                        ))
+                                    )}
+                                </div>
 
                                 {/* Add Subcategory Button */}
                                 <div style={{ textAlign: 'right', marginBottom: categoryIndex < categories.length - 1 ? '2rem' : '0' }}>
@@ -868,6 +952,22 @@ const ReviewsConfig = ({ config, onChange }) => {
 
                 {isSocialOpen && (
                     <div style={{ padding: '1rem', background: '#fff' }}>
+                        {errors.socialLinks && (
+                            <div style={{
+                                background: '#fef2f2',
+                                border: '1px solid #fee2e2',
+                                color: '#dc2626',
+                                padding: '0.75rem',
+                                borderRadius: '6px',
+                                marginBottom: '1.5rem',
+                                fontSize: '0.85rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem'
+                            }}>
+                                <span>⚠️</span> {errors.socialLinks}
+                            </div>
+                        )}
 
                         {/* Social Media Input Fields */}
                         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
@@ -904,7 +1004,7 @@ const ReviewsConfig = ({ config, onChange }) => {
                                                         width: '100%',
                                                         padding: '0.75rem 0.75rem 0.75rem 3rem',
                                                         borderRadius: '4px',
-                                                        border: '1px solid #1e293b',
+                                                        border: `1px solid ${errors[platformId] ? '#ef4444' : '#1e293b'}`,
                                                         fontSize: '0.9rem',
                                                         outline: 'none'
                                                     }}
@@ -928,6 +1028,11 @@ const ReviewsConfig = ({ config, onChange }) => {
                                                 <X size={16} />
                                             </div>
                                         </div>
+                                        {errors[platformId] && (
+                                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                                {errors[platformId]}
+                                            </p>
+                                        )}
                                     </div>
                                 );
                             })}

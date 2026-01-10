@@ -7180,7 +7180,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                                                 fontSize: '0.8rem',
                                                 color: '#64748b',
                                                 margin: '0 0 0.5rem 0',
-                                                lineHeight: '1.3'
+                                                lineHeight: '1.3',
+                                                wordBreak: 'break-word',
+                                                overflowWrap: 'break-word'
                                             }}>
                                                 {product.description}
                                             </p>

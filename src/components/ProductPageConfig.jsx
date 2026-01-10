@@ -6,7 +6,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
-const ProductPageConfig = ({ config, onChange }) => {
+const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(false);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isContentOpen, setIsContentOpen] = useState(false);
@@ -23,50 +23,20 @@ const ProductPageConfig = ({ config, onChange }) => {
         { id: 'def-2', url: 'https://picsum.photos/seed/product2/600/600' },
         { id: 'def-3', url: 'https://picsum.photos/seed/product3/600/600' }
     ];
-    const basicInfo = {
-        ...bInfo,
-        companyName: bInfo.companyName || 'Dairyland',
-        productTitle: bInfo.productTitle || 'Chocolate Flavored Milk',
-        headline: bInfo.headline || '325 ml',
-        price: bInfo.price || '95',
-        currency: bInfo.currency || '₨',
-        productImages: bInfo.productImages || defaultProductImages,
-    };
-    const video = {
-        title: 'Vanilla & Malai...',
-        url: 'https://www.youtube.com/watch?v=kYI9P_pkyEw',
-        ...(config.video || {})
-    };
-    const feedback = {
-        title: 'Add Your Feedback',
-        ratingUrl: 'https://www.dairylandltd.com/floveredmilk/rating',
-        font: 'Lato',
-        ...(config.feedback || {}),
-        textColor: (config.feedback?.textColor && config.feedback.textColor !== '#000000') ? config.feedback.textColor : '#ffffff'
-    };
-    const contact = {
-        phone: '+1 234 567 890',
-        email: 'contact@dairyland.com',
-        website: 'https://www.dairylandltd.com',
-        socials: [
-            { platform: 'facebook', url: 'https://facebook.com/dairyland' },
-            { platform: 'instagram', url: 'https://instagram.com/dairyland' },
-            { platform: 'twitter', url: 'https://twitter.com/dairyland' }
-        ],
-        ...(config.contact || {})
-    };
-    const content = config.content || {
-        items: [
-            { id: '1', title: 'Description', text: 'The Dark, Smooth, Creaminess Of Chocolate Romances The Wholesome Goodness Of Real Cow\'S Milk, Reigniting For The Love For A Healthy, Tasty Beverage.' },
-            { id: '2', title: 'Ingredient', text: '• Reduced Fat Milk\n• Milk Solids\nCocoa Powder\n• Sugar\n• Emulsifier: Vegetable Oil Origin (E471)\n• Stabilizer (E470) & Chocolate Flavor' }
-        ],
-        certificates: (config.content && config.content.certificates && config.content.certificates.length > 0) ? config.content.certificates : [
-            { id: 'def-cert-1', url: 'https://picsum.photos/seed/cert1/200/200' },
-            { id: 'def-cert-2', url: 'https://picsum.photos/seed/cert2/200/200' }
-        ],
-        buttonText: 'Buy Product',
-        buttonLink: 'https://www.dairylandltd.com/'
-    };
+    const basicInfo = config.basicInfo || {};
+    const video = config.video || {};
+    const feedback = config.feedback || {};
+    const contact = config.contact || {};
+    const contactSocials = contact.socials || [
+        { platform: 'facebook', url: 'https://facebook.com/dairyland' },
+        { platform: 'instagram', url: 'https://instagram.com/dairyland' },
+        { platform: 'twitter', url: 'https://twitter.com/dairyland' }
+    ];
+    const content = config.content || {};
+    const contentItems = content.items || [
+        { id: '1', title: 'Description', text: 'The Dark, Smooth, Creaminess Of Chocolate Romances The Wholesome Goodness Of Real Cow\'S Milk, Reigniting For The Love For A Healthy, Tasty Beverage.' },
+        { id: '2', title: 'Ingredient', text: '• Reduced Fat Milk\n• Milk Solids\nCocoa Powder\n• Sugar\n• Emulsifier: Vegetable Oil Origin (E471)\n• Stabilizer (E470) & Chocolate Flavor' }
+    ];
 
     // Default colors from screenshot (approximate or standard defaults)
     const primaryColor = design.color?.header || '#FFB03E';
@@ -129,6 +99,14 @@ const ProductPageConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+
+        if (setErrors && errors[key]) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key];
+                return newErrors;
+            });
+        }
     };
 
     const handleLogoUpload = (e) => {
@@ -169,23 +147,53 @@ const ProductPageConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+
+        if (setErrors && errors[key]) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key];
+                return newErrors;
+            });
+        }
     };
 
     const handleItemUpdate = (id, key, value) => {
-        const newItems = (content.items || []).map(item =>
+        const newItems = (contentItems || []).map(item =>
             item.id === id ? { ...item, [key]: value } : item
         );
         handleContentUpdate('items', newItems);
+
+        if (setErrors && errors.content?.[id] && key === 'title') {
+            setErrors(prev => {
+                const newContentErrors = { ...prev.content };
+                delete newContentErrors[id];
+                return {
+                    ...prev,
+                    content: Object.keys(newContentErrors).length > 0 ? newContentErrors : null
+                };
+            });
+        }
     };
 
     const handleAddCategory = () => {
         const newItem = { id: Date.now().toString(), title: '', text: '' };
-        handleContentUpdate('items', [...(content.items || []), newItem]);
+        handleContentUpdate('items', [...(contentItems || []), newItem]);
     };
 
     const handleRemoveCategory = (id) => {
-        const newItems = (content.items || []).filter(item => item.id !== id);
+        const newItems = (contentItems || []).filter(item => item.id !== id);
         handleContentUpdate('items', newItems);
+
+        if (setErrors && errors.content?.[id]) {
+            setErrors(prev => {
+                const newContentErrors = { ...prev.content };
+                delete newContentErrors[id];
+                return {
+                    ...prev,
+                    content: Object.keys(newContentErrors).length > 0 ? newContentErrors : null
+                };
+            });
+        }
     };
 
     const handleCertificateUpload = (e) => {
@@ -215,6 +223,23 @@ const ProductPageConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+
+        if (setErrors) {
+            if (key === 'title' && errors.videoTitle) {
+                setErrors(prev => {
+                    const newErrors = { ...prev };
+                    delete newErrors.videoTitle;
+                    return newErrors;
+                });
+            }
+            if (key === 'url' && errors.videoUrl) {
+                setErrors(prev => {
+                    const newErrors = { ...prev };
+                    delete newErrors.videoUrl;
+                    return newErrors;
+                });
+            }
+        }
     };
 
     const handleVideoUpload = (e) => {
@@ -237,6 +262,14 @@ const ProductPageConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+
+        if (setErrors && key === 'title' && errors.feedbackTitle) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.feedbackTitle;
+                return newErrors;
+            });
+        }
     };
 
     // Contact Handlers
@@ -248,18 +281,53 @@ const ProductPageConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+
+        if (setErrors) {
+            // Clear specific contact error
+            if (errors.contact?.[key]) {
+                setErrors(prev => {
+                    const newContactErrors = { ...prev.contact };
+                    delete newContactErrors[key];
+                    return { ...prev, contact: Object.keys(newContactErrors).length > 0 ? newContactErrors : null };
+                });
+            }
+            // Clear general contact error if any value is added
+            if (value && errors.contactGeneral) {
+                setErrors(prev => {
+                    const newErrors = { ...prev };
+                    delete newErrors.contactGeneral;
+                    return newErrors;
+                });
+            }
+        }
     };
 
     const handleAddSocial = (platform) => {
         const currentSocials = contact.socials || [];
         if (!currentSocials.find(s => s.platform === platform)) {
             handleContactUpdate('socials', [...currentSocials, { platform, url: '' }]);
+
+            if (setErrors && errors.contactGeneral) {
+                setErrors(prev => {
+                    const newErrors = { ...prev };
+                    delete newErrors.contactGeneral;
+                    return newErrors;
+                });
+            }
         }
     };
 
     const handleRemoveSocial = (platform) => {
-        const currentSocials = contact.socials || [];
+        const currentSocials = contactSocials || [];
         handleContactUpdate('socials', currentSocials.filter(s => s.platform !== platform));
+
+        if (setErrors && errors.contact?.[`social_${platform}`]) {
+            setErrors(prev => {
+                const newContactErrors = { ...prev.contact };
+                delete newContactErrors[`social_${platform}`];
+                return { ...prev, contact: Object.keys(newContactErrors).length > 0 ? newContactErrors : null };
+            });
+        }
     };
 
     const handleSocialUrlUpdate = (platform, url) => {
@@ -268,6 +336,14 @@ const ProductPageConfig = ({ config, onChange }) => {
             s.platform === platform ? { ...s, url } : s
         );
         handleContactUpdate('socials', updatedSocials);
+
+        if (setErrors && errors.contact?.[`social_${platform}`]) {
+            setErrors(prev => {
+                const newContactErrors = { ...prev.contact };
+                delete newContactErrors[`social_${platform}`];
+                return { ...prev, contact: Object.keys(newContactErrors).length > 0 ? newContactErrors : null };
+            });
+        }
     };
 
     // Share Handlers
@@ -366,15 +442,28 @@ const ProductPageConfig = ({ config, onChange }) => {
                         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 0.5fr', gap: '1rem', marginBottom: '1.5rem', alignItems: 'end' }}>
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    COMAPNY NAME*
+                                    COMPANY NAME*
                                 </label>
                                 <input
                                     type="text"
-                                    value={basicInfo.companyName}
+                                    value={basicInfo.companyName || ''}
                                     onChange={(e) => handleBasicInfoUpdate('companyName', e.target.value)}
                                     placeholder="Dairyland"
-                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: errors.companyName ? '1px solid #ef4444' : '1px solid #1e293b',
+                                        fontSize: '0.9rem',
+                                        outline: 'none',
+                                        color: '#000'
+                                    }}
                                 />
+                                {errors.companyName && (
+                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                        {errors.companyName}
+                                    </p>
+                                )}
                             </div>
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>Text Color</label>
@@ -415,7 +504,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                                 PRODUCT IMAGE
                             </label>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                {(basicInfo.productImages || []).map(img => (
+                                {(basicInfo.productImages || defaultProductImages).map(img => (
                                     <div key={img.id} style={{ width: '60px', height: '60px', borderRadius: '4px', border: '1px solid #e2e8f0', padding: '4px', position: 'relative' }}>
                                         <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                         <div
@@ -449,11 +538,24 @@ const ProductPageConfig = ({ config, onChange }) => {
                                 </label>
                                 <input
                                     type="text"
-                                    value={basicInfo.productTitle}
+                                    value={basicInfo.productTitle || ''}
                                     onChange={(e) => handleBasicInfoUpdate('productTitle', e.target.value)}
                                     placeholder="Chocolate Flavored Milk"
-                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: errors.productTitle ? '1px solid #ef4444' : '1px solid #1e293b',
+                                        fontSize: '0.9rem',
+                                        outline: 'none',
+                                        color: '#000'
+                                    }}
                                 />
+                                {errors.productTitle && (
+                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                        {errors.productTitle}
+                                    </p>
+                                )}
                             </div>
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>Text Color</label>
@@ -492,7 +594,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={basicInfo.headline}
+                                value={basicInfo.headline || ''}
                                 onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
                                 placeholder="325 ml"
                                 style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
@@ -506,9 +608,18 @@ const ProductPageConfig = ({ config, onChange }) => {
                                     CURRENCY*
                                 </label>
                                 <select
-                                    value={basicInfo.currency}
+                                    value={basicInfo.currency || '₨'}
                                     onChange={(e) => handleBasicInfoUpdate('currency', e.target.value)}
-                                    style={{ width: '100%', height: '42px', borderRadius: '4px', border: '1px solid #1e293b', padding: '0 0.5rem', outline: 'none', fontSize: '0.9rem', color: '#000' }}
+                                    style={{
+                                        width: '100%',
+                                        height: '42px',
+                                        borderRadius: '4px',
+                                        border: errors.currency ? '1px solid #ef4444' : '1px solid #1e293b',
+                                        padding: '0 0.5rem',
+                                        outline: 'none',
+                                        fontSize: '0.9rem',
+                                        color: '#000'
+                                    }}
                                 >
                                     {[
                                         { code: 'AFN', symbol: '؋' }, { code: 'ALL', symbol: 'L' }, { code: 'DZD', symbol: 'د.ج' },
@@ -564,6 +675,11 @@ const ProductPageConfig = ({ config, onChange }) => {
                                         <option key={curr.code} value={curr.symbol}>{curr.code} - {curr.symbol}</option>
                                     ))}
                                 </select>
+                                {errors.currency && (
+                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                        {errors.currency}
+                                    </p>
+                                )}
                             </div>
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
@@ -571,11 +687,24 @@ const ProductPageConfig = ({ config, onChange }) => {
                                 </label>
                                 <input
                                     type="text"
-                                    value={basicInfo.price}
+                                    value={basicInfo.price || ''}
                                     onChange={(e) => handleBasicInfoUpdate('price', e.target.value)}
                                     placeholder="95"
-                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: errors.price ? '1px solid #ef4444' : '1px solid #1e293b',
+                                        fontSize: '0.9rem',
+                                        outline: 'none',
+                                        color: '#000'
+                                    }}
                                 />
+                                {errors.price && (
+                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                        {errors.price}
+                                    </p>
+                                )}
                             </div>
                         </div>
 
@@ -606,7 +735,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                 {isContentOpen && (
                     <div style={{ padding: '1rem', background: '#fff' }}>
 
-                        {(content.items || []).map((item, index) => (
+                        {(contentItems || []).map((item, index) => (
                             <div key={item.id} style={{ marginBottom: '2rem' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                                     <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#1e293b' }}>
@@ -633,12 +762,17 @@ const ProductPageConfig = ({ config, onChange }) => {
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: errors.content?.[item.id] ? '1px solid #ef4444' : '1px solid #1e293b',
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             color: '#000'
                                         }}
                                     />
+                                    {errors.content?.[item.id] && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.content[item.id]}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* React Quill Editor */}
@@ -705,7 +839,10 @@ const ProductPageConfig = ({ config, onChange }) => {
                                 CERTIFICATE
                             </label>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                {(content.certificates || []).map(cert => (
+                                {(content.certificates || [
+                                    { id: 'def-cert-1', url: 'https://picsum.photos/seed/cert1/200/200' },
+                                    { id: 'def-cert-2', url: 'https://picsum.photos/seed/cert2/200/200' }
+                                ]).map(cert => (
                                     <div key={cert.id} style={{ width: '60px', height: '60px', borderRadius: '4px', border: '1px solid #e2e8f0', padding: '4px', position: 'relative' }}>
                                         <img src={cert.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                         <div
@@ -742,8 +879,21 @@ const ProductPageConfig = ({ config, onChange }) => {
                                     value={content.buttonText || ''}
                                     onChange={(e) => handleContentUpdate('buttonText', e.target.value)}
                                     placeholder="Buy Product"
-                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: errors.buttonText ? '1px solid #ef4444' : '1px solid #1e293b',
+                                        fontSize: '0.9rem',
+                                        outline: 'none',
+                                        color: '#000'
+                                    }}
                                 />
+                                {errors.buttonText && (
+                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                        {errors.buttonText}
+                                    </p>
+                                )}
                             </div>
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
@@ -754,8 +904,21 @@ const ProductPageConfig = ({ config, onChange }) => {
                                     value={content.buttonLink || ''}
                                     onChange={(e) => handleContentUpdate('buttonLink', e.target.value)}
                                     placeholder="https://www.dairylandltd.com/"
-                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: errors.buttonLink ? '1px solid #ef4444' : '1px solid #1e293b',
+                                        fontSize: '0.9rem',
+                                        outline: 'none',
+                                        color: '#000'
+                                    }}
                                 />
+                                {errors.buttonLink && (
+                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                        {errors.buttonLink}
+                                    </p>
+                                )}
                             </div>
                         </div>
 
@@ -800,12 +963,17 @@ const ProductPageConfig = ({ config, onChange }) => {
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: errors.videoTitle ? '1px solid #ef4444' : '1px solid #1e293b',
                                     fontSize: '0.9rem',
                                     outline: 'none',
                                     color: '#000'
                                 }}
                             />
+                            {errors.videoTitle && (
+                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                    {errors.videoTitle}
+                                </p>
+                            )}
                         </div>
 
                         {/* Upload Video */}
@@ -824,13 +992,18 @@ const ProductPageConfig = ({ config, onChange }) => {
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: errors.videoUrl ? '1px solid #ef4444' : '1px solid #1e293b',
                                     fontSize: '0.9rem',
                                     outline: 'none',
                                     color: '#000',
-                                    marginBottom: '1rem'
+                                    marginBottom: errors.videoUrl ? '0.25rem' : '1rem'
                                 }}
                             />
+                            {errors.videoUrl && (
+                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', marginBottom: '1rem' }}>
+                                    {errors.videoUrl}
+                                </p>
+                            )}
 
                             <div style={{ textAlign: 'center', color: '#8b5cf6', fontWeight: 'bold', fontSize: '0.8rem', marginBottom: '1rem' }}>
                                 OR
@@ -911,8 +1084,21 @@ const ProductPageConfig = ({ config, onChange }) => {
                                         value={feedback.title || ''}
                                         onChange={(e) => handleFeedbackUpdate('title', e.target.value)}
                                         placeholder="Add Your Feedback"
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: errors.feedbackTitle ? '1px solid #ef4444' : '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            color: '#000'
+                                        }}
                                     />
+                                    {errors.feedbackTitle && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.feedbackTitle}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                             <div style={{ flex: '1 1 120px' }}>
@@ -979,6 +1165,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                 >
                     <div>
                         <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>CONTACT</div>
+                        {errors.contactGeneral && <div style={{ color: '#ef4444', fontSize: '0.75rem' }}>{errors.contactGeneral}</div>}
                     </div>
                     {isContactOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
                 </div>
@@ -998,11 +1185,20 @@ const ProductPageConfig = ({ config, onChange }) => {
                                     </div>
                                     <input
                                         type="text"
-                                        value={contact.phone}
+                                        value={contact.phone || ''}
                                         onChange={(e) => handleContactUpdate('phone', e.target.value)}
                                         placeholder="111337374"
-                                        style={{ width: '100%', padding: '0.75rem 0.75rem 0.75rem 2.5rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem 0.75rem 0.75rem 2.5rem',
+                                            borderRadius: '4px',
+                                            border: errors.contact?.phone ? '1px solid #ef4444' : '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            color: '#000'
+                                        }}
                                     />
+                                    {errors.contact?.phone && <div style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{errors.contact.phone}</div>}
                                 </div>
                                 <div onClick={() => handleContactUpdate('phone', null)} style={{ cursor: 'pointer', opacity: 1, padding: '0.5rem', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                                     <X size={18} color="#ef4444" />
@@ -1033,8 +1229,17 @@ const ProductPageConfig = ({ config, onChange }) => {
                                         value={contact.email}
                                         onChange={(e) => handleContactUpdate('email', e.target.value)}
                                         placeholder="info@dairylandltd.com"
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: errors.contact?.email ? '1px solid #ef4444' : '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            color: '#000'
+                                        }}
                                     />
+                                    {errors.contact?.email && <div style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{errors.contact.email}</div>}
                                 </div>
                                 <div onClick={() => handleContactUpdate('email', null)} style={{ cursor: 'pointer', opacity: 1, padding: '0.5rem', display: 'flex', alignItems: 'center' }}>
                                     <X size={18} color="#ef4444" />
@@ -1065,8 +1270,17 @@ const ProductPageConfig = ({ config, onChange }) => {
                                         value={contact.website}
                                         onChange={(e) => handleContactUpdate('website', e.target.value)}
                                         placeholder="https://www.example.com"
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #1e293b', fontSize: '0.9rem', outline: 'none', color: '#000' }}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: errors.contact?.website ? '1px solid #ef4444' : '1px solid #1e293b',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            color: '#000'
+                                        }}
                                     />
+                                    {errors.contact?.website && <div style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{errors.contact.website}</div>}
                                 </div>
                                 <div onClick={() => handleContactUpdate('website', null)} style={{ cursor: 'pointer', opacity: 1, padding: '0.5rem', display: 'flex', alignItems: 'center' }}>
                                     <X size={18} color="#ef4444" />
@@ -1086,7 +1300,7 @@ const ProductPageConfig = ({ config, onChange }) => {
 
                         {/* Social Media Inputs */}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
-                            {(contact.socials || []).map((social, idx) => {
+                            {(contactSocials || []).map((social, idx) => {
                                 const iconObj = socialIcons.find(i => i.id === social.platform);
                                 return (
                                     <div key={idx} style={{ position: 'relative' }}>
@@ -1096,7 +1310,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                                             </span>
                                         </div>
                                         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                            <div style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center', border: '1px solid #1e293b', borderRadius: '4px', overflow: 'hidden', paddingLeft: '0.5rem' }}>
+                                            <div style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center', border: errors.contact?.[`social_${social.platform}`] ? '1px solid #ef4444' : '1px solid #1e293b', borderRadius: '4px', overflow: 'hidden', paddingLeft: '0.5rem' }}>
                                                 {iconObj && <div style={{ color: iconObj.color, display: 'flex', alignItems: 'center' }}>{iconObj.icon}</div>}
                                                 <input
                                                     type="text"
@@ -1125,7 +1339,7 @@ const ProductPageConfig = ({ config, onChange }) => {
                             </div>
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                                 {socialIcons.map((item) => {
-                                    const isAdded = (contact.socials || []).find(s => s.platform === item.id);
+                                    const isAdded = (contactSocials || []).find(s => s.platform === item.id);
                                     return (
                                         <div
                                             key={item.id}

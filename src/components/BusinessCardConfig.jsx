@@ -140,6 +140,14 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                 [key]: value
             }
         }));
+        // Clear error when user updates an exchange contact field
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.exchange;
+                return newErrors;
+            });
+        }
     };
 
     const deleteContactField = (field) => {
@@ -2172,7 +2180,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             }}>
                                 <input
                                     type="checkbox"
-                                    checked={exchange.fullName !== false}
+                                    checked={exchange.fullName === true}
                                     onChange={(e) => handleExchangeUpdate('fullName', e.target.checked)}
                                     style={{
                                         width: '20px',
@@ -2197,7 +2205,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             }}>
                                 <input
                                     type="checkbox"
-                                    checked={exchange.contactNumber !== false}
+                                    checked={exchange.contactNumber === true}
                                     onChange={(e) => handleExchangeUpdate('contactNumber', e.target.checked)}
                                     style={{
                                         width: '20px',
@@ -2222,7 +2230,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             }}>
                                 <input
                                     type="checkbox"
-                                    checked={exchange.organization !== false}
+                                    checked={exchange.organization === true}
                                     onChange={(e) => handleExchangeUpdate('organization', e.target.checked)}
                                     style={{
                                         width: '20px',
@@ -2247,7 +2255,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             }}>
                                 <input
                                     type="checkbox"
-                                    checked={exchange.email !== false}
+                                    checked={exchange.email === true}
                                     onChange={(e) => handleExchangeUpdate('email', e.target.checked)}
                                     style={{
                                         width: '20px',
@@ -2272,7 +2280,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             }}>
                                 <input
                                     type="checkbox"
-                                    checked={exchange.jobTitle || false}
+                                    checked={exchange.jobTitle === true}
                                     onChange={(e) => handleExchangeUpdate('jobTitle', e.target.checked)}
                                     style={{
                                         width: '20px',
@@ -2297,7 +2305,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             }}>
                                 <input
                                     type="checkbox"
-                                    checked={exchange.website || false}
+                                    checked={exchange.website === true}
                                     onChange={(e) => handleExchangeUpdate('website', e.target.checked)}
                                     style={{
                                         width: '20px',
@@ -2466,7 +2474,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         )}
 
                         {/* Add Customized Button */}
-                        <div>
+                        <div style={{ marginBottom: errors.exchange ? '1rem' : '0' }}>
                             <button
                                 onClick={handleAddCustomField}
                                 style={{
@@ -2490,6 +2498,22 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 Add Customized
                             </button>
                         </div>
+
+                        {/* Error Message */}
+                        {errors.exchange && (
+                            <div style={{
+                                marginTop: '1rem',
+                                padding: '0.75rem',
+                                background: '#fee2e2',
+                                border: '1px solid #ef4444',
+                                borderRadius: '4px',
+                                color: '#991b1b',
+                                fontSize: '0.875rem',
+                                fontWeight: '500'
+                            }}>
+                                {errors.exchange}
+                            </div>
+                        )}
 
 
                     </div>

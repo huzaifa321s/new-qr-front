@@ -141,6 +141,15 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
             ...prev,
             socialLinks: [...(prev.socialLinks || []), newLink]
         }));
+
+        // Clear socialLinks error when a platform is added
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.socialLinks;
+                return newErrors;
+            });
+        }
     };
 
     const handleSocialLinkUpdate = (id, value) => {
@@ -148,17 +157,44 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
             link.id === id ? { ...link, url: value } : link
         );
         onChange(prev => ({ ...prev, socialLinks: newLinks }));
+
+        // Clear individual link error when user updates the url
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[id];
+                return newErrors;
+            });
+        }
     };
 
     const handleSocialLinkRemove = (id) => {
         const newLinks = socialLinks.filter(link => link.id !== id);
         onChange(prev => ({ ...prev, socialLinks: newLinks }));
+
+        // Clear socialLinks error when a platform is removed (user is interacting)
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.socialLinks;
+                return newErrors;
+            });
+        }
     };
 
     const handleSocialLinkUnselect = (id) => {
         // Remove the social link entirely
         const newLinks = socialLinks.filter(link => link.id !== id);
         onChange(prev => ({ ...prev, socialLinks: newLinks }));
+
+        // Clear socialLinks error
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.socialLinks;
+                return newErrors;
+            });
+        }
     };
 
     // Social Media Platforms Configuration
@@ -806,15 +842,36 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                             width: '100%',
                                                             padding: '0.75rem 0.75rem 0.75rem 3rem',
                                                             borderRadius: '4px',
-                                                            border: '1px solid #1e293b',
+                                                            border: `1px solid ${errors[link.id] ? '#ef4444' : '#1e293b'}`,
                                                             fontSize: '0.9rem',
                                                             outline: 'none'
                                                         }}
                                                     />
                                                 </div>
+                                                {errors[link.id] && (
+                                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                                        {errors[link.id]}
+                                                    </p>
+                                                )}
                                             </div>
                                         );
                                     })}
+                                </div>
+                            )}
+
+                            {/* Error Message */}
+                            {errors.socialLinks && (
+                                <div style={{
+                                    marginBottom: '1.5rem',
+                                    padding: '0.75rem',
+                                    background: '#fee2e2',
+                                    border: '1px solid #ef4444',
+                                    borderRadius: '4px',
+                                    color: '#991b1b',
+                                    fontSize: '0.875rem',
+                                    fontWeight: '500'
+                                }}>
+                                    {errors.socialLinks}
                                 </div>
                             )}
 

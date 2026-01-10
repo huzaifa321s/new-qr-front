@@ -2,7 +2,7 @@ import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Plus, Faceboo
 import { useState, useEffect } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
-const MultipleLinksConfig = ({ config, onChange }) => {
+const MultipleLinksConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
 
@@ -64,6 +64,14 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        // Clear error when user updates a basic info field
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key];
+                return newErrors;
+            });
+        }
     };
 
     const handleLinkUpdate = (id, field, value) => {
@@ -71,16 +79,67 @@ const MultipleLinksConfig = ({ config, onChange }) => {
             link.id === id ? { ...link, [field]: value } : link
         );
         onChange(prev => ({ ...prev, links: newLinks }));
+        // Clear specific error for this link field
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                if (newErrors.links && typeof newErrors.links === 'object') {
+                    const newLinkErrors = { ...newErrors.links };
+                    if (newLinkErrors[id]) {
+                        const itemErrors = { ...newLinkErrors[id] };
+                        delete itemErrors[field];
+                        if (Object.keys(itemErrors).length === 0) {
+                            delete newLinkErrors[id];
+                        } else {
+                            newLinkErrors[id] = itemErrors;
+                        }
+
+                        if (Object.keys(newLinkErrors).length === 0) {
+                            delete newErrors.links;
+                        } else {
+                            newErrors.links = newLinkErrors;
+                        }
+                    }
+                }
+                return newErrors;
+            });
+        }
     };
 
     const handleAddLink = () => {
         const newLink = { id: Date.now().toString(), url: '', title: '' };
         onChange(prev => ({ ...prev, links: [...links, newLink] }));
+        // Clear general links error when a link is added
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                if (typeof newErrors.links === 'string') {
+                    delete newErrors.links;
+                }
+                return newErrors;
+            });
+        }
     };
 
     const handleRemoveLink = (id) => {
         const newLinks = links.filter(link => link.id !== id);
         onChange(prev => ({ ...prev, links: newLinks }));
+        // Clear specific error for this removed link
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                if (newErrors.links && typeof newErrors.links === 'object') {
+                    const newLinkErrors = { ...newErrors.links };
+                    delete newLinkErrors[id];
+                    if (Object.keys(newLinkErrors).length === 0) {
+                        delete newErrors.links;
+                    } else {
+                        newErrors.links = newLinkErrors;
+                    }
+                }
+                return newErrors;
+            });
+        }
     };
 
     const handleSocialLinkAdd = (platformId) => {
@@ -107,6 +166,14 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                 };
             }
         });
+        // Clear general socialLinks error when a channel is added or toggled
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.socialLinks;
+                return newErrors;
+            });
+        }
     };
 
     const handleSocialLinkUpdate = (id, value) => {
@@ -114,11 +181,43 @@ const MultipleLinksConfig = ({ config, onChange }) => {
             link.id === id ? { ...link, url: value } : link
         );
         onChange(prev => ({ ...prev, socialLinks: newLinks }));
+        // Clear specific error for this social link
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                if (newErrors.socialLinks && typeof newErrors.socialLinks === 'object') {
+                    const newSocialErrors = { ...newErrors.socialLinks };
+                    delete newSocialErrors[id];
+                    if (Object.keys(newSocialErrors).length === 0) {
+                        delete newErrors.socialLinks;
+                    } else {
+                        newErrors.socialLinks = newSocialErrors;
+                    }
+                }
+                return newErrors;
+            });
+        }
     };
 
     const handleSocialLinkRemove = (id) => {
         const newLinks = socialLinks.filter(link => link.id !== id);
         onChange(prev => ({ ...prev, socialLinks: newLinks }));
+        // Clear specific error for this social link
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                if (newErrors.socialLinks && typeof newErrors.socialLinks === 'object') {
+                    const newSocialErrors = { ...newErrors.socialLinks };
+                    delete newSocialErrors[id];
+                    if (Object.keys(newSocialErrors).length === 0) {
+                        delete newErrors.socialLinks;
+                    } else {
+                        newErrors.socialLinks = newSocialErrors;
+                    }
+                }
+                return newErrors;
+            });
+        }
     };
 
     // Share Handlers
@@ -222,19 +321,27 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                             </label>
                             <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr 1fr', gap: '1rem' }}>
                                 {/* Headline Input */}
-                                <input
-                                    type="text"
-                                    value={basicInfo.headline || 'Techoid'}
-                                    onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
+                                <div>
+                                    <input
+                                        type="text"
+                                        value={basicInfo.headline || ''}
+                                        onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
+                                        placeholder="Techoid"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: `1px solid ${errors.headline ? '#ef4444' : '#1e293b'}`,
+                                            fontSize: '0.9rem',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                    {errors.headline && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem', marginBottom: '0' }}>
+                                            {errors.headline}
+                                        </p>
+                                    )}
+                                </div>
 
                                 {/* Text Color */}
                                 <div>
@@ -326,8 +433,9 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                 ABOUT US
                             </label>
                             <textarea
-                                value={basicInfo.aboutUs || 'Follow us and get updates delivered to your favorite social media channel.'}
+                                value={basicInfo.aboutUs || ''}
                                 onChange={(e) => handleBasicInfoUpdate('aboutUs', e.target.value)}
+                                placeholder="Follow us and get updates delivered to your favorite social media channel."
                                 rows={3}
                                 style={{
                                     width: '100%',
@@ -369,10 +477,17 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                 {isLinksOpen && (
                     <div style={{ padding: isMobile ? '1rem' : '2rem', background: '#fff' }}>
 
+                        {/* General Links Error */}
+                        {typeof errors.links === 'string' && (
+                            <div style={{ color: '#ef4444', fontSize: '0.85rem', marginBottom: '1.5rem', fontWeight: 'bold' }}>
+                                {errors.links}
+                            </div>
+                        )}
+
                         {links.map((link) => (
-                            <div key={link.id} style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem', alignItems: 'end' }}>
+                            <div key={link.id} style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1.5rem', marginBottom: '2rem', alignItems: 'start' }}>
                                 {/* URL Input */}
-                                <div>
+                                <div style={{ position: 'relative' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         URL*
                                     </label>
@@ -385,16 +500,21 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: `1px solid ${errors.links && errors.links[link.id]?.url ? '#ef4444' : '#1e293b'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
                                     />
+                                    {errors.links && errors.links[link.id]?.url && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                            {errors.links[link.id].url}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* Link Title Input & Delete */}
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                    <div style={{ flex: 1 }}>
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'start' }}>
+                                    <div style={{ flex: 1, position: 'relative' }}>
                                         <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                             LINK TITLE*
                                         </label>
@@ -407,11 +527,16 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                                 width: '100%',
                                                 padding: '0.75rem',
                                                 borderRadius: '4px',
-                                                border: '1px solid #1e293b',
+                                                border: `1px solid ${errors.links && errors.links[link.id]?.title ? '#ef4444' : '#1e293b'}`,
                                                 fontSize: '0.9rem',
                                                 outline: 'none'
                                             }}
                                         />
+                                        {errors.links && errors.links[link.id]?.title && (
+                                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                                {errors.links[link.id].title}
+                                            </p>
+                                        )}
                                     </div>
                                     <div
                                         onClick={() => handleRemoveLink(link.id)}
@@ -424,7 +549,8 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             cursor: 'pointer',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            marginTop: '2.2rem'
                                         }}
                                     >
                                         <X size={14} color="#cbd5e1" />
@@ -482,6 +608,13 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                 {isSocialOpen && (
                     <div style={{ padding: isMobile ? '1rem' : '2rem', background: '#fff' }}>
 
+                        {/* General Social Error */}
+                        {typeof errors.socialLinks === 'string' && (
+                            <div style={{ color: '#ef4444', fontSize: '0.85rem', marginBottom: '1.5rem', fontWeight: 'bold' }}>
+                                {errors.socialLinks}
+                            </div>
+                        )}
+
                         {/* Selected Social Channels */}
                         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '1rem' : '2rem', marginBottom: socialLinks.length > 0 ? '2.5rem' : '0' }}>
                             {socialLinks.map((link) => {
@@ -538,9 +671,15 @@ const MultipleLinksConfig = ({ config, onChange }) => {
                                                     padding: '0 1rem',
                                                     outline: 'none',
                                                     color: '#64748b',
-                                                    fontSize: '0.9rem'
+                                                    fontSize: '0.9rem',
+                                                    borderBottom: errors.socialLinks && errors.socialLinks[link.id] ? '2px solid #ef4444' : 'none'
                                                 }}
                                             />
+                                            {errors.socialLinks && errors.socialLinks[link.id] && (
+                                                <div style={{ color: '#ef4444', fontSize: '0.7rem', marginTop: '0.5rem', width: '100%', paddingLeft: '44px' }}>
+                                                    {errors.socialLinks[link.id]}
+                                                </div>
+                                            )}
                                             <div
                                                 onClick={() => handleSocialLinkRemove(link.id)}
                                                 style={{

@@ -2,7 +2,7 @@ import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, FileText, Edi
 import { useState, useRef } from 'react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
-const PDFConfig = ({ config, onChange }) => {
+const PDFConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isUploadPdfOpen, setIsUploadPdfOpen] = useState(false);
@@ -74,6 +74,14 @@ const PDFConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        // Clear error when user updates a basic info field
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key];
+                return newErrors;
+            });
+        }
     };
 
     const handleUploadPdfUpdate = (key, value) => {
@@ -84,6 +92,20 @@ const PDFConfig = ({ config, onChange }) => {
                 [key]: value
             }
         }));
+        // Clear error when user updates an upload pdf field
+        if (setErrors) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                if (key === 'pdfTitle') {
+                    delete newErrors.uploadPdfTitle;
+                } else if (key === 'pdfUrl') {
+                    delete newErrors.pdfSource;
+                } else if (key === 'buttonTitle') {
+                    delete newErrors.buttonTitle;
+                }
+                return newErrors;
+            });
+        }
     };
 
     const handleFileChange = (event) => {
@@ -101,6 +123,10 @@ const PDFConfig = ({ config, onChange }) => {
                     }
                 }
             }));
+            // Clear error when user uploads a file
+            if (setErrors) {
+                setErrors(prev => ({ ...prev, pdfSource: undefined }));
+            }
         }
     };
 
@@ -192,17 +218,23 @@ const PDFConfig = ({ config, onChange }) => {
                                 <div style={{ flex: '2 1 200px' }}>
                                     <input
                                         type="text"
-                                        value={basicInfo.companyName || 'Software Company'}
+                                        value={basicInfo.companyName || ''}
                                         onChange={(e) => handleBasicInfoUpdate('companyName', e.target.value)}
+                                        placeholder="Software Company"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: `1px solid ${errors.companyName ? '#ef4444' : '#1e293b'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
                                     />
+                                    {errors.companyName && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.companyName}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* Text Color */}
@@ -299,17 +331,23 @@ const PDFConfig = ({ config, onChange }) => {
                                 <div style={{ flex: '2 1 200px' }}>
                                     <input
                                         type="text"
-                                        value={basicInfo.pdfTitle || 'See Our Company Profile'}
+                                        value={basicInfo.pdfTitle || ''}
                                         onChange={(e) => handleBasicInfoUpdate('pdfTitle', e.target.value)}
+                                        placeholder="See Our Company Profile"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: `1px solid ${errors.pdfTitle ? '#ef4444' : '#1e293b'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
                                     />
+                                    {errors.pdfTitle && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                            {errors.pdfTitle}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* Text Color */}
@@ -403,8 +441,9 @@ const PDFConfig = ({ config, onChange }) => {
                                 DESCRIPTION
                             </label>
                             <textarea
-                                value={basicInfo.description || 'We aim to provide fresh and healthy snacks people on the go.'}
+                                value={basicInfo.description || ''}
                                 onChange={(e) => handleBasicInfoUpdate('description', e.target.value)}
+                                placeholder="We aim to provide fresh and healthy snacks people on the go."
                                 rows={3}
                                 style={{
                                     width: '100%',
@@ -453,17 +492,23 @@ const PDFConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={uploadPdf.pdfTitle || 'Qr Insight Presentation'}
+                                value={uploadPdf.pdfTitle || ''}
                                 onChange={(e) => handleUploadPdfUpdate('pdfTitle', e.target.value)}
+                                placeholder="Qr Insight Presentation"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: `1px solid ${errors.uploadPdfTitle ? '#ef4444' : '#1e293b'}`,
                                     fontSize: '0.9rem',
                                     outline: 'none'
                                 }}
                             />
+                            {errors.uploadPdfTitle && (
+                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                    {errors.uploadPdfTitle}
+                                </p>
+                            )}
                         </div>
 
                         {/* UPLOAD PDF SECTION */}
@@ -475,18 +520,24 @@ const PDFConfig = ({ config, onChange }) => {
                             {/* URL Input */}
                             <input
                                 type="text"
-                                value={uploadPdf.pdfUrl || 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf'}
+                                value={uploadPdf.pdfUrl || ''}
                                 onChange={(e) => handleUploadPdfUpdate('pdfUrl', e.target.value)}
+                                placeholder="https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: `1px solid ${errors.pdfSource ? '#ef4444' : '#1e293b'}`,
                                     fontSize: '0.9rem',
                                     outline: 'none',
                                     marginBottom: '1rem'
                                 }}
                             />
+                            {errors.pdfSource && (
+                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', marginBottom: '1rem' }}>
+                                    {errors.pdfSource}
+                                </p>
+                            )}
 
                             {/* OR Separator */}
                             <div style={{ textAlign: 'center', margin: '0.5rem 0 1rem 0', color: '#8b5cf6', fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase' }}>OR</div>
@@ -578,17 +629,23 @@ const PDFConfig = ({ config, onChange }) => {
                             </label>
                             <input
                                 type="text"
-                                value={uploadPdf.buttonTitle || 'Download Now'}
+                                value={uploadPdf.buttonTitle || ''}
                                 onChange={(e) => handleUploadPdfUpdate('buttonTitle', e.target.value)}
+                                placeholder="Download Now"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: `1px solid ${errors.buttonTitle ? '#ef4444' : '#1e293b'}`,
                                     fontSize: '0.9rem',
                                     outline: 'none'
                                 }}
                             />
+                            {errors.buttonTitle && (
+                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                    {errors.buttonTitle}
+                                </p>
+                            )}
                         </div>
 
                     </div>
