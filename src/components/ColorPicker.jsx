@@ -8,7 +8,7 @@ const ColorPicker = ({ label, color, onChange }) => {
 
     return (
         <div style={{ marginBottom: '1rem', position: 'relative' }}>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#64748b', marginBottom: '0.5rem' }}>
+            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#94a3b8', marginBottom: '0.5rem' }}>
                 {label}
             </label>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
@@ -17,11 +17,11 @@ const ColorPicker = ({ label, color, onChange }) => {
                     style={{
                         width: '40px',
                         height: '40px',
-                        borderRadius: '50%',
+                        borderRadius: '12px',
                         background: color,
-                        border: '2px solid #e2e8f0',
+                        border: '2px solid #475569',
                         cursor: 'pointer',
-                        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3)',
                         flexShrink: 0
                     }}
                 />
@@ -31,11 +31,13 @@ const ColorPicker = ({ label, color, onChange }) => {
                     onChange={(e) => onChange(e.target.value)}
                     style={{
                         padding: '0.5rem',
-                        border: '1px solid #cbd5e1',
-                        borderRadius: '6px',
-                        width: '90px',
+                        border: '1px solid #334155',
+                        borderRadius: '8px',
+                        width: '100px',
                         fontSize: '0.9rem',
-                        fontFamily: 'monospace'
+                        fontFamily: 'monospace',
+                        background: '#0f172a',
+                        color: '#f8fafc'
                     }}
                 />
                 <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
@@ -44,21 +46,23 @@ const ColorPicker = ({ label, color, onChange }) => {
                             key={preset}
                             onClick={() => onChange(preset)}
                             style={{
-                                width: '22px',
-                                height: '22px',
-                                borderRadius: '50%',
+                                width: '24px',
+                                height: '24px',
+                                borderRadius: '8px',
                                 background: preset,
                                 cursor: 'pointer',
-                                border: color === preset ? '2px solid #000' : '1px solid #e2e8f0',
-                                flexShrink: 0
+                                border: color === preset ? '2px solid #f8fafc' : '1px solid #334155'
                             }}
                         />
                     ))}
                 </div>
             </div>
             {showPicker && (
-                <div style={{ position: 'absolute', zIndex: 1000, top: '100%', left: 0 }}>
-                    <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, left: 0 }} onClick={() => setShowPicker(false)} />
+                <div style={{ position: 'absolute', zIndex: 10, marginTop: '0.5rem' }}>
+                    <div
+                        style={{ position: 'fixed', top: 0, right: 0, bottom: 0, left: 0 }}
+                        onClick={() => setShowPicker(false)}
+                    />
                     <SketchPicker color={color} onChange={(c) => onChange(c.hex)} />
                 </div>
             )}

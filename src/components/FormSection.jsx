@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const FormSection = ({ title, children, defaultOpen = false }) => {
     const [isOpen, setIsOpen] = useState(defaultOpen);
 
     return (
-        <div style={{
-            background: '#ffffff',
-            borderRadius: '12px',
-            marginBottom: '1rem',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-            overflow: 'hidden'
-        }}>
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{
+                background: '#1e293b',
+                borderRadius: '16px',
+                marginBottom: '1rem',
+                border: '1px solid #334155',
+                overflow: 'hidden'
+            }}
+        >
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 style={{
@@ -25,20 +30,35 @@ const FormSection = ({ title, children, defaultOpen = false }) => {
                     cursor: 'pointer',
                     fontSize: '1rem',
                     fontWeight: '600',
-                    color: '#1e293b',
+                    color: '#f8fafc',
                     textAlign: 'left'
                 }}
             >
                 {title}
-                {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                <motion.div
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                >
+                    <ChevronDown size={20} color="#94a3b8" />
+                </motion.div>
             </button>
 
-            {isOpen && (
-                <div style={{ padding: '0 1rem 1rem 1rem', borderTop: '1px solid #f1f5f9' }}>
-                    {children}
-                </div>
-            )}
-        </div>
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        style={{ overflow: 'hidden' }}
+                    >
+                        <div style={{ padding: '0 1.25rem 1.25rem 1.25rem', borderTop: '1px solid #334155', paddingTop: '1rem' }}>
+                            {children}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
     );
 };
 

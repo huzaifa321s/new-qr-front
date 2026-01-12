@@ -47,10 +47,17 @@ const Statistics = () => {
     // Responsive Sidebar State
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [sidebarExpanded, setSidebarExpanded] = useState(true);
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        const handleResize = () => {
+             const mobile = window.innerWidth <= 768;
+             setIsMobile(mobile);
+             if (mobile) setSidebarExpanded(false);
+             else setSidebarExpanded(true);
+        };
         window.addEventListener('resize', handleResize);
+        handleResize();
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
@@ -294,10 +301,21 @@ const Statistics = () => {
             <Toaster position="top-center" />
 
             {/* Sidebar */}
-            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+            <Sidebar 
+                isOpen={isSidebarOpen} 
+                onClose={() => setIsSidebarOpen(false)} 
+                onToggle={(expanded) => setSidebarExpanded(expanded)}
+                collapsed={!sidebarExpanded}
+            />
 
             {/* Main Content */}
-            <div className="stats-main-content" style={{ flex: 1, padding: '2rem 3rem', overflowY: 'auto' }}>
+            <div className="stats-main-content" style={{ 
+                flex: 1, 
+                padding: '2rem 3rem', 
+                overflowY: 'auto',
+                marginLeft: isMobile ? 0 : (sidebarExpanded ? '260px' : '80px'),
+                transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}>
                 <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
                         {isMobile && (

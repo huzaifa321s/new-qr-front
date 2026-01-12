@@ -27,7 +27,8 @@ import { qrTypes } from '../utils/qrTypes';
 import { getPreviewConfig } from '../utils/previewConfigs';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronLeft } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Generator = () => {
     const location = useLocation();
