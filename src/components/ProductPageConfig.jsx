@@ -2,6 +2,7 @@ import { ChevronDown, ChevronUp, RefreshCw, Check, X, UploadCloud, Bold, Italic,
 import { FaWhatsapp, FaDiscord, FaTwitch, FaSnapchat, FaTiktok, FaSpotify, FaPinterest, FaTelegram, FaReddit, FaBehance, FaTumblr } from 'react-icons/fa';
 import { SiKick } from 'react-icons/si';
 import { useState, useRef } from 'react';
+import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
@@ -118,17 +119,35 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
         e.target.value = null;
     };
 
-    const handleProductImageUpload = (e) => {
-        const files = Array.from(e.target.files);
+    const handleProductImageUpload = async (e) => {
+        const files = Array.from(e.target.files || []);
         if (files.length === 0) return;
 
-        const newImages = files.map(file => ({
-            id: Date.now() + Math.random().toString(),
-            url: URL.createObjectURL(file)
-        }));
+        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/';
+        const uploadedImages = [];
 
-        const currentImages = basicInfo.productImages || [];
-        handleBasicInfoUpdate('productImages', [...currentImages, ...newImages]);
+        for (const file of files) {
+            try {
+                const formData = new FormData();
+                formData.append('image', file);
+                const res = await axios.post(`${baseUrl}api/upload/image`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                if (res?.data?.url) {
+                    uploadedImages.push({
+                        id: Date.now() + Math.random().toString(),
+                        url: res.data.url
+                    });
+                }
+            } catch (err) {
+                console.error('Product image upload failed:', err);
+            }
+        }
+
+        if (uploadedImages.length > 0) {
+            const currentImages = basicInfo.productImages || [];
+            handleBasicInfoUpdate('productImages', [...currentImages, ...uploadedImages]);
+        }
         e.target.value = null;
     };
 
