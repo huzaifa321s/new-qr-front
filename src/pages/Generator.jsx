@@ -1053,7 +1053,8 @@ const Generator = () => {
                 const socialErrors = {};
                 socialLinks.forEach(link => {
                     if (!link.url || !link.url.trim()) {
-                        socialErrors[link.id] = 'URL is required';
+                        const platformName = link.platform ? link.platform.charAt(0).toUpperCase() + link.platform.slice(1) : 'Social Media';
+                        socialErrors[link.id] = `${platformName} URL is required`;
                     } else {
                         try {
                             const url = new URL(link.url);
@@ -1081,7 +1082,8 @@ const Generator = () => {
                         itemErrors.title = 'Title is required';
                     }
                     if (!link.url || !link.url.trim()) {
-                        itemErrors.url = 'URL is required';
+                        const linkName = link.title && link.title.trim() ? link.title : 'Link';
+                        itemErrors.url = `${linkName} URL is required`;
                     } else {
                         try {
                             const url = new URL(link.url);
@@ -1103,10 +1105,28 @@ const Generator = () => {
 
             if (Object.keys(errors).length > 0) {
                 setMultipleLinksErrors(errors);
-                const firstError = errors.headline ||
-                    (typeof errors.socialLinks === 'string' ? errors.socialLinks : (errors.socialLinks ? Object.values(errors.socialLinks)[0] : null)) ||
-                    (typeof errors.links === 'string' ? errors.links : (errors.links ? Object.values(Object.values(errors.links)[0])[0] : null));
-                toast.error(firstError);
+
+                let toastMessage = '';
+                if (errors.headline) {
+                    toastMessage = `Basic Info: ${errors.headline}`;
+                } else if (errors.links) {
+                    if (typeof errors.links === 'string') {
+                        toastMessage = `Links: ${errors.links}`;
+                    } else {
+                        const firstLinkErrorObj = Object.values(errors.links)[0];
+                        const firstLinkMsg = Object.values(firstLinkErrorObj)[0];
+                        toastMessage = `Links: ${firstLinkMsg}`;
+                    }
+                } else if (errors.socialLinks) {
+                    if (typeof errors.socialLinks === 'string') {
+                        toastMessage = `Social Media: ${errors.socialLinks}`;
+                    } else {
+                        const firstSocialMsg = Object.values(errors.socialLinks)[0];
+                        toastMessage = `Social Media: ${firstSocialMsg}`;
+                    }
+                }
+
+                toast.error(toastMessage || 'Please fix the errors');
                 return;
             }
 
@@ -1763,15 +1783,46 @@ const Generator = () => {
                         </div>
 
                         <div style={{
-                            background: scannability.bgColor,
-                            color: scannability.color,
-                            padding: '0.25rem 1rem',
-                            borderRadius: '4px',
-                            fontSize: '0.8rem',
-                            fontWeight: '600',
-                            border: `1px solid ${scannability.color}20`
+                            width: '90%',
+                            marginTop: '1rem'
                         }}>
-                            Scannability: {scannability.text}
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                marginBottom: '0.5rem'
+                            }}>
+                                <div style={{
+                                    background: scannability.bgColor,
+                                    color: scannability.color,
+                                    padding: '0.25rem 0.75rem',
+                                    borderRadius: '4px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: '700',
+                                    border: `1px solid ${scannability.color}20`,
+                                    textTransform: 'uppercase'
+                                }}>
+                                    {scannability.text}
+                                </div>
+                                <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748b' }}>Scanability</span>
+                            </div>
+
+                            <div style={{
+                                width: '100%',
+                                height: '8px',
+                                background: '#f8fafc',
+                                borderRadius: '4px',
+                                overflow: 'hidden',
+                                border: '1px solid #e2e8f0'
+                            }}>
+                                <div style={{
+                                    width: `${scannability.score}%`,
+                                    height: '100%',
+                                    background: scannability.color,
+                                    borderRadius: '4px',
+                                    transition: 'all 0.3s ease'
+                                }}></div>
+                            </div>
                         </div>
                     </>
                 )}

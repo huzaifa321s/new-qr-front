@@ -86,8 +86,15 @@ const StaticGenerator = () => {
         dots: { style: 'square', color: '#000000' },
         cornersSquare: { style: 'square', color: '#000000' },
         cornersDot: { style: 'dot', color: '#000000' },
+        background: { color: '#ffffff' },
         image: { url: null },
         imageOptions: { hideBackgroundDots: false, imageSize: 0.4 }
+    });
+    const [scannability, setScannability] = useState({
+        score: 100,
+        text: 'EXCELLENT',
+        color: '#166534',
+        bgColor: '#dcfce7'
     });
     const [isSaving, setIsSaving] = useState(false);
 
@@ -212,6 +219,69 @@ const StaticGenerator = () => {
             document.body.removeAttribute('data-view-mode');
         };
     }, [viewMode]);
+
+    // --- SCANNABILITY ENGINE ---
+    const getRelativeLuminance = (hex) => {
+        // Handle cases where hex might be null or undefined
+        if (!hex) return 0;
+        let c = hex.replace(/^#/, '');
+        if (c.length === 3) {
+            c = c.split('').map(x => x + x).join('');
+        }
+        const rgb = c.match(/.{2}/g).map(x => parseInt(x, 16) / 255);
+        const [r, g, b] = rgb.map(c => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+
+    const getContrastRatio = (color1, color2) => {
+        const L1 = getRelativeLuminance(color1);
+        const L2 = getRelativeLuminance(color2);
+        return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+    };
+
+    const calculateScannability = (design, qrValue) => {
+        let score = 100;
+        // Default background to white if not present
+        const bgColor = design.background?.color || '#ffffff';
+        const contrast = getContrastRatio(design.dots.color, bgColor);
+
+        // 1. Contrast Check (Weight: 60%)
+        if (contrast < 2.5) score -= 60;
+        else if (contrast < 4.5) score -= 30;
+
+        // 2. Logo Check (Weight: 20%)
+        if (design.image?.url) {
+            const size = design.imageOptions?.imageSize || 0.2;
+
+            // If logo covers > 40% (0.4), it's critical blocking risk
+            if (size >= 0.4) {
+                score -= 50;
+            }
+            // If logo covers > 30% (0.3), it's high risk
+            else if (size >= 0.3) {
+                score -= 30;
+            }
+            // If logo covers > 20% (0.2), it's moderate impact
+            else if (size > 0.2) {
+                score -= 10;
+            }
+        }
+
+        // 3. Data Density (Weight: 20%)
+        const len = (qrValue || '').length;
+        if (len > 200) score -= 20;
+        else if (len > 100) score -= 10;
+
+        // Final result mapping
+        if (score >= 90) return { score, text: 'EXCELLENT', color: '#166534', bgColor: '#dcfce7' };
+        if (score >= 60) return { score, text: 'GOOD', color: '#1e40af', bgColor: '#dbeafe' };
+        return { score, text: 'CRITICAL', color: '#991b1b', bgColor: '#fee2e2' };
+    };
+
+    useEffect(() => {
+        const result = calculateScannability(qrDesign, link || '');
+        setScannability(result);
+    }, [qrDesign, link]);
 
     const handleLogoUpload = (e) => {
         const file = e.target.files[0];
@@ -1293,6 +1363,49 @@ const StaticGenerator = () => {
                                 design={qrDesign}
                                 size={260}
                             />
+                        </div>
+
+                        {/* Scannability Badge */}
+                        <div style={{
+                            width: '100%',
+                            marginBottom: '2rem'
+                        }}>
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                marginBottom: '0.5rem'
+                            }}>
+                                <div style={{
+                                    background: scannability.bgColor,
+                                    color: scannability.color,
+                                    padding: '0.25rem 0.75rem',
+                                    borderRadius: '4px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: '700',
+                                    border: `1px solid ${scannability.color}20`,
+                                    textTransform: 'uppercase'
+                                }}>
+                                    {scannability.text}
+                                </div>
+                                <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748b' }}>Scanability</span>
+                            </div>
+
+                            <div style={{
+                                width: '100%',
+                                height: '8px',
+                                background: '#f1f5f9',
+                                borderRadius: '4px',
+                                overflow: 'hidden'
+                            }}>
+                                <div style={{
+                                    width: `${scannability.score}%`,
+                                    height: '100%',
+                                    background: scannability.color,
+                                    borderRadius: '4px',
+                                    transition: 'all 0.3s ease'
+                                }}></div>
+                            </div>
                         </div>
 
                         {/* Scannable Content Preview (Mobile Preview) */}
