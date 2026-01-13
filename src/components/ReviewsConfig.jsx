@@ -267,7 +267,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const palettes = [
         { p: '#0B2D86', s: '#FFA800' },
         { p: '#FACC15', s: '#FEF9C3' },
-        { p: '#8B5CF6', s: '#C4B5FD' },
+        { p: '#FFA305', s: '#FFD89A' },
         { p: '#16A34A', s: '#86EFAC' },
         { p: '#06B6D4', s: '#67E8F9' }
     ];
@@ -318,7 +318,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                 {/* HEADER IMAGE SECTION */}
                 <div style={{ marginBottom: '2rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#ffa305', textTransform: 'uppercase' }}>
                             HEADER IMAGE
                         </span>
                         <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
@@ -355,7 +355,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     height: '53px',
                                     borderRadius: '4px',
                                     overflow: 'hidden',
-                                    border: design.headerImage?.url === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                    border: design.headerImage?.url === img.url ? '2px solid #ffa305' : '1px solid #e2e8f0',
                                     cursor: 'pointer',
                                     position: 'relative'
                                 }}
@@ -368,7 +368,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         right: 2,
                                         width: '20px',
                                         height: '20px',
-                                        background: '#8b5cf6',
+                                        background: '#ffa305',
                                         borderRadius: '50%',
                                         display: 'flex',
                                         alignItems: 'center',
@@ -423,7 +423,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     height: '53px',
                                     borderRadius: '4px',
                                     overflow: 'hidden',
-                                    border: '2px solid #8b5cf6',
+                                    border: '2px solid #ffa305',
                                     cursor: 'pointer',
                                     position: 'relative'
                                 }}
@@ -451,7 +451,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     right: 2,
                                     width: '20px',
                                     height: '20px',
-                                    background: '#8b5cf6',
+                                    background: '#ffa305',
                                     borderRadius: '50%',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -492,7 +492,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* ORGANIZATION NAME FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 ORGANIZATION NAME*
                             </label>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -595,7 +595,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* TITLE FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 TITLE*
                             </label>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -698,7 +698,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* DESCRIPTION FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 DESCRIPTION
                             </label>
                             <textarea
@@ -721,7 +721,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* WEBSITE FIELD */}
                         <div style={{ marginBottom: '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 WEBSITE*
                             </label>
                             <input
@@ -826,7 +826,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 </div>
 
                                 <div style={{ marginBottom: '1rem' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         SUBCATEGORIES:
                                     </label>
                                     {errors[`category_${category.id}_subcategories`] && (
@@ -885,8 +885,8 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         onClick={() => handleAddSubcategory(category.id)}
                                         style={{
                                             background: 'transparent',
-                                            border: '1px solid #8b5cf6',
-                                            color: '#8b5cf6',
+                                            border: '1px solid #ffa305',
+                                            color: '#ffa305',
                                             padding: '0.5rem 1rem',
                                             borderRadius: '4px',
                                             cursor: 'pointer',
@@ -976,7 +976,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 if (!platform) return null;
                                 return (
                                     <div key={platformId} style={{ flex: '1 1 200px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                             {platform.name}*
                                         </label>
                                         <div style={{ position: 'relative', display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -1040,7 +1040,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* ADD MORE Section */}
                         <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '1.5rem' }}>
-                            <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 ADD MORE
                             </div>
                             <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1.25rem' }}>
@@ -1060,14 +1060,14 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 height: '50px',
                                                 background: '#fff',
                                                 borderRadius: '12px',
-                                                border: `2px solid ${isSelected ? '#8b5cf6' : '#f1f5f9'}`,
+                                                border: `2px solid ${isSelected ? '#ffa305' : '#f1f5f9'}`,
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
                                                 position: 'relative',
                                                 transition: 'all 0.2s',
-                                                boxShadow: isSelected ? '0 4px 12px rgba(139, 92, 246, 0.15)' : 'none'
+                                                boxShadow: isSelected ? '0 4px 12px rgba(255, 163, 5, 0.15)' : 'none'
                                             }}
                                             onMouseOver={(e) => {
                                                 if (!isSelected) e.currentTarget.style.borderColor = '#e2e8f0';
@@ -1093,7 +1093,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                     right: '-6px',
                                                     width: '18px',
                                                     height: '18px',
-                                                    background: '#8b5cf6',
+                                                    background: '#ffa305',
                                                     borderRadius: '50%',
                                                     display: 'flex',
                                                     alignItems: 'center',

@@ -38,7 +38,7 @@ const FileUploader = ({ label, type = 'logo', onUpload, currentFile }) => {
 
     return (
         <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#64748b', marginBottom: '0.5rem' }}>
+            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                 {label}
             </label>
 
@@ -48,10 +48,10 @@ const FileUploader = ({ label, type = 'logo', onUpload, currentFile }) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '2rem',
-                border: '2px dashed #cbd5e1',
+                border: '2px dashed #334155',
                 borderRadius: '12px',
                 cursor: 'pointer',
-                background: '#f8fafc',
+                background: '#020617',
                 transition: 'all 0.2s',
                 marginBottom: currentFile ? '1rem' : '0'
             }}>
@@ -62,10 +62,10 @@ const FileUploader = ({ label, type = 'logo', onUpload, currentFile }) => {
                     style={{ display: 'none' }}
                 />
                 <Upload size={32} color="#94a3b8" />
-                <span style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#64748b' }}>
+                <span style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#94a3b8', fontWeight: '500' }}>
                     Click to upload or drag and drop
                 </span>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                <span style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>
                     PNG, JPG, SVG up to 5MB
                 </span>
             </label>
@@ -76,9 +76,9 @@ const FileUploader = ({ label, type = 'logo', onUpload, currentFile }) => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: '0.75rem 1rem',
-                    border: '1px solid #e2e8f0',
+                    border: '1px solid #334155',
                     borderRadius: '8px',
-                    background: '#fff'
+                    background: '#0f172a'
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                         <div style={{
@@ -86,15 +86,15 @@ const FileUploader = ({ label, type = 'logo', onUpload, currentFile }) => {
                             height: '40px',
                             borderRadius: '4px',
                             overflow: 'hidden',
-                            border: '1px solid #e2e8f0',
-                            background: '#f1f5f9',
+                            border: '1px solid #334155',
+                            background: '#020617',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center'
                         }}>
                             <img src={currentFile} alt="Uploaded" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
-                        <span style={{ fontSize: '0.875rem', color: '#334155', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <span style={{ fontSize: '0.875rem', color: '#e5e7eb', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                             {fileName || 'Uploaded Image'}
                         </span>
                     </div>

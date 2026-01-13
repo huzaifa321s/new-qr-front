@@ -197,7 +197,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const palettes = [
         { p: '#0B2D86', s: '#FFA800' },
         { p: '#FACC15', s: '#FEF9C3' },
-        { p: '#8B5CF6', s: '#C4B5FD' },
+        { p: '#FFA305', s: '#FFD89A' },
         { p: '#16A34A', s: '#86EFAC' },
         { p: '#06B6D4', s: '#67E8F9' }
     ];
@@ -243,7 +243,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                 {/* BACKGROUND IMAGE SECTION */}
                 <div style={{ marginBottom: '2rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#ffa305', textTransform: 'uppercase' }}>
                             BACKGROUND IMAGE
                         </span>
                         <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
@@ -280,7 +280,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     height: '53px',
                                     borderRadius: '4px',
                                     overflow: 'hidden',
-                                    border: design.backgroundImage?.url === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                    border: design.backgroundImage?.url === img.url ? '2px solid #ffa305' : '1px solid #e2e8f0',
                                     cursor: 'pointer',
                                     position: 'relative'
                                 }}
@@ -293,7 +293,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         right: 2,
                                         width: '20px',
                                         height: '20px',
-                                        background: '#8b5cf6',
+                                        background: '#ffa305',
                                         borderRadius: '50%',
                                         display: 'flex',
                                         alignItems: 'center',
@@ -348,7 +348,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     height: '53px',
                                     borderRadius: '4px',
                                     overflow: 'hidden',
-                                    border: '2px solid #8b5cf6',
+                                    border: '2px solid #ffa305',
                                     cursor: 'pointer',
                                     position: 'relative'
                                 }}
@@ -376,7 +376,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     right: 2,
                                     width: '20px',
                                     height: '20px',
-                                    background: '#8b5cf6',
+                                    background: '#ffa305',
                                     borderRadius: '50%',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -419,7 +419,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* HEADLINE FIELD */}
                         <div style={{ marginBottom: '2.5rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 HEADLINE*
                             </label>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -538,7 +538,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* ABOUT US FIELD */}
                         <div style={{ marginBottom: '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 ABOUT US
                             </label>
                             <textarea
@@ -592,7 +592,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             return (
                                 <div key={platform.id} style={{ marginBottom: '2rem' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '1rem', textTransform: 'uppercase' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '1rem', textTransform: 'uppercase' }}>
                                         {platform.name.toUpperCase()}
                                     </label>
 
@@ -686,7 +686,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* ADD MORE Section */}
                         <div style={{ marginTop: '2.5rem' }}>
-                            <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 ADD MORE
                             </div>
                             <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
@@ -791,7 +791,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* SHARE MESSAGE FIELD */}
                         <div style={{ marginBottom: '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 SHARE MESSAGE
                             </label>
                             <div style={{ position: 'relative' }}>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, UploadCloud, X, RefreshCw, Check, Image as ImageIcon, Plus, ArrowUpDown, Trash2, Clock, Globe, Facebook, Instagram, Twitter, Linkedin, Youtube, MessageCircle, Music, Send, MapPin, Link as LinkIcon, Hash } from 'lucide-react';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 import ImageUploadModal from './ImageUploadModal';
@@ -6,11 +7,11 @@ import axios from 'axios';
 
 const MenuConfig = ({ config, onChange }) => {
     // Accordion States
-    const [isDesignOpen, setIsDesignOpen] = useState(false);
+    const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isTimingsOpen, setIsTimingsOpen] = useState(false);
-    const [isSocialOpen, setIsSocialOpen] = useState(true);
+    const [isSocialOpen, setIsSocialOpen] = useState(false);
 
     // Sub-accordion state for Menu Categories
     const [openCategoryId, setOpenCategoryId] = useState(() => {
@@ -271,7 +272,13 @@ const MenuConfig = ({ config, onChange }) => {
         if (businessInfo?.timeFormat) setTimeFormat(businessInfo.timeFormat);
     }, [businessInfo?.timings, businessInfo?.timeFormat]);
 
-    const palettes = [{ p: '#0f296d', s: '#f59e0b' }, { p: '#fef08a', s: '#fffbeb' }, { p: '#8b5cf6', s: '#c4b5fd' }, { p: '#16a34a', s: '#86efac' }, { p: '#06b6d4', s: '#67e8f9' }];
+    const palettes = [
+        { p: '#1e293b', s: '#ffa305' },
+        { p: '#0f172a', s: '#334155' },
+        { p: '#0f766e', s: '#22c55e' },
+        { p: '#4c1d95', s: '#ffa305' },
+        { p: '#0369a1', s: '#38bdf8' }
+    ];
     const bgImages = [{ id: '1', url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400' }, { id: '2', url: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400' }, { id: '3', url: 'https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=400' }, { id: '4', url: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400' }, { id: '5', url: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=400' }];
     const logos = [{ id: '1', url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix' }, { id: '2', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Food' }, { id: '3', url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka' }];
 
@@ -280,8 +287,8 @@ const MenuConfig = ({ config, onChange }) => {
             <ReusableDesignAccordion
                 design={{
                     ...design,
-                    primaryColor: design.primaryColor || '#6F0101',
-                    secondaryColor: design.secondaryColor || '#FFFFFF'
+                    primaryColor: design.primaryColor || '#1e293b',
+                    secondaryColor: design.secondaryColor || '#ffa305'
                 }}
                 onChange={handleDesignSectionUpdate}
                 isOpen={isDesignOpen}
@@ -294,30 +301,30 @@ const MenuConfig = ({ config, onChange }) => {
                 logoOptions={logos}
             >
                 <div style={{ marginBottom: '2.5rem' }}>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>BACKGROUND IMAGE</div>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>BACKGROUND IMAGE</div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
                         <div onClick={() => handleDesignSectionUpdate('backgroundImage', '')} style={{ width: '80px', height: '80px', borderRadius: '4px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                             <X size={32} color="#e2e8f0" />
                         </div>
                         {bgImages.map(img => (
-                            <div key={img.id} onClick={() => handleDesignSectionUpdate('backgroundImage', img.url)} style={{ width: '80px', height: '80px', borderRadius: '4px', overflow: 'hidden', border: design.backgroundImage === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0', position: 'relative', cursor: 'pointer' }}>
+                            <div key={img.id} onClick={() => handleDesignSectionUpdate('backgroundImage', img.url)} style={{ width: '80px', height: '80px', borderRadius: '4px', overflow: 'hidden', border: design.backgroundImage === img.url ? '2px solid #ffa305' : '1px solid #e2e8f0', position: 'relative', cursor: 'pointer' }}>
                                 <img src={img.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 {design.backgroundImage === img.url && (
-                                    <div style={{ position: 'absolute', top: '4px', right: '4px', background: '#8b5cf6', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <div style={{ position: 'absolute', top: '4px', right: '4px', background: '#ffa305', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <Check size={12} color="#fff" strokeWidth={3} />
                                     </div>
                                 )}
                             </div>
                         ))}
                         {design.backgroundImage && !bgImages.find(img => img.url === design.backgroundImage) && (
-                            <div onClick={() => setShowImageModal(true)} onMouseEnter={() => setIsHoveringUpload(true)} onMouseLeave={() => setIsHoveringUpload(false)} style={{ width: '80px', height: '80px', borderRadius: '4px', overflow: 'hidden', border: '2px solid #8b5cf6', position: 'relative', cursor: 'pointer' }}>
+                            <div onClick={() => setShowImageModal(true)} onMouseEnter={() => setIsHoveringUpload(true)} onMouseLeave={() => setIsHoveringUpload(false)} style={{ width: '80px', height: '80px', borderRadius: '4px', overflow: 'hidden', border: '2px solid #ffa305', position: 'relative', cursor: 'pointer' }}>
                                 <img src={design.backgroundImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 {isHoveringUpload && (
                                     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
                                         <span style={{ color: '#fff', fontSize: '0.7rem', fontWeight: 'bold' }}>Preview</span>
                                     </div>
                                 )}
-                                <div style={{ position: 'absolute', top: '4px', right: '4px', background: '#8b5cf6', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 5 }}>
+                                <div style={{ position: 'absolute', top: '4px', right: '4px', background: '#ffa305', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 5 }}>
                                     <Check size={12} color="#fff" strokeWidth={3} />
                                 </div>
                             </div>
@@ -339,206 +346,434 @@ const MenuConfig = ({ config, onChange }) => {
                 </div>
             </ReusableDesignAccordion>
 
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
-                    <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
-                    {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-                {isBasicInfoOpen && (
-                    <div style={{ padding: '1rem' }}>
-                        <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>RESTAURANT NAME*</label><input type="text" value={businessInfo.title || ''} onChange={e => handleBusinessInfoUpdate('title', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
-                        <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>TITLE*</label><input type="text" value={businessInfo.headline || 'DOWNLOAD NOW'} onChange={e => handleBusinessInfoUpdate('headline', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
-                        <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>DESCRIPTION</label><textarea value={businessInfo.description || ''} onChange={e => handleBusinessInfoUpdate('description', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
-                        <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>WEBSITE*</label><input type="text" value={businessInfo.website || ''} onChange={e => handleBusinessInfoUpdate('website', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
-                        <div style={{ marginBottom: '1.5rem' }}><label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>NO OF TABLES*</label><input type="number" value={businessInfo.tables || ''} onChange={e => handleBusinessInfoUpdate('tables', e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #1e293b', borderRadius: '4px' }} /></div>
-                    </div>
-                )}
-            </div>
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
+                    onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
+                    style={{
+                        width: '100%',
+                        padding: '1rem 1.25rem',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
+                    }}
+                >
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'none' }}>Basic Information</div>
+                    <motion.div animate={{ rotate: isBasicInfoOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isBasicInfoOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
+                                <div style={{ marginBottom: '1.25rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Restaurant Name*</label>
+                                    <input type="text" value={businessInfo.title || ''} onChange={e => handleBusinessInfoUpdate('title', e.target.value)} style={{ width: '100%', padding: '0.75rem 1rem', border: '1px solid #334155', borderRadius: '10px', background: '#020617', color: '#e5e7eb', outline: 'none' }} />
+                                </div>
+                                <div style={{ marginBottom: '1.25rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Title*</label>
+                                    <input type="text" value={businessInfo.headline || 'DOWNLOAD NOW'} onChange={e => handleBusinessInfoUpdate('headline', e.target.value)} style={{ width: '100%', padding: '0.75rem 1rem', border: '1px solid #334155', borderRadius: '10px', background: '#020617', color: '#e5e7eb', outline: 'none' }} />
+                                </div>
+                                <div style={{ marginBottom: '1.25rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Description</label>
+                                    <textarea value={businessInfo.description || ''} onChange={e => handleBusinessInfoUpdate('description', e.target.value)} style={{ width: '100%', padding: '0.75rem 1rem', border: '1px solid #334155', borderRadius: '10px', background: '#020617', color: '#e5e7eb', outline: 'none', minHeight: '80px' }} />
+                                </div>
+                                <div style={{ marginBottom: '1.25rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Website*</label>
+                                    <input type="text" value={businessInfo.website || ''} onChange={e => handleBusinessInfoUpdate('website', e.target.value)} style={{ width: '100%', padding: '0.75rem 1rem', border: '1px solid #334155', borderRadius: '10px', background: '#020617', color: '#e5e7eb', outline: 'none' }} />
+                                </div>
+                                <div style={{ marginBottom: '0.25rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>No of Tables*</label>
+                                    <input type="number" value={businessInfo.tables || ''} onChange={e => handleBusinessInfoUpdate('tables', e.target.value)} style={{ width: '100%', padding: '0.75rem 1rem', border: '1px solid #334155', borderRadius: '10px', background: '#020617', color: '#e5e7eb', outline: 'none' }} />
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div onClick={() => setIsMenuOpen(!isMenuOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
-                    <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>MENU</div>
-                    {isMenuOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-                {isMenuOpen && (
-                    <div style={{ padding: '1rem', background: '#faf9fc' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            {categories.map((cat) => (
-                                <div key={cat.id} style={{ borderRadius: '4px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', background: '#fff' }}>
-                                    <div onClick={() => toggleCategory(cat.id)} style={{ padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', fontWeight: 'bold', color: '#000000' }}>
-                                        {cat.name || 'New Category'}
-                                        {openCategoryId === cat.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                                    </div>
-                                    {openCategoryId === cat.id && (
-                                        <div style={{ padding: '1rem' }}>
-                                            <input type="text" value={cat.name} onChange={(e) => handleCategoryNameChange(cat.id, e.target.value)} placeholder="Category Name" style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
-                                            {cat.products.map((prod, idx) => (
-                                                <div key={prod.id} style={{ border: '1px solid #f1f5f9', padding: '1rem', borderRadius: '8px', marginBottom: '1rem', background: '#f8fafc' }}>
-                                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
-                                                        <input type="text" value={prod.name} placeholder="Product Name" onChange={(e) => handleProductChange(cat.id, prod.id, 'name', e.target.value)} style={{ flex: '1 1 150px', padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
-                                                        <input type="text" value={prod.price} placeholder="Price" onChange={(e) => handleProductChange(cat.id, prod.id, 'price', e.target.value)} style={{ flex: '1 1 80px', padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    style={{
+                        width: '100%',
+                        padding: '1rem 1.25rem',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
+                    }}
+                >
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>Menu</div>
+                    <motion.div animate={{ rotate: isMenuOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isMenuOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                    {categories.map((cat) => (
+                                        <motion.div
+                                            key={cat.id}
+                                            layout
+                                            style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid #1e293b', background: '#020617' }}
+                                        >
+                                            <button
+                                                type="button"
+                                                onClick={() => toggleCategory(cat.id)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.9rem 1.1rem',
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    alignItems: 'center',
+                                                    background: 'rgba(15,23,42,0.9)',
+                                                    border: 'none',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                    <div style={{ width: 26, height: 26, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617', color: '#e5e7eb', fontSize: '0.75rem' }}>
+                                                        {cat.name ? cat.name.charAt(0).toUpperCase() : '+'}
                                                     </div>
-                                                    <textarea value={prod.description} placeholder="Description" onChange={(e) => handleProductChange(cat.id, prod.id, 'description', e.target.value)} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0', marginBottom: '0.5rem' }} />
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                                        {prod.image && <img src={prod.image} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />}
-                                                        <input type="file" onChange={(e) => handleProductImageUpload(cat.id, prod.id, e.target.files[0])} style={{ fontSize: '0.8rem' }} />
-                                                        <button onClick={() => handleRemoveProduct(cat.id, prod.id)} style={{ color: '#ef4444' }}><Trash2 size={16} /></button>
+                                                    <div style={{ textAlign: 'left' }}>
+                                                        <div style={{ fontWeight: '600', color: '#f8fafc', fontSize: '0.95rem' }}>{cat.name || 'New Category'}</div>
+                                                        <div style={{ fontSize: '0.7rem', color: '#64748b' }}>{cat.products.length} items</div>
                                                     </div>
                                                 </div>
-                                            ))}
-                                            <button onClick={() => handleAddProduct(cat.id)} style={{ color: '#8b5cf6', fontWeight: 'bold', fontSize: '0.9rem' }}>+ Add Product</button>
-                                            <button onClick={() => handleRemoveCategory(cat.id)} style={{ color: '#ef4444', float: 'right' }}>Remove Category</button>
-                                        </div>
-                                    )}
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                    <ArrowUpDown size={16} color="#64748b" />
+                                                    {openCategoryId === cat.id ? <ChevronUp size={18} color="#94a3b8" /> : <ChevronDown size={18} color="#94a3b8" />}
+                                                </div>
+                                            </button>
+                                            <AnimatePresence>
+                                                {openCategoryId === cat.id && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, y: -6 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        exit={{ opacity: 0, y: -6 }}
+                                                        transition={{ duration: 0.2 }}
+                                                        style={{ padding: '1.1rem 1.1rem 1.2rem' }}
+                                                    >
+                                                        <div style={{ marginBottom: '1rem' }}>
+                                                            <input
+                                                                type="text"
+                                                                value={cat.name}
+                                                                onChange={(e) => handleCategoryNameChange(cat.id, e.target.value)}
+                                                                placeholder="Category Name"
+                                                                style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '10px', border: '1px solid #334155', background: '#020617', color: '#e5e7eb', fontSize: '0.9rem', outline: 'none' }}
+                                                            />
+                                                        </div>
+                                                        {cat.products.map((prod) => (
+                                                            <div key={prod.id} style={{ border: '1px solid #1e293b', padding: '1rem', borderRadius: '12px', marginBottom: '0.9rem', background: '#020617' }}>
+                                                                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={prod.name}
+                                                                        placeholder="Product Name"
+                                                                        onChange={(e) => handleProductChange(cat.id, prod.id, 'name', e.target.value)}
+                                                                        style={{ flex: '1 1 150px', padding: '0.6rem 0.9rem', borderRadius: '10px', border: '1px solid #334155', background: '#020617', color: '#e5e7eb', fontSize: '0.9rem', outline: 'none' }}
+                                                                    />
+                                                                    <input
+                                                                        type="text"
+                                                                        value={prod.price}
+                                                                        placeholder="Price"
+                                                                        onChange={(e) => handleProductChange(cat.id, prod.id, 'price', e.target.value)}
+                                                                        style={{ flex: '0 0 100px', padding: '0.6rem 0.9rem', borderRadius: '10px', border: '1px solid #334155', background: '#020617', color: '#e5e7eb', fontSize: '0.9rem', outline: 'none' }}
+                                                                    />
+                                                                </div>
+                                                                <textarea
+                                                                    value={prod.description}
+                                                                    placeholder="Description"
+                                                                    onChange={(e) => handleProductChange(cat.id, prod.id, 'description', e.target.value)}
+                                                                    style={{ width: '100%', padding: '0.6rem 0.9rem', borderRadius: '10px', border: '1px solid #334155', background: '#020617', color: '#e5e7eb', fontSize: '0.9rem', outline: 'none', marginBottom: '0.6rem' }}
+                                                                />
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem', flexWrap: 'wrap' }}>
+                                                                    {prod.image && <img src={prod.image} style={{ width: 46, height: 46, objectFit: 'cover', borderRadius: '10px', border: '1px solid #1e293b' }} />}
+                                                                    <label style={{ padding: '0.5rem 0.9rem', borderRadius: '999px', border: '1px dashed #334155', color: '#e5e7eb', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer', fontSize: '0.8rem', background: 'rgba(15,23,42,0.9)' }}>
+                                                                        <ImageIcon size={16} />
+                                                                        <span>Product Image</span>
+                                                                        <input type="file" accept="image/*" onChange={(e) => handleProductImageUpload(cat.id, prod.id, e.target.files[0])} style={{ display: 'none' }} />
+                                                                    </label>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => handleRemoveProduct(cat.id, prod.id)}
+                                                                        style={{ marginLeft: 'auto', borderRadius: '999px', padding: '0.45rem 0.75rem', border: 'none', background: 'rgba(248,113,113,0.12)', color: '#fca5a5', display: 'flex', alignItems: 'center', gap: '0.25rem', cursor: 'pointer', fontSize: '0.8rem' }}
+                                                                    >
+                                                                        <Trash2 size={14} />
+                                                                        <span>Remove</span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.75rem', gap: '0.75rem', flexWrap: 'wrap' }}>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleAddProduct(cat.id)}
+                                                                style={{ borderRadius: '999px', padding: '0.55rem 1rem', border: 'none', background: 'rgba(255,163,5,0.15)', color: '#ffd89a', display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '600' }}
+                                                            >
+                                                                <Plus size={16} />
+                                                                <span>Add Product</span>
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleRemoveCategory(cat.id)}
+                                                                style={{ borderRadius: '999px', padding: '0.55rem 1rem', border: 'none', background: 'rgba(248,113,113,0.12)', color: '#fca5a5', display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '600' }}
+                                                            >
+                                                                <Trash2 size={16} />
+                                                                <span>Remove Category</span>
+                                                            </button>
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </motion.div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                        <button onClick={handleAddCategory} style={{ marginTop: '1rem', background: '#8b5cf6', color: '#fff', padding: '0.5rem 1rem', borderRadius: '4px' }}>+ Add Category</button>
-                    </div>
-                )}
-            </div>
-
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div onClick={() => setIsTimingsOpen(!isTimingsOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
-                    <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>TIMINGS</div>
-                    {isTimingsOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-                {isTimingsOpen && (
-                    <div style={{ padding: '1rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginBottom: '2rem' }}>
-                            {['24 hrs', 'AM/PM'].map(f => (
-                                <button
-                                    key={f}
-                                    onClick={() => handleTimeFormatChange(f)}
-                                    style={{
-                                        padding: '0.6rem 1.2rem',
-                                        borderRadius: '8px',
-                                        border: timeFormat === f ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
-                                        background: timeFormat === f ? '#fff' : '#fff',
-                                        color: timeFormat === f ? '#8b5cf6' : '#94a3b8',
-                                        fontWeight: '700',
-                                        fontSize: '0.85rem',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s',
-                                        boxShadow: timeFormat === f ? '0 4px 12px rgba(139, 92, 246, 0.15)' : 'none'
-                                    }}
-                                >
-                                    {f}
-                                </button>
-                            ))}
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                            {timings.map((day, idx) => (
-                                <div key={day.day} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingBottom: '1rem', borderBottom: '1px solid #f1f5f9' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                        <div
-                                            onClick={() => handleTimingChange(idx, 'isOpen', !day.isOpen)}
-                                            style={{
-                                                width: '24px',
-                                                height: '24px',
-                                                borderRadius: '4px',
-                                                border: `2px solid ${day.isOpen ? '#06b6d4' : '#e2e8f0'}`,
-                                                background: day.isOpen ? '#06b6d4' : '#fff',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                cursor: 'pointer',
-                                                transition: 'all 0.2s',
-                                                flexShrink: 0
-                                            }}
-                                        >
-                                            {day.isOpen && <Check size={16} color="#fff" strokeWidth={4} />}
-                                        </div>
-                                        <span style={{ fontSize: '1rem', fontWeight: 'bold', color: '#475569', minWidth: '100px' }}>{day.day}</span>
-                                    </div>
-
-                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                        <div style={{ position: 'relative', flex: '1 1 120px' }}>
-                                            <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem' }}>OPEN</label>
-                                            <input
-                                                type="text"
-                                                value={day.start}
-                                                disabled={!day.isOpen}
-                                                onChange={(e) => handleTimingChange(idx, 'start', e.target.value)}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem 1rem',
-                                                    paddingRight: '2.5rem',
-                                                    borderRadius: '8px',
-                                                    border: '1px solid #e2e8f0',
-                                                    fontSize: '0.9rem',
-                                                    color: '#1e293b',
-                                                    background: day.isOpen ? '#fff' : '#f8fafc',
-                                                    outline: 'none',
-                                                    transition: 'all 0.2s'
-                                                }}
-                                                placeholder="08:00 AM"
-                                            />
-                                            <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '1rem', top: 'calc(50% + 8px)', transform: 'translateY(-50%)', opacity: 0.6 }} />
-                                        </div>
-
-                                        <div style={{ position: 'relative', flex: '1 1 120px' }}>
-                                            <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem' }}>CLOSE</label>
-                                            <input
-                                                type="text"
-                                                value={day.end}
-                                                disabled={!day.isOpen}
-                                                onChange={(e) => handleTimingChange(idx, 'end', e.target.value)}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem 1rem',
-                                                    paddingRight: '2.5rem',
-                                                    borderRadius: '8px',
-                                                    border: '1px solid #e2e8f0',
-                                                    fontSize: '0.9rem',
-                                                    color: '#1e293b',
-                                                    background: day.isOpen ? '#fff' : '#f8fafc',
-                                                    outline: 'none',
-                                                    transition: 'all 0.2s'
-                                                }}
-                                                placeholder="08:00 AM"
-                                            />
-                                            <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '1rem', top: 'calc(50% + 8px)', transform: 'translateY(-50%)', opacity: 0.6 }} />
-                                        </div>
-                                    </div>
+                                <div style={{ marginTop: '1.25rem' }}>
+                                    <button
+                                        type="button"
+                                        onClick={handleAddCategory}
+                                        style={{ borderRadius: '999px', padding: '0.7rem 1.2rem', border: 'none', background: '#ffa305', color: '#0f172a', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '700' }}
+                                    >
+                                        <Plus size={16} />
+                                        <span>Add Category</span>
+                                    </button>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div onClick={() => setIsSocialOpen(!isSocialOpen)} style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
-                    <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SOCIAL MEDIA</div>
-                    {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-                {isSocialOpen && (
-                    <div style={{ padding: '1rem' }}>
-                        {socials.map((s, idx) => (
-                            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                                <div style={{ background: getSocialColor(s.id), padding: '0.5rem', borderRadius: '4px', flexShrink: 0 }}>{getSocialIcon(s.id)}</div>
-                                <input type="text" value={s.url} placeholder={s.placeholder} onChange={(e) => handleSocialChange(idx, e.target.value)} style={{ flex: '1 1 150px', padding: '0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0' }} />
-                                <button onClick={() => handleRemoveSocial(idx)} style={{ color: '#ef4444', marginLeft: 'auto' }}><X size={16} /></button>
                             </div>
-                        ))}
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem' }}>
-                            {availableSocials.map(s => (
-                                <div key={s.id} onClick={() => handleAddSocial(s.id)} style={{ width: '30px', height: '30px', borderRadius: '4px', background: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', opacity: socials.find(as => as.id === s.id) ? 0.3 : 1 }}>
-                                    <img src={s.icon} style={{ width: '16px', height: '16px', filter: 'brightness(0) invert(1)' }} />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
+                    onClick={() => setIsTimingsOpen(!isTimingsOpen)}
+                    style={{
+                        width: '100%',
+                        padding: '1rem 1.25rem',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
+                    }}
+                >
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>Timings</div>
+                    <motion.div animate={{ rotate: isTimingsOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isTimingsOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginBottom: '1.75rem', flexWrap: 'wrap' }}>
+                                    {['24 hrs', 'AM/PM'].map(f => (
+                                        <button
+                                            key={f}
+                                            type="button"
+                                            onClick={() => handleTimeFormatChange(f)}
+                                            style={{ padding: '0.55rem 1.25rem', borderRadius: '999px', border: timeFormat === f ? '1px solid rgba(255,163,5,0.8)' : '1px solid #334155', background: timeFormat === f ? 'rgba(255,163,5,0.1)' : '#020617', color: timeFormat === f ? '#ffa305' : '#94a3b8', fontWeight: '600', fontSize: '0.8rem', cursor: 'pointer' }}
+                                        >
+                                            {f}
+                                        </button>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-            </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                                    {timings.map((day, idx) => (
+                                        <div key={day.day} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', paddingBottom: '1rem', borderBottom: '1px solid #1e293b' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleTimingChange(idx, 'isOpen', !day.isOpen)}
+                                                    style={{ width: 26, height: 26, borderRadius: 999, border: `2px solid ${day.isOpen ? '#22c55e' : '#334155'}`, background: day.isOpen ? '#22c55e' : '#020617', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                                                >
+                                                    {day.isOpen && <Check size={16} color="#022c22" strokeWidth={4} />}
+                                                </button>
+                                                <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#e5e7eb', minWidth: '100px' }}>{day.day}</span>
+                                            </div>
+                                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                                <div style={{ position: 'relative', flex: '1 1 140px' }}>
+                                                    <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Open</label>
+                                                    <input
+                                                        type="text"
+                                                        value={day.start}
+                                                        disabled={!day.isOpen}
+                                                        onChange={(e) => handleTimingChange(idx, 'start', e.target.value)}
+                                                        style={{ width: '100%', padding: '0.75rem 1rem', paddingRight: '2.5rem', borderRadius: '10px', border: '1px solid #334155', fontSize: '0.9rem', color: day.isOpen ? '#e5e7eb' : '#6b7280', background: '#020617', outline: 'none' }}
+                                                        placeholder="08:00 AM"
+                                                    />
+                                                    <Clock size={16} color="#64748b" style={{ position: 'absolute', right: '1rem', top: 'calc(50% + 8px)', transform: 'translateY(-50%)', opacity: 0.8 }} />
+                                                </div>
+                                                <div style={{ position: 'relative', flex: '1 1 140px' }}>
+                                                    <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Close</label>
+                                                    <input
+                                                        type="text"
+                                                        value={day.end}
+                                                        disabled={!day.isOpen}
+                                                        onChange={(e) => handleTimingChange(idx, 'end', e.target.value)}
+                                                        style={{ width: '100%', padding: '0.75rem 1rem', paddingRight: '2.5rem', borderRadius: '10px', border: '1px solid #334155', fontSize: '0.9rem', color: day.isOpen ? '#e5e7eb' : '#6b7280', background: '#020617', outline: 'none' }}
+                                                        placeholder="08:00 AM"
+                                                    />
+                                                    <Clock size={16} color="#64748b" style={{ position: 'absolute', right: '1rem', top: 'calc(50% + 8px)', transform: 'translateY(-50%)', opacity: 0.8 }} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
+                    onClick={() => setIsSocialOpen(!isSocialOpen)}
+                    style={{
+                        width: '100%',
+                        padding: '1rem 1.25rem',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
+                    }}
+                >
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>Social Media</div>
+                    <motion.div animate={{ rotate: isSocialOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isSocialOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+                                    {socials.map((s, idx) => (
+                                        <motion.div
+                                            key={idx}
+                                            initial={{ opacity: 0, y: 8 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.2 }}
+                                            style={{ display: 'flex', alignItems: 'center', gap: '0.9rem', flexWrap: 'wrap', border: '1px solid #1e293b', padding: '0.85rem', borderRadius: '12px', background: '#0b1222' }}
+                                        >
+                                            <div style={{ width: 36, height: 36, borderRadius: 10, background: getSocialColor(s.id), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                {getSocialIcon(s.id)}
+                                            </div>
+                                            <input
+                                                type="text"
+                                                value={s.url}
+                                                placeholder={s.placeholder}
+                                                onChange={(e) => handleSocialChange(idx, e.target.value)}
+                                                style={{ flex: '1 1 200px', padding: '0.6rem 0.9rem', borderRadius: '10px', border: '1px solid #334155', background: '#020617', color: '#e5e7eb', fontSize: '0.9rem', outline: 'none' }}
+                                            />
+                                            <button
+                                                onClick={() => handleRemoveSocial(idx)}
+                                                style={{ width: 36, height: 36, borderRadius: 999, border: '1px solid #334155', background: '#020617', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ef4444', marginLeft: 'auto', cursor: 'pointer' }}
+                                            >
+                                                <X size={16} />
+                                            </button>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                                <div style={{ marginTop: '1rem' }}>
+                                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>Add Social</div>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                        {availableSocials.map(s => (
+                                            <button
+                                                key={s.id}
+                                                type="button"
+                                                onClick={() => handleAddSocial(s.id)}
+                                                disabled={!!socials.find(as => as.id === s.id)}
+                                                style={{ width: 34, height: 34, borderRadius: 8, background: s.color, border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: socials.find(as => as.id === s.id) ? 'not-allowed' : 'pointer', opacity: socials.find(as => as.id === s.id) ? 0.35 : 1 }}
+                                            >
+                                                <img src={s.icon} style={{ width: 16, height: 16, filter: 'brightness(0) invert(1)' }} />
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* Modals */}
-            {showImageModal && (
-                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.8)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setShowImageModal(false)}>
-                    <img src={design.backgroundImage} style={{ maxWidth: '90%', maxHeight: '90%', borderRadius: '8px' }} />
-                </div>
-            )}
+            <AnimatePresence>
+                {showImageModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.8)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        onClick={() => setShowImageModal(false)}
+                    >
+                        <motion.img
+                            src={design.backgroundImage}
+                            initial={{ scale: 0.98, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.98, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            style={{ maxWidth: '90%', maxHeight: '90%', borderRadius: '10px', boxShadow: '0 10px 30px rgba(0,0,0,0.35)' }}
+                        />
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <ImageUploadModal
                 isOpen={isBgModalOpen}

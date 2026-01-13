@@ -1375,8 +1375,8 @@ const Generator = () => {
     const typeInfo = qrTypes.find(t => t.id === selectedType) || qrTypes[0];
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
-            <Toaster position="top-center" />
+        <div style={{ display: 'flex', minHeight: '100vh', background: '#0f172a', color: '#f8fafc' }}>
+            
             {/* Left Panel */}
             <div style={{
                 flex: 1,
@@ -1390,7 +1390,9 @@ const Generator = () => {
 
                     {/* Header / Nav */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
-                        <button
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={() => {
                                 if (activeStep === 'design') {
                                     setActiveStep('content');
@@ -1404,30 +1406,30 @@ const Generator = () => {
                                 }
                             }}
                             style={{
-                                background: '#e0f2fe',
-                                border: 'none',
-                                borderRadius: '50%',
-                                width: '40px',
-                                height: '40px',
+                                background: '#1e293b',
+                                border: '1px solid #334155',
+                                borderRadius: '12px',
+                                width: '44px',
+                                height: '44px',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                color: '#0ea5e9'
+                                color: '#f8fafc'
                             }}
                         >
-                            ←
-                        </button>
+                            <ChevronLeft size={20} />
+                        </motion.button>
 
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <span style={{ color: '#8b5cf6', fontWeight: '600', fontSize: '0.9rem' }}>
+                            <span style={{ color: '#ffa305', fontWeight: '600', fontSize: '0.9rem' }}>
                                 {activeStep === 'content' ? 'Content Configuration' : 'Design QR Code'}
                             </span>
-                            <div style={{ width: '150px', height: '4px', background: '#e5e7eb', borderRadius: '2px', marginTop: '0.5rem', position: 'relative' }}>
+                            <div style={{ width: '150px', height: '4px', background: '#334155', borderRadius: '2px', marginTop: '0.5rem', position: 'relative' }}>
                                 <div style={{
                                     width: activeStep === 'content' ? '70px' : '100%',
                                     height: '100%',
-                                    background: 'linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%)',
+                                    background: '#ffa305',
                                     borderRadius: '2px',
                                     position: 'absolute',
                                     left: 0,
@@ -1618,47 +1620,26 @@ const Generator = () => {
                             )}
 
                             <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-                                <button
+                                <motion.button
+                                    whileHover={{ scale: 1.03 }}
+                                    whileTap={{ scale: 0.97 }}
                                     onClick={handleContinue}
                                     style={{
-                                        background: 'transparent',
+                                        background: '#ffa305',
                                         border: 'none',
-                                        padding: 0,
+                                        padding: '0.9rem 2rem',
                                         cursor: 'pointer',
                                         display: 'inline-flex',
                                         alignItems: 'center',
-                                        transition: 'all 0.2s ease'
+                                        gap: '0.5rem',
+                                        transition: 'all 0.2s ease',
+                                        color: '#000',
+                                        borderRadius: '12px',
+                                        fontWeight: '700'
                                     }}
                                 >
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        borderRadius: '50px',
-                                        overflow: 'hidden',
-
-                                    }}>
-                                        <div style={{
-                                            background: '#8b5cf6',
-                                            color: '#ffffff',
-                                            padding: '0.75rem 2rem',
-                                            fontSize: '1rem',
-                                            fontWeight: '600'
-                                        }}>
-                                            Continue
-                                        </div>
-                                        <div style={{
-                                            background: '#c4b5fd',
-                                            width: '48px',
-                                            height: '48px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            color: '#8b5cf6'
-                                        }}>
-                                            <ArrowRight size={20} />
-                                        </div>
-                                    </div>
-                                </button>
+                                    Continue <ArrowRight size={18} />
+                                </motion.button>
                             </div>
                         </>
                     ) : (
@@ -1689,8 +1670,8 @@ const Generator = () => {
             {/* Right Panel - Preview */}
             <div style={{
                 width: isMobile ? '100%' : '400px',
-                background: 'linear-gradient(180deg, #eef2ff 0%, #f3e8ff 100%)',
-                borderLeft: isMobile ? 'none' : '1px solid #e2e8f0',
+                background: '#1e293b',
+                borderLeft: isMobile ? 'none' : '1px solid #334155',
                 display: isMobile ? (activeTab === 'preview' ? 'flex' : 'none') : 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -1748,13 +1729,13 @@ const Generator = () => {
                                 position: 'absolute',
                                 top: '-12px',
                                 left: '20px',
-                                background: '#fff',
-                                border: '1px solid #8b5cf6',
-                                color: '#8b5cf6',
+                                background: '#1e293b',
+                                border: '1px solid #334155',
+                                color: '#ffa305',
                                 fontSize: '0.7rem',
                                 fontWeight: 'bold',
                                 padding: '2px 8px',
-                                borderRadius: '4px',
+                                borderRadius: '8px',
                                 zIndex: 10,
                                 textTransform: 'uppercase'
                             }}>
@@ -1762,10 +1743,10 @@ const Generator = () => {
                             </div>
 
                             <div style={{
-                                background: '#fff',
-                                padding: '2rem',
-                                borderRadius: '4px',
-                                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05)',
+                                background: '#1e293b',
+                                padding: '1.5rem',
+                                borderRadius: '16px',
+                                border: '1px solid #334155',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -1800,27 +1781,27 @@ const Generator = () => {
                                     borderRadius: '4px',
                                     fontSize: '0.75rem',
                                     fontWeight: '700',
-                                    border: `1px solid ${scannability.color}20`,
+                                    border: `1px solid ${scannability.color}33`,
                                     textTransform: 'uppercase'
                                 }}>
                                     {scannability.text}
                                 </div>
-                                <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748b' }}>Scanability</span>
+                                <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#94a3b8' }}>Scanability</span>
                             </div>
 
                             <div style={{
                                 width: '100%',
                                 height: '8px',
-                                background: '#f8fafc',
-                                borderRadius: '4px',
+                                background: '#0f172a',
+                                borderRadius: '8px',
                                 overflow: 'hidden',
-                                border: '1px solid #e2e8f0'
+                                border: '1px solid #334155'
                             }}>
                                 <div style={{
                                     width: `${scannability.score}%`,
                                     height: '100%',
                                     background: scannability.color,
-                                    borderRadius: '4px',
+                                    borderRadius: '8px',
                                     transition: 'all 0.3s ease'
                                 }}></div>
                             </div>
@@ -1837,10 +1818,10 @@ const Generator = () => {
                     left: 0,
                     right: 0,
                     height: '70px',
-                    background: '#fff',
+                    background: '#0f172a',
                     display: 'flex',
-                    borderTop: '1px solid #e2e8f0',
-                    boxShadow: '0 -4px 12px rgba(0,0,0,0.05)',
+                    borderTop: '1px solid #334155',
+                    boxShadow: '0 -4px 12px rgba(0,0,0,0.3)',
                     zIndex: 1000
                 }}>
                     <div
@@ -1852,7 +1833,7 @@ const Generator = () => {
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: '4px',
-                            color: activeTab === 'generator' ? '#8b5cf6' : '#94a3b8',
+                            color: activeTab === 'generator' ? '#ffa305' : '#94a3b8',
                             cursor: 'pointer'
                         }}
                     >
@@ -1868,7 +1849,7 @@ const Generator = () => {
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: '4px',
-                            color: activeTab === 'preview' ? '#8b5cf6' : '#94a3b8',
+                            color: activeTab === 'preview' ? '#ffa305' : '#94a3b8',
                             cursor: 'pointer'
                         }}
                     >
@@ -1886,7 +1867,7 @@ const Generator = () => {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -1895,13 +1876,14 @@ const Generator = () => {
                     <div
                         className="modal-entry-animation"
                         style={{
-                            backgroundColor: '#fff',
-                            borderRadius: '8px',
+                            backgroundColor: '#1e293b',
+                            border: '1px solid #334155',
+                            borderRadius: '16px',
                             padding: '2rem',
                             maxWidth: '500px',
                             width: '90%',
                             position: 'relative',
-                            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+                            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3)'
                         }}
                     >
                         {/* Close button */}
@@ -1914,7 +1896,7 @@ const Generator = () => {
                                 background: 'transparent',
                                 border: 'none',
                                 fontSize: '1.5rem',
-                                color: '#9ca3af',
+                                color: '#94a3b8',
                                 cursor: 'pointer',
                                 padding: '0',
                                 width: '24px',
@@ -1932,7 +1914,7 @@ const Generator = () => {
                             <h2 style={{
                                 fontSize: '1.5rem',
                                 fontWeight: '600',
-                                color: '#1f2937',
+                                color: '#fff',
                                 marginBottom: '1rem',
                                 marginTop: '0'
                             }}>
@@ -1940,7 +1922,7 @@ const Generator = () => {
                             </h2>
                             <p style={{
                                 fontSize: '1rem',
-                                color: '#6b7280',
+                                color: '#94a3b8',
                                 marginBottom: '2rem',
                                 lineHeight: '1.5'
                             }}>
@@ -1958,19 +1940,19 @@ const Generator = () => {
                                     style={{
                                         padding: '0.75rem 2.5rem',
                                         fontSize: '1rem',
-                                        fontWeight: '500',
-                                        color: '#374151',
-                                        backgroundColor: '#fff',
-                                        border: '2px solid #d1d5db',
-                                        borderRadius: '4px',
+                                        fontWeight: '600',
+                                        color: '#fff',
+                                        backgroundColor: 'transparent',
+                                        border: '1px solid #334155',
+                                        borderRadius: '8px',
                                         cursor: 'pointer',
                                         transition: 'all 0.2s'
                                     }}
                                     onMouseEnter={(e) => {
-                                        e.target.style.backgroundColor = '#f9fafb';
+                                        e.target.style.backgroundColor = '#0f172a';
                                     }}
                                     onMouseLeave={(e) => {
-                                        e.target.style.backgroundColor = '#fff';
+                                        e.target.style.backgroundColor = 'transparent';
                                     }}
                                 >
                                     No
@@ -1983,19 +1965,19 @@ const Generator = () => {
                                     style={{
                                         padding: '0.75rem 2.5rem',
                                         fontSize: '1rem',
-                                        fontWeight: '500',
-                                        color: '#fff',
-                                        backgroundColor: '#dc2626',
+                                        fontWeight: '700',
+                                        color: '#000',
+                                        backgroundColor: '#ffa305',
                                         border: 'none',
-                                        borderRadius: '4px',
+                                        borderRadius: '8px',
                                         cursor: 'pointer',
                                         transition: 'all 0.2s'
                                     }}
                                     onMouseEnter={(e) => {
-                                        e.target.style.backgroundColor = '#b91c1c';
+                                        e.target.style.backgroundColor = '#ffb53a';
                                     }}
                                     onMouseLeave={(e) => {
-                                        e.target.style.backgroundColor = '#dc2626';
+                                        e.target.style.backgroundColor = '#ffa305';
                                     }}
                                 >
                                     Yes

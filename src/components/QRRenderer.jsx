@@ -39,6 +39,8 @@ const QRRenderer = forwardRef(({ value, design, size = 280, margin = 20, id }, r
                 const response = await axios.post('/api/qr/preview', {
                     content: value,
                     design: design
+                }, {
+                    skipGlobalLoader: true // Skip global loader for preview updates to avoid flickering
                 });
 
                 clearTimeout(loadingTimeout);

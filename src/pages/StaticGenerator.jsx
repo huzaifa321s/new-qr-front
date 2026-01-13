@@ -89,7 +89,7 @@ const Accordion = ({ title, icon: Icon, isOpen, setIsOpen, children }) => (
             }}
         >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6' }}>
+                <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(255, 163, 5, 0.1)', color: '#ffa305' }}>
                     <Icon size={20} />
                 </div>
                 <span style={{ fontWeight: '600', color: '#f8fafc' }}>{title}</span>
@@ -142,7 +142,7 @@ const StaticGenerator = () => {
         cornersDot: { style: 'dot', color: '#000000' },
         background: { color: '#ffffff' },
         image: { url: null },
-        imageOptions: { hideBackgroundDots: false, imageSize: 0.4 }
+        imageOptions: { hideBackgroundDots: false, imageSize: 0.2 }
     });
     const [scannability, setScannability] = useState({
         score: 100,
@@ -522,7 +522,6 @@ const StaticGenerator = () => {
 
     return (
         <div style={{ minHeight: '100vh', background: '#0f172a', color: '#f8fafc', fontFamily: 'Inter, sans-serif' }}>
-            <Toaster position="top-center" toastOptions={{ style: { background: '#1e293b', color: '#fff', border: '1px solid #334155' } }} />
             
             {/* Top Navigation */}
             <header style={{ 
@@ -735,14 +734,14 @@ const StaticGenerator = () => {
                                             style={{
                                                 width: '50px',
                                                 height: '50px',
-                                                background: qrDesign?.dots?.style === p.id ? 'rgba(139, 92, 246, 0.2)' : '#0f172a',
-                                                border: qrDesign?.dots?.style === p.id ? '2px solid #8b5cf6' : '1px solid #334155',
+                                                background: qrDesign?.dots?.style === p.id ? 'rgba(255, 163, 5, 0.2)' : '#0f172a',
+                                                border: qrDesign?.dots?.style === p.id ? '2px solid #ffa305' : '1px solid #334155',
                                                 borderRadius: '12px',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
-                                                color: qrDesign?.dots?.style === p.id ? '#8b5cf6' : '#64748b'
+                                                color: qrDesign?.dots?.style === p.id ? '#ffa305' : '#64748b'
                                             }}
                                         >
                                             <svg width="24" height="24" viewBox="0 0 50 50">{p.svg}</svg>
@@ -751,38 +750,132 @@ const StaticGenerator = () => {
                                 </div>
                             </div>
 
-                            {/* Colors */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                <div>
-                                    <label style={{ display: 'block', color: '#f8fafc', fontWeight: '600', marginBottom: '0.5rem' }}>Foreground Color</label>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: '#0f172a', padding: '0.5rem 1rem', borderRadius: '12px', border: '1px solid #334155' }}>
-                                        <input 
-                                            type="color" 
-                                            value={qrDesign?.dots?.color || '#000000'}
-                                            onChange={(e) => setQrDesign(prev => ({ 
-                                                ...prev, 
-                                                dots: { ...prev.dots, color: e.target.value },
-                                                cornersSquare: { ...prev.cornersSquare, color: e.target.value },
-                                                cornersDot: { ...prev.cornersDot, color: e.target.value }
-                                            }))}
-                                            style={{ width: '40px', height: '40px', border: 'none', background: 'transparent', cursor: 'pointer' }} 
-                                        />
-                                        <span style={{ color: '#94a3b8', fontFamily: 'monospace' }}>{qrDesign?.dots?.color || '#000000'}</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label style={{ display: 'block', color: '#f8fafc', fontWeight: '600', marginBottom: '0.5rem' }}>Background Color</label>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: '#0f172a', padding: '0.5rem 1rem', borderRadius: '12px', border: '1px solid #334155' }}>
-                                        <input 
-                                            type="color" 
-                                            value={qrDesign?.background?.color || '#ffffff'}
-                                            onChange={(e) => setQrDesign(prev => ({ ...prev, background: { ...prev.background, color: e.target.value } }))}
-                                            style={{ width: '40px', height: '40px', border: 'none', background: 'transparent', cursor: 'pointer' }} 
-                                        />
-                                        <span style={{ color: '#94a3b8', fontFamily: 'monospace' }}>{qrDesign?.background?.color || '#ffffff'}</span>
-                                    </div>
+                            {/* Foreground Color (under Pattern Style) */}
+                            <div>
+                                <label style={{ display: 'block', color: '#f8fafc', fontWeight: '600', marginBottom: '0.5rem' }}>Foreground Color</label>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: '#0f172a', padding: '0.5rem 1rem', borderRadius: '12px', border: '1px solid #334155', maxWidth: '260px' }}>
+                                    <input 
+                                        type="color" 
+                                        value={qrDesign?.dots?.color || '#000000'}
+                                        onChange={(e) => setQrDesign(prev => ({ 
+                                            ...prev, 
+                                            dots: { ...prev.dots, color: e.target.value },
+                                            cornersSquare: { ...prev.cornersSquare, color: e.target.value },
+                                            cornersDot: { ...prev.cornersDot, color: e.target.value }
+                                        }))}
+                                        style={{ width: '40px', height: '40px', border: 'none', background: 'transparent', cursor: 'pointer' }} 
+                                    />
+                                    <span style={{ color: '#94a3b8', fontFamily: 'monospace' }}>{qrDesign?.dots?.color || '#000000'}</span>
                                 </div>
                             </div>
+                            {/* Eye Frame (Outer Square) */}
+                            <div>
+                                <label style={{ display: 'block', color: '#f8fafc', fontWeight: '600', marginBottom: '1rem' }}>Eye Frame Style</label>
+                                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                    {[
+                                        { id: 'circle', svg: <circle cx="25" cy="25" r="21.5" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                        { id: 'square', svg: <rect x="3.5" y="3.5" width="43" height="43" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                        {
+                                            id: 'dashed', svg: <>
+                                                <path d="M3.5 3.5 h15 v7 h-8 v8 h-7 v-15 z" fill="currentColor" />
+                                                <path d="M46.5 3.5 h-15 v7 h8 v8 h7 v-15 z" fill="currentColor" />
+                                                <path d="M3.5 46.5 h15 v-7 h-8 v-8 h-7 v15 z" fill="currentColor" />
+                                                <path d="M46.5 46.5 h-15 v-7 h8 v-8 h7 v15 z" fill="currentColor" />
+                                            </>
+                                        },
+                                        { id: 'rounded', svg: <rect x="3.5" y="3.5" width="43" height="43" rx="12" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                        { id: 'leaf-top-right', svg: <path d="M3.5 23.5 A20 20 0 0 1 23.5 3.5 L46.5 3.5 L46.5 26.5 A20 20 0 0 1 26.5 46.5 L23.5 46.5 A20 20 0 0 1 3.5 26.5 Z" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                        { id: 'leaf-top-left', svg: <path d="M3.5 3.5 L26.5 3.5 A20 20 0 0 1 46.5 23.5 L46.5 26.5 A20 20 0 0 1 26.5 46.5 L23.5 46.5 A20 20 0 0 1 3.5 26.5 Z" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                        { id: 'leaf-bottom-right', svg: <path d="M3.5 3.5 L26.5 3.5 A20 20 0 0 1 46.5 23.5 L46.5 46.5 L23.5 46.5 A20 20 0 0 1 3.5 26.5 Z" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                        { id: 'leaf-bottom-left', svg: <path d="M3.5 23.5 A20 20 0 0 1 23.5 3.5 L46.5 3.5 L46.5 26.5 A20 20 0 0 1 26.5 46.5 L3.5 46.5 Z" stroke="currentColor" strokeWidth="7" fill="none" /> },
+                                    ].map((f) => (
+                                        <div
+                                            key={f.id}
+                                            onClick={() => setQrDesign(prev => ({ ...prev, cornersSquare: { ...prev.cornersSquare, style: f.id } }))}
+                                            style={{
+                                                width: '50px',
+                                                height: '50px',
+                                                background: qrDesign?.cornersSquare?.style === f.id ? 'rgba(255, 163, 5, 0.2)' : '#0f172a',
+                                                border: qrDesign?.cornersSquare?.style === f.id ? '2px solid #ffa305' : '1px solid #334155',
+                                                borderRadius: '12px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                color: qrDesign?.cornersSquare?.style === f.id ? '#ffa305' : '#64748b'
+                                            }}
+                                        >
+                                            <svg width="24" height="24" viewBox="0 0 50 50">{f.svg}</svg>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label style={{ display: 'block', color: '#f8fafc', fontWeight: '600', marginBottom: '0.5rem' }}>Frame Color</label>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: '#0f172a', padding: '0.5rem 1rem', borderRadius: '12px', border: '1px solid #334155', maxWidth: '260px' }}>
+                                    <input
+                                        type="color"
+                                        value={qrDesign?.cornersSquare?.color || qrDesign?.dots?.color || '#000000'}
+                                        onChange={(e) => setQrDesign(prev => ({ ...prev, cornersSquare: { ...prev.cornersSquare, color: e.target.value } }))}
+                                        style={{ width: '40px', height: '40px', border: 'none', background: 'transparent', cursor: 'pointer' }}
+                                    />
+                                    <span style={{ color: '#94a3b8', fontFamily: 'monospace' }}>{qrDesign?.cornersSquare?.color || qrDesign?.dots?.color || '#000000'}</span>
+                                </div>
+                            </div>
+
+                            {/* Eye Ball (Inner Dot) */}
+                            <div>
+                                <label style={{ display: 'block', color: '#f8fafc', fontWeight: '600', marginBottom: '1rem' }}>Eye Ball Style</label>
+                                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                    {[
+                                        { id: 'dot', svg: <circle cx="25" cy="25" r="17" fill="currentColor" /> },
+                                        { id: 'square', svg: <rect x="9" y="9" width="32" height="32" fill="currentColor" /> },
+                                        { id: 'rounded', svg: <rect x="9" y="9" width="32" height="32" rx="10" fill="currentColor" /> },
+                                        { id: 'leaf-diag-1', svg: <path d="M25 9 L41 9 L41 25 A16 16 0 0 1 25 41 L9 41 L9 25 A16 16 0 0 1 25 9 Z" fill="currentColor" /> },
+                                        { id: 'leaf-diag-2', svg: <path d="M9 25 L9 9 L25 9 A16 16 0 0 1 41 25 L41 41 L25 41 A16 16 0 0 1 9 25 Z" fill="currentColor" /> },
+                                        { id: 'teardrop-tl', svg: <path d="M9 25 L9 9 L25 9 A16 16 0 0 1 41 25 A16 16 0 0 1 25 41 A16 16 0 0 1 9 25 Z" fill="currentColor" /> },
+                                        { id: 'diamond', svg: <path d="M25 5 L45 25 L25 45 L5 25 Z" fill="currentColor" /> },
+                                        { id: 'star', svg: <path d="M25 8 L30 18 L41 19 L32 26 L35 37 L25 31 L15 37 L18 26 L9 19 L20 18 Z" fill="currentColor" /> },
+                                        { id: 'plus', svg: <path d="M22 12 L28 12 L28 22 L38 22 L38 28 L28 28 L28 38 L22 38 L22 28 L12 28 L12 22 L22 22 Z" fill="currentColor" /> },
+                                        { id: 'cross', svg: <path d="M16 10 L25 19 L34 10 L40 16 L31 25 L40 34 L34 40 L25 31 L16 40 L10 34 L19 25 L10 16 Z" fill="currentColor" /> },
+                                    ].map((b) => (
+                                        <div
+                                            key={b.id}
+                                            onClick={() => setQrDesign(prev => ({ ...prev, cornersDot: { ...prev.cornersDot, style: b.id } }))}
+                                            style={{
+                                                width: '50px',
+                                                height: '50px',
+                                                background: qrDesign?.cornersDot?.style === b.id ? 'rgba(255, 163, 5, 0.2)' : '#0f172a',
+                                                border: qrDesign?.cornersDot?.style === b.id ? '2px solid #ffa305' : '1px solid #334155',
+                                                borderRadius: '12px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                color: qrDesign?.cornersDot?.style === b.id ? '#ffa305' : '#64748b'
+                                            }}
+                                        >
+                                            <svg width="24" height="24" viewBox="0 0 50 50">{b.svg}</svg>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label style={{ display: 'block', color: '#f8fafc', fontWeight: '600', marginBottom: '0.5rem' }}>Ball Color</label>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: '#0f172a', padding: '0.5rem 1rem', borderRadius: '12px', border: '1px solid #334155', maxWidth: '260px' }}>
+                                    <input
+                                        type="color"
+                                        value={qrDesign?.cornersDot?.color || qrDesign?.dots?.color || '#000000'}
+                                        onChange={(e) => setQrDesign(prev => ({ ...prev, cornersDot: { ...prev.cornersDot, color: e.target.value } }))}
+                                        style={{ width: '40px', height: '40px', border: 'none', background: 'transparent', cursor: 'pointer' }}
+                                    />
+                                    <span style={{ color: '#94a3b8', fontFamily: 'monospace' }}>{qrDesign?.cornersDot?.color || qrDesign?.dots?.color || '#000000'}</span>
+                                </div>
+                            </div>
+
+                            
                         </div>
                     </Accordion>
 
@@ -843,6 +936,68 @@ const StaticGenerator = () => {
                                             <img src={social.src} alt={social.label} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                         </div>
                                     ))}
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div>
+                                    <label style={{ display: 'block', color: '#f8fafc', fontWeight: '600', marginBottom: '0.5rem' }}>Logo Size</label>
+                                    <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '12px', padding: '0.75rem 1rem' }}>
+                                        <input
+                                            type="range"
+                                            min="0.1"
+                                            max="0.6"
+                                            step="0.05"
+                                            value={qrDesign?.imageOptions?.imageSize ?? 0.2}
+                                            onChange={(e) => setQrDesign(prev => ({ ...prev, imageOptions: { ...prev.imageOptions, imageSize: parseFloat(e.target.value) } }))}
+                                            style={{ width: '100%' }}
+                                        />
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', alignItems: 'center' }}>
+                                            <span style={{ color: '#94a3b8', fontFamily: 'monospace' }}>{(qrDesign?.imageOptions?.imageSize ?? 0.2).toFixed(2)}</span>
+                                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                <button
+                                                    onClick={() => setQrDesign(prev => ({ ...prev, imageOptions: { ...prev.imageOptions, imageSize: 0.2 } }))}
+                                                    style={{ padding: '0.25rem 0.5rem', borderRadius: '8px', background: 'rgba(255,163,5,0.15)', border: '1px solid #ffa305', color: '#f8fafc', cursor: 'pointer' }}
+                                                >
+                                                    Small
+                                                </button>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', color: '#f8fafc', fontWeight: '600', marginBottom: '0.5rem' }}>Remove Background</label>
+                                    <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '12px', padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                        <span style={{ color: '#94a3b8' }}>Hide dots behind logo</span>
+                                        <label style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer', gap: '0.5rem' }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={qrDesign?.imageOptions?.hideBackgroundDots || false}
+                                                onChange={(e) => setQrDesign(prev => ({ ...prev, imageOptions: { ...prev.imageOptions, hideBackgroundDots: e.target.checked } }))}
+                                                style={{ width: '0', height: '0', opacity: 0, position: 'absolute' }}
+                                            />
+                                            <div style={{
+                                                width: '42px',
+                                                height: '24px',
+                                                background: (qrDesign?.imageOptions?.hideBackgroundDots || false) ? '#ffa305' : '#334155',
+                                                borderRadius: '999px',
+                                                position: 'relative',
+                                                transition: 'background 0.2s'
+                                            }}>
+                                                <div style={{
+                                                    position: 'absolute',
+                                                    top: '3px',
+                                                    left: (qrDesign?.imageOptions?.hideBackgroundDots || false) ? '22px' : '3px',
+                                                    width: '18px',
+                                                    height: '18px',
+                                                    borderRadius: '50%',
+                                                    background: '#f8fafc',
+                                                    transition: 'left 0.2s'
+                                                }} />
+                                            </div>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

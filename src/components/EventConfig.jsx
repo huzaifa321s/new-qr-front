@@ -367,7 +367,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const palettes = [
         { p: '#0B2D86', s: '#FFA800' }, // Dark Blue / Orange
         { p: '#FFFF00', s: '#FFFFE0' }, // Yellow / Cream
-        { p: '#8B5CF6', s: '#C4B5FD' }, // Purple / Light Purple
+        { p: '#FFA305', s: '#FFD89A' }, // Orange / Light Orange
         { p: '#16A34A', s: '#86EFAC' }, // Green / Light Green
         { p: '#06B6D4', s: '#67E8F9' }  // Cyan / Light Cyan
     ];
@@ -412,7 +412,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                 {/* HEADER IMAGE SECTION */}
                 <div style={{ marginBottom: '2rem' }}>
                     <div style={{ marginBottom: '1.5rem' }}>
-                        <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                             HEADER IMAGE
                         </div>
                         <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.5rem' }}>
@@ -457,7 +457,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     height: '100%',
                                     borderRadius: '4px',
                                     overflow: 'hidden',
-                                    border: design.headerImage?.url === img.url ? '2px solid #8b5cf6' : 'none'
+                                    border: design.headerImage?.url === img.url ? '2px solid #ffa305' : 'none'
                                 }}>
                                     <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 </div>
@@ -469,7 +469,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         right: '-8px',
                                         width: '20px',
                                         height: '20px',
-                                        background: '#8b5cf6',
+                                        background: '#ffa305',
                                         borderRadius: '50%',
                                         display: 'flex',
                                         alignItems: 'center',
@@ -492,7 +492,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     borderRadius: '4px',
                                     position: 'relative',
                                     cursor: 'pointer',
-                                    border: '2px solid #8b5cf6',
+                                    border: '2px solid #ffa305',
                                     overflow: 'hidden'
                                 }}
                                 onMouseEnter={() => setIsHeaderHovered(true)}
@@ -506,7 +506,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     right: '-4px',
                                     width: '18px',
                                     height: '18px',
-                                    background: '#8b5cf6',
+                                    background: '#ffa305',
                                     borderRadius: '50%',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -591,7 +591,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         <div style={{ marginBottom: '2rem' }}>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 <div style={{ flex: '2 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         ORGANIZATION NAME*
                                     </label>
                                     <input
@@ -706,7 +706,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         <div style={{ marginBottom: '2rem' }}>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 <div style={{ flex: '2 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         EVENT NAME*
                                     </label>
                                     <input
@@ -819,7 +819,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* DESCRIPTION */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 DESCRIPTION
                             </label>
                             <textarea
@@ -831,7 +831,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #8b5cf6', // Purple border as shown in screenshot
+                                    border: '1px solid #ffa305', // Accent border
                                     fontSize: '0.9rem',
                                     outline: 'none',
                                     resize: 'vertical',
@@ -845,7 +845,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '0' }}>
                             {/* BUTTON */}
                             <div style={{ flex: '1 1 200px' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     BUTTON
                                 </label>
                                 <input
@@ -867,7 +867,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {/* LINK */}
                             <div style={{ flex: '1 1 200px' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     LINK
                                 </label>
                                 <input
@@ -921,10 +921,10 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 onClick={() => handleScheduleUpdate('format', '24h')}
                                 style={{
                                     padding: '0.5rem 1rem',
-                                    border: eventSchedule.format === '24h' ? '1px solid #8b5cf6' : '1px solid #e2e8f0',
+                                    border: eventSchedule.format === '24h' ? '1px solid #ffa305' : '1px solid #e2e8f0',
                                     borderRadius: '4px',
                                     background: eventSchedule.format === '24h' ? '#fff' : '#fff',
-                                    color: eventSchedule.format === '24h' ? '#8b5cf6' : '#64748b',
+                                    color: eventSchedule.format === '24h' ? '#ffa305' : '#64748b',
                                     fontSize: '0.85rem',
                                     cursor: 'pointer',
                                     pointerEvents: 'auto', // Ensure it's clickable
@@ -936,10 +936,10 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 onClick={() => handleScheduleUpdate('format', 'ampm')}
                                 style={{
                                     padding: '0.5rem 1rem',
-                                    border: eventSchedule.format === 'ampm' ? '1px solid #8b5cf6' : '1px solid #e2e8f0',
+                                    border: eventSchedule.format === 'ampm' ? '1px solid #ffa305' : '1px solid #e2e8f0',
                                     borderRadius: '4px',
                                     background: eventSchedule.format === 'ampm' ? '#fff' : '#fff',
-                                    color: eventSchedule.format === 'ampm' ? '#8b5cf6' : '#64748b',
+                                    color: eventSchedule.format === 'ampm' ? '#ffa305' : '#64748b',
                                     fontSize: '0.85rem',
                                     cursor: 'pointer',
                                     fontWeight: eventSchedule.format === 'ampm' ? '500' : '400'
@@ -1055,8 +1055,8 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     alignItems: 'center',
                                     gap: '0.5rem',
                                     background: '#fff',
-                                    color: '#8b5cf6',
-                                    border: '1px solid #8b5cf6',
+                                    color: '#ffa305',
+                                    border: '1px solid #ffa305',
                                     padding: '0.75rem 1.5rem',
                                     borderRadius: '4px',
                                     fontSize: '0.9rem',
@@ -1096,8 +1096,8 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                 {isVenuOpen && (
                     <div style={{ padding: '1rem', background: '#fff' }}>
                         <div>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                LOCATION*
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                SOCIAL LINKS
                             </label>
                             <input
                                 type="text"
@@ -1205,7 +1205,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* NAME OF PERSON */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 NAME OF PERSON
                             </label>
                             <input
@@ -1227,7 +1227,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* DESIGNATION */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 DESIGNATION IN THE COMPANY
                             </label>
                             <input
@@ -1322,8 +1322,8 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         alignItems: 'center',
                                         gap: '0.5rem',
                                         background: '#fff',
-                                        color: '#8b5cf6',
-                                        border: '1px solid #8b5cf6',
+                                        color: '#ffa305',
+                                        border: '1px solid #ffa305',
                                         padding: '0.75rem 1.5rem',
                                         borderRadius: '4px',
                                         fontSize: '0.9rem',
@@ -1343,8 +1343,8 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         alignItems: 'center',
                                         gap: '0.5rem',
                                         background: '#fff',
-                                        color: '#8b5cf6',
-                                        border: '1px solid #8b5cf6',
+                                        color: '#ffa305',
+                                        border: '1px solid #ffa305',
                                         padding: '0.75rem 1.5rem',
                                         borderRadius: '4px',
                                         fontSize: '0.9rem',
@@ -1364,8 +1364,8 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         alignItems: 'center',
                                         gap: '0.5rem',
                                         background: '#fff',
-                                        color: '#8b5cf6',
-                                        border: '1px solid #8b5cf6',
+                                        color: '#ffa305',
+                                        border: '1px solid #ffa305',
                                         padding: '0.75rem 1.5rem',
                                         borderRadius: '4px',
                                         fontSize: '0.9rem',

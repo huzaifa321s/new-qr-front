@@ -152,7 +152,7 @@ export const businessPagePreviewConfig = {
 export const bioPagePreviewConfig = {
     type: 'bio-page',
     design: {
-        color: { header: '#8b5cf6', dark: '#8b5cf6', light: '#ffffff' }, // Purple/Violet
+        color: { header: '#ffa305', dark: '#ffa305', light: '#ffffff' }, // Orange
         profile: { url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80' } // Professional woman photo
     },
     basicInfo: {

@@ -402,7 +402,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const palettes = [
         { p: '#0B2D86', s: '#FFA800' },
         { p: '#FFFF00', s: '#FFFFE0' },
-        { p: '#8B5CF6', s: '#C4B5FD' },
+        { p: '#FFA305', s: '#FFD89A' },
         { p: '#16A34A', s: '#86EFAC' },
         { p: '#06B6D4', s: '#67E8F9' }
     ];
@@ -460,7 +460,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         {/* Company Name Row */}
                         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 0.5fr', gap: '1rem', marginBottom: '1.5rem', alignItems: 'end' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     COMPANY NAME*
                                 </label>
                                 <input
@@ -519,7 +519,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* Product Images */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '1rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '1rem', textTransform: 'uppercase' }}>
                                 PRODUCT IMAGE
                             </label>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -529,7 +529,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         <div
                                             onClick={() => handleRemoveProductImage(img.id)}
                                             style={{
-                                                position: 'absolute', top: '-6px', left: '-6px', width: '16px', height: '16px', background: '#8b5cf6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #fff'
+                                                position: 'absolute', top: '-6px', left: '-6px', width: '16px', height: '16px', background: '#ffa305', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #fff'
                                             }}
                                         >
                                             <X size={10} color="#fff" />
@@ -552,7 +552,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         {/* Product Title Row */}
                         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 0.5fr', gap: '1rem', marginBottom: '1.5rem', alignItems: 'end' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     PRODUCT TITLE*
                                 </label>
                                 <input
@@ -608,7 +608,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* Headline */}
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 HEADLINE
                             </label>
                             <input
@@ -623,7 +623,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         {/* Currency & Price */}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr', gap: '1rem', alignItems: 'end' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     CURRENCY*
                                 </label>
                                 <select
@@ -701,7 +701,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 )}
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     PRICE*
                                 </label>
                                 <input
@@ -769,7 +769,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 </div>
 
                                 <div style={{ marginBottom: '1rem' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         TITLE*
                                     </label>
                                     <input
@@ -839,9 +839,9 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     gap: '0.5rem',
                                     padding: '0.75rem 1.5rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #8b5cf6',
+                                    border: '1px solid #ffa305',
                                     background: '#fff',
-                                    color: '#8b5cf6',
+                                    color: '#ffa305',
                                     fontWeight: 'bold',
                                     fontSize: '0.9rem',
                                     cursor: 'pointer'
@@ -854,7 +854,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* Certificates */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '1rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '1rem', textTransform: 'uppercase' }}>
                                 CERTIFICATE
                             </label>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -867,7 +867,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         <div
                                             onClick={() => handleRemoveCertificate(cert.id)}
                                             style={{
-                                                position: 'absolute', top: '-6px', left: '-6px', width: '16px', height: '16px', background: '#8b5cf6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #fff'
+                                                position: 'absolute', top: '-6px', left: '-6px', width: '16px', height: '16px', background: '#ffa305', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #fff'
                                             }}
                                         >
                                             <X size={10} color="#fff" />
@@ -890,7 +890,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         {/* Button and Link */}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     BUTTON*
                                 </label>
                                 <input
@@ -915,7 +915,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 )}
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     LINK*
                                 </label>
                                 <input
@@ -970,7 +970,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* Video Title */}
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 VIDEO TITLE*
                             </label>
                             <input
@@ -997,7 +997,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* Upload Video */}
                         <div>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 UPLOAD VIDEO
                             </label>
 
@@ -1024,7 +1024,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 </p>
                             )}
 
-                            <div style={{ textAlign: 'center', color: '#8b5cf6', fontWeight: 'bold', fontSize: '0.8rem', marginBottom: '1rem' }}>
+                            <div style={{ textAlign: 'center', color: '#ffa305', fontWeight: 'bold', fontSize: '0.8rem', marginBottom: '1rem' }}>
                                 OR
                             </div>
 
@@ -1095,7 +1095,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 <div style={{ flex: '2 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                         FEEDBACK TITLE*
                                     </label>
                                     <input
@@ -1153,7 +1153,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* See Product Rating */}
                         <div style={{ marginTop: '1.5rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 SEE PRODUCT RATING
                             </label>
                             <input
@@ -1228,7 +1228,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 <button
                                     onClick={() => handleContactUpdate('phone', '')}
                                     style={{
-                                        display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', border: '1px solid #8b5cf6', borderRadius: '4px', color: '#8b5cf6', background: '#fff', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer'
+                                        display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', border: '1px solid #ffa305', borderRadius: '4px', color: '#ffa305', background: '#fff', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer'
                                     }}
                                 >
                                     <Plus size={14} /> Add Phone
@@ -1269,7 +1269,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 <button
                                     onClick={() => handleContactUpdate('email', '')}
                                     style={{
-                                        display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', border: '1px solid #8b5cf6', borderRadius: '4px', color: '#8b5cf6', background: '#fff', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer'
+                                        display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', border: '1px solid #ffa305', borderRadius: '4px', color: '#ffa305', background: '#fff', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer'
                                     }}
                                 >
                                     <Plus size={14} /> Add Email
@@ -1310,7 +1310,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 <button
                                     onClick={() => handleContactUpdate('website', '')}
                                     style={{
-                                        display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', border: '1px solid #8b5cf6', borderRadius: '4px', color: '#8b5cf6', background: '#fff', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer'
+                                        display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', border: '1px solid #ffa305', borderRadius: '4px', color: '#ffa305', background: '#fff', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer'
                                     }}>
                                     <Plus size={14} /> Add Website
                                 </button>
@@ -1350,7 +1350,7 @@ const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* ADD MORE Section */}
                         <div>
-                            <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.2rem', textTransform: 'uppercase' }}>
+                            <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.2rem', textTransform: 'uppercase' }}>
                                 ADD MORE
                             </div>
                             <div style={{ fontSize: '0.7rem', color: '#64748b', marginBottom: '1rem' }}>

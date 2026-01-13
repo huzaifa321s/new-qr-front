@@ -21,8 +21,8 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
             website: 'https://techoid.com'
         };
 
-    const primaryColor = design.color?.header || '#7D2AE7';
-    const secondaryColor = design.color?.light || '#C291FF';
+    const primaryColor = design.color?.header || '#ffa305';
+    const secondaryColor = design.color?.light || '#334155';
 
     const handleDesignUpdate = (key, value) => {
         onChange(prev => ({
@@ -145,7 +145,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
     const palettes = [
         { p: '#0B2D86', s: '#FFA800' },
         { p: '#FACC15', s: '#FEF9C3' },
-        { p: '#8B5CF6', s: '#C4B5FD' },
+        { p: '#FFA305', s: '#FFD89A' },
         { p: '#16A34A', s: '#86EFAC' },
         { p: '#06B6D4', s: '#67E8F9' }
     ];
@@ -165,8 +165,8 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                     ...design,
                     color: {
                         ...design.color,
-                        header: design.color?.header || '#7D2AE7',
-                        light: design.color?.light || '#C291FF'
+                        header: design.color?.header || '#ffa305',
+                        light: design.color?.light || '#334155'
                     },
 
                 }}
@@ -182,7 +182,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
             >
                 {/* PICTURE FRAME SECTION - Passed as Children */}
                 <div style={{ marginBottom: '0' }}>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '1rem', textTransform: 'uppercase' }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '1rem', textTransform: 'uppercase' }}>
                         PICTURE FRAME
                     </div>
 
@@ -204,7 +204,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 style={{
                                     width: '18px',
                                     height: '18px',
-                                    accentColor: '#8b5cf6',
+                                    accentColor: '#ffa305',
                                     cursor: 'pointer'
                                 }}
                             />
@@ -228,7 +228,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 style={{
                                     width: '18px',
                                     height: '18px',
-                                    accentColor: '#8b5cf6',
+                                    accentColor: '#ffa305',
                                     cursor: 'pointer'
                                 }}
                             />
@@ -263,7 +263,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* NAME FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 NAME*
                             </label>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -305,7 +305,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     }}>
                                         <input
                                             type="text"
-                                            value={basicInfo.nameColor || '#7D2AE7'}
+                                            value={basicInfo.nameColor || '#ffa305'}
                                             onChange={(e) => handleBasicInfoUpdate('nameColor', e.target.value)}
                                             style={{
                                                 border: 'none',
@@ -319,7 +319,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         />
                                         <input
                                             type="color"
-                                            value={basicInfo.nameColor || '#7D2AE7'}
+                                            value={basicInfo.nameColor || '#ffa305'}
                                             onChange={(e) => handleBasicInfoUpdate('nameColor', e.target.value)}
                                             style={{
                                                 width: '24px',
@@ -365,7 +365,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* COMPANY NAME FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 COMPANY NAME
                             </label>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -467,7 +467,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* DESCRIPTION FIELD */}
                         <div style={{ marginBottom: '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 DESCRIPTION
                             </label>
                             <textarea
@@ -535,7 +535,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                     {/* Phone Number Input */}
                                     <div style={{ flex: '1 1 200px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem' }}>
                                             Phone Number
                                         </label>
                                         <input
@@ -556,7 +556,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                     {/* Button Title */}
                                     <div style={{ flex: '1 1 150px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem' }}>
                                             Button Title
                                         </label>
                                         <input
@@ -622,7 +622,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                     {/* Email Input */}
                                     <div style={{ flex: '1 1 200px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem' }}>
                                             Email
                                         </label>
                                         <input
@@ -643,7 +643,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                     {/* Button Title */}
                                     <div style={{ flex: '1 1 150px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem' }}>
                                             Button Title
                                         </label>
                                         <input
@@ -709,7 +709,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                     {/* Website Input */}
                                     <div style={{ flex: '1 1 200px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem' }}>
                                             Website
                                         </label>
                                         <input
@@ -730,7 +730,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                     {/* Button Title */}
                                     <div style={{ flex: '1 1 150px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem' }}>
                                             Button Title
                                         </label>
                                         <input

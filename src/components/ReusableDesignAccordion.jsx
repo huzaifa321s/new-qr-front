@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react';
 import { ChevronDown, ChevronUp, RefreshCw, Check, UploadCloud, X, Eye } from 'lucide-react';
 import ImageUploadModal from './ImageUploadModal';
 import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /**
  * Reusable Design Accordion Component
@@ -38,6 +39,7 @@ const ReusableDesignAccordion = ({
     logoOptions = [],
     logoKey = 'logo', // Can be 'logo' (string url) or 'logo.url' (nested)
     logoShapeKey,
+    onPaletteChange,
     children
 }) => {
 
@@ -73,8 +75,12 @@ const ReusableDesignAccordion = ({
     const [fileName, setFileName] = useState('');
 
     const handleColorPaletteClick = (p, s) => {
-        onChange(colorKeys.primary, p);
-        onChange(colorKeys.secondary, s);
+        if (onPaletteChange) {
+            onPaletteChange(p, s);
+        } else {
+            onChange(colorKeys.primary, p);
+            onChange(colorKeys.secondary, s);
+        }
     };
 
     const handleFileUpload = (e) => {
@@ -120,31 +126,44 @@ const ReusableDesignAccordion = ({
     };
 
     return (
-        <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-            <div
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+        >
+            <button
+                type="button"
                 onClick={onToggle}
                 style={{
-                    padding: '1.5rem',
-                    background: '#f8fafc',
+                    width: '100%',
+                    padding: '1rem 1.25rem',
                     display: 'flex',
-                    alignItems: 'center',
                     justifyContent: 'space-between',
-                    cursor: 'pointer',
-                    borderBottom: isOpen ? '1px solid #e2e8f0' : 'none'
+                    alignItems: 'center',
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer'
                 }}
             >
-                <div>
-                    <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>{label}</div>
-                </div>
-                {isOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-            </div>
-
-            {isOpen && (
-                <div style={{ padding: '1rem', background: '#fff' }}>
+                <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>{label}</div>
+                <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                    <ChevronDown size={18} color="#94a3b8" />
+                </motion.div>
+            </button>
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: 'easeInOut' }}
+                        style={{ borderTop: '1px solid #334155', background: '#020617', overflow: 'hidden' }}
+                    >
+                        <div style={{ padding: '1.25rem' }}>
 
                     {showColors && (
                         <div style={{ marginBottom: showLogo || children ? '2rem' : '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '1rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '1rem', textTransform: 'uppercase' }}>
                                 COLORS
                             </label>
 
@@ -160,27 +179,30 @@ const ReusableDesignAccordion = ({
                                             borderRadius: '50%',
                                             overflow: 'hidden',
                                             cursor: 'pointer',
-                                            border: (primaryColor === palette.p && secondaryColor === palette.s) ? '3px solid #8b5cf6' : '2px solid #e2e8f0',
+                                            border: (primaryColor?.toLowerCase() === palette.p.toLowerCase() && secondaryColor?.toLowerCase() === palette.s.toLowerCase()) ? '3px solid #ffa305' : '2px solid #334155',
                                             position: 'relative',
-                                            background: `linear-gradient(180deg, ${palette.p} 50%, ${palette.s} 50%)`
+                                            background: `linear-gradient(180deg, ${palette.p} 50%, ${palette.s} 50%)`,
+                                            boxShadow: (primaryColor?.toLowerCase() === palette.p.toLowerCase() && secondaryColor?.toLowerCase() === palette.s.toLowerCase()) ? '0 6px 16px rgba(255,163,5,0.25)' : 'none'
                                         }}
                                     >
-                                        {(primaryColor === palette.p && secondaryColor === palette.s) && (
+                                        {(primaryColor?.toLowerCase() === palette.p.toLowerCase() && secondaryColor?.toLowerCase() === palette.s.toLowerCase()) && (
                                             <div style={{
                                                 position: 'absolute',
-                                                top: '50%',
-                                                left: '50%',
-                                                transform: 'translate(-50%, -50%)',
-                                                width: '24px',
-                                                height: '24px',
-                                                background: '#8b5cf6',
+                                                top: '-6px',
+                                                left: '-6px',
+                                                width: '22px',
+                                                height: '22px',
+                                                background: '#ffa305',
                                                 borderRadius: '50%',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                border: '2px solid #fff'
+                                                border: '2px solid #334155',
+                                                color: '#fff',
+                                                fontSize: '12px',
+                                                fontWeight: 700
                                             }}>
-                                                <Check size={14} color="#fff" />
+                                                ✓
                                             </div>
                                         )}
                                     </div>
@@ -192,7 +214,7 @@ const ReusableDesignAccordion = ({
                                 position: 'relative',
                                 height: '1px',
                                 background: 'none',
-                                borderTop: '1px dashed #e2e8f0',
+                                borderTop: '1px dashed #334155',
                                 margin: '2rem 0'
                             }}></div>
 
@@ -200,16 +222,17 @@ const ReusableDesignAccordion = ({
                             <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                 {/* Primary Color */}
                                 <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                         Primary Color
                                     </label>
                                     <div style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
                                         padding: '0.5rem',
-                                        height: '44px'
+                                        height: '44px',
+                                        background: '#020617'
                                     }}>
                                         <input
                                             type="text"
@@ -220,20 +243,22 @@ const ReusableDesignAccordion = ({
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.9rem',
-                                                color: '#000',
-                                                fontWeight: '500',
-                                                textTransform: 'uppercase'
+                                                color: '#e5e7eb',
+                                                fontWeight: '600',
+                                                textTransform: 'uppercase',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <div style={{
                                             width: '28px',
                                             height: '28px',
                                             background: primaryColor,
-                                            borderRadius: '2px',
+                                            borderRadius: '6px',
                                             flexShrink: 0,
                                             position: 'relative',
                                             overflow: 'hidden',
-                                            cursor: 'pointer'
+                                            cursor: 'pointer',
+                                            border: '1px solid #334155'
                                         }}>
                                             <input
                                                 type="color"
@@ -278,16 +303,17 @@ const ReusableDesignAccordion = ({
 
                                 {/* Secondary Color */}
                                 <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                         Secondary Color
                                     </label>
                                     <div style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
                                         padding: '0.5rem',
-                                        height: '44px'
+                                        height: '44px',
+                                        background: '#020617'
                                     }}>
                                         <input
                                             type="text"
@@ -298,18 +324,19 @@ const ReusableDesignAccordion = ({
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.9rem',
-                                                color: '#000',
-                                                fontWeight: '500',
-                                                textTransform: 'uppercase'
+                                                color: '#e5e7eb',
+                                                fontWeight: '600',
+                                                textTransform: 'uppercase',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <div style={{
                                             width: '28px',
                                             height: '28px',
                                             background: secondaryColor,
-                                            borderRadius: '2px',
+                                            borderRadius: '6px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0',
+                                            border: '1px solid #334155',
                                             position: 'relative',
                                             overflow: 'hidden',
                                             cursor: 'pointer'
@@ -338,7 +365,7 @@ const ReusableDesignAccordion = ({
                     {showLogo && (
                         <div style={{ marginBottom: children ? '2rem' : '0' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                                <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
+                                <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#ffa305', textTransform: 'uppercase' }}>
                                     {logoLabel}
                                 </span>
                                 <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
@@ -361,17 +388,18 @@ const ReusableDesignAccordion = ({
                                         width: '80px',
                                         height: '80px',
                                         borderRadius: '50%',
-                                        border: '1px solid #e2e8f0',
+                                        border: '1px solid #334155',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         cursor: 'pointer',
-                                        background: '#fff',
-                                        flexShrink: 0
+                                        background: '#020617',
+                                        flexShrink: 0,
+                                        color: '#94a3b8'
                                     }}
                                     title="Remove Logo"
                                 >
-                                    <X size={24} color="#cbd5e1" />
+                                    <X size={24} />
                                 </div>
 
                                 {/* Logo Presets */}
@@ -391,28 +419,32 @@ const ReusableDesignAccordion = ({
                                             height: '80px',
                                             borderRadius: '50%',
                                             overflow: 'hidden',
-                                            border: currentLogoUrl === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                            border: currentLogoUrl === img.url ? '3px solid #ffa305' : '2px solid #334155',
                                             cursor: 'pointer',
                                             position: 'relative',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            background: '#0f172a'
                                         }}
                                     >
                                         <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         {currentLogoUrl === img.url && (
                                             <div style={{
                                                 position: 'absolute',
-                                                top: 0,
-                                                right: 0,
-                                                width: '24px',
-                                                height: '24px',
-                                                background: '#8b5cf6',
+                                                top: '0',
+                                                left: '0',
+                                                width: '22px',
+                                                height: '22px',
+                                                background: '#ffa305',
                                                 borderRadius: '50%',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                border: '2px solid #fff'
+                                                border: '2px solid #334155',
+                                                color: '#fff',
+                                                fontSize: '12px',
+                                                fontWeight: 700
                                             }}>
-                                                <Check size={14} color="#fff" />
+                                                ✓
                                             </div>
                                         )}
                                     </div>
@@ -426,7 +458,7 @@ const ReusableDesignAccordion = ({
                                             height: '80px',
                                             borderRadius: '50%',
                                             overflow: 'hidden',
-                                            border: '2px solid #8b5cf6',
+                                            border: '3px solid #ffa305',
                                             cursor: 'pointer',
                                             position: 'relative',
                                             flexShrink: 0
@@ -438,19 +470,22 @@ const ReusableDesignAccordion = ({
                                         <img src={currentLogoUrl} alt="Custom Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         <div style={{
                                             position: 'absolute',
-                                            top: 0,
-                                            right: 0,
-                                            width: '24px',
-                                            height: '24px',
-                                            background: '#8b5cf6',
+                                            top: '0',
+                                            left: '0',
+                                            width: '22px',
+                                            height: '22px',
+                                            background: '#ffa305',
                                             borderRadius: '50%',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            border: '2px solid #fff',
-                                            zIndex: 2
+                                            border: '2px solid #334155',
+                                            zIndex: 2,
+                                            color: '#fff',
+                                            fontSize: '12px',
+                                            fontWeight: 700
                                         }}>
-                                            <Check size={14} color="#fff" />
+                                            ✓
                                         </div>
                                         {isHovered && (
                                             <div style={{
@@ -488,12 +523,13 @@ const ReusableDesignAccordion = ({
                                             width: '80px',
                                             height: '80px',
                                             borderRadius: '50%',
-                                            border: '1px dashed #cbd5e1',
+                                            border: '1px dashed #334155',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             cursor: 'pointer',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            background: '#0f172a'
                                         }}
                                     >
                                         <UploadCloud size={24} color="#94a3b8" />
@@ -506,7 +542,7 @@ const ReusableDesignAccordion = ({
                     {/* Shape Selection */}
                     {showLogo && logoShapeKey && (
                         <div style={{ marginBottom: children ? '2rem' : '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '1rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '1rem', textTransform: 'uppercase' }}>
                                 SHAPE
                             </label>
                             <div style={{ display: 'flex', gap: '2rem' }}>
@@ -523,9 +559,9 @@ const ReusableDesignAccordion = ({
                                                 onChange(logoShapeKey, 'circular');
                                             }
                                         }}
-                                        style={{ width: '16px', height: '16px', accentColor: '#8b5cf6' }}
+                                        style={{ width: '16px', height: '16px', accentColor: '#ffa305' }}
                                     />
-                                    <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>Circular</span>
+                                    <span style={{ fontSize: '0.9rem', color: '#f8fafc' }}>Circular</span>
                                 </label>
                                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
                                     <input
@@ -540,56 +576,74 @@ const ReusableDesignAccordion = ({
                                                 onChange(logoShapeKey, 'rectangular');
                                             }
                                         }}
-                                        style={{ width: '16px', height: '16px', accentColor: '#8b5cf6' }}
+                                        style={{ width: '16px', height: '16px', accentColor: '#ffa305' }}
                                     />
-                                    <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>Rectangular</span>
+                                    <span style={{ fontSize: '0.9rem', color: '#f8fafc' }}>Rectangular</span>
                                 </label>
                             </div>
                         </div>
                     )}
 
                     {children}
-                </div>
-            )}
-            {/* Modal for Logo Preview */}
-            {isModalOpen && currentLogoUrl && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    zIndex: 9999,
-                    background: 'rgba(0,0,0,0.8)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '2rem'
-                }} onClick={() => setIsModalOpen(false)}>
-                    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={e => e.stopPropagation()}>
-                        <img src={currentLogoUrl} alt="Logo Preview" style={{ maxWidth: '100%', maxHeight: '90vh', borderRadius: '8px' }} />
-                        <button
-                            onClick={() => setIsModalOpen(false)}
-                            style={{
-                                position: 'absolute',
-                                top: '10px',
-                                right: '10px',
-                                background: 'white',
-                                border: 'none',
-                                borderRadius: '50%',
-                                width: '40px',
-                                height: '40px',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+            <AnimatePresence>
+                {isModalOpen && currentLogoUrl && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        style={{
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            zIndex: 9999,
+                            background: 'rgba(0,0,0,0.8)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '2rem'
+                        }}
+                        onClick={() => setIsModalOpen(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.98, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.98, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%', background: '#0f172a', border: '1px solid #334155', borderRadius: '12px', padding: '1rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }}
+                            onClick={e => e.stopPropagation()}
                         >
-                            <X size={24} color="#000" />
-                        </button>
-                    </div>
-                </div>
-            )}
+                            <img src={currentLogoUrl} alt="Logo Preview" style={{ maxWidth: '100%', maxHeight: '80vh', borderRadius: '8px', display: 'block' }} />
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                style={{
+                                    position: 'absolute',
+                                    top: '-12px',
+                                    right: '-12px',
+                                    background: '#0f172a',
+                                    border: '1px solid #334155',
+                                    borderRadius: '50%',
+                                    width: '36px',
+                                    height: '36px',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: '#94a3b8',
+                                    boxShadow: '0 2px 8px rgba(0,0,0,0.25)'
+                                }}
+                            >
+                                <X size={18} />
+                            </button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Reusable Upload/Edit Modal */}
             <ImageUploadModal
@@ -603,7 +657,7 @@ const ReusableDesignAccordion = ({
                 fileName={fileName}
                 type="logo"
             />
-        </div>
+        </motion.div>
     );
 };
 

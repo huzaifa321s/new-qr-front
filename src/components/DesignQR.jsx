@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { ChevronDown, ChevronUp, Upload, X, ArrowRight, Check, Eye, UploadCloud } from 'lucide-react';
+import { motion } from 'framer-motion';
 import FormSection from './FormSection';
 import ColorPicker from './ColorPicker';
 
@@ -62,7 +63,7 @@ const DesignQR = ({
     ];
 
     return (
-        <div style={{ padding: '1rem', width: '100%', boxSizing: 'border-box' }}>
+        <div style={{ padding: '1rem', width: '100%', boxSizing: 'border-box', background: '#0f172a', color: '#fff' }}>
 
 
             {/* SHAPE & COLOR */}
@@ -71,7 +72,7 @@ const DesignQR = ({
 
                     {/* Body Patterns */}
                     <div>
-                        <label className="label" style={{ marginBottom: '1rem', display: 'block', color: '#0f172a', fontWeight: '600', fontSize: '0.85rem' }}>BODY PATTERNS</label>
+                        <label className="label" style={{ marginBottom: '1rem', display: 'block', color: '#fff', fontWeight: '600', fontSize: '0.85rem' }}>BODY PATTERNS</label>
                         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
                             {[
                                 { id: 'square', svg: <rect x="2" y="2" width="46" height="46" fill="currentColor" /> },
@@ -80,46 +81,48 @@ const DesignQR = ({
                                 { id: 'rounded', svg: <rect x="2" y="2" width="46" height="46" rx="12" fill="currentColor" /> },
                                 { id: 'extra-rounded', svg: <rect x="2" y="2" width="46" height="46" rx="23" fill="currentColor" /> },
                             ].map((p, idx) => (
-                                <div
+                                <motion.div
                                     key={idx}
                                     onClick={() => setDesign(prev => ({ ...prev, dots: { ...prev.dots, style: p.id } }))}
                                     style={{
                                         width: '50px',
                                         height: '50px',
-                                        border: design?.dots?.style === p.id ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                        border: design?.dots?.style === p.id ? '2px solid #ffa305' : '1px solid #334155',
                                         borderRadius: '4px',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        background: '#fff',
-                                        color: '#000',
+                                        background: '#1e293b',
+                                        color: '#fff',
                                         padding: '8px'
                                     }}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     <svg viewBox="0 0 50 50" width="100%" height="100%">
                                         {p.svg}
                                     </svg>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
 
-                        <div style={{ borderTop: '1px dashed #e2e8f0', margin: '1.5rem 0' }}></div>
+                        <div style={{ borderTop: '1px dashed #334155', margin: '1.5rem 0' }}></div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                            <label style={{ fontSize: '0.75rem', color: '#64748b' }}>Pattern Color</label>
+                            <label style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Pattern Color</label>
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                border: '1px solid #e2e8f0',
+                                border: '1px solid #334155',
                                 borderRadius: '4px',
                                 padding: '0.5rem',
-                                background: '#fff',
+                                background: '#0f172a',
                                 width: '100%',
                                 maxWidth: '200px',
                                 justifyContent: 'space-between'
                             }}>
-                                <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: '500' }}>{design?.dots?.color || '#000000'}</span>
+                                <span style={{ fontSize: '0.9rem', color: '#94a3b8', fontWeight: '500' }}>{design?.dots?.color || '#000000'}</span>
                                 <div style={{ position: 'relative', width: '24px', height: '24px', flexShrink: 0 }}>
                                     <input
                                         type="color"
@@ -140,7 +143,7 @@ const DesignQR = ({
                                         height: '100%',
                                         background: design?.dots?.color || '#000000',
                                         borderRadius: '4px',
-                                        border: '1px solid #e2e8f0'
+                                        border: '1px solid #334155'
                                     }}></div>
                                 </div>
                             </div>
@@ -151,7 +154,7 @@ const DesignQR = ({
 
                     {/* Eye Frame (Outer Square) */}
                     <div>
-                        <label className="label" style={{ marginBottom: '1rem', display: 'block', color: '#0f172a', fontWeight: '600', fontSize: '0.85rem' }}>EYE FRAME (OUTER SQUARE)</label>
+                        <label className="label" style={{ marginBottom: '1rem', display: 'block', color: '#fff', fontWeight: '600', fontSize: '0.85rem' }}>EYE FRAME (OUTER SQUARE)</label>
                         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
                             {[
                                 { id: 'circle', svg: <circle cx="25" cy="25" r="21.5" stroke="currentColor" strokeWidth="7" fill="none" /> },
@@ -170,46 +173,48 @@ const DesignQR = ({
                                 { id: 'leaf-bottom-right', svg: <path d="M3.5 3.5 L26.5 3.5 A20 20 0 0 1 46.5 23.5 L46.5 46.5 L23.5 46.5 A20 20 0 0 1 3.5 26.5 Z" stroke="currentColor" strokeWidth="7" fill="none" /> },
                                 { id: 'leaf-bottom-left', svg: <path d="M3.5 23.5 A20 20 0 0 1 23.5 3.5 L46.5 3.5 L46.5 26.5 A20 20 0 0 1 26.5 46.5 L3.5 46.5 Z" stroke="currentColor" strokeWidth="7" fill="none" /> },
                             ].map((f, idx) => (
-                                <div
+                                <motion.div
                                     key={idx}
                                     onClick={() => setDesign(prev => ({ ...prev, cornersSquare: { ...prev.cornersSquare, style: f.id } }))}
                                     style={{
                                         width: '40px',
                                         height: '40px',
-                                        border: design?.cornersSquare?.style === f.id ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                        border: design?.cornersSquare?.style === f.id ? '2px solid #ffa305' : '1px solid #334155',
                                         borderRadius: '4px',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        background: '#fff',
-                                        color: '#000',
+                                        background: '#1e293b',
+                                        color: '#fff',
                                         padding: '6px'
                                     }}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     <svg viewBox="0 0 50 50" width="100%" height="100%">
                                         {f.svg}
                                     </svg>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
 
-                        <div style={{ borderTop: '1px dashed #e2e8f0', margin: '1rem 0' }}></div>
+                        <div style={{ borderTop: '1px dashed #334155', margin: '1rem 0' }}></div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                            <label style={{ fontSize: '0.75rem', color: '#64748b' }}>Frame Color</label>
+                            <label style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Frame Color</label>
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                border: '1px solid #e2e8f0',
+                                border: '1px solid #334155',
                                 borderRadius: '4px',
                                 padding: '0.5rem',
-                                background: '#fff',
+                                background: '#0f172a',
                                 width: '100%',
                                 maxWidth: '200px',
                                 justifyContent: 'space-between'
                             }}>
-                                <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: '500' }}>{design?.cornersSquare?.color || design?.dots?.color || '#000000'}</span>
+                                <span style={{ fontSize: '0.9rem', color: '#94a3b8', fontWeight: '500' }}>{design?.cornersSquare?.color || design?.dots?.color || '#000000'}</span>
                                 <div style={{ position: 'relative', width: '24px', height: '24px', flexShrink: 0 }}>
                                     <input
                                         type="color"
@@ -230,7 +235,7 @@ const DesignQR = ({
                                         height: '100%',
                                         background: design?.cornersSquare?.color || design?.dots?.color || '#000000',
                                         borderRadius: '4px',
-                                        border: '1px solid #e2e8f0'
+                                        border: '1px solid #334155'
                                     }}></div>
                                 </div>
                             </div>
@@ -241,7 +246,7 @@ const DesignQR = ({
 
                     {/* Eye Ball (Inner Dot) */}
                     <div>
-                        <label className="label" style={{ marginBottom: '1rem', display: 'block', color: '#0f172a', fontWeight: '600', fontSize: '0.85rem' }}>EYE BALL (INNER DOT)</label>
+                        <label className="label" style={{ marginBottom: '1rem', display: 'block', color: '#fff', fontWeight: '600', fontSize: '0.85rem' }}>EYE BALL (INNER DOT)</label>
                         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
                             {[
                                 { id: 'dot', svg: <circle cx="25" cy="25" r="17" fill="currentColor" /> },
@@ -255,46 +260,48 @@ const DesignQR = ({
                                 { id: 'plus', svg: <path d="M22 12 L28 12 L28 22 L38 22 L38 28 L28 28 L28 38 L22 38 L22 28 L12 28 L12 22 L22 22 Z" fill="currentColor" /> },
                                 { id: 'cross', svg: <path d="M16 10 L25 19 L34 10 L40 16 L31 25 L40 34 L34 40 L25 31 L16 40 L10 34 L19 25 L10 16 Z" fill="currentColor" /> },
                             ].map((b, idx) => (
-                                <div
+                                <motion.div
                                     key={idx}
                                     onClick={() => setDesign(prev => ({ ...prev, cornersDot: { ...prev.cornersDot, style: b.id } }))}
                                     style={{
                                         width: '40px',
                                         height: '40px',
-                                        border: design?.cornersDot?.style === b.id ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
+                                        border: design?.cornersDot?.style === b.id ? '2px solid #ffa305' : '1px solid #334155',
                                         borderRadius: '4px',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        background: '#fff',
-                                        color: '#000',
+                                        background: '#1e293b',
+                                        color: '#fff',
                                         padding: '6px'
                                     }}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     <svg viewBox="0 0 50 50" width="100%" height="100%">
                                         {b.svg}
                                     </svg>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
 
-                        <div style={{ borderTop: '1px dashed #e2e8f0', margin: '1rem 0' }}></div>
+                        <div style={{ borderTop: '1px dashed #334155', margin: '1rem 0' }}></div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                            <label style={{ fontSize: '0.75rem', color: '#64748b' }}>Ball Color</label>
+                            <label style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Ball Color</label>
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                border: '1px solid #e2e8f0',
+                                border: '1px solid #334155',
                                 borderRadius: '4px',
                                 padding: '0.5rem',
-                                background: '#fff',
+                                background: '#0f172a',
                                 width: '100%',
                                 maxWidth: '200px',
                                 justifyContent: 'space-between'
                             }}>
-                                <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: '500' }}>{design?.cornersDot?.color || design?.dots?.color || '#000000'}</span>
+                                <span style={{ fontSize: '0.9rem', color: '#94a3b8', fontWeight: '500' }}>{design?.cornersDot?.color || design?.dots?.color || '#000000'}</span>
                                 <div style={{ position: 'relative', width: '24px', height: '24px', flexShrink: 0 }}>
                                     <input
                                         type="color"
@@ -315,7 +322,7 @@ const DesignQR = ({
                                         height: '100%',
                                         background: design?.cornersDot?.color || design?.dots?.color || '#000000',
                                         borderRadius: '4px',
-                                        border: '1px solid #e2e8f0'
+                                        border: '1px solid #334155'
                                     }}></div>
                                 </div>
                             </div>
@@ -332,15 +339,16 @@ const DesignQR = ({
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
 
                     {/* Upload Section */}
-                    <div style={{
-                        border: '2px dashed #cbd5e1',
-                        borderRadius: '12px',
-                        padding: '2rem',
-                        textAlign: 'center',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        background: isHovered ? '#f8fafc' : '#ffffff'
-                    }}
+                    <div
+                        style={{
+                            border: '2px dashed #334155',
+                            borderRadius: '16px',
+                            padding: '2rem',
+                            textAlign: 'center',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s',
+                            background: isHovered ? '#1e293b' : '#0f172a'
+                        }}
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
                         onClick={() => fileInputRef.current?.click()}
@@ -367,41 +375,45 @@ const DesignQR = ({
                                     }}
                                     style={{
                                         position: 'absolute',
-                                        top: '-10px',
-                                        right: '-10px',
-                                        background: '#ef4444',
-                                        color: '#fff',
+                                        top: '-12px',
+                                        right: '-12px',
+                                        background: '#0f172a',
+                                        color: '#94a3b8',
                                         borderRadius: '50%',
-                                        width: '24px',
-                                        height: '24px',
+                                        width: '28px',
+                                        height: '28px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                        border: '1px solid #334155',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.25)'
                                     }}
                                 >
-                                    <X size={14} />
+                                    <X size={16} />
                                 </div>
                             </div>
                         ) : (
                             <>
-                                <div style={{
-                                    width: '64px',
-                                    height: '64px',
-                                    borderRadius: '50%',
-                                    background: '#eff6ff',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    margin: '0 auto 1rem',
-                                    color: '#3b82f6'
-                                }}>
-                                    <Upload size={28} />
+                                <div
+                                    style={{
+                                        width: '64px',
+                                        height: '64px',
+                                        borderRadius: '50%',
+                                        background: '#0b1222',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        margin: '0 auto 1rem',
+                                        color: '#64748b',
+                                        border: '1px solid #334155'
+                                    }}
+                                >
+                                    <Upload size={28} color="#64748b" />
                                 </div>
-                                <div style={{ fontSize: '0.95rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>
+                                <div style={{ fontSize: '0.95rem', fontWeight: '600', color: '#f8fafc', marginBottom: '0.5rem' }}>
                                     Upload your custom logo
                                 </div>
-                                <div style={{ fontSize: '0.85rem', color: '#64748b' }}>
+                                <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
                                     Supported formats: PNG, JPG, SVG
                                 </div>
                             </>
@@ -410,7 +422,7 @@ const DesignQR = ({
 
                     {/* Social Logos Grid */}
                     <div>
-                        <label style={{ display: 'block', marginBottom: '1rem', fontWeight: '600', color: '#0f172a', fontSize: '0.9rem' }}>
+                        <label style={{ display: 'block', marginBottom: '1rem', fontWeight: '600', color: '#f8fafc', fontSize: '0.9rem' }}>
                             OR CHOOSE FROM PRESETS
                         </label>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(60px, 1fr))', gap: '1rem' }}>
@@ -421,7 +433,7 @@ const DesignQR = ({
                                     style={{
                                         width: '60px',
                                         height: '60px',
-                                        border: design?.image?.url === social.src ? '2px solid #3b82f6' : '1px solid #e2e8f0',
+                                        border: design?.image?.url === social.src ? '2px solid #3b82f6' : 'none',
                                         borderRadius: '12px',
                                         padding: '10px',
                                         cursor: 'pointer',
@@ -431,7 +443,8 @@ const DesignQR = ({
                                         background: '#fff',
                                         boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                                         transition: 'all 0.2s',
-                                        position: 'relative'
+                                        position: 'relative',
+                                        opacity: design?.image?.url === social.src ? 1 : 0.85
                                     }}
                                 >
                                     <img src={social.src} alt={social.label} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
@@ -457,7 +470,7 @@ const DesignQR = ({
                     </div>
 
                     {/* Remove Background Toggle */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem', background: '#f8fafc', borderRadius: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem', background: '#0f172a', borderRadius: '12px', border: '1px solid #334155' }}>
                         <div
                             onClick={() => setDesign(prev => ({
                                 ...prev,
@@ -485,35 +498,37 @@ const DesignQR = ({
                                 boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
                             }}></div>
                         </div>
-                        <span style={{ fontSize: '0.9rem', fontWeight: '500', color: '#1e293b' }}>Remove Background Behind Logo</span>
+                        <span style={{ fontSize: '0.9rem', fontWeight: '500', color: '#94a3b8' }}>Remove Background Behind Logo</span>
                     </div>
 
                     {/* Logo Size Slider */}
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                            <label style={{ fontSize: '0.9rem', fontWeight: '600', color: '#0f172a' }}>Logo Size</label>
-                            <span style={{ fontSize: '0.85rem', color: '#64748b' }}>{Math.round((design?.imageOptions?.imageSize || 0.4) * 100)}%</span>
+                            <label style={{ fontSize: '0.9rem', fontWeight: '600', color: '#f8fafc' }}>Logo Size</label>
+                            <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>{Math.round((design?.imageOptions?.imageSize || 0.4) * 100)}%</span>
                         </div>
-                        <input
-                            type="range"
-                            min="0.1"
-                            max="0.5"
-                            step="0.05"
-                            value={design?.imageOptions?.imageSize || 0.4}
-                            onChange={(e) => setDesign(prev => ({
-                                ...prev,
-                                imageOptions: { ...prev.imageOptions, imageSize: parseFloat(e.target.value) }
-                            }))}
-                            style={{
-                                width: '100%',
-                                height: '6px',
-                                background: '#e2e8f0',
-                                borderRadius: '3px',
-                                outline: 'none',
-                                cursor: 'pointer',
-                                accentColor: '#3b82f6'
-                            }}
-                        />
+                        <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '12px', padding: '0.75rem 1rem' }}>
+                            <input
+                                type="range"
+                                min="0.1"
+                                max="0.5"
+                                step="0.05"
+                                value={design?.imageOptions?.imageSize || 0.4}
+                                onChange={(e) => setDesign(prev => ({
+                                    ...prev,
+                                    imageOptions: { ...prev.imageOptions, imageSize: parseFloat(e.target.value) }
+                                }))}
+                                style={{
+                                    width: '100%',
+                                    height: '6px',
+                                    background: '#334155',
+                                    borderRadius: '3px',
+                                    outline: 'none',
+                                    cursor: 'pointer',
+                                    accentColor: '#3b82f6'
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
             </FormSection>
@@ -660,7 +675,7 @@ const DesignQR = ({
                     onClick={onSave}
                     disabled={isGenerating}
                     style={{
-                        background: isGenerating ? '#e2e8f0' : 'linear-gradient(to right, #6366f1, #8b5cf6)',
+                        background: isGenerating ? '#e2e8f0' : 'linear-gradient(to right, #f59e0b, #ffa305)',
                         color: isGenerating ? '#94a3b8' : '#ffffff',
                         border: 'none',
                         padding: '0.875rem 1.5rem',

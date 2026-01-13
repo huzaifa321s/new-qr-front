@@ -10,7 +10,7 @@ const FormSection = ({ title, children, defaultOpen = false }) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             style={{
-                background: '#1e293b',
+                background: '#0f172a',
                 borderRadius: '16px',
                 marginBottom: '1rem',
                 border: '1px solid #334155',
@@ -25,7 +25,7 @@ const FormSection = ({ title, children, defaultOpen = false }) => {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    background: 'none',
+                    background: 'transparent',
                     border: 'none',
                     cursor: 'pointer',
                     fontSize: '1rem',
@@ -35,11 +35,8 @@ const FormSection = ({ title, children, defaultOpen = false }) => {
                 }}
             >
                 {title}
-                <motion.div
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ duration: 0.2 }}
-                >
-                    <ChevronDown size={20} color="#94a3b8" />
+                <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                    <ChevronDown size={18} color="#94a3b8" />
                 </motion.div>
             </button>
 
@@ -50,9 +47,9 @@ const FormSection = ({ title, children, defaultOpen = false }) => {
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        style={{ overflow: 'hidden' }}
+                        style={{ overflow: 'hidden', background: '#020617', borderTop: '1px solid #334155' }}
                     >
-                        <div style={{ padding: '0 1.25rem 1.25rem 1.25rem', borderTop: '1px solid #334155', paddingTop: '1rem' }}>
+                        <div style={{ padding: '0 1.25rem 1.25rem 1.25rem', paddingTop: '1rem' }}>
                             {children}
                         </div>
                     </motion.div>

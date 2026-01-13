@@ -29,7 +29,7 @@ import {
 } from 'recharts';
 
 // --- Constants & Helpers ---
-const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
+const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#ffa305'];
 
 const DateCustomInput = React.forwardRef(({ value, onClick, startDate, endDate, onClear }, ref) => (
     <div
@@ -80,6 +80,7 @@ const DateCustomInput = React.forwardRef(({ value, onClick, startDate, endDate, 
 
 const Dashboard = () => {
     const navigate = useNavigate();
+    const staticTypes = ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone', 'more'];
     
     // --- State ---
     const [qrs, setQrs] = useState([]);
@@ -445,7 +446,6 @@ const Dashboard = () => {
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh', background: '#0f172a', color: '#f8fafc', fontFamily: '"Inter", sans-serif' }}>
-            <Toaster position="top-center" toastOptions={{ style: { background: '#1e293b', color: '#fff' } }} />
             
             <Sidebar 
                 isOpen={isSidebarOpen} 
@@ -503,7 +503,7 @@ const Dashboard = () => {
                             {[
                                 { label: 'Total QRs', value: totalQRs, icon: Grid, color: '#3b82f6' },
                                 { label: 'Total Scans', value: qrs.reduce((acc, qr) => acc + (qr.scanCount || 0), 0), icon: BarChart, color: '#10b981' },
-                                { label: 'Active Campaigns', value: qrs.filter(q => !['text', 'wifi'].includes(q.type)).length, icon: Sparkles, color: '#8b5cf6' }
+                                { label: 'Active Campaigns', value: qrs.filter(q => !['text', 'wifi'].includes(q.type)).length, icon: Sparkles, color: '#ffa305' }
                             ].map((stat, i) => (
                                 <motion.div
                                     key={i}
@@ -637,9 +637,130 @@ const Dashboard = () => {
                                 startDate={startDate}
                                 endDate={endDate}
                                 selectsRange
-                                customInput={<DateCustomInput />}
+                                customInput={
+                                    <DateCustomInput
+                                        startDate={startDate}
+                                        endDate={endDate}
+                                        onClear={() => {
+                                            setStartDate(null);
+                                            setEndDate(null);
+                                        }}
+                                    />
+                                }
                             />
+                            {(searchTerm !== '' || activeTab !== 'All' || sortOption !== 'Last Created' || selectedTypeFilter !== 'All types' || startDate !== null || endDate !== null) && (
+                                <button
+                                    onClick={() => {
+                                        setSearchTerm('');
+                                        setActiveTab('All');
+                                        setSortOption('Last Created');
+                                        setSelectedTypeFilter('All types');
+                                        setStartDate(null);
+                                        setEndDate(null);
+                                        toast.success('All filters cleared');
+                                    }}
+                                    style={{
+                                        padding: '1rem 1.5rem',
+                                        background: '#ffa305',
+                                        border: 'none',
+                                        borderRadius: '12px',
+                                        color: '#000000',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.5rem',
+                                        fontWeight: '600',
+                                        fontSize: '0.9rem',
+                                        height: '58px', // Match height of other inputs
+                                        boxShadow: '0 4px 6px -1px rgba(255, 163, 5, 0.5)'
+                                    }}
+                                    className="hover:opacity-90 transition-opacity"
+                                >
+                                    <X size={18} />
+                                    Clear Filters
+                                </button>
+                            )}
                         </div>
+                    </div>
+                </div>
+
+                {/* Pagination Controls */}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: isMobile ? 'column' : 'row',
+                    justifyContent: 'space-between',
+                    alignItems: isMobile ? 'flex-start' : 'center',
+                    marginBottom: '1.5rem',
+                    padding: '1rem',
+                    background: '#1e293b',
+                    borderRadius: '12px',
+                    gap: '1rem',
+                    border: '1px solid #334155'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <span style={{ fontSize: '0.875rem', color: '#94a3b8' }}>Show:</span>
+                        <select
+                            value={pageLimit}
+                            onChange={(e) => {
+                                setPageLimit(Number(e.target.value));
+                                setCurrentPage(1);
+                            }}
+                            style={{
+                                padding: '0.5rem',
+                                border: '1px solid #334155',
+                                borderRadius: '6px',
+                                fontSize: '0.875rem',
+                                cursor: 'pointer',
+                                background: '#0f172a',
+                                color: '#fff'
+                            }}
+                        >
+                            <option value={10}>10</option>
+                            <option value={20}>20</option>
+                            <option value={50}>50</option>
+                            <option value={100}>100</option>
+                        </select>
+                        <span style={{ fontSize: '0.875rem', color: '#94a3b8' }}>per page</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', width: isMobile ? '100%' : 'auto', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', gap: '0.5rem', order: isMobile ? 2 : 1 }}>
+                            <button
+                                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                                disabled={currentPage === 1}
+                                style={{
+                                    padding: '0.5rem 0.75rem',
+                                    border: '1px solid #334155',
+                                    borderRadius: '6px',
+                                    background: currentPage === 1 ? '#1e293b' : '#0f172a',
+                                    color: currentPage === 1 ? '#64748b' : '#fff',
+                                    cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                                    fontSize: '0.875rem'
+                                }}
+                            >
+                                <ChevronLeft size={16} />
+                            </button>
+                            <div style={{ fontSize: '0.875rem', color: '#94a3b8', display: 'flex', alignItems: 'center', px: '0.5rem' }}>
+                                {currentPage} / {totalPages}
+                            </div>
+                            <button
+                                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                                disabled={currentPage === totalPages}
+                                style={{
+                                    padding: '0.5rem 0.75rem',
+                                    border: '1px solid #334155',
+                                    borderRadius: '6px',
+                                    background: currentPage === totalPages ? '#1e293b' : '#0f172a',
+                                    color: currentPage === totalPages ? '#64748b' : '#fff',
+                                    cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                                    fontSize: '0.875rem'
+                                }}
+                            >
+                                <ChevronRight size={16} />
+                            </button>
+                        </div>
+                        <span style={{ fontSize: '0.875rem', color: '#94a3b8', order: isMobile ? 1 : 2 }}>
+                            {totalQRs} total
+                        </span>
                     </div>
                 </div>
 
@@ -648,6 +769,34 @@ const Dashboard = () => {
                     <div style={{ display: 'flex', justifyContent: 'center', padding: '4rem' }}>
                         <Loader2 size={40} className="animate-spin" color="#ffa305" />
                     </div>
+                ) : qrs.length === 0 ? (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '4rem',
+                            background: '#1e293b',
+                            borderRadius: '24px',
+                            border: '1px solid #334155',
+                            textAlign: 'center',
+                            color: '#94a3b8'
+                        }}
+                    >
+                        <div style={{
+                            width: '80px', height: '80px', borderRadius: '50%', background: '#334155',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem'
+                        }}>
+                            <Search size={40} color="#64748b" />
+                        </div>
+                        <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#fff', marginBottom: '0.5rem' }}>No Result Found</h3>
+                        <p style={{ maxWidth: '400px', margin: '0 auto' }}>
+                            We couldn't find any QR codes matching your filters. Try adjusting your search or create a new one.
+                        </p>
+                    </motion.div>
                 ) : (
                     <motion.div
                         variants={containerVariants}
@@ -711,16 +860,38 @@ const Dashboard = () => {
                                                                     border: '1px solid #475569'
                                                                 }}
                                                             >
-                                                                <button onClick={() => navigate(`/statistics/${qr._id}`)} style={{ width: '100%', padding: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.9rem', borderRadius: '6px' }} className="hover:bg-slate-600">
-                                                                    <BarChart size={16} /> Statistics
-                                                                </button>
-                                                                <button onClick={() => handleRenameClick(qr)} style={{ width: '100%', padding: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.9rem', borderRadius: '6px' }} className="hover:bg-slate-600">
-                                                                    <PenTool size={16} /> Rename
-                                                                </button>
-                                                                <button onClick={() => handleEditQR(qr)} style={{ width: '100%', padding: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.9rem', borderRadius: '6px' }} className="hover:bg-slate-600">
-                                                                    <Edit size={16} /> Edit
-                                                                </button>
-                                                                <button onClick={() => handleDeleteClick(qr._id)} style={{ width: '100%', padding: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#ef4444', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.9rem', borderRadius: '6px' }} className="hover:bg-red-900/20">
+                                                                {/* Protected IDs Check */}
+                                                                {!(String(qr._id) === '6954c3238ed008ead9300b3c' || String(qr._id) === '6954c3818ed008ead9300c25') && !staticTypes.includes(qr.type) && (
+                                                            <button onClick={() => navigate(`/statistics/${qr._id}`)} style={{ width: '100%', padding: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.9rem', borderRadius: '6px' }} className="hover:bg-slate-600">
+                                                                <BarChart size={16} /> Statistics
+                                                            </button>
+                                                        )}
+                                                        <button onClick={() => handleRenameClick(qr)} style={{ width: '100%', padding: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.9rem', borderRadius: '6px' }} className="hover:bg-slate-600">
+                                                            <PenTool size={16} /> Rename
+                                                        </button>
+                                                        {!(String(qr._id) === '6954c3238ed008ead9300b3c' || String(qr._id) === '6954c3818ed008ead9300c25') && !staticTypes.includes(qr.type) && (
+                                                            <button onClick={() => handleEditQR(qr)} style={{ width: '100%', padding: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.9rem', borderRadius: '6px' }} className="hover:bg-slate-600">
+                                                                <Edit size={16} /> Edit
+                                                            </button>
+                                                        )}
+                                                                <button 
+                                                                    onClick={() => {
+                                                                        if (String(qr._id) === '6954c3238ed008ead9300b3c' || String(qr._id) === '6954c3818ed008ead9300c25') {
+                                                                            toast.error('This QR code cannot be deleted');
+                                                                            return;
+                                                                        }
+                                                                        handleDeleteClick(qr._id);
+                                                                    }} 
+                                                                    style={{ 
+                                                                        width: '100%', padding: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', 
+                                                                        color: (String(qr._id) === '6954c3238ed008ead9300b3c' || String(qr._id) === '6954c3818ed008ead9300c25') ? '#94a3b8' : '#ef4444', 
+                                                                        background: 'transparent', border: 'none', 
+                                                                        cursor: (String(qr._id) === '6954c3238ed008ead9300b3c' || String(qr._id) === '6954c3818ed008ead9300c25') ? 'not-allowed' : 'pointer', 
+                                                                        fontSize: '0.9rem', borderRadius: '6px',
+                                                                        opacity: (String(qr._id) === '6954c3238ed008ead9300b3c' || String(qr._id) === '6954c3818ed008ead9300c25') ? 0.5 : 1
+                                                                    }} 
+                                                                    className={(String(qr._id) === '6954c3238ed008ead9300b3c' || String(qr._id) === '6954c3818ed008ead9300c25') ? "" : "hover:bg-red-900/20"}
+                                                                >
                                                                     <Trash2 size={16} /> Delete
                                                                 </button>
                                                             </motion.div>
@@ -731,7 +902,28 @@ const Dashboard = () => {
                                             <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#fff', margin: '0.25rem 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                                 {qr.name || 'Untitled QR'}
                                             </h3>
+                                            {/* Mobile Preview URL */}
+                                            <div style={{ marginBottom: '0.5rem' }}>
+                                                <a 
+                                                    href={`${baseUrl}/view/${qr.shortId}`} 
+                                                    target="_blank" 
+                                                    rel="noreferrer" 
+                                                    style={{ 
+                                                        fontSize: '0.8rem', 
+                                                        color: '#ffa305', 
+                                                        textDecoration: 'none', 
+                                                        display: 'flex', 
+                                                        alignItems: 'center', 
+                                                        gap: '0.25rem' 
+                                                    }}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    <ExternalLink size={12} />
+                                                    {`${baseUrl}/view/${qr.shortId}`}
+                                                </a>
+                                            </div>
                                             <div style={{ fontSize: '0.85rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+
                                                 <Clock size={14} />
                                                 {new Date(qr.createdAt).toLocaleDateString()}
                                             </div>
@@ -743,11 +935,18 @@ const Dashboard = () => {
                                         background: '#0f172a', padding: '1rem 1.5rem', borderTop: '1px solid #334155',
                                         display: 'flex', alignItems: 'center', justifyContent: 'space-between'
                                     }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <BarChart size={18} color="#ffa305" />
-                                            <span style={{ fontWeight: '700', fontSize: '1.1rem' }}>{qr.scanCount || 0}</span>
-                                            <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>scans</span>
-                                        </div>
+                                        {!staticTypes.includes(qr.type) ? (
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                <BarChart size={18} color="#ffa305" />
+                                                <span style={{ fontWeight: '700', fontSize: '1.1rem' }}>{qr.scanCount || 0}</span>
+                                                <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>scans</span>
+                                            </div>
+                                        ) : (
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#94a3b8' }}></div>
+                                                <span style={{ fontWeight: '600', fontSize: '0.9rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Static</span>
+                                            </div>
+                                        )}
                                         <div style={{ display: 'flex', gap: '0.5rem' }}>
                                             <motion.button
                                                 whileHover={{ scale: 1.1, background: '#334155' }}
@@ -756,7 +955,7 @@ const Dashboard = () => {
                                             >
                                                 <Download size={18} />
                                             </motion.button>
-                                            {qr.type === 'dynamic-url' && (
+                                            {!staticTypes.includes(qr.type) && (
                                                 <motion.button
                                                     whileHover={{ scale: 1.1, background: '#334155' }}
                                                     onClick={() => handleEditUrlClick(qr)}
