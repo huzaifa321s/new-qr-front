@@ -539,7 +539,7 @@ const DesignQR = ({
 
                     {/* Password Protection */}
                     <div>
-                        <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 'bold', color: '#7c3aed', fontSize: '0.8rem', textTransform: 'uppercase' }}>PASSWORD PROTECTION</label>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>PASSWORD PROTECTION</label>
                         <div style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '0.5rem' }}>Require a password to access content</div>
                         <div style={{ position: 'relative' }}>
                             <input
@@ -549,10 +549,11 @@ const DesignQR = ({
                                 placeholder="......"
                                 style={{
                                     width: '100%',
-                                    padding: '0.75rem',
-                                    border: '1px solid #94a3b8',
-                                    borderRadius: '6px',
-                                    fontSize: '0.95rem',
+                                    padding: '0.75rem 1rem',
+                                    border: '1px solid #334155',
+                                    borderRadius: '10px',
+                                    background: '#020617',
+                                    color: '#e5e7eb',
                                     outline: 'none'
                                 }}
                             />
@@ -574,17 +575,18 @@ const DesignQR = ({
 
                     {/* Password Expiry */}
                     <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', color: '#7c3aed', fontSize: '0.8rem', textTransform: 'uppercase' }}>PASSWORD EXPIRY</label>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>PASSWORD EXPIRY</label>
                         <input
                             type="date"
                             value={passwordExpiry}
                             onChange={(e) => setPasswordExpiry(e.target.value)}
                             style={{
                                 width: '100%',
-                                padding: '0.75rem',
-                                border: '1px solid #000',
-                                borderRadius: '6px',
-                                fontSize: '0.95rem',
+                                padding: '0.75rem 1rem',
+                                border: '1px solid #334155',
+                                borderRadius: '10px',
+                                background: '#020617',
+                                color: '#e5e7eb',
                                 outline: 'none'
                             }}
                         />
@@ -592,14 +594,14 @@ const DesignQR = ({
 
                     {/* Scan Limit */}
                     <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', color: '#7c3aed', fontSize: '0.8rem', textTransform: 'uppercase' }}>SCAN LIMIT</label>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>SCAN LIMIT</label>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
                             <div
                                 onClick={() => setScanLimitEnabled(!scanLimitEnabled)}
                                 style={{
                                     width: '36px',
                                     height: '20px',
-                                    background: scanLimitEnabled ? '#7c3aed' : '#cbd5e1',
+                                    background: scanLimitEnabled ? '#ffa305' : '#334155',
                                     borderRadius: '10px',
                                     position: 'relative',
                                     cursor: 'pointer',
@@ -618,7 +620,7 @@ const DesignQR = ({
                                     boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
                                 }}></div>
                             </div>
-                            <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#000' }}>Limit number of times this coupon can be used</span>
+                            <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#e5e7eb' }}>Limit number of times this coupon can be used</span>
                         </div>
                         {scanLimitEnabled && (
                             <input
@@ -628,10 +630,11 @@ const DesignQR = ({
                                 placeholder="10"
                                 style={{
                                     width: '100%',
-                                    padding: '0.75rem',
-                                    border: '1px solid #000',
-                                    borderRadius: '6px',
-                                    fontSize: '0.95rem',
+                                    padding: '0.75rem 1rem',
+                                    border: '1px solid #334155',
+                                    borderRadius: '10px',
+                                    background: '#020617',
+                                    color: '#e5e7eb',
                                     outline: 'none'
                                 }}
                             />
@@ -641,8 +644,8 @@ const DesignQR = ({
             </FormSection>
 
             {/* QR NAME */}
-            <div style={{ marginBottom: '2rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#0f172a' }}>QR Code Name</label>
+            <FormSection title="QR CODE NAME" defaultOpen={true}>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>QR Code Name</label>
                 <input
                     ref={qrNameRef}
                     type="text"
@@ -654,10 +657,11 @@ const DesignQR = ({
                     placeholder="Enter QR name..."
                     style={{
                         width: '100%',
-                        padding: '0.75rem',
-                        border: `1px solid ${qrNameError ? '#ef4444' : '#e2e8f0'}`,
-                        borderRadius: '8px',
-                        fontSize: '0.95rem',
+                        padding: '0.75rem 1rem',
+                        border: `1px solid ${qrNameError ? '#ef4444' : '#334155'}`,
+                        borderRadius: '10px',
+                        background: '#020617',
+                        color: '#e5e7eb',
                         outline: 'none',
                         boxShadow: qrNameError ? '0 0 0 1px #ef4444' : 'none'
                     }}
@@ -667,7 +671,7 @@ const DesignQR = ({
                         {qrNameError}
                     </p>
                 )}
-            </div>
+            </FormSection>
 
             {/* SAVE BUTTON */}
             <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
