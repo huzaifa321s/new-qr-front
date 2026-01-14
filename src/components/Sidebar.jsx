@@ -3,11 +3,14 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Plus, BarChart, ChevronLeft, ChevronRight, LayoutGrid, 
-    HelpCircle, MessageCircle, X, Zap, Settings, PieChart 
+    HelpCircle, MessageCircle, X, Zap, Settings, PieChart, User, Shield 
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import logoLoader from '../assets/logo-loader.jpg';
+import { useAuth } from '../context/AuthContext';
 
 const Sidebar = ({ isOpen, onClose, onToggle, collapsed }) => {
+    const { user } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const [localCollapsed, setLocalCollapsed] = useState(false);
@@ -27,13 +30,13 @@ const Sidebar = ({ isOpen, onClose, onToggle, collapsed }) => {
 
     // Handle collapse toggle
     const handleToggle = () => {
-        const newState = !isCollapsed;
+        const newCollapsedState = !isCollapsed;
         if (collapsed === undefined) {
-            setLocalCollapsed(newState);
+            setLocalCollapsed(newCollapsedState);
         }
-        // Notify parent (send 'expanded' state which is opposite of collapsed)
+        // Notify parent of the NEW collapsed state
         if (onToggle) {
-            onToggle(!newState);
+            onToggle(newCollapsedState);
         }
     };
 
@@ -183,15 +186,15 @@ const Sidebar = ({ isOpen, onClose, onToggle, collapsed }) => {
                             whileHover={{ rotate: 10, scale: 1.1 }}
                             style={{
                                 width: '40px', height: '40px', 
-                                background: 'linear-gradient(135deg, #ffa305 0%, #f59e0b 100%)',
                                 borderRadius: '12px',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                color: '#000',
                                 flexShrink: 0,
-                                boxShadow: '0 4px 12px rgba(255, 163, 5, 0.3)'
+                                boxShadow: '0 4px 12px rgba(255, 163, 5, 0.3)',
+                                overflow: 'hidden',
+                                border: '2px solid #ffa305'
                             }}
                         >
-                            <Zap size={24} fill="currentColor" />
+                            <img src={logoLoader} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </motion.div>
                         
                         <motion.div 
@@ -256,9 +259,15 @@ const Sidebar = ({ isOpen, onClose, onToggle, collapsed }) => {
                     
                     <div style={{ height: '1px', background: '#334155', margin: '1rem 1.5rem' }} />
                     
-                    <NavItem icon={LayoutGrid} label="My QR Codes" path="/" />
+                    <NavItem icon={LayoutGrid} label="My QR Codes" path="/dashboard" />
+                    
+                    {user?.role === 'admin' && (
+                        <NavItem icon={Shield} label="Admin Stats" path="/admin/stats" />
+                    )}
+                    
                     <NavItem icon={PieChart} label="Statistics" isComingSoon={true} />
                     <NavItem icon={Settings} label="Settings" isComingSoon={true} />
+                    <NavItem icon={User} label="My Profile" path="/profile" />
                 </div>
 
                 {/* Footer / Support */}

@@ -5,6 +5,7 @@ import { qrTypes } from '../utils/qrTypes';
 import MobilePreview from '../components/MobilePreview';
 import { getPreviewConfig } from '../utils/previewConfigs';
 import { motion, AnimatePresence } from 'framer-motion';
+import logoLoader from '../assets/logo-loader.jpg';
 
 const TemplateSelection = () => {
     const [selectedType, setSelectedType] = useState('app-store');
@@ -60,7 +61,7 @@ const TemplateSelection = () => {
                 style={{
                     background: 'rgba(30, 41, 59, 0.8)',
                     backdropFilter: 'blur(12px)',
-                    padding: '1rem 2rem',
+                    padding: isMobile ? '1rem' : '1rem 2rem',
                     borderBottom: '1px solid #334155',
                     display: 'flex',
                     alignItems: 'center',
@@ -73,37 +74,37 @@ const TemplateSelection = () => {
                 {/* Logo */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.25rem', fontWeight: '800' }}>
                     <div style={{
-                        width: '36px', height: '36px', borderRadius: '10px',
-                        background: '#ffa305',
+                        width: isMobile ? '32px' : '36px', height: isMobile ? '32px' : '36px', borderRadius: '10px',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: '#000'
+                        overflow: 'hidden',
+                        border: '2px solid #ffa305'
                     }}>
-                        <Zap size={20} fill="currentColor" />
+                        <img src={logoLoader} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
-                        <span style={{ fontSize: '1rem', color: '#fff' }}>QR</span>
-                        <span style={{ fontSize: '0.8rem', color: '#ffa305', letterSpacing: '1px' }}>INSIGHT</span>
+                        <span style={{ fontSize: isMobile ? '0.9rem' : '1rem', color: '#fff' }}>QR</span>
+                        <span style={{ fontSize: isMobile ? '0.7rem' : '0.8rem', color: '#ffa305', letterSpacing: '1px' }}>INSIGHT</span>
                     </div>
                 </div>
 
                 {/* Navigation Links */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '1rem' : '2rem' }}>
                     <motion.span
                         whileHover={{ scale: 1.05, color: '#fff' }}
                         onClick={() => navigate('/static-generator')}
-                        style={{ fontSize: '0.95rem', color: '#94a3b8', cursor: 'pointer', fontWeight: '500' }}
+                        style={{ fontSize: isMobile ? '0.8rem' : '0.95rem', color: '#94a3b8', cursor: 'pointer', fontWeight: '500' }}
                     >
-                        Static QRs
+                        {isMobile ? 'Static' : 'Static QRs'}
                     </motion.span>
                     <motion.span
                         whileHover={{ scale: 1.05 }}
                         style={{
-                            fontSize: '0.95rem', color: '#ffa305', fontWeight: '700', cursor: 'pointer',
-                            background: 'rgba(255, 163, 5, 0.1)', padding: '0.5rem 1rem', borderRadius: '20px',
+                            fontSize: isMobile ? '0.8rem' : '0.95rem', color: '#ffa305', fontWeight: '700', cursor: 'pointer',
+                            background: 'rgba(255, 163, 5, 0.1)', padding: isMobile ? '0.4rem 0.8rem' : '0.5rem 1rem', borderRadius: '20px',
                             border: '1px solid rgba(255, 163, 5, 0.2)'
                         }}
                     >
-                        Dynamic QRs
+                        {isMobile ? 'Dynamic' : 'Dynamic QRs'}
                     </motion.span>
                 </div>
             </motion.div>

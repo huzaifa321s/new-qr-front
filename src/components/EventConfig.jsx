@@ -1,5 +1,6 @@
-import { ChevronDown, ChevronUp, UploadCloud, X, Check, ArrowRightLeft, Clock, Plus, Wifi, Plug, Accessibility, Users, Baby, PawPrint, Bus, Car, Bed, Coffee, Martini, Utensils, ParkingCircle, Phone, Mail, Globe, RotateCcw, Facebook, Instagram, Twitter, Linkedin, Youtube, Twitch, Music, MessageCircle, Send, LayoutGrid, Eye } from 'lucide-react';
+import { ChevronDown, ChevronUp, UploadCloud, X, Check, ArrowRightLeft, Clock, Plus, Wifi, Plug, Accessibility, Users, Baby, PawPrint, Bus, Car, Bed, Coffee, Martini, Utensils, ParkingCircle, Phone, Mail, Globe, Eye } from 'lucide-react';
 import { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
@@ -39,18 +40,7 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
         { id: 3, platform: 'facebook', url: 'https://facebook.com/sterlingco' }
     ];
 
-    // Default colors from screenshot
-    const primaryColor = design.color?.header || '#097D6A';
-    const secondaryColor = design.color?.light || '#FFC700';
-
     // Handler functions
-    const handleDesignUpdate = (key, value) => {
-        onChange(prev => ({
-            ...prev,
-            design: { ...prev.design, [key]: value }
-        }));
-    };
-
     const handleDesignSectionUpdate = (key, value) => {
         onChange(prev => {
             const newDesign = { ...prev.design };
@@ -63,27 +53,6 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
             }
             return { ...prev, design: newDesign };
         });
-    };
-
-
-    const handleColorUpdate = (colorKey, value) => {
-        onChange(prev => ({
-            ...prev,
-            design: {
-                ...prev.design,
-                color: { ...prev.design.color, [colorKey]: value }
-            }
-        }));
-    };
-
-    const handleColorPaletteClick = (primary, secondary) => {
-        onChange(prev => ({
-            ...prev,
-            design: {
-                ...prev.design,
-                color: { header: primary, dark: primary, light: secondary }
-            }
-        }));
     };
 
     const handleHeaderImageUpdate = (url) => {
@@ -111,16 +80,6 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
         if (headerFileInputRef.current) {
             headerFileInputRef.current.click();
         }
-    };
-
-    const handleLogoUpdate = (url) => {
-        onChange(prev => ({
-            ...prev,
-            design: {
-                ...prev.design,
-                logo: { url }
-            }
-        }));
     };
 
     const handleBusinessInfoUpdate = (key, value) => {
@@ -270,10 +229,10 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
     const getChannelIcon = (type) => {
         switch (type) {
-            case 'phone': return <Phone size={20} color="#64748b" />;
-            case 'email': return <Mail size={20} color="#64748b" />;
-            case 'website': return <Globe size={20} color="#64748b" />;
-            default: return <Globe size={20} color="#64748b" />;
+            case 'phone': return <Phone size={20} color="#94a3b8" />;
+            case 'email': return <Mail size={20} color="#94a3b8" />;
+            case 'website': return <Globe size={20} color="#94a3b8" />;
+            default: return <Globe size={20} color="#94a3b8" />;
         }
     };
 
@@ -288,10 +247,8 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
         const existingLink = socialLinks.find(link => link.platform === platformId);
 
         if (existingLink) {
-            // Remove if exists (Toggle Off)
             handleRemoveSocial(existingLink.id);
         } else {
-            // Add if doesn't exist (Toggle On)
             const newLink = {
                 id: Date.now(),
                 platform: platformId,
@@ -357,28 +314,20 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
         { id: 'website', icon: 'https://img.icons8.com/color/48/domain.png', color: '#4B5563' }
     ];
 
-    const getSocialIcon = (platform) => {
-        const p = socialPlatforms.find(p => p.id === platform);
-        const Icon = p ? p.icon : Globe;
-        return <Icon size={20} color="#fff" />;
-    };
-
-    // Colors matching the screenshot palettes
     const palettes = [
-        { p: '#0B2D86', s: '#FFA800' }, // Dark Blue / Orange
-        { p: '#FFFF00', s: '#FFFFE0' }, // Yellow / Cream
-        { p: '#FFA305', s: '#FFD89A' }, // Orange / Light Orange
-        { p: '#16A34A', s: '#86EFAC' }, // Green / Light Green
-        { p: '#06B6D4', s: '#67E8F9' }  // Cyan / Light Cyan
+        { p: '#0B2D86', s: '#FFA800' },
+        { p: '#FFFF00', s: '#FFFFE0' },
+        { p: '#FFA305', s: '#FFD89A' },
+        { p: '#16A34A', s: '#86EFAC' },
+        { p: '#06B6D4', s: '#67E8F9' }
     ];
 
-    // Placeholder images matching the visual style of reference
     const headerOptions = [
         { id: 'h1', url: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=150&h=100&fit=crop' },
         { id: 'h2', url: 'https://images.unsplash.com/photo-1550684847-75bdda21cc95?w=150&h=100&fit=crop' },
         { id: 'h3', url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&h=100&fit=crop' },
         { id: 'h4', url: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=150&h=100&fit=crop' },
-        { id: 'h5', url: 'https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?w=150&h=100&fit=crop' }, // Selected in reference
+        { id: 'h5', url: 'https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?w=150&h=100&fit=crop' },
     ];
 
     const logoOptions = [
@@ -421,25 +370,23 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                     </div>
 
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                        {/* Remove/Clear Option */}
                         <div
                             onClick={() => handleHeaderImageUpdate('')}
                             style={{
                                 width: '80px',
                                 height: '80px',
                                 borderRadius: '4px',
-                                border: '1px solid #e2e8f0',
+                                border: '1px solid #334155',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 cursor: 'pointer',
-                                background: '#fff'
+                                background: '#020617'
                             }}
                         >
-                            <X size={32} color="#e2e8f0" strokeWidth={1} />
+                            <X size={32} color="#94a3b8" strokeWidth={1} />
                         </div>
 
-                        {/* Image Options */}
                         {headerOptions.map(img => (
                             <div
                                 key={img.id}
@@ -483,7 +430,6 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             </div>
                         ))}
 
-                        {/* Custom Uploaded Image */}
                         {design.headerImage?.url && !headerOptions.some(opt => opt.url === design.headerImage.url) && (
                             <div
                                 style={{
@@ -537,18 +483,18 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             </div>
                         )}
 
-                        {/* Upload Option */}
                         <div
                             onClick={triggerHeaderFileUpload}
                             style={{
                                 width: '80px',
                                 height: '80px',
                                 borderRadius: '4px',
-                                border: '1px dashed #cbd5e1',
+                                border: '1px dashed #334155',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                cursor: 'pointer'
+                                cursor: 'pointer',
+                                background: '#020617'
                             }}
                         >
                             <input
@@ -565,1011 +511,1079 @@ const EventConfig = ({ config, onChange, errors = {}, setErrors }) => {
             </ReusableDesignAccordion>
 
             {/* BASIC INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid #1e293b', marginBottom: '1.5rem', overflow: 'hidden' }}>
+                <motion.div
                     onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
                     style={{
                         padding: '1.5rem',
-                        background: '#f8fafc',
+                        background: '#0f172a',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         cursor: 'pointer',
-                        borderBottom: isBasicInfoOpen ? '1px solid #e2e8f0' : 'none'
+                        borderBottom: isBasicInfoOpen ? '1px solid #1e293b' : 'none'
                     }}
                 >
-                    <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>
+                    <div style={{ textAlign: 'left', fontWeight: 'bold', color: '#e2e8f0', fontSize: '1rem', textTransform: 'uppercase' }}>
                         BASIC INFORMATION
                     </div>
-                    {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    {isBasicInfoOpen ? <ChevronUp size={20} color="#94a3b8" /> : <ChevronDown size={20} color="#94a3b8" />}
+                </motion.div>
 
-                {isBasicInfoOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                <AnimatePresence>
+                    {isBasicInfoOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            style={{ padding: '1rem', background: '#0f172a' }}
+                        >
 
-                        {/* ORGANIZATION NAME */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                <div style={{ flex: '2 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        ORGANIZATION NAME*
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={businessInfo.companyName || ''}
-                                        onChange={(e) => handleBusinessInfoUpdate('companyName', e.target.value)}
-                                        placeholder="Sterling & Co."
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: errors.businessInfo?.companyName ? '1px solid #ef4444' : '1px solid #1e293b',
-                                            fontSize: '0.9rem',
-                                            outline: 'none',
-                                            color: '#1e293b'
-                                        }}
-                                    />
-                                    {errors.businessInfo?.companyName && (
-                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
-                                            {errors.businessInfo.companyName}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Text Color
-                                    </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
-                                    }}>
+                            {/* ORGANIZATION NAME */}
+                            <div style={{ marginBottom: '2rem' }}>
+                                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                    <div style={{ flex: '2 1 200px' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                            ORGANIZATION NAME*
+                                        </label>
                                         <input
                                             type="text"
-                                            value={businessInfo.companyNameColor || '#FFC700'}
-                                            onChange={(e) => handleBusinessInfoUpdate('companyNameColor', e.target.value)}
+                                            value={businessInfo.companyName || ''}
+                                            onChange={(e) => handleBusinessInfoUpdate('companyName', e.target.value)}
+                                            placeholder="Sterling & Co."
                                             style={{
-                                                border: 'none',
-                                                outline: 'none',
                                                 width: '100%',
+                                                padding: '0.75rem',
+                                                borderRadius: '4px',
+                                                border: errors.businessInfo?.companyName ? '1px solid #ef4444' : '1px solid #334155',
                                                 fontSize: '0.9rem',
-                                                color: '#000',
-                                                fontWeight: '600',
-                                                textTransform: 'uppercase'
+                                                outline: 'none',
+                                                color: '#e2e8f0',
+                                                background: '#020617'
                                             }}
                                         />
+                                        {errors.businessInfo?.companyName && (
+                                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                                {errors.businessInfo.companyName}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div style={{ flex: '1 1 120px' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
+                                            Text Color
+                                        </label>
                                         <div style={{
-                                            width: '28px',
-                                            height: '28px',
-                                            background: businessInfo.companyNameColor || '#FFC700',
-                                            borderRadius: '2px',
-                                            flexShrink: 0,
-                                            border: '1px solid #e2e8f0',
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            cursor: 'pointer'
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            border: '1px solid #334155',
+                                            borderRadius: '4px',
+                                            padding: '0.5rem',
+                                            height: '44px',
+                                            background: '#020617'
                                         }}>
                                             <input
-                                                type="color"
+                                                type="text"
                                                 value={businessInfo.companyNameColor || '#FFC700'}
                                                 onChange={(e) => handleBusinessInfoUpdate('companyNameColor', e.target.value)}
                                                 style={{
-                                                    position: 'absolute',
-                                                    top: '-50%',
-                                                    left: '-50%',
-                                                    width: '200%',
-                                                    height: '200%',
-                                                    cursor: 'pointer',
-                                                    opacity: 0
+                                                    border: 'none',
+                                                    outline: 'none',
+                                                    width: '100%',
+                                                    fontSize: '0.9rem',
+                                                    color: '#e2e8f0',
+                                                    fontWeight: '600',
+                                                    textTransform: 'uppercase',
+                                                    background: 'transparent'
                                                 }}
                                             />
+                                            <div style={{
+                                                width: '28px',
+                                                height: '28px',
+                                                background: businessInfo.companyNameColor || '#FFC700',
+                                                borderRadius: '2px',
+                                                flexShrink: 0,
+                                                border: '1px solid #475569',
+                                                position: 'relative',
+                                                overflow: 'hidden',
+                                                cursor: 'pointer'
+                                            }}>
+                                                <input
+                                                    type="color"
+                                                    value={businessInfo.companyNameColor || '#FFC700'}
+                                                    onChange={(e) => handleBusinessInfoUpdate('companyNameColor', e.target.value)}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '-50%',
+                                                        left: '-50%',
+                                                        width: '200%',
+                                                        height: '200%',
+                                                        cursor: 'pointer',
+                                                        opacity: 0
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ flex: '1 1 100px' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
+                                            Font
+                                        </label>
+                                        <div style={{ position: 'relative' }}>
+                                            <select
+                                                value={businessInfo.companyNameFont || 'Lato'}
+                                                onChange={(e) => handleBusinessInfoUpdate('companyNameFont', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    paddingRight: '2rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #334155',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    appearance: 'none',
+                                                    backgroundColor: '#020617',
+                                                    color: '#e2e8f0',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                {fonts.map(font => (
+                                                    <option key={font} value={font}>{font}</option>
+                                                ))}
+                                            </select>
+                                            <ChevronDown size={14} color="#94a3b8" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Font
-                                    </label>
-                                    <div style={{ position: 'relative' }}>
-                                        <select
-                                            value={businessInfo.companyNameFont || 'Lato'}
-                                            onChange={(e) => handleBusinessInfoUpdate('companyNameFont', e.target.value)}
+                            {/* EVENT NAME */}
+                            <div style={{ marginBottom: '2rem' }}>
+                                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                    <div style={{ flex: '2 1 200px' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                            EVENT NAME*
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={businessInfo.headline || ''}
+                                            onChange={(e) => handleBusinessInfoUpdate('headline', e.target.value)}
+                                            placeholder="4th Annual Company Meetup"
                                             style={{
                                                 width: '100%',
                                                 padding: '0.75rem',
-                                                paddingRight: '2rem',
                                                 borderRadius: '4px',
-                                                border: '1px solid #1e293b',
+                                                border: errors.businessInfo?.headline ? '1px solid #ef4444' : '1px solid #334155',
                                                 fontSize: '0.9rem',
                                                 outline: 'none',
-                                                appearance: 'none',
-                                                backgroundColor: '#fff',
-                                                cursor: 'pointer'
-                                            }}
-                                        >
-                                            {fonts.map(font => (
-                                                <option key={font} value={font}>{font}</option>
-                                            ))}
-                                        </select>
-                                        <ChevronDown size={14} color="#94a3b8" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* EVENT NAME */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                <div style={{ flex: '2 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        EVENT NAME*
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={businessInfo.headline || ''}
-                                        onChange={(e) => handleBusinessInfoUpdate('headline', e.target.value)}
-                                        placeholder="4th Annual Company Meetup"
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: errors.businessInfo?.headline ? '1px solid #ef4444' : '1px solid #1e293b',
-                                            fontSize: '0.9rem',
-                                            outline: 'none',
-                                            color: '#1e293b'
-                                        }}
-                                    />
-                                    {errors.businessInfo?.headline && (
-                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
-                                            {errors.businessInfo.headline}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Text Color
-                                    </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
-                                    }}>
-                                        <input
-                                            type="text"
-                                            value={businessInfo.headlineColor || '#FFFFFF'}
-                                            onChange={(e) => handleBusinessInfoUpdate('headlineColor', e.target.value)}
-                                            style={{
-                                                border: 'none',
-                                                outline: 'none',
-                                                width: '100%',
-                                                fontSize: '0.9rem',
-                                                color: '#000',
-                                                fontWeight: '600',
-                                                textTransform: 'uppercase'
+                                                color: '#e2e8f0',
+                                                background: '#020617'
                                             }}
                                         />
+                                        {errors.businessInfo?.headline && (
+                                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                                {errors.businessInfo.headline}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div style={{ flex: '1 1 120px' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
+                                            Text Color
+                                        </label>
                                         <div style={{
-                                            width: '28px',
-                                            height: '28px',
-                                            background: businessInfo.headlineColor || '#FFFFFF',
-                                            borderRadius: '2px',
-                                            flexShrink: 0,
-                                            border: '1px solid #e2e8f0',
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            cursor: 'pointer'
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            border: '1px solid #334155',
+                                            borderRadius: '4px',
+                                            padding: '0.5rem',
+                                            height: '44px',
+                                            background: '#020617'
                                         }}>
                                             <input
-                                                type="color"
+                                                type="text"
                                                 value={businessInfo.headlineColor || '#FFFFFF'}
                                                 onChange={(e) => handleBusinessInfoUpdate('headlineColor', e.target.value)}
                                                 style={{
-                                                    position: 'absolute',
-                                                    top: '-50%',
-                                                    left: '-50%',
-                                                    width: '200%',
-                                                    height: '200%',
-                                                    cursor: 'pointer',
-                                                    opacity: 0
+                                                    border: 'none',
+                                                    outline: 'none',
+                                                    width: '100%',
+                                                    fontSize: '0.9rem',
+                                                    color: '#e2e8f0',
+                                                    fontWeight: '600',
+                                                    textTransform: 'uppercase',
+                                                    background: 'transparent'
                                                 }}
                                             />
+                                            <div style={{
+                                                width: '28px',
+                                                height: '28px',
+                                                background: businessInfo.headlineColor || '#FFFFFF',
+                                                borderRadius: '2px',
+                                                flexShrink: 0,
+                                                border: '1px solid #475569',
+                                                position: 'relative',
+                                                overflow: 'hidden',
+                                                cursor: 'pointer'
+                                            }}>
+                                                <input
+                                                    type="color"
+                                                    value={businessInfo.headlineColor || '#FFFFFF'}
+                                                    onChange={(e) => handleBusinessInfoUpdate('headlineColor', e.target.value)}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '-50%',
+                                                        left: '-50%',
+                                                        width: '200%',
+                                                        height: '200%',
+                                                        cursor: 'pointer',
+                                                        opacity: 0
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ flex: '1 1 100px' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
+                                            Font
+                                        </label>
+                                        <div style={{ position: 'relative' }}>
+                                            <select
+                                                value={businessInfo.headlineFont || 'Lato'}
+                                                onChange={(e) => handleBusinessInfoUpdate('headlineFont', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    paddingRight: '2rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #334155',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    appearance: 'none',
+                                                    backgroundColor: '#020617',
+                                                    color: '#e2e8f0',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                {fonts.map(font => (
+                                                    <option key={font} value={font}>{font}</option>
+                                                ))}
+                                            </select>
+                                            <ChevronDown size={14} color="#94a3b8" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
                                         </div>
                                     </div>
                                 </div>
-
-                                <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Font
-                                    </label>
-                                    <div style={{ position: 'relative' }}>
-                                        <select
-                                            value={businessInfo.headlineFont || 'Lato'}
-                                            onChange={(e) => handleBusinessInfoUpdate('headlineFont', e.target.value)}
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                paddingRight: '2rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
-                                                fontSize: '0.9rem',
-                                                outline: 'none',
-                                                appearance: 'none',
-                                                backgroundColor: '#fff',
-                                                cursor: 'pointer'
-                                            }}
-                                        >
-                                            {fonts.map(font => (
-                                                <option key={font} value={font}>{font}</option>
-                                            ))}
-                                        </select>
-                                        <ChevronDown size={14} color="#94a3b8" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                                    </div>
-                                </div>
                             </div>
-                        </div>
 
-                        {/* DESCRIPTION */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                DESCRIPTION
-                            </label>
-                            <textarea
-                                value={businessInfo.description || ''}
-                                onChange={(e) => handleBusinessInfoUpdate('description', e.target.value)}
-                                placeholder="We aim to provide fresh and healthy snacks people on the go."
-                                rows={4}
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #ffa305', // Accent border
-                                    fontSize: '0.9rem',
-                                    outline: 'none',
-                                    resize: 'vertical',
-                                    fontFamily: 'inherit',
-                                    color: '#1e293b'
-                                }}
-                            />
-                        </div>
-
-                        {/* BUTTON & LINK */}
-                        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '0' }}>
-                            {/* BUTTON */}
-                            <div style={{ flex: '1 1 200px' }}>
+                            {/* DESCRIPTION */}
+                            <div style={{ marginBottom: '2rem' }}>
                                 <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    BUTTON
+                                    DESCRIPTION
                                 </label>
-                                <input
-                                    type="text"
-                                    value={businessInfo.button || ''}
-                                    onChange={(e) => handleBusinessInfoUpdate('button', e.target.value)}
-                                    placeholder="Get Tickets"
+                                <textarea
+                                    value={businessInfo.description || ''}
+                                    onChange={(e) => handleBusinessInfoUpdate('description', e.target.value)}
+                                    placeholder="We aim to provide fresh and healthy snacks people on the go."
+                                    rows={4}
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem',
                                         borderRadius: '4px',
-                                        border: '1px solid #1e293b',
+                                        border: '1px solid #ffa305',
                                         fontSize: '0.9rem',
                                         outline: 'none',
-                                        color: '#1e293b'
+                                        resize: 'vertical',
+                                        fontFamily: 'inherit',
+                                        color: '#e2e8f0',
+                                        background: '#020617'
                                     }}
                                 />
                             </div>
 
-                            {/* LINK */}
-                            <div style={{ flex: '1 1 200px' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    LINK
-                                </label>
-                                <input
-                                    type="text"
-                                    value={businessInfo.website || ''}
-                                    onChange={(e) => handleBusinessInfoUpdate('website', e.target.value)}
-                                    placeholder="http://www.sterlingco.com/tickets"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none',
-                                        color: '#1e293b'
-                                    }}
-                                />
-                            </div>
-                        </div>
-
-                    </div>
-                )}
-            </div>
-
-            {/* EVENT SCHEDULE ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
-                    onClick={() => setIsScheduleOpen(!isScheduleOpen)}
-                    style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isScheduleOpen ? '1px solid #e2e8f0' : 'none'
-                    }}
-                >
-                    <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>
-                        EVENT SCHEDULE
-                    </div>
-                    {isScheduleOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {isScheduleOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
-
-                        {/* Time Format Toggle */}
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '1.5rem' }}>
-                            <button
-                                onClick={() => handleScheduleUpdate('format', '24h')}
-                                style={{
-                                    padding: '0.5rem 1rem',
-                                    border: eventSchedule.format === '24h' ? '1px solid #ffa305' : '1px solid #e2e8f0',
-                                    borderRadius: '4px',
-                                    background: eventSchedule.format === '24h' ? '#fff' : '#fff',
-                                    color: eventSchedule.format === '24h' ? '#ffa305' : '#64748b',
-                                    fontSize: '0.85rem',
-                                    cursor: 'pointer',
-                                    pointerEvents: 'auto', // Ensure it's clickable
-                                    fontWeight: eventSchedule.format === '24h' ? '500' : '400'
-                                }}>
-                                24 hrs
-                            </button>
-                            <button
-                                onClick={() => handleScheduleUpdate('format', 'ampm')}
-                                style={{
-                                    padding: '0.5rem 1rem',
-                                    border: eventSchedule.format === 'ampm' ? '1px solid #ffa305' : '1px solid #e2e8f0',
-                                    borderRadius: '4px',
-                                    background: eventSchedule.format === 'ampm' ? '#fff' : '#fff',
-                                    color: eventSchedule.format === 'ampm' ? '#ffa305' : '#64748b',
-                                    fontSize: '0.85rem',
-                                    cursor: 'pointer',
-                                    fontWeight: eventSchedule.format === 'ampm' ? '500' : '400'
-                                }}>
-                                AM/PM
-                            </button>
-                        </div>
-
-                        {/* Days List */}
-                        {eventSchedule.days && eventSchedule.days.map((day, index) => (
-                            <div key={day.id} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem', paddingBottom: '1.5rem', borderBottom: '1px solid #f1f5f9' }}>
-                                {/* DAY/DATE */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        DAY{index + 1}*
+                            {/* BUTTON & LINK */}
+                            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '0' }}>
+                                {/* BUTTON */}
+                                <div style={{ flex: '1 1 200px' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                        BUTTON
                                     </label>
                                     <input
-                                        type="date"
-                                        value={day.date}
-                                        onChange={(e) => handleDayUpdate(day.id, 'date', e.target.value)}
+                                        type="text"
+                                        value={businessInfo.button || ''}
+                                        onChange={(e) => handleBusinessInfoUpdate('button', e.target.value)}
+                                        placeholder="Get Tickets"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
                                             outline: 'none',
-                                            color: '#1e293b'
+                                            color: '#e2e8f0',
+                                            background: '#020617'
                                         }}
                                     />
                                 </div>
 
-                                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
-                                    {/* BEGINS AT */}
-                                    <div style={{ flex: '1 1 120px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                            BEGINS AT*
-                                        </label>
-                                        <div style={{ position: 'relative' }}>
-                                            <input
-                                                type="text"
-                                                value={day.begins}
-                                                onChange={(e) => handleDayUpdate(day.id, 'begins', e.target.value)}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem',
-                                                    paddingRight: '2.5rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #1e293b',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none',
-                                                    color: '#1e293b'
-                                                }}
-                                            />
-                                            <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                                        </div>
-                                    </div>
-
-                                    {/* ENDS AT */}
-                                    <div style={{ flex: '1 1 120px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                            ENDS AT*
-                                        </label>
-                                        <div style={{ position: 'relative' }}>
-                                            <input
-                                                type="text"
-                                                value={day.ends}
-                                                onChange={(e) => handleDayUpdate(day.id, 'ends', e.target.value)}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem',
-                                                    paddingRight: '2.5rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #1e293b',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none',
-                                                    color: '#1e293b'
-                                                }}
-                                            />
-                                            <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                                        </div>
-                                    </div>
-
-                                    {/* Remove Button */}
-                                    <div
-                                        onClick={() => handleRemoveDay(day.id)}
+                                {/* LINK */}
+                                <div style={{ flex: '1 1 200px' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                        LINK
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={businessInfo.website || ''}
+                                        onChange={(e) => handleBusinessInfoUpdate('website', e.target.value)}
+                                        placeholder="http://www.sterlingco.com/tickets"
                                         style={{
-                                            width: '32px',
-                                            height: '32px',
-                                            borderRadius: '50%',
-                                            border: '1px solid #e2e8f0',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            cursor: 'pointer',
-                                            marginBottom: '6px', // Align with inputs
-                                            flexShrink: 0,
-                                            marginLeft: 'auto'
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '4px',
+                                            border: '1px solid #334155',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            color: '#e2e8f0',
+                                            background: '#020617'
                                         }}
-                                    >
-                                        <X size={16} color="#cbd5e1" />
-                                    </div>
+                                    />
                                 </div>
                             </div>
-                        ))}
 
-                        {/* Add Days Button */}
-                        <div style={{ marginTop: '1rem' }}>
-                            <button
-                                onClick={handleAddDay}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.5rem',
-                                    background: '#fff',
-                                    color: '#ffa305',
-                                    border: '1px solid #ffa305',
-                                    padding: '0.75rem 1.5rem',
-                                    borderRadius: '4px',
-                                    fontSize: '0.9rem',
-                                    fontWeight: '500',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                <Plus size={16} />
-                                Add Days
-                            </button>
-                        </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
-                    </div>
-                )}
-            </div>
-
-            {/* VENU ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
-                    onClick={() => setIsVenuOpen(!isVenuOpen)}
+            {/* EVENT SCHEDULE ACCORDION */}
+            <motion.div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid #1e293b', marginBottom: '1.5rem', overflow: 'hidden' }}>
+                <motion.div
+                    onClick={() => setIsScheduleOpen(!isScheduleOpen)}
                     style={{
                         padding: '1.5rem',
-                        background: '#f8fafc',
+                        background: '#0f172a',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         cursor: 'pointer',
-                        borderBottom: isVenuOpen ? '1px solid #e2e8f0' : 'none'
+                        borderBottom: isScheduleOpen ? '1px solid #1e293b' : 'none'
                     }}
                 >
-                    <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>
-                        VENU
+                    <div style={{ textAlign: 'left', fontWeight: 'bold', color: '#e2e8f0', fontSize: '1rem', textTransform: 'uppercase' }}>
+                        EVENT SCHEDULE
                     </div>
-                    {isVenuOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    {isScheduleOpen ? <ChevronUp size={20} color="#94a3b8" /> : <ChevronDown size={20} color="#94a3b8" />}
+                </motion.div>
 
-                {isVenuOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
-                        <div>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                SOCIAL LINKS
-                            </label>
-                            <input
-                                type="text"
-                                value={venue.location || ''}
-                                onChange={(e) => handleVenueUpdate('location', e.target.value)}
-                                placeholder="1000 Marketplace Ave. NY, 10001, United States"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: errors.venue?.location ? '1px solid #ef4444' : '1px solid #1e293b',
-                                    fontSize: '0.9rem',
-                                    outline: 'none',
-                                    color: '#1e293b'
-                                }}
-                            />
-                            {errors.venue?.location && (
-                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
-                                    {errors.venue.location}
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                )}
-            </div>
+                <AnimatePresence>
+                    {isScheduleOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            style={{ padding: '1rem', background: '#0f172a' }}
+                        >
 
-            {/* FACILITIES ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
-                    onClick={() => setIsFacilitiesOpen(!isFacilitiesOpen)}
-                    style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isFacilitiesOpen ? '1px solid #e2e8f0' : 'none'
-                    }}
-                >
-                    <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>
-                        FACILITIES
-                    </div>
-                    {isFacilitiesOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {isFacilitiesOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
-                        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', border: errors.facilities ? '1px solid #ef4444' : 'none', padding: errors.facilities ? '1rem' : '0', borderRadius: '8px' }}>
-                            {facilityIcons.map((item) => {
-                                const Icon = item.icon;
-                                const isSelected = facilities.includes(item.id);
-                                return (
-                                    <div
-                                        key={item.id}
-                                        onClick={() => handleFacilitiesUpdate(item.id)}
-                                        style={{
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            transition: 'all 0.2s'
-                                        }}
-                                        title={item.label}
-                                    >
-                                        <Icon
-                                            size={24}
-                                            color={isSelected ? '#3b82f6' : '#94a3b8'}
-                                        />
-                                    </div>
-                                );
-                            })}
-                        </div>
-                        {errors.facilities && (
-                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
-                                {errors.facilities}
-                            </p>
-                        )}
-                    </div>
-                )}
-            </div>
-
-            {/* CONTACT INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
-                    onClick={() => setIsContactOpen(!isContactOpen)}
-                    style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isContactOpen ? '1px solid #e2e8f0' : 'none'
-                    }}
-                >
-                    <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>
-                        CONTACT INFORMATION
-                    </div>
-                    {isContactOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {isContactOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
-
-                        {/* NAME OF PERSON */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                NAME OF PERSON
-                            </label>
-                            <input
-                                type="text"
-                                value={contactInfo.personName || ''}
-                                onChange={(e) => handleContactUpdate('personName', e.target.value)}
-                                placeholder="Hellen Grey"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
-                                    fontSize: '0.9rem',
-                                    outline: 'none',
-                                    color: '#1e293b'
-                                }}
-                            />
-                        </div>
-
-                        {/* DESIGNATION */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                DESIGNATION IN THE COMPANY
-                            </label>
-                            <input
-                                type="text"
-                                value={contactInfo.designation || ''}
-                                onChange={(e) => handleContactUpdate('designation', e.target.value)}
-                                placeholder="Event Manager"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
-                                    fontSize: '0.9rem',
-                                    outline: 'none',
-                                    color: '#1e293b'
-                                }}
-                            />
-                        </div>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            {contactInfo.channels && contactInfo.channels.map(channel => (
-                                <div key={channel.id} style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-                                    {/* Icon Box */}
-                                    <div style={{
-                                        width: '44px',
-                                        height: '44px',
+                            {/* Time Format Toggle */}
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                                <button
+                                    onClick={() => handleScheduleUpdate('format', '24h')}
+                                    style={{
+                                        padding: '0.5rem 1rem',
+                                        border: eventSchedule.format === '24h' ? '1px solid #ffa305' : '1px solid #334155',
                                         borderRadius: '4px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        border: '1px solid #1e293b',
-                                        flexShrink: 0
+                                        background: eventSchedule.format === '24h' ? '#020617' : '#020617',
+                                        color: eventSchedule.format === '24h' ? '#ffa305' : '#94a3b8',
+                                        fontSize: '0.85rem',
+                                        cursor: 'pointer',
+                                        pointerEvents: 'auto',
+                                        fontWeight: eventSchedule.format === '24h' ? '500' : '400'
                                     }}>
-                                        {getChannelIcon(channel.type)}
-                                    </div>
+                                    24 hrs
+                                </button>
+                                <button
+                                    onClick={() => handleScheduleUpdate('format', 'ampm')}
+                                    style={{
+                                        padding: '0.5rem 1rem',
+                                        border: eventSchedule.format === 'ampm' ? '1px solid #ffa305' : '1px solid #334155',
+                                        borderRadius: '4px',
+                                        background: eventSchedule.format === 'ampm' ? '#020617' : '#020617',
+                                        color: eventSchedule.format === 'ampm' ? '#ffa305' : '#94a3b8',
+                                        fontSize: '0.85rem',
+                                        cursor: 'pointer',
+                                        fontWeight: eventSchedule.format === 'ampm' ? '500' : '400'
+                                    }}>
+                                    AM/PM
+                                </button>
+                            </div>
 
-                                    {/* Input */}
-                                    <div style={{ flex: '1 1 200px', position: 'relative' }}>
+                            {/* Days List */}
+                            {eventSchedule.days && eventSchedule.days.map((day, index) => (
+                                <div key={day.id} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem', paddingBottom: '1.5rem', borderBottom: '1px solid #1e293b' }}>
+                                    {/* DAY/DATE */}
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                            DAY{index + 1}*
+                                        </label>
                                         <input
-                                            type="text"
-                                            value={channel.value}
-                                            onChange={(e) => handleChannelUpdate(channel.id, e.target.value)}
+                                            type="date"
+                                            value={day.date}
+                                            onChange={(e) => handleDayUpdate(day.id, 'date', e.target.value)}
                                             style={{
                                                 width: '100%',
                                                 padding: '0.75rem',
-                                                paddingLeft: '2.5rem',
                                                 borderRadius: '4px',
-                                                border: '1px solid #1e293b',
+                                                border: '1px solid #334155',
                                                 fontSize: '0.9rem',
                                                 outline: 'none',
-                                                color: '#1e293b'
+                                                color: '#e2e8f0',
+                                                background: '#020617'
                                             }}
                                         />
-                                        <div style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center' }}>
-                                            {channel.type === 'phone' && (
-                                                <Phone size={14} color="#64748b" style={{ marginRight: '8px' }} />
-                                            )}
-                                            {channel.type === 'email' && (
-                                                <Mail size={14} color="#64748b" style={{ marginRight: '8px' }} />
-                                            )}
-                                            {channel.type === 'website' && (
-                                                <Globe size={14} color="#64748b" style={{ marginRight: '8px' }} />
-                                            )}
-                                        </div>
                                     </div>
 
-                                    {/* Controls */}
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '12px', marginLeft: 'auto' }}>
-                                        <X
-                                            size={16}
-                                            color="#cbd5e1"
-                                            style={{ cursor: 'pointer' }}
-                                            onClick={() => handleRemoveChannel(channel.id)}
-                                        />
-                                        <ArrowRightLeft
-                                            size={16}
-                                            color="#cbd5e1"
-                                            style={{ cursor: 'pointer', transform: 'rotate(90deg)' }}
-                                        />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Add Channel Buttons */}
-                        <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                            {!contactInfo.channels?.some(ch => ch.type === 'phone') && (
-                                <button
-                                    onClick={() => handleAddChannel('phone')}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.5rem',
-                                        background: '#fff',
-                                        color: '#ffa305',
-                                        border: '1px solid #ffa305',
-                                        padding: '0.75rem 1.5rem',
-                                        borderRadius: '4px',
-                                        fontSize: '0.9rem',
-                                        fontWeight: '500',
-                                        cursor: 'pointer'
-                                    }}
-                                >
-                                    <Plus size={16} />
-                                    Add Phone
-                                </button>
-                            )}
-                            {!contactInfo.channels?.some(ch => ch.type === 'email') && (
-                                <button
-                                    onClick={() => handleAddChannel('email')}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.5rem',
-                                        background: '#fff',
-                                        color: '#ffa305',
-                                        border: '1px solid #ffa305',
-                                        padding: '0.75rem 1.5rem',
-                                        borderRadius: '4px',
-                                        fontSize: '0.9rem',
-                                        fontWeight: '500',
-                                        cursor: 'pointer'
-                                    }}
-                                >
-                                    <Plus size={16} />
-                                    Add Email
-                                </button>
-                            )}
-                            {!contactInfo.channels?.some(ch => ch.type === 'website') && (
-                                <button
-                                    onClick={() => handleAddChannel('website')}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.5rem',
-                                        background: '#fff',
-                                        color: '#ffa305',
-                                        border: '1px solid #ffa305',
-                                        padding: '0.75rem 1.5rem',
-                                        borderRadius: '4px',
-                                        fontSize: '0.9rem',
-                                        fontWeight: '500',
-                                        cursor: 'pointer'
-                                    }}
-                                >
-                                    <Plus size={16} />
-                                    Add Website
-                                </button>
-                            )}
-                        </div>
-
-                    </div>
-                )}
-            </div>
-
-            {/* SOCIAL MEDIA CHANNELS ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
-                    onClick={() => setIsSocialOpen(!isSocialOpen)}
-                    style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isSocialOpen ? '1px solid #e2e8f0' : 'none'
-                    }}
-                >
-                    <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>
-                        SOCIAL MEDIA CHANNELS
-                    </div>
-                    {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {isSocialOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
-
-                        {/* Active Inputs */}
-                        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
-                            {typeof errors.socialLinks === 'string' && (
-                                <div style={{ width: '100%', marginBottom: '1rem' }}>
-                                    <p style={{ color: '#ef4444', fontSize: '0.75rem' }}>
-                                        {errors.socialLinks}
-                                    </p>
-                                </div>
-                            )}
-                            {socialLinks.map(link => {
-                                const platform = socialPlatforms.find(p => p.id === link.platform);
-                                if (!platform) return null;
-                                const Icon = platform.icon;
-                                const error = errors.socialLinks?.[link.id];
-                                return (
-                                    <div key={link.id} style={{ flex: '1 1 200px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b', marginBottom: '0.5rem', textTransform: 'capitalize' }}>
-                                            {link.platform}*
-                                        </label>
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                                {/* Icon */}
-                                                <div style={{
-                                                    width: '42px',
-                                                    height: '42px',
-                                                    borderRadius: '8px',
-                                                    background: 'transparent',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    border: '1px solid #1e293b',
-                                                    flexShrink: 0
-                                                }}>
-                                                    {typeof Icon === 'string' ? (
-                                                        <img
-                                                            src={Icon}
-                                                            alt=""
-                                                            style={{
-                                                                width: '24px',
-                                                                height: '24px',
-                                                                objectFit: 'contain'
-                                                            }}
-                                                        />
-                                                    ) : (
-                                                        <Icon size={24} color="#fff" />
-                                                    )}
-                                                </div>
-
-                                                {/* Input */}
-                                                <div style={{ flex: 1, display: 'flex', alignItems: 'center', border: error ? '1px solid #ef4444' : '1px solid #e2e8f0', borderRadius: '4px', paddingRight: '0.5rem' }}>
-                                                    <input
-                                                        type="text"
-                                                        value={link.url}
-                                                        onChange={(e) => handleSocialLinkChange(link.id, e.target.value)}
-                                                        placeholder="https://"
-                                                        style={{
-                                                            width: '100%',
-                                                            padding: '0.75rem',
-                                                            border: 'none',
-                                                            outline: 'none',
-                                                            fontSize: '0.9rem',
-                                                            color: '#1e293b',
-                                                            background: 'transparent'
-                                                        }}
-                                                    />
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                                        <X
-                                                            size={14}
-                                                            color="#cbd5e1"
-                                                            style={{ cursor: 'pointer' }}
-                                                            onClick={() => handleRemoveSocial(link.id)}
-                                                        />
-                                                        <ArrowRightLeft
-                                                            size={14}
-                                                            color="#cbd5e1"
-                                                            style={{ cursor: 'pointer', transform: 'rotate(90deg)' }}
-                                                        />
-                                                    </div>
-                                                </div>
+                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+                                        {/* BEGINS AT */}
+                                        <div style={{ flex: '1 1 120px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                BEGINS AT*
+                                            </label>
+                                            <div style={{ position: 'relative' }}>
+                                                <input
+                                                    type="text"
+                                                    value={day.begins}
+                                                    onChange={(e) => handleDayUpdate(day.id, 'begins', e.target.value)}
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.75rem',
+                                                        paddingRight: '2.5rem',
+                                                        borderRadius: '4px',
+                                                        border: '1px solid #334155',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        color: '#e2e8f0',
+                                                        background: '#020617'
+                                                    }}
+                                                />
+                                                <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
                                             </div>
-                                            {error && (
-                                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginLeft: '3.5rem' }}>
-                                                    {error}
-                                                </p>
-                                            )}
                                         </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
 
-                        {/* Add More Section */}
-                        <div>
-                            <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.25rem', textTransform: 'uppercase' }}>
-                                ADD MORE
-                            </div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
-                                Click on the icon to add a social media profile.
-                            </div>
+                                        {/* ENDS AT */}
+                                        <div style={{ flex: '1 1 120px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                ENDS AT*
+                                            </label>
+                                            <div style={{ position: 'relative' }}>
+                                                <input
+                                                    type="text"
+                                                    value={day.ends}
+                                                    onChange={(e) => handleDayUpdate(day.id, 'ends', e.target.value)}
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.75rem',
+                                                        paddingRight: '2.5rem',
+                                                        borderRadius: '4px',
+                                                        border: '1px solid #334155',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        color: '#e2e8f0',
+                                                        background: '#020617'
+                                                    }}
+                                                />
+                                                <Clock size={16} color="#94a3b8" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                                            </div>
+                                        </div>
 
-                            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                                {socialPlatforms.map(platform => {
-                                    const Icon = platform.icon;
-                                    const isAdded = socialLinks.some(l => l.platform === platform.id);
-                                    return (
+                                        {/* Remove Button */}
                                         <div
-                                            key={platform.id}
-                                            onClick={() => handleAddSocial(platform.id)}
+                                            onClick={() => handleRemoveDay(day.id)}
                                             style={{
-                                                width: '40px',
-                                                height: '40px',
-                                                borderRadius: '8px',
-                                                background: isAdded ? 'rgba(34, 197, 94, 0.1)' : 'transparent',
+                                                width: '32px',
+                                                height: '32px',
+                                                borderRadius: '50%',
+                                                border: '1px solid #334155',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
-                                                border: isAdded ? '1px solid #22c55e' : 'none',
-                                                transition: 'all 0.2s',
-                                                position: 'relative'
+                                                marginBottom: '6px',
+                                                flexShrink: 0,
+                                                marginLeft: 'auto',
+                                                background: '#020617'
                                             }}
-                                            title={platform.id}
                                         >
-                                            {typeof Icon === 'string' ? (
-                                                <img
-                                                    src={Icon}
-                                                    alt=""
-                                                    style={{
-                                                        width: '20px',
-                                                        height: '20px',
-                                                        objectFit: 'contain',
-                                                        opacity: isAdded ? 0.7 : 1
-                                                    }}
-                                                />
-                                            ) : (
-                                                <Icon size={20} color={isAdded ? '#22c55e' : '#fff'} />
-                                            )}
-                                            {isAdded && (
-                                                <div style={{
-                                                    position: 'absolute',
-                                                    top: '-5px',
-                                                    right: '-5px',
-                                                    background: '#22c55e',
-                                                    borderRadius: '50%',
-                                                    width: '18px',
-                                                    height: '18px',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    border: '2px solid #fff',
-                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                                                }}>
-                                                    <Check size={10} color="#fff" />
-                                                </div>
-                                            )}
+                                            <X size={16} color="#cbd5e1" />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+
+                            {/* Add Days Button */}
+                            <div style={{ marginTop: '1rem' }}>
+                                <button
+                                    onClick={handleAddDay}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.5rem',
+                                        background: '#020617',
+                                        color: '#ffa305',
+                                        border: '1px solid #ffa305',
+                                        padding: '0.75rem 1.5rem',
+                                        borderRadius: '4px',
+                                        fontSize: '0.9rem',
+                                        fontWeight: '500',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    <Plus size={16} />
+                                    Add Days
+                                </button>
+                            </div>
+
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
+
+            {/* VENU ACCORDION */}
+            <motion.div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid #1e293b', marginBottom: '1.5rem', overflow: 'hidden' }}>
+                <motion.div
+                    onClick={() => setIsVenuOpen(!isVenuOpen)}
+                    style={{
+                        padding: '1.5rem',
+                        background: '#0f172a',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        borderBottom: isVenuOpen ? '1px solid #1e293b' : 'none'
+                    }}
+                >
+                    <div style={{ textAlign: 'left', fontWeight: 'bold', color: '#e2e8f0', fontSize: '1rem', textTransform: 'uppercase' }}>
+                        VENUE
+                    </div>
+                    {isVenuOpen ? <ChevronUp size={20} color="#94a3b8" /> : <ChevronDown size={20} color="#94a3b8" />}
+                </motion.div>
+
+                <AnimatePresence>
+                    {isVenuOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            style={{ padding: '1rem', background: '#0f172a' }}
+                        >
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    LOCATION
+                                </label>
+                                <input
+                                    type="text"
+                                    value={venue.location || ''}
+                                    onChange={(e) => handleVenueUpdate('location', e.target.value)}
+                                    placeholder="1000 Marketplace Ave. NY, 10001, United States"
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: errors.venue?.location ? '1px solid #ef4444' : '1px solid #334155',
+                                        fontSize: '0.9rem',
+                                        outline: 'none',
+                                        color: '#e2e8f0',
+                                        background: '#020617'
+                                    }}
+                                />
+                                {errors.venue?.location && (
+                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                        {errors.venue.location}
+                                    </p>
+                                )}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
+
+            {/* FACILITIES ACCORDION */}
+            <motion.div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid #1e293b', marginBottom: '1.5rem', overflow: 'hidden' }}>
+                <motion.div
+                    onClick={() => setIsFacilitiesOpen(!isFacilitiesOpen)}
+                    style={{
+                        padding: '1.5rem',
+                        background: '#0f172a',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        borderBottom: isFacilitiesOpen ? '1px solid #1e293b' : 'none'
+                    }}
+                >
+                    <div style={{ textAlign: 'left', fontWeight: 'bold', color: '#e2e8f0', fontSize: '1rem', textTransform: 'uppercase' }}>
+                        FACILITIES
+                    </div>
+                    {isFacilitiesOpen ? <ChevronUp size={20} color="#94a3b8" /> : <ChevronDown size={20} color="#94a3b8" />}
+                </motion.div>
+
+                <AnimatePresence>
+                    {isFacilitiesOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            style={{ padding: '1rem', background: '#0f172a' }}
+                        >
+                            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', border: errors.facilities ? '1px solid #ef4444' : 'none', padding: errors.facilities ? '1rem' : '0', borderRadius: '8px' }}>
+                                {facilityIcons.map((item) => {
+                                    const Icon = item.icon;
+                                    const isSelected = facilities.includes(item.id);
+                                    return (
+                                        <div
+                                            key={item.id}
+                                            onClick={() => handleFacilitiesUpdate(item.id)}
+                                            style={{
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                transition: 'all 0.2s'
+                                            }}
+                                            title={item.label}
+                                        >
+                                            <Icon
+                                                size={24}
+                                                color={isSelected ? '#3b82f6' : '#94a3b8'}
+                                            />
                                         </div>
                                     );
                                 })}
                             </div>
-                        </div>
+                            {errors.facilities && (
+                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                    {errors.facilities}
+                                </p>
+                            )}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
+            {/* CONTACT INFORMATION ACCORDION */}
+            <motion.div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid #1e293b', marginBottom: '1.5rem', overflow: 'hidden' }}>
+                <motion.div
+                    onClick={() => setIsContactOpen(!isContactOpen)}
+                    style={{
+                        padding: '1.5rem',
+                        background: '#0f172a',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        borderBottom: isContactOpen ? '1px solid #1e293b' : 'none'
+                    }}
+                >
+                    <div style={{ textAlign: 'left', fontWeight: 'bold', color: '#e2e8f0', fontSize: '1rem', textTransform: 'uppercase' }}>
+                        CONTACT INFORMATION
                     </div>
-                )}
-            </div>
+                    {isContactOpen ? <ChevronUp size={20} color="#94a3b8" /> : <ChevronDown size={20} color="#94a3b8" />}
+                </motion.div>
+
+                <AnimatePresence>
+                    {isContactOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            style={{ padding: '1rem', background: '#0f172a' }}
+                        >
+
+                            {/* NAME OF PERSON */}
+                            <div style={{ marginBottom: '2rem' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    NAME OF PERSON
+                                </label>
+                                <input
+                                    type="text"
+                                    value={contactInfo.personName || ''}
+                                    onChange={(e) => handleContactUpdate('personName', e.target.value)}
+                                    placeholder="Hellen Grey"
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: '1px solid #334155',
+                                        fontSize: '0.9rem',
+                                        outline: 'none',
+                                        color: '#e2e8f0',
+                                        background: '#020617'
+                                    }}
+                                />
+                            </div>
+
+                            {/* DESIGNATION */}
+                            <div style={{ marginBottom: '2rem' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    DESIGNATION IN THE COMPANY
+                                </label>
+                                <input
+                                    type="text"
+                                    value={contactInfo.designation || ''}
+                                    onChange={(e) => handleContactUpdate('designation', e.target.value)}
+                                    placeholder="Event Manager"
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: '1px solid #334155',
+                                        fontSize: '0.9rem',
+                                        outline: 'none',
+                                        color: '#e2e8f0',
+                                        background: '#020617'
+                                    }}
+                                />
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                {contactInfo.channels && contactInfo.channels.map(channel => (
+                                    <div key={channel.id} style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                                        {/* Icon Box */}
+                                        <div style={{
+                                            width: '44px',
+                                            height: '44px',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            border: '1px solid #334155',
+                                            flexShrink: 0,
+                                            background: '#020617'
+                                        }}>
+                                            {getChannelIcon(channel.type)}
+                                        </div>
+
+                                        {/* Input */}
+                                        <div style={{ flex: '1 1 200px', position: 'relative' }}>
+                                            <input
+                                                type="text"
+                                                value={channel.value}
+                                                onChange={(e) => handleChannelUpdate(channel.id, e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    paddingLeft: '2.5rem',
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #334155',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    color: '#e2e8f0',
+                                                    background: '#020617'
+                                                }}
+                                            />
+                                            <div style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center' }}>
+                                                {channel.type === 'phone' && (
+                                                    <Phone size={14} color="#94a3b8" style={{ marginRight: '8px' }} />
+                                                )}
+                                                {channel.type === 'email' && (
+                                                    <Mail size={14} color="#94a3b8" style={{ marginRight: '8px' }} />
+                                                )}
+                                                {channel.type === 'website' && (
+                                                    <Globe size={14} color="#94a3b8" style={{ marginRight: '8px' }} />
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Controls */}
+                                        <div style={{ display: 'flex', flexDirection: 'row', gap: '12px', marginLeft: 'auto' }}>
+                                            <X
+                                                size={16}
+                                                color="#cbd5e1"
+                                                style={{ cursor: 'pointer' }}
+                                                onClick={() => handleRemoveChannel(channel.id)}
+                                            />
+                                            <ArrowRightLeft
+                                                size={16}
+                                                color="#cbd5e1"
+                                                style={{ cursor: 'pointer', transform: 'rotate(90deg)' }}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Add Channel Buttons */}
+                            <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                {!contactInfo.channels?.some(ch => ch.type === 'phone') && (
+                                    <button
+                                        onClick={() => handleAddChannel('phone')}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.5rem',
+                                            background: '#020617',
+                                            color: '#ffa305',
+                                            border: '1px solid #ffa305',
+                                            padding: '0.75rem 1.5rem',
+                                            borderRadius: '4px',
+                                            fontSize: '0.9rem',
+                                            fontWeight: '500',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        <Plus size={16} />
+                                        Add Phone
+                                    </button>
+                                )}
+                                {!contactInfo.channels?.some(ch => ch.type === 'email') && (
+                                    <button
+                                        onClick={() => handleAddChannel('email')}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.5rem',
+                                            background: '#020617',
+                                            color: '#ffa305',
+                                            border: '1px solid #ffa305',
+                                            padding: '0.75rem 1.5rem',
+                                            borderRadius: '4px',
+                                            fontSize: '0.9rem',
+                                            fontWeight: '500',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        <Plus size={16} />
+                                        Add Email
+                                    </button>
+                                )}
+                                {!contactInfo.channels?.some(ch => ch.type === 'website') && (
+                                    <button
+                                        onClick={() => handleAddChannel('website')}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.5rem',
+                                            background: '#020617',
+                                            color: '#ffa305',
+                                            border: '1px solid #ffa305',
+                                            padding: '0.75rem 1.5rem',
+                                            borderRadius: '4px',
+                                            fontSize: '0.9rem',
+                                            fontWeight: '500',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        <Plus size={16} />
+                                        Add Website
+                                    </button>
+                                )}
+                            </div>
+
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
+
+            {/* SOCIAL MEDIA CHANNELS ACCORDION */}
+            <motion.div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid #1e293b', marginBottom: '1.5rem', overflow: 'hidden' }}>
+                <motion.div
+                    onClick={() => setIsSocialOpen(!isSocialOpen)}
+                    style={{
+                        padding: '1.5rem',
+                        background: '#0f172a',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        borderBottom: isSocialOpen ? '1px solid #1e293b' : 'none'
+                    }}
+                >
+                    <div style={{ textAlign: 'left', fontWeight: 'bold', color: '#e2e8f0', fontSize: '1rem', textTransform: 'uppercase' }}>
+                        SOCIAL MEDIA CHANNELS
+                    </div>
+                    {isSocialOpen ? <ChevronUp size={20} color="#94a3b8" /> : <ChevronDown size={20} color="#94a3b8" />}
+                </motion.div>
+
+                <AnimatePresence>
+                    {isSocialOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            style={{ padding: '1rem', background: '#0f172a' }}
+                        >
+
+                            {/* Active Inputs */}
+                            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+                                {typeof errors.socialLinks === 'string' && (
+                                    <div style={{ width: '100%', marginBottom: '1rem' }}>
+                                        <p style={{ color: '#ef4444', fontSize: '0.75rem' }}>
+                                            {errors.socialLinks}
+                                        </p>
+                                    </div>
+                                )}
+                                {socialLinks.map(link => {
+                                    const platform = socialPlatforms.find(p => p.id === link.platform);
+                                    if (!platform) return null;
+                                    const Icon = platform.icon;
+                                    const error = errors.socialLinks?.[link.id];
+                                    return (
+                                        <div key={link.id} style={{ flex: '1 1 200px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'capitalize' }}>
+                                                {link.platform}*
+                                            </label>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                    {/* Icon */}
+                                                    <div style={{
+                                                        width: '42px',
+                                                        height: '42px',
+                                                        borderRadius: '8px',
+                                                        background: 'transparent',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        border: '1px solid #334155',
+                                                        flexShrink: 0
+                                                    }}>
+                                                        {typeof Icon === 'string' ? (
+                                                            <img
+                                                                src={Icon}
+                                                                alt=""
+                                                                style={{
+                                                                    width: '24px',
+                                                                    height: '24px',
+                                                                    objectFit: 'contain'
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <Icon size={24} color="#fff" />
+                                                        )}
+                                                    </div>
+
+                                                    {/* Input */}
+                                                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', border: error ? '1px solid #ef4444' : '1px solid #334155', borderRadius: '4px', paddingRight: '0.5rem', background: '#020617' }}>
+                                                        <input
+                                                            type="text"
+                                                            value={link.url}
+                                                            onChange={(e) => handleSocialLinkChange(link.id, e.target.value)}
+                                                            placeholder="https://"
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem',
+                                                                border: 'none',
+                                                                outline: 'none',
+                                                                fontSize: '0.9rem',
+                                                                color: '#e2e8f0',
+                                                                background: 'transparent'
+                                                            }}
+                                                        />
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                                                            <X
+                                                                size={14}
+                                                                color="#cbd5e1"
+                                                                style={{ cursor: 'pointer' }}
+                                                                onClick={() => handleRemoveSocial(link.id)}
+                                                            />
+                                                            <ArrowRightLeft
+                                                                size={14}
+                                                                color="#cbd5e1"
+                                                                style={{ cursor: 'pointer', transform: 'rotate(90deg)' }}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {error && (
+                                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginLeft: '3.5rem' }}>
+                                                        {error}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Add More Section */}
+                            <div>
+                                <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.25rem', textTransform: 'uppercase' }}>
+                                    ADD MORE
+                                </div>
+                                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                                    Click on the icon to add a social media profile.
+                                </div>
+
+                                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                                    {socialPlatforms.map(platform => {
+                                        const Icon = platform.icon;
+                                        const isAdded = socialLinks.some(l => l.platform === platform.id);
+                                        return (
+                                            <div
+                                                key={platform.id}
+                                                onClick={() => handleAddSocial(platform.id)}
+                                                style={{
+                                                    width: '40px',
+                                                    height: '40px',
+                                                    borderRadius: '8px',
+                                                    background: isAdded ? 'rgba(34, 197, 94, 0.1)' : 'transparent',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    cursor: 'pointer',
+                                                    border: isAdded ? '1px solid #22c55e' : 'none',
+                                                    transition: 'all 0.2s',
+                                                    position: 'relative'
+                                                }}
+                                                title={platform.id}
+                                            >
+                                                {typeof Icon === 'string' ? (
+                                                    <img
+                                                        src={Icon}
+                                                        alt=""
+                                                        style={{
+                                                            width: '20px',
+                                                            height: '20px',
+                                                            objectFit: 'contain',
+                                                            opacity: isAdded ? 0.7 : 1
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <Icon size={20} color={isAdded ? '#22c55e' : '#fff'} />
+                                                )}
+                                                {isAdded && (
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        top: '-5px',
+                                                        right: '-5px',
+                                                        background: '#22c55e',
+                                                        borderRadius: '50%',
+                                                        width: '18px',
+                                                        height: '18px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        border: '2px solid #fff',
+                                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                                    }}>
+                                                        <Check size={10} color="#fff" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* Modal for Header Image Preview */}
             {isHeaderModalOpen && design.headerImage?.url && (

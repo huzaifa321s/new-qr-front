@@ -939,7 +939,7 @@ const StaticGenerator = () => {
                                 </div>
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: windowWidth <= 640 ? '1fr' : '1fr 1fr', gap: '1rem' }}>
                                 <div>
                                     <label style={{ display: 'block', color: '#f8fafc', fontWeight: '600', marginBottom: '0.5rem' }}>Logo Size</label>
                                     <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '12px', padding: '0.75rem 1rem' }}>

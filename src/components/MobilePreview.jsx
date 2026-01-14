@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { Phone, MapPin, Clock, Globe, Instagram, Facebook, Twitter, X, Copy, Mail, Linkedin, MessageCircle, Wifi, Armchair, Accessibility, Calendar, User, Heart, Briefcase, Youtube, Twitch, Music, Ghost, Gamepad2, Dribbble, MessageSquare, Video, PenTool, Github, Send, Headphones, Pin, Bot, ChevronRight, Users, Baby, PawPrint, Plug, ParkingCircle, Bus, Car, Bed, Coffee, Martini, Utensils, Download, File, Wine, Plane, Star, ThumbsUp, ThumbsDown, Frown, Meh, Smile, Laugh, Share } from 'lucide-react';
 import { FaWhatsapp, FaDiscord, FaTwitch, FaSnapchat, FaTiktok, FaSpotify, FaPinterest, FaTelegram, FaReddit, FaBehance, FaTumblr } from 'react-icons/fa';
 import { SiKick } from 'react-icons/si';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const AutoSlider = ({ images }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -298,7 +299,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
         };
 
         return (
-            <div style={{
+            <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                transition={{ duration: 0.5 }}
+                style={{
                 width: isLiveView ? '100%' : '320px',
                 maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
@@ -1012,13 +1017,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         </>
                     )}
                 </div>
-            </div>
+            </motion.div>
         );
     }
 
     if (isBioPage) {
         return (
-            <div style={{
+            <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                transition={{ duration: 0.5 }}
+                style={{
                 width: isLiveView ? '100%' : '320px',
                 maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
@@ -1257,7 +1266,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </motion.div>
         );
     }
 
@@ -1265,7 +1274,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
     if (isSurvey) {
         return (
-            <div style={{
+            <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                transition={{ duration: 0.5 }}
+                style={{
                 width: isLiveView ? '100%' : '320px',
                 maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
@@ -1804,13 +1817,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     </div >
                 )
                 }
-            </div >
+            </motion.div >
         );
     }
 
     if (isLeadGeneration) {
         return (
-            <div style={{
+            <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                transition={{ duration: 0.5 }}
+                style={{
                 width: isLiveView ? '100%' : '320px',
                 maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
@@ -2183,13 +2200,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         )}
                     </div>
                 )}
-            </div>
+            </motion.div>
         );
     }
 
     if (isRating) {
         return (
-            <div style={{
+            <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                transition={{ duration: 0.5 }}
+                style={{
                 width: isLiveView ? '100%' : '320px',
                 maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
@@ -2754,7 +2775,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         )}
                     </div>
                 )}
-            </div>
+            </motion.div>
         );
     }
 
@@ -2769,7 +2790,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
         const hasLogo = !!(design?.logo?.url);
 
         return (
-            <div style={{
+            <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                transition={{ duration: 0.5 }}
+                style={{
                 width: isLiveView ? '100%' : '320px',
                 maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
@@ -3013,13 +3038,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         <path d="M15.41 6.51L8.59 10.49" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </div>
-            </div>
+            </motion.div>
         );
     }
 
     if (isBusinessPage) {
         return (
-            <div style={{
+            <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                transition={{ duration: 0.5 }}
+                style={{
                 width: isLiveView ? '100%' : '320px',
                 maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
@@ -3317,13 +3346,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     {/* Bottom Curve */}
                     <div style={{ height: '60px', background: headerColor, borderTopLeftRadius: '50% 100%', borderTopRightRadius: '50% 100%', marginTop: 'auto', display: 'none' }}></div>
                 </div >
-            </div >
+            </motion.div >
         );
     }
 
     if (isBusinessCard) {
         return (
-            <div style={{
+            <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                transition={{ duration: 0.5 }}
+                style={{
                 width: isLiveView ? '100%' : '320px',
                 maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
@@ -3847,13 +3880,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     </div>
                 )
                 }
-            </div >
+            </motion.div >
         );
     }
 
     if (isCoupon) {
         return (
-            <div style={{
+            <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                transition={{ duration: 0.5 }}
+                style={{
                 width: isLiveView ? '100%' : '320px',
                 maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
@@ -4104,13 +4141,17 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         </div>
                     </div>
                 )}
-            </div>
+            </motion.div>
         );
     }
 
     if (isReviews) {
         return (
-            <div style={{
+            <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                transition={{ duration: 0.5 }}
+                style={{
                 width: isLiveView ? '100%' : '320px',
                 maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
@@ -4640,11 +4681,9 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         </div>
                     </div>
                 )}
-            </div>
+            </motion.div>
         );
     }
-
-
 
     const isPdf = type === 'pdf';
 
@@ -6696,7 +6735,11 @@ const MobilePreview = ({ config, isLiveView = false }) => {
 
     if (isAppStore) {
         return (
-            <div style={{
+            <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                transition={{ duration: 0.5 }}
+                style={{
                 width: isLiveView ? '100%' : '320px',
                 maxWidth: isLiveView ? '480px' : 'none',
                 height: isLiveView ? '100vh' : '640px',
@@ -6976,12 +7019,16 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                         )}
                     </div>
                 </div>
-            </div>
+            </motion.div>
         );
     }
 
     return (
-        <div style={{
+        <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            transition={{ duration: 0.5 }}
+            style={{
             width: isLiveView ? '100%' : '320px',
             maxWidth: isLiveView ? '480px' : 'none',
             height: isLiveView ? '100vh' : '640px',
@@ -7379,7 +7426,7 @@ const MobilePreview = ({ config, isLiveView = false }) => {
                     </a>
                 </div>
             </div>
-        </div >
+        </motion.div >
 
     );
 };

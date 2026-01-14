@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAxiosLoader } from '../context/AxiosLoaderContext';
+import logoLoader from '../assets/logo-loader.jpg';
 
 const GlobalLoader = () => {
     const { isLoading } = useAxiosLoader();
@@ -17,7 +18,7 @@ const GlobalLoader = () => {
                         position: 'fixed',
                         inset: 0,
                         zIndex: 9999,
-                        background: 'rgba(15, 23, 42, 0.4)', // Slate-900 with lower opacity
+                        background: 'rgba(15, 23, 42, 0.85)', // Slightly darker for better contrast with image
                         backdropFilter: 'blur(8px)',
                         display: 'flex',
                         alignItems: 'center',
@@ -35,53 +36,37 @@ const GlobalLoader = () => {
                             gap: '1.5rem'
                         }}
                     >
-                        {/* Animated Logo/Spinner */}
-                        <div style={{ position: 'relative', width: '80px', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            {/* Outer rotating ring */}
-                            <motion.span
-                                style={{
-                                    position: 'absolute',
-                                    width: '100%',
-                                    height: '100%',
-                                    borderRadius: '50%',
-                                    border: '3px solid transparent',
-                                    borderTopColor: '#ffa305', // Orange
-                                    borderRightColor: 'transparent',
-                                }}
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                        {/* Logo Image Loader */}
+                        <motion.div
+                            animate={{ 
+                                scale: [1, 1.1, 1],
+                                opacity: [0.8, 1, 0.8]
+                            }}
+                            transition={{ 
+                                duration: 1.5, 
+                                repeat: Infinity, 
+                                ease: "easeInOut" 
+                            }}
+                            style={{
+                                width: '120px',
+                                height: '120px',
+                                borderRadius: '50%',
+                                overflow: 'hidden',
+                                border: '4px solid #ffa305', // Orange border matching theme
+                                boxShadow: '0 0 20px rgba(255, 163, 5, 0.3)',
+                                background: '#000'
+                            }}
+                        >
+                            <img 
+                                src={logoLoader} 
+                                alt="Loading..." 
+                                style={{ 
+                                    width: '100%', 
+                                    height: '100%', 
+                                    objectFit: 'cover' 
+                                }} 
                             />
-                            
-                            {/* Inner counter-rotating ring */}
-                            <motion.span
-                                style={{
-                                    position: 'absolute',
-                                    width: '70%',
-                                    height: '70%',
-                                    borderRadius: '50%',
-                                    border: '3px solid transparent',
-                                    borderBottomColor: '#ffa305',
-                                    borderLeftColor: 'transparent',
-                                }}
-                                animate={{ rotate: -360 }}
-                                transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-                            />
-
-                            {/* Center pulsing dot */}
-                            <motion.div
-                                style={{
-                                    width: '12px',
-                                    height: '12px',
-                                    borderRadius: '50%',
-                                    background: '#ffa305',
-                                }}
-                                animate={{ 
-                                    scale: [1, 1.5, 1],
-                                    opacity: [1, 0.7, 1]
-                                }}
-                                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                            />
-                        </div>
+                        </motion.div>
 
                         {/* Loading Text */}
                         <motion.div
@@ -89,16 +74,17 @@ const GlobalLoader = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
                             style={{
-                                color: '#f8fafc', // Slate-50
-                                fontSize: '1rem',
-                                fontWeight: '500',
-                                letterSpacing: '0.05em',
+                                color: '#f8fafc',
+                                fontSize: '1.1rem',
+                                fontWeight: '600',
+                                letterSpacing: '0.1em',
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '4px'
+                                gap: '4px',
+                                textTransform: 'uppercase'
                             }}
                         >
-                            <span>Loading</span>
+                            <span style={{ color: '#ffa305' }}>Loading</span>
                             <motion.span
                                 animate={{ opacity: [0, 1, 0] }}
                                 transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 0.1 }}

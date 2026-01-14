@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Plus, Facebook, Instagram, Twitter, Linkedin, Github, Youtube, Globe, Mail } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const MultipleLinksConfig = ({ config, onChange, errors = {}, setErrors }) => {
@@ -292,567 +293,656 @@ const MultipleLinksConfig = ({ config, onChange, errors = {}, setErrors }) => {
             />
 
             {/* BASIC INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isBasicInfoOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
                     </div>
-                    {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <motion.div animate={{ rotate: isBasicInfoOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isBasicInfoOpen && (
-                    <div style={{ padding: isMobile ? '1rem' : '2rem', background: '#fff' }}>
+                <AnimatePresence>
+                    {isBasicInfoOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#0f172a' }}
+                        >
+                            <div style={{ padding: '1rem' }}>
 
-                        {/* HEADLINE FIELD */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                HEADLINE*
-                            </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr 1fr', gap: '1rem' }}>
-                                {/* Headline Input */}
-                                <div>
-                                    <input
-                                        type="text"
-                                        value={basicInfo.headline || ''}
-                                        onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
-                                        placeholder="Techoid"
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: `1px solid ${errors.headline ? '#ef4444' : '#1e293b'}`,
-                                            fontSize: '0.9rem',
-                                            outline: 'none'
-                                        }}
-                                    />
-                                    {errors.headline && (
-                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem', marginBottom: '0' }}>
-                                            {errors.headline}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* Text Color */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Text Color
+                                {/* HEADLINE FIELD */}
+                                <div style={{ marginBottom: '2rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                        HEADLINE*
                                     </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
-                                    }}>
-                                        <input
-                                            type="text"
-                                            value={basicInfo.headlineColor || '#2B1E99'}
-                                            onChange={(e) => handleBasicInfoUpdate('headlineColor', e.target.value)}
-                                            style={{
-                                                border: 'none',
-                                                outline: 'none',
-                                                width: '100%',
-                                                fontSize: '0.85rem',
-                                                color: '#000',
-                                                fontWeight: '500',
-                                                textTransform: 'uppercase'
-                                            }}
-                                        />
-                                        <div style={{
-                                            width: '24px',
-                                            height: '24px',
-                                            background: basicInfo.headlineColor || '#2B1E99',
-                                            borderRadius: '2px',
-                                            flexShrink: 0,
-                                            border: '1px solid #e2e8f0',
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            cursor: 'pointer'
-                                        }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr 1fr', gap: '1rem' }}>
+                                        {/* Headline Input */}
+                                        <div>
                                             <input
-                                                type="color"
-                                                value={basicInfo.headlineColor || '#2B1E99'}
-                                                onChange={(e) => handleBasicInfoUpdate('headlineColor', e.target.value)}
+                                                type="text"
+                                                value={basicInfo.headline || ''}
+                                                onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
+                                                placeholder="Techoid"
                                                 style={{
-                                                    position: 'absolute',
-                                                    top: '-50%',
-                                                    left: '-50%',
-                                                    width: '200%',
-                                                    height: '200%',
-                                                    cursor: 'pointer',
-                                                    opacity: 0
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '10px',
+                                                    border: `1px solid ${errors.headline ? '#ef4444' : '#334155'}`,
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    background: '#020617',
+                                                    color: '#e5e7eb'
                                                 }}
                                             />
+                                            {errors.headline && (
+                                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem', marginBottom: '0' }}>
+                                                    {errors.headline}
+                                                </p>
+                                            )}
                                         </div>
-                                    </div>
-                                </div>
 
-                                {/* Font */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Font
-                                    </label>
-                                    <select
-                                        value={basicInfo.headlineFont || 'Lato'}
-                                        onChange={(e) => handleBasicInfoUpdate('headlineFont', e.target.value)}
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
-                                            fontSize: '0.9rem',
-                                            outline: 'none',
-                                            cursor: 'pointer',
-                                            background: '#fff'
-                                        }}
-                                    >
-                                        <option value="Lato">Lato</option>
-                                        <option value="Roboto">Roboto</option>
-                                        <option value="Open Sans">Open Sans</option>
-                                        <option value="Montserrat">Montserrat</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* ABOUT US FIELD */}
-                        <div style={{ marginBottom: '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                ABOUT US
-                            </label>
-                            <textarea
-                                value={basicInfo.aboutUs || ''}
-                                onChange={(e) => handleBasicInfoUpdate('aboutUs', e.target.value)}
-                                placeholder="Follow us and get updates delivered to your favorite social media channel."
-                                rows={3}
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
-                                    fontSize: '0.9rem',
-                                    outline: 'none',
-                                    resize: 'vertical',
-                                    fontFamily: 'inherit'
-                                }}
-                            />
-                        </div>
-
-                    </div>
-                )}
-            </div>
-
-            {/* LINKS ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
-                    onClick={() => setIsLinksOpen(!isLinksOpen)}
-                    style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isLinksOpen ? '1px solid #e2e8f0' : 'none'
-                    }}
-                >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>LINKS</div>
-                    </div>
-                    {isLinksOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {isLinksOpen && (
-                    <div style={{ padding: isMobile ? '1rem' : '2rem', background: '#fff' }}>
-
-                        {/* General Links Error */}
-                        {typeof errors.links === 'string' && (
-                            <div style={{ color: '#ef4444', fontSize: '0.85rem', marginBottom: '1.5rem', fontWeight: 'bold' }}>
-                                {errors.links}
-                            </div>
-                        )}
-
-                        {links.map((link) => (
-                            <div key={link.id} style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1.5rem', marginBottom: '2rem', alignItems: 'start' }}>
-                                {/* URL Input */}
-                                <div style={{ position: 'relative' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        URL*
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={link.url}
-                                        onChange={(e) => handleLinkUpdate(link.id, 'url', e.target.value)}
-                                        placeholder="https://"
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: `1px solid ${errors.links && errors.links[link.id]?.url ? '#ef4444' : '#1e293b'}`,
-                                            fontSize: '0.9rem',
-                                            outline: 'none'
-                                        }}
-                                    />
-                                    {errors.links && errors.links[link.id]?.url && (
-                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
-                                            {errors.links[link.id].url}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* Link Title Input & Delete */}
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'start' }}>
-                                    <div style={{ flex: 1, position: 'relative' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                            LINK TITLE*
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={link.title}
-                                            onChange={(e) => handleLinkUpdate(link.id, 'title', e.target.value)}
-                                            placeholder="Visit Us Online"
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                borderRadius: '4px',
-                                                border: `1px solid ${errors.links && errors.links[link.id]?.title ? '#ef4444' : '#1e293b'}`,
-                                                fontSize: '0.9rem',
-                                                outline: 'none'
-                                            }}
-                                        />
-                                        {errors.links && errors.links[link.id]?.title && (
-                                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
-                                                {errors.links[link.id].title}
-                                            </p>
-                                        )}
-                                    </div>
-                                    <div
-                                        onClick={() => handleRemoveLink(link.id)}
-                                        style={{
-                                            width: '24px',
-                                            height: '24px',
-                                            borderRadius: '50%',
-                                            border: '1px solid #e2e8f0',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            cursor: 'pointer',
-                                            flexShrink: 0,
-                                            marginTop: '2.2rem'
-                                        }}
-                                    >
-                                        <X size={14} color="#cbd5e1" />
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-
-                        {/* Add More Links Button */}
-                        <button
-                            onClick={handleAddLink}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                padding: '0.75rem 1.5rem',
-                                borderRadius: '4px',
-                                border: '1px solid #8b5cf6',
-                                background: '#fff',
-                                color: '#8b5cf6',
-                                fontWeight: 'bold',
-                                fontSize: '0.9rem',
-                                cursor: 'pointer',
-                                marginTop: '1rem'
-                            }}
-                        >
-                            <Plus size={18} />
-                            Add More Links
-                        </button>
-
-                    </div>
-                )}
-            </div>
-
-            {/* SOCIAL MEDIA CHANNELS ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
-                    onClick={() => setIsSocialOpen(!isSocialOpen)}
-                    style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isSocialOpen ? '1px solid #e2e8f0' : 'none'
-                    }}
-                >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
-                    </div>
-                    {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {isSocialOpen && (
-                    <div style={{ padding: isMobile ? '1rem' : '2rem', background: '#fff' }}>
-
-                        {/* General Social Error */}
-                        {typeof errors.socialLinks === 'string' && (
-                            <div style={{ color: '#ef4444', fontSize: '0.85rem', marginBottom: '1.5rem', fontWeight: 'bold' }}>
-                                {errors.socialLinks}
-                            </div>
-                        )}
-
-                        {/* Selected Social Channels */}
-                        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '1rem' : '2rem', marginBottom: socialLinks.length > 0 ? '2.5rem' : '0' }}>
-                            {socialLinks.map((link) => {
-                                const platform = socialPlatforms.find(p => p.id === link.platform) || socialPlatforms[0];
-                                const Icon = platform.icon;
-
-                                return (
-                                    <div key={link.id}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b' }}>
-                                                {platform.name}*
+                                        {/* Text Color */}
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
+                                                Text Color
                                             </label>
-                                        </div>
-                                        <div style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            border: '1px solid #1e293b',
-                                            borderRadius: '4px',
-                                            height: '44px',
-                                            overflow: 'hidden'
-                                        }}>
                                             <div style={{
-                                                width: '44px',
-                                                height: '100%',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center',
-                                                borderRight: '1px solid #1e293b',
-                                                background: 'transparent'
+                                                border: '1px solid #334155',
+                                                borderRadius: '10px',
+                                                padding: '0.5rem',
+                                                height: '44px',
+                                                background: '#020617'
                                             }}>
-                                                {typeof Icon === 'string' ? (
-                                                    <img
-                                                        src={Icon}
-                                                        alt=""
+                                                <input
+                                                    type="text"
+                                                    value={basicInfo.headlineColor || '#2B1E99'}
+                                                    onChange={(e) => handleBasicInfoUpdate('headlineColor', e.target.value)}
+                                                    style={{
+                                                        border: 'none',
+                                                        outline: 'none',
+                                                        width: '100%',
+                                                        fontSize: '0.85rem',
+                                                        color: '#e5e7eb',
+                                                        fontWeight: '500',
+                                                        textTransform: 'uppercase',
+                                                        background: 'transparent'
+                                                    }}
+                                                />
+                                                <div style={{
+                                                    width: '24px',
+                                                    height: '24px',
+                                                    background: basicInfo.headlineColor || '#2B1E99',
+                                                    borderRadius: '4px',
+                                                    flexShrink: 0,
+                                                    border: '1px solid #334155',
+                                                    position: 'relative',
+                                                    overflow: 'hidden',
+                                                    cursor: 'pointer'
+                                                }}>
+                                                    <input
+                                                        type="color"
+                                                        value={basicInfo.headlineColor || '#2B1E99'}
+                                                        onChange={(e) => handleBasicInfoUpdate('headlineColor', e.target.value)}
                                                         style={{
-                                                            width: '20px',
-                                                            height: '20px',
-                                                            objectFit: 'contain'
+                                                            position: 'absolute',
+                                                            top: '-50%',
+                                                            left: '-50%',
+                                                            width: '200%',
+                                                            height: '200%',
+                                                            cursor: 'pointer',
+                                                            opacity: 0,
+                                                            padding: 0,
+                                                            margin: 0
                                                         }}
                                                     />
-                                                ) : (
-                                                    <Icon size={20} color="#fff" />
-                                                )}
+                                                </div>
                                             </div>
+                                        </div>
+
+                                        {/* Font */}
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
+                                                Font
+                                            </label>
+                                            <select
+                                                value={basicInfo.headlineFont || 'Lato'}
+                                                onChange={(e) => handleBasicInfoUpdate('headlineFont', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '10px',
+                                                    border: '1px solid #334155',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    cursor: 'pointer',
+                                                    background: '#020617',
+                                                    color: '#e5e7eb'
+                                                }}
+                                            >
+                                                <option value="Lato">Lato</option>
+                                                <option value="Roboto">Roboto</option>
+                                                <option value="Open Sans">Open Sans</option>
+                                                <option value="Montserrat">Montserrat</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* ABOUT US FIELD */}
+                                <div style={{ marginBottom: '0' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                        ABOUT US
+                                    </label>
+                                    <textarea
+                                        value={basicInfo.aboutUs || ''}
+                                        onChange={(e) => handleBasicInfoUpdate('aboutUs', e.target.value)}
+                                        placeholder="Follow us and get updates delivered to your favorite social media channel."
+                                        rows={3}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            resize: 'vertical',
+                                            fontFamily: 'inherit',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
+                                        }}
+                                    />
+                                </div>
+
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
+
+            {/* LINKS ACCORDION */}
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
+                    onClick={() => setIsLinksOpen(!isLinksOpen)}
+                    style={{
+                        width: '100%',
+                        padding: '1rem 1.25rem',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
+                    }}
+                >
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>LINKS</div>
+                    </div>
+                    <motion.div animate={{ rotate: isLinksOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+
+                <AnimatePresence>
+                    {isLinksOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#0f172a' }}
+                        >
+                            <div style={{ padding: '1rem' }}>
+
+                                {/* General Links Error */}
+                                {typeof errors.links === 'string' && (
+                                    <div style={{ color: '#ef4444', fontSize: '0.85rem', marginBottom: '1.5rem', fontWeight: 'bold' }}>
+                                        {errors.links}
+                                    </div>
+                                )}
+
+                                {links.map((link) => (
+                                    <div key={link.id} style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1.5rem', marginBottom: '2rem', alignItems: 'start' }}>
+                                        {/* URL Input */}
+                                        <div style={{ position: 'relative' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                URL*
+                                            </label>
                                             <input
                                                 type="text"
                                                 value={link.url}
-                                                onChange={(e) => handleSocialLinkUpdate(link.id, e.target.value)}
+                                                onChange={(e) => handleLinkUpdate(link.id, 'url', e.target.value)}
                                                 placeholder="https://"
                                                 style={{
-                                                    flex: 1,
-                                                    height: '100%',
-                                                    border: 'none',
-                                                    padding: '0 1rem',
-                                                    outline: 'none',
-                                                    color: '#64748b',
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '10px',
+                                                    border: `1px solid ${errors.links && errors.links[link.id]?.url ? '#ef4444' : '#334155'}`,
                                                     fontSize: '0.9rem',
-                                                    borderBottom: errors.socialLinks && errors.socialLinks[link.id] ? '2px solid #ef4444' : 'none'
+                                                    outline: 'none',
+                                                    background: '#020617',
+                                                    color: '#e5e7eb'
                                                 }}
                                             />
-                                            {errors.socialLinks && errors.socialLinks[link.id] && (
-                                                <div style={{ color: '#ef4444', fontSize: '0.7rem', marginTop: '0.5rem', width: '100%', paddingLeft: '44px' }}>
-                                                    {errors.socialLinks[link.id]}
-                                                </div>
+                                            {errors.links && errors.links[link.id]?.url && (
+                                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                                    {errors.links[link.id].url}
+                                                </p>
                                             )}
+                                        </div>
+
+                                        {/* Link Title Input & Delete */}
+                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'start' }}>
+                                            <div style={{ flex: 1, position: 'relative' }}>
+                                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                    LINK TITLE*
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={link.title}
+                                                    onChange={(e) => handleLinkUpdate(link.id, 'title', e.target.value)}
+                                                    placeholder="Visit Us Online"
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.75rem',
+                                                        borderRadius: '10px',
+                                                        border: `1px solid ${errors.links && errors.links[link.id]?.title ? '#ef4444' : '#334155'}`,
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        background: '#020617',
+                                                        color: '#e5e7eb'
+                                                    }}
+                                                />
+                                                {errors.links && errors.links[link.id]?.title && (
+                                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                                        {errors.links[link.id].title}
+                                                    </p>
+                                                )}
+                                            </div>
                                             <div
-                                                onClick={() => handleSocialLinkRemove(link.id)}
+                                                onClick={() => handleRemoveLink(link.id)}
                                                 style={{
-                                                    padding: '0 0.5rem',
-                                                    cursor: 'pointer',
+                                                    width: '24px',
+                                                    height: '24px',
+                                                    borderRadius: '50%',
+                                                    border: '1px solid #334155',
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
-                                                    height: '100%'
+                                                    cursor: 'pointer',
+                                                    flexShrink: 0,
+                                                    marginTop: '2.2rem',
+                                                    background: '#020617'
                                                 }}
                                             >
-                                                <X size={16} color="#ef4444" />
+                                                <X size={14} color="#ef4444" />
                                             </div>
                                         </div>
                                     </div>
-                                );
-                            })}
-                        </div>
+                                ))}
 
-                        {/* Add More Section */}
-                        <div style={{ marginTop: '1rem' }}>
-                            <div style={{
-                                fontSize: '0.75rem',
-                                fontWeight: 'bold',
-                                color: '#8b5cf6',
-                                marginBottom: '0.25rem',
-                                textTransform: 'uppercase'
-                            }}>
-                                ADD MORE
+                                {/* Add More Links Button */}
+                                <button
+                                    onClick={handleAddLink}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.5rem',
+                                        padding: '0.75rem 1.5rem',
+                                        borderRadius: '10px',
+                                        border: '1px solid #ffa305',
+                                        background: 'rgba(255, 163, 5, 0.1)',
+                                        color: '#ffa305',
+                                        fontWeight: 'bold',
+                                        fontSize: '0.9rem',
+                                        cursor: 'pointer',
+                                        marginTop: '1rem'
+                                    }}
+                                >
+                                    <Plus size={18} />
+                                    Add More Links
+                                </button>
+
                             </div>
-                            <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '1rem' }}>
-                                Click on the icon to add a social media profile.
-                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
-                                {socialPlatforms.map((platform) => {
-                                    const Icon = platform.icon;
-                                    const isSelected = socialLinks.some(link => link.platform === platform.id);
-                                    return (
-                                        <div
-                                            key={platform.id}
-                                            onClick={() => handleSocialLinkAdd(platform.id)}
-                                            style={{
-                                                width: '40px',
-                                                height: '40px',
-                                                borderRadius: '8px',
-                                                background: isSelected ? 'rgba(34, 197, 94, 0.1)' : 'transparent',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                cursor: 'pointer',
-                                                border: isSelected ? '1px solid #22c55e' : 'none',
-                                                transition: 'all 0.2s',
-                                                position: 'relative'
-                                            }}
-                                            title={platform.name}
-                                        >
-                                            {typeof Icon === 'string' ? (
-                                                <img
-                                                    src={Icon}
-                                                    alt=""
-                                                    style={{
-                                                        width: '20px',
-                                                        height: '20px',
-                                                        objectFit: 'contain',
-                                                        opacity: isSelected ? 0.7 : 1
-                                                    }}
-                                                />
-                                            ) : (
-                                                <Icon size={20} color="#fff" />
-                                            )}
-                                            {isSelected && (
-                                                <div style={{
-                                                    position: 'absolute',
-                                                    top: '-5px',
-                                                    right: '-5px',
-                                                    background: '#22c55e',
-                                                    borderRadius: '50%',
-                                                    width: '18px',
-                                                    height: '18px',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    border: '2px solid #fff',
-                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                                                }}>
-                                                    <Check size={10} color="#fff" />
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-
-                    </div>
-                )}
-            </div>
-
-            {/* SHARE ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
-                    onClick={() => setIsShareOpen(!isShareOpen)}
+            {/* SOCIAL MEDIA CHANNELS ACCORDION */}
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
+                    onClick={() => setIsSocialOpen(!isSocialOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isShareOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SHARE</div>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
                     </div>
-                    {isShareOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <motion.div animate={{ rotate: isSocialOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isShareOpen && (
-                    <div style={{ padding: isMobile ? '1rem' : '2rem', background: '#fff' }}>
-                        {/* Share Message */}
-                        <div>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                SHARE MESSAGE
-                            </label>
-                            <div style={{ position: 'relative' }}>
-                                <input
-                                    type="text"
-                                    value={config.share?.message || ''}
-                                    onChange={(e) => {
-                                        const value = e.target.value;
-                                        if (value.length <= 50) {
-                                            handleShareUpdate('message', value);
-                                        }
-                                    }}
-                                    placeholder="Check out my links!"
-                                    maxLength={50}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        paddingRight: '3.5rem',
-                                        borderRadius: '4px',
-                                        border: (config.share?.message || '').length >= 50 ? '1px solid #ef4444' : '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none',
-                                        color: '#000'
-                                    }}
-                                />
-                                <div style={{
-                                    position: 'absolute',
-                                    right: '0.75rem',
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    fontSize: '0.75rem',
-                                    color: (config.share?.message || '').length >= 50 ? '#ef4444' : '#64748b',
-                                    fontWeight: '500'
-                                }}>
-                                    {(config.share?.message || '').length}/50
+                <AnimatePresence>
+                    {isSocialOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#0f172a' }}
+                        >
+                            <div style={{ padding: '1rem' }}>
+
+                                {/* General Social Error */}
+                                {typeof errors.socialLinks === 'string' && (
+                                    <div style={{ color: '#ef4444', fontSize: '0.85rem', marginBottom: '1.5rem', fontWeight: 'bold' }}>
+                                        {errors.socialLinks}
+                                    </div>
+                                )}
+
+                                {/* Selected Social Channels */}
+                                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '1rem' : '2rem', marginBottom: socialLinks.length > 0 ? '2.5rem' : '0' }}>
+                                    {socialLinks.map((link) => {
+                                        const platform = socialPlatforms.find(p => p.id === link.platform) || socialPlatforms[0];
+                                        const Icon = platform.icon;
+
+                                        return (
+                                            <div key={link.id}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                                    <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#94a3b8' }}>
+                                                        {platform.name}*
+                                                    </label>
+                                                </div>
+                                                <div style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    border: '1px solid #334155',
+                                                    borderRadius: '10px',
+                                                    height: '44px',
+                                                    overflow: 'hidden',
+                                                    background: '#020617'
+                                                }}>
+                                                    <div style={{
+                                                        width: '44px',
+                                                        height: '100%',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        borderRight: '1px solid #334155',
+                                                        background: 'transparent'
+                                                    }}>
+                                                        {typeof Icon === 'string' ? (
+                                                            <img
+                                                                src={Icon}
+                                                                alt=""
+                                                                style={{
+                                                                    width: '20px',
+                                                                    height: '20px',
+                                                                    objectFit: 'contain'
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <Icon size={20} color="#e5e7eb" />
+                                                        )}
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        value={link.url}
+                                                        onChange={(e) => handleSocialLinkUpdate(link.id, e.target.value)}
+                                                        placeholder="https://"
+                                                        style={{
+                                                            flex: 1,
+                                                            height: '100%',
+                                                            border: 'none',
+                                                            padding: '0 1rem',
+                                                            outline: 'none',
+                                                            color: '#e5e7eb',
+                                                            fontSize: '0.9rem',
+                                                            background: 'transparent',
+                                                            borderBottom: errors.socialLinks && errors.socialLinks[link.id] ? '2px solid #ef4444' : 'none'
+                                                        }}
+                                                    />
+                                                    {errors.socialLinks && errors.socialLinks[link.id] && (
+                                                        <div style={{ color: '#ef4444', fontSize: '0.7rem', marginTop: '0.5rem', width: '100%', paddingLeft: '44px' }}>
+                                                            {errors.socialLinks[link.id]}
+                                                        </div>
+                                                    )}
+                                                    <div
+                                                        onClick={() => handleSocialLinkRemove(link.id)}
+                                                        style={{
+                                                            padding: '0 0.5rem',
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            height: '100%'
+                                                        }}
+                                                    >
+                                                        <X size={16} color="#ef4444" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                            </div>
-                            {(config.share?.message || '').length >= 50 && (
-                                <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.5rem', fontWeight: 'bold' }}>
-                                    Max characters length is 50
+
+                                {/* Add More Section */}
+                                <div style={{ marginTop: '1rem' }}>
+                                    <div style={{
+                                        fontSize: '0.75rem',
+                                        fontWeight: 'bold',
+                                        color: '#ffa305',
+                                        marginBottom: '0.25rem',
+                                        textTransform: 'uppercase'
+                                    }}>
+                                        ADD MORE
+                                    </div>
+                                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                                        Click on the icon to add a social media profile.
+                                    </div>
+
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+                                        {socialPlatforms.map((platform) => {
+                                            const Icon = platform.icon;
+                                            const isSelected = socialLinks.some(link => link.platform === platform.id);
+                                            return (
+                                                <div
+                                                    key={platform.id}
+                                                    onClick={() => handleSocialLinkAdd(platform.id)}
+                                                    style={{
+                                                        width: '40px',
+                                                        height: '40px',
+                                                        borderRadius: '8px',
+                                                        background: isSelected ? 'rgba(34, 197, 94, 0.1)' : 'transparent',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        cursor: 'pointer',
+                                                        border: isSelected ? '1px solid #22c55e' : 'none',
+                                                        transition: 'all 0.2s',
+                                                        position: 'relative'
+                                                    }}
+                                                    title={platform.name}
+                                                >
+                                                    {typeof Icon === 'string' ? (
+                                                        <img
+                                                            src={Icon}
+                                                            alt=""
+                                                            style={{
+                                                                width: '20px',
+                                                                height: '20px',
+                                                                objectFit: 'contain',
+                                                                opacity: isSelected ? 0.7 : 1
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <Icon size={20} color="#e5e7eb" />
+                                                    )}
+                                                    {isSelected && (
+                                                        <div style={{
+                                                            position: 'absolute',
+                                                            top: '-5px',
+                                                            right: '-5px',
+                                                            background: '#22c55e',
+                                                            borderRadius: '50%',
+                                                            width: '18px',
+                                                            height: '18px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            border: '2px solid #fff',
+                                                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                                        }}>
+                                                            <Check size={10} color="#fff" />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
-                            )}
-                            <div style={{ fontSize: '0.7rem', color: '#64748b', marginTop: '0.5rem' }}>
-                                This message will be shared along with the mobile preview link.
+
                             </div>
-                        </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
+
+            {/* SHARE ACCORDION */}
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
+                    onClick={() => setIsShareOpen(!isShareOpen)}
+                    style={{
+                        width: '100%',
+                        padding: '1rem 1.25rem',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
+                    }}
+                >
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>SHARE</div>
                     </div>
-                )}
-            </div>
+                    <motion.div animate={{ rotate: isShareOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+
+                <AnimatePresence>
+                    {isShareOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#0f172a' }}
+                        >
+                            <div style={{ padding: '1rem' }}>
+                                {/* Share Message */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                        SHARE MESSAGE
+                                    </label>
+                                    <div style={{ position: 'relative' }}>
+                                        <input
+                                            type="text"
+                                            value={config.share?.message || ''}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (value.length <= 50) {
+                                                    handleShareUpdate('message', value);
+                                                }
+                                            }}
+                                            placeholder="Check out my links!"
+                                            maxLength={50}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                paddingRight: '3.5rem',
+                                                borderRadius: '10px',
+                                                border: (config.share?.message || '').length >= 50 ? '1px solid #ef4444' : '1px solid #334155',
+                                                fontSize: '0.9rem',
+                                                outline: 'none',
+                                                color: '#e5e7eb',
+                                                background: '#020617'
+                                            }}
+                                        />
+                                        <div style={{
+                                            position: 'absolute',
+                                            right: '0.75rem',
+                                            top: '50%',
+                                            transform: 'translateY(-50%)',
+                                            fontSize: '0.75rem',
+                                            color: (config.share?.message || '').length >= 50 ? '#ef4444' : '#94a3b8',
+                                            fontWeight: '500'
+                                        }}>
+                                            {(config.share?.message || '').length}/50
+                                        </div>
+                                    </div>
+                                    {(config.share?.message || '').length >= 50 && (
+                                        <div style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.5rem', fontWeight: 'bold' }}>
+                                            Max characters length is 50
+                                        </div>
+                                    )}
+                                    <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '0.5rem' }}>
+                                        This message will be shared along with the mobile preview link.
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
         </div >
     );

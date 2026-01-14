@@ -1,77 +1,135 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Generator from './pages/Generator';
-import StaticGenerator from './pages/StaticGenerator';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { AnimatePresence } from 'framer-motion';
+
+// Context
+import { AxiosLoaderProvider } from './context/AxiosLoaderContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+
+// Components
+import Sidebar from './components/Sidebar';
+import GlobalLoader from './components/GlobalLoader';
+
+// Pages
 import Dashboard from './pages/Dashboard';
+import CreateQR from './pages/Generator';
+import EditQR from './pages/Generator';
 import LandingPage from './pages/LandingPage';
 import TemplateSelection from './pages/TemplateSelection';
-import AppStoreLanding from './pages/AppStoreLanding';
+import StaticGenerator from './pages/StaticGenerator';
 import Statistics from './pages/Statistics';
-import CreateWithAI from './pages/CreateWithAI';
-import { AxiosLoaderProvider } from './context/AxiosLoaderContext';
-import GlobalLoader from './components/GlobalLoader';
-import { Toaster } from 'react-hot-toast';
-import './styles/global.css';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Profile from './pages/Profile';
+import AdminStats from './pages/AdminStats';
+
+// Private Route Wrapper
+const PrivateRoute = ({ children, adminOnly = false }) => {
+    const { isAuthenticated, loading, user } = useAuth();
+    
+    if (loading) return null; // Or a specific loading spinner
+    
+    if (!isAuthenticated) {
+        return <Navigate to="/login" />;
+    }
+
+    if (adminOnly && user?.role !== 'admin') {
+        return <Navigate to="/dashboard" />;
+    }
+
+    return children;
+};
+
+// Layout Wrapper (Sidebar + Content)
+const Layout = ({ children }) => {
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const [isCollapsed, setCollapsed] = useState(false);
+    const location = useLocation();
+
+    // Pages that should NOT have the sidebar
+    const noSidebarRoutes = ['/view/', '/login', '/signup'];
+    // Check if current path starts with any of the noSidebarRoutes
+    const showSidebar = !noSidebarRoutes.some(route => location.pathname.startsWith(route));
+
+    return (
+        <div style={{ display: 'flex', minHeight: '100vh', background: '#0f172a' }}>
+            {showSidebar && (
+                <Sidebar 
+                    isOpen={isSidebarOpen} 
+                    onClose={() => setSidebarOpen(false)}
+                    onToggle={(newCollapsedState) => setCollapsed(newCollapsedState)} 
+                    collapsed={isCollapsed}
+                />
+            )}
+
+            <div style={{ 
+                flex: 1, 
+                marginLeft: (showSidebar) ? (isCollapsed ? '80px' : '260px') : '0',
+                transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                width: '100%',
+                position: 'relative',
+                maxWidth: (showSidebar) ? `calc(100vw - ${isCollapsed ? '80px' : '260px'})` : '100vw'
+            }} className="content-area">
+                <style>{`
+                    @media (max-width: 768px) {
+                        .content-area {
+                            margin-left: 0 !important;
+                            max-width: 100vw !important;
+                        }
+                    }
+                `}</style>
+                {children}
+            </div>
+        </div>
+    );
+};
+
+const AppContent = () => {
+    return (
+        <Layout>
+            <AnimatePresence mode="wait">
+                <Routes>
+                    {/* Public Routes */}
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/view/:shortId" element={<LandingPage />} />
+                    
+                    {/* Protected Routes */}
+                    <Route path="/" element={<Navigate to="/dashboard" />} />
+                    <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+                    <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+                    <Route path="/select-template" element={<PrivateRoute><TemplateSelection /></PrivateRoute>} />
+                    <Route path="/generator" element={<PrivateRoute><CreateQR /></PrivateRoute>} />
+                    <Route path="/static-generator" element={<PrivateRoute><StaticGenerator /></PrivateRoute>} />
+                    <Route path="/edit/:id" element={<PrivateRoute><EditQR /></PrivateRoute>} />
+                    <Route path="/stats/:id" element={<PrivateRoute><Statistics /></PrivateRoute>} />
+
+                    {/* Admin Routes */}
+                    <Route path="/admin/stats" element={<PrivateRoute adminOnly={true}><AdminStats /></PrivateRoute>} />
+                </Routes>
+            </AnimatePresence>
+        </Layout>
+    );
+};
 
 function App() {
     return (
-        <AxiosLoaderProvider>
-            <GlobalLoader />
-            <Toaster
-                position="top-center"
-                reverseOrder={false}
-                toastOptions={{
-                    style: {
-                        background: '#0f172a', // Darker background (Slate 900) to match dashboard
-                        color: '#f8fafc', // Slate 50
-                        border: '1px solid #334155', // Slate 700
-                        borderRadius: '12px',
-                        padding: '12px 24px',
-                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3)',
-                        fontSize: '0.95rem',
-                        fontWeight: '500',
-                    },
-                    success: {
-                        iconTheme: {
-                            primary: '#10b981', // Emerald 500
-                            secondary: '#0f172a',
-                        },
+        <Router>
+            <AuthProvider>
+                <AxiosLoaderProvider>
+                    <GlobalLoader />
+                    <Toaster position="top-right" toastOptions={{
                         style: {
-                            border: '1px solid rgba(16, 185, 129, 0.2)',
+                            background: '#1e293b',
+                            color: '#fff',
+                            border: '1px solid #334155'
                         }
-                    },
-                    error: {
-                        iconTheme: {
-                            primary: '#ef4444', // Red 500
-                            secondary: '#0f172a',
-                        },
-                        style: {
-                            border: '1px solid rgba(239, 68, 68, 0.2)',
-                        }
-                    },
-                    loading: {
-                        iconTheme: {
-                            primary: '#ffa305', // Orange for loading
-                            secondary: '#0f172a',
-                        },
-                        style: {
-                            border: '1px solid rgba(255, 163, 5, 0.2)',
-                        }
-                    }
-                }}
-            />
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/create-ai" element={<CreateWithAI />} />
-                    <Route path="/select-template" element={<TemplateSelection />} />
-                    <Route path="/generator" element={<Generator />} />
-                    <Route path="/static-generator" element={<StaticGenerator />} />
-                    <Route path="/view/:shortId" element={<LandingPage />} />
-                    <Route path="/app/:shortId" element={<AppStoreLanding />} />
-                    <Route path="/statistics/:id" element={<Statistics />} />
-                </Routes>
-            </Router>
-        </AxiosLoaderProvider>
+                    }} />
+                    <AppContent />
+                </AxiosLoaderProvider>
+            </AuthProvider>
+        </Router>
     );
 }
 

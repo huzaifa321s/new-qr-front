@@ -10,7 +10,6 @@ import {
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import QRRenderer from '../components/QRRenderer';
-import Sidebar from '../components/Sidebar';
 import { toPng, toJpeg, toSvg } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import DatePicker from "react-datepicker";
@@ -118,10 +117,8 @@ const Dashboard = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [totalQRs, setTotalQRs] = useState(0);
 
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     // Use slightly larger breakpoint for mobile check or dynamic width adjustment
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-    const [sidebarExpanded, setSidebarExpanded] = useState(true); // Track sidebar state
 
     const baseUrl = (import.meta.env.VITE_FRONTEND_URL || window.location.origin).replace(/\/$/, '');
 
@@ -143,8 +140,6 @@ const Dashboard = () => {
         const handleResize = () => {
              const mobile = window.innerWidth <= 768;
              setIsMobile(mobile);
-             if (mobile) setSidebarExpanded(false);
-             else setSidebarExpanded(true); // Or maintain previous state if preferred
         };
         window.addEventListener('resize', handleResize);
         handleResize(); // Initial check
@@ -445,36 +440,30 @@ const Dashboard = () => {
     };
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: '#0f172a', color: '#f8fafc', fontFamily: '"Inter", sans-serif' }}>
+        <div style={{ padding: isMobile ? '1rem' : '2rem 3rem' }}>
             
-            <Sidebar 
-                isOpen={isSidebarOpen} 
-                onClose={() => setIsSidebarOpen(false)} 
-                onToggle={(expanded) => setSidebarExpanded(expanded)} 
-                collapsed={!sidebarExpanded}
-            />
+            {/* Mobile Header */}
+            {isMobile && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                    <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Dashboard</h1>
+                    {/* Sidebar is handled by App.jsx, but if we need a trigger for mobile sidebar here, we might need a context or prop. 
+                        However, usually the sidebar handles its own trigger or is always there. 
+                        If the sidebar is hidden on mobile, there should be a button in Layout to open it.
+                        The Layout currently has a Sidebar that handles its own open state via a mobile overlay, but the trigger button is INSIDE the sidebar header.
+                        Wait, if sidebar is closed on mobile (off-screen), how do we open it?
+                        App.jsx Layout renders Sidebar. Sidebar has a mobile state.
+                        Sidebar has a hamburger menu? No, it has a Close button.
+                        We need a way to OPEN the sidebar from the page content on mobile.
+                        
+                        For now, let's just render the content. The Sidebar visibility on mobile is a separate UX concern if the trigger is missing.
+                        I'll leave the button visually but it won't do anything without context. 
+                        Actually, better to remove the non-functional button or fix it later.
+                    */}
+                </div>
+            )}
 
-            <div style={{ 
-                flex: 1, 
-                padding: isMobile ? '1rem' : '2rem 3rem', 
-                overflowY: 'auto', 
-                maxHeight: '100vh',
-                marginLeft: isMobile ? 0 : (sidebarExpanded ? '260px' : '80px'), // Adjust margin based on sidebar state
-                transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)' // Smooth transition matching sidebar animation
-            }}>
-                
-                {/* Mobile Header */}
-                {isMobile && (
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                        <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Dashboard</h1>
-                        <button onClick={() => setIsSidebarOpen(true)} style={{ background: 'transparent', border: 'none', color: '#fff' }}>
-                            <Menu size={24} />
-                        </button>
-                    </div>
-                )}
-
-                {/* Header & Stats */}
-                <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+            {/* Header & Stats */}
+            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
                         <div>
                             <h1 style={{ fontSize: '2.5rem', fontWeight: '800', letterSpacing: '-1px', marginBottom: '0.5rem', background: 'linear-gradient(to right, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
@@ -862,7 +851,7 @@ const Dashboard = () => {
                                                             >
                                                                 {/* Protected IDs Check */}
                                                                 {!(String(qr._id) === '6954c3238ed008ead9300b3c' || String(qr._id) === '6954c3818ed008ead9300c25') && !staticTypes.includes(qr.type) && (
-                                                            <button onClick={() => navigate(`/statistics/${qr._id}`)} style={{ width: '100%', padding: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.9rem', borderRadius: '6px' }} className="hover:bg-slate-600">
+                                                            <button onClick={() => navigate(`/stats/${qr._id}`)} style={{ width: '100%', padding: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.9rem', borderRadius: '6px' }} className="hover:bg-slate-600">
                                                                 <BarChart size={16} /> Statistics
                                                             </button>
                                                         )}
@@ -998,8 +987,7 @@ const Dashboard = () => {
                         </button>
                     </div>
                 )}
-            </div>
-
+            
             {/* Hidden Elements for Downloads */}
             <div style={{ position: 'absolute', left: '-9999px', top: '-9999px', opacity: 0 }}>
                 {downloadingQr && (

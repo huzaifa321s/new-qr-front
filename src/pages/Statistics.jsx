@@ -10,7 +10,6 @@ import toast, { Toaster } from 'react-hot-toast';
 import { io } from 'socket.io-client';
 import MobilePreview from '../components/MobilePreview';
 import QRRenderer from '../components/QRRenderer';
-import Sidebar from '../components/Sidebar';
 import { toPng, toJpeg, toSvg } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -44,11 +43,9 @@ const Statistics = () => {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    // Responsive Sidebar State
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    // Responsive State
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const [isTablet, setIsTablet] = useState(window.innerWidth <= 1024);
-    const [sidebarExpanded, setSidebarExpanded] = useState(true);
 
     // Tab State for Demographics
     const [activeDemographicTab, setActiveDemographicTab] = useState('device');
@@ -56,15 +53,8 @@ const Statistics = () => {
     useEffect(() => {
         const handleResize = () => {
             const width = window.innerWidth;
-            const mobile = width <= 768;
-            const tablet = width <= 1024;
-            
-            setIsMobile(mobile);
-            setIsTablet(tablet);
-            
-            if (mobile) setSidebarExpanded(false);
-            else if (tablet) setSidebarExpanded(false); // Auto collapse on tablet
-            else setSidebarExpanded(true);
+            setIsMobile(width <= 768);
+            setIsTablet(width <= 1024);
         };
         window.addEventListener('resize', handleResize);
         handleResize();
@@ -225,7 +215,15 @@ const Statistics = () => {
         </div>
     );
     
-    if (!qr) return null;
+    if (!qr) return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', color: '#94a3b8' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: '#fff' }}>QR Code Not Found</h2>
+            <p>The requested QR code statistics could not be loaded.</p>
+            <button onClick={() => navigate('/')} style={{ marginTop: '1.5rem', padding: '0.75rem 1.5rem', background: '#ffa305', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }}>
+                Go to Dashboard
+            </button>
+        </div>
+    );
 
     // --- Data Processing ---
     const scansByDate = {};
@@ -299,13 +297,6 @@ const Statistics = () => {
     return (
         <div style={{ display: 'flex', minHeight: '100vh', background: '#0f172a', color: '#f8fafc', fontFamily: '"Inter", sans-serif' }}>
             
-            <Sidebar 
-                isOpen={isSidebarOpen} 
-                onClose={() => setIsSidebarOpen(false)} 
-                onToggle={(expanded) => setSidebarExpanded(expanded)} 
-                collapsed={!sidebarExpanded}
-            />
-
             <motion.div 
                 initial="hidden"
                 animate="visible"
@@ -314,19 +305,12 @@ const Statistics = () => {
                     flex: 1, 
                     padding: isMobile ? '1rem' : '2rem 3rem', 
                     overflowY: 'auto', 
-                    maxHeight: '100vh',
-                    marginLeft: isMobile ? 0 : (sidebarExpanded ? '260px' : '80px'),
-                    transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                    maxHeight: '100vh'
                 }}
             >
                 {/* Header */}
                 <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        {isMobile && (
-                            <button onClick={() => setIsSidebarOpen(true)} style={{ background: 'transparent', border: 'none', color: '#fff' }}>
-                                <Menu size={24} />
-                            </button>
-                        )}
                         <button 
                             onClick={() => navigate('/')} 
                             style={{ 
@@ -391,8 +375,8 @@ const Statistics = () => {
                             </div>
                         </div>
 
-                        <div style={{ background: '#0f172a', padding: '1rem', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #334155' }}>
-                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#ffa305', fontSize: '0.9rem', flex: 1, marginRight: '1rem' }}>
+                        <div style={{ background: '#0f172a', padding: '1rem', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #334155', gap: '0.5rem' }}>
+                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#ffa305', fontSize: '0.85rem', flex: 1 }}>
                                 {qr.type === 'dynamic-url' ? `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/${qr.shortId}` : `${baseUrl}/view/${qr.shortId}`}
                             </div>
                             <button onClick={() => handleCopyLink(qr.shortId)} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '0.25rem' }}>
@@ -421,30 +405,30 @@ const Statistics = () => {
                     {/* Stats & Charts Area */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                         {/* Summary Cards */}
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
                             <motion.div variants={itemVariants} style={{ background: '#1e293b', padding: '1.5rem', borderRadius: '16px', border: '1px solid #334155' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem', color: '#94a3b8' }}>
                                     <Activity size={20} color="#ffa305" />
-                                    <span style={{ fontWeight: '500' }}>Total Scans</span>
+                                    <span style={{ fontWeight: '500', fontSize: '0.9rem' }}>Total Scans</span>
                                 </div>
-                                <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#fff' }}>{(qr.scans || []).length}</div>
+                                <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#fff' }}>{(qr.scans || []).length}</div>
                             </motion.div>
                             <motion.div variants={itemVariants} style={{ background: '#1e293b', padding: '1.5rem', borderRadius: '16px', border: '1px solid #334155' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem', color: '#94a3b8' }}>
                                     <Fingerprint size={20} color="#10b981" />
-                                    <span style={{ fontWeight: '500' }}>Unique Scans</span>
+                                    <span style={{ fontWeight: '500', fontSize: '0.9rem' }}>Unique Scans</span>
                                 </div>
-                                <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#fff' }}>{uniqueScans}</div>
+                                <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#fff' }}>{uniqueScans}</div>
                             </motion.div>
                             <motion.div variants={itemVariants} style={{ background: '#1e293b', padding: '1.5rem', borderRadius: '16px', border: '1px solid #334155' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem', color: '#94a3b8' }}>
                                     <Smartphone size={20} color="#3b82f6" />
-                                    <span style={{ fontWeight: '500' }}>Top Device</span>
+                                    <span style={{ fontWeight: '500', fontSize: '0.9rem' }}>Top Device</span>
                                 </div>
-                                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#fff' }}>
+                                <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                     {deviceStats.data[0]?.name || 'N/A'}
                                 </div>
-                                <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}>{deviceStats.data[0]?.value || 0} scans</div>
+                                <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{deviceStats.data[0]?.value || 0} scans</div>
                             </motion.div>
                         </div>
 

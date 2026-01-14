@@ -13,7 +13,7 @@ const LandingPage = () => {
         const fetchData = async () => {
             try {
                 // Fetch QR Data
-                const res = await axios.get(`/api/qr/${shortId}`);
+                const res = await axios.get(`/api/qr/${shortId}`, { skipGlobalLoader: true });
                 const data = res.data;
                 setQrData(data);
 
@@ -21,7 +21,7 @@ const LandingPage = () => {
                 const searchParams = new URLSearchParams(location.search);
                 if (!searchParams.get('scanned') && !scanTracked.current) {
                     scanTracked.current = true;
-                    await axios.post(`/api/qr/scan/${shortId}`);
+                    await axios.post(`/api/qr/scan/${shortId}`, {}, { skipGlobalLoader: true });
                 }
 
                 // Handle direct redirection for dynamic-url type (for legacy QRs)
@@ -44,46 +44,13 @@ const LandingPage = () => {
 
     if (loading) return (
         <div style={{
+            minHeight: '100vh',
+            background: '#f1f5f9',
             display: 'flex',
-            flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh',
-            background: '#f8fafc',
-            fontFamily: "'Inter', sans-serif"
+            alignItems: 'center'
         }}>
-            <div className="loader-container" style={{
-                position: 'relative',
-                width: '80px',
-                height: '80px',
-                marginBottom: '1.5rem'
-            }}>
-                <div style={{
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%',
-                    border: '4px solid #e2e8f0',
-                    borderRadius: '50%'
-                }}></div>
-                <div style={{
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%',
-                    border: '4px solid #8b5cf6',
-                    borderTopColor: 'transparent',
-                    borderRadius: '50%',
-                    animation: 'spin 1s linear infinite'
-                }}></div>
-            </div>
-            <h2 style={{ color: '#1e293b', fontSize: '1.25rem', fontWeight: '600', margin: '0 0 0.5rem 0' }}>Loading...</h2>
-            <p style={{ color: '#64748b', fontSize: '0.975rem' }}>Preparing your experience</p>
-
-            <style>{`
-                @keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-            `}</style>
+            {/* Loader hidden as per request */}
         </div>
     );
 
@@ -120,40 +87,42 @@ const LandingPage = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '100vh',
-                background: '#f8fafc',
+                background: '#0f172a',
                 fontFamily: "'Inter', sans-serif"
             }}>
-                <div className="loader-container" style={{
-                    position: 'relative',
-                    width: '60px',
-                    height: '60px',
-                    marginBottom: '1.5rem'
-                }}>
-                    <div style={{
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        border: '3px solid #e2e8f0',
-                        borderRadius: '50%'
-                    }}></div>
-                    <div style={{
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        border: '3px solid #8b5cf6',
-                        borderTopColor: 'transparent',
+                <motion.div
+                    animate={{ 
+                        scale: [1, 1.1, 1],
+                        opacity: [0.8, 1, 0.8]
+                    }}
+                    transition={{ 
+                        duration: 1.5, 
+                        repeat: Infinity, 
+                        ease: "easeInOut" 
+                    }}
+                    style={{
+                        width: '80px',
+                        height: '80px',
                         borderRadius: '50%',
-                        animation: 'spin 1.2s linear infinite'
-                    }}></div>
-                </div>
-                <h2 style={{ color: '#1e293b', fontSize: '1.125rem', fontWeight: '600' }}>Redirecting you...</h2>
-                <p style={{ color: '#64748b', fontSize: '0.875rem', marginTop: '0.5rem' }}>Please wait a moment</p>
-                <style>{`
-                    @keyframes spin {
-                        0% { transform: rotate(0deg); }
-                        100% { transform: rotate(360deg); }
-                    }
-                `}</style>
+                        overflow: 'hidden',
+                        border: '3px solid #ffa305',
+                        boxShadow: '0 0 15px rgba(255, 163, 5, 0.3)',
+                        background: '#000',
+                        marginBottom: '1.5rem'
+                    }}
+                >
+                    <img 
+                        src={logoLoader} 
+                        alt="Redirecting..." 
+                        style={{ 
+                            width: '100%', 
+                            height: '100%', 
+                            objectFit: 'cover' 
+                        }} 
+                    />
+                </motion.div>
+                <h2 style={{ color: '#f8fafc', fontSize: '1.125rem', fontWeight: '600' }}>Redirecting you...</h2>
+                <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginTop: '0.5rem' }}>Please wait a moment</p>
             </div>
         );
     }

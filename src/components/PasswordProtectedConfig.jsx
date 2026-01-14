@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Plus } from 'lucide-react';
 import { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ImageUploadModal from './ImageUploadModal';
 
 const PasswordProtectedConfig = ({ config, onChange, errors = {}, setErrors }) => {
@@ -182,485 +183,529 @@ const PasswordProtectedConfig = ({ config, onChange, errors = {}, setErrors }) =
     return (
         <div>
             {/* DESIGN ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsDesignOpen(!isDesignOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isDesignOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>DESIGN</div>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>DESIGN</div>
                     </div>
-                    {isDesignOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <motion.div animate={{ rotate: isDesignOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isDesignOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
+                <AnimatePresence>
+                    {isDesignOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#0f172a' }}
+                        >
+                            <div style={{ padding: '1rem' }}>
 
-                        {/* COLORS SECTION */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '1rem', textTransform: 'uppercase' }}>
-                                COLORS
-                            </label>
-
-                            {/* Color Palettes */}
-                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-                                {palettes.map((palette, idx) => (
-                                    <div
-                                        key={idx}
-                                        onClick={() => handleColorPaletteClick(palette.p, palette.s)}
-                                        style={{
-                                            width: '64px',
-                                            height: '64px',
-                                            borderRadius: '50%',
-                                            overflow: 'hidden',
-                                            cursor: 'pointer',
-                                            border: (primaryColor === palette.p && secondaryColor === palette.s) ? '3px solid #8b5cf6' : '2px solid #e2e8f0',
-                                            position: 'relative',
-                                            background: `linear-gradient(180deg, ${palette.p} 50%, ${palette.s} 50%)`
-                                        }}
-                                    >
-                                        {(primaryColor === palette.p && secondaryColor === palette.s) && (
-                                            <div style={{
-                                                position: 'absolute',
-                                                top: '50%',
-                                                left: '50%',
-                                                transform: 'translate(-50%, -50%)',
-                                                width: '24px',
-                                                height: '24px',
-                                                background: '#8b5cf6',
-                                                borderRadius: '50%',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                border: '2px solid #fff'
-                                            }}>
-                                                <Check size={14} color="#fff" />
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Divider */}
-                            <div style={{
-                                position: 'relative',
-                                height: '1px',
-                                background: 'none',
-                                borderTop: '1px dashed #e2e8f0',
-                                margin: '2rem 0'
-                            }}></div>
-
-                            {/* Primary and Secondary Color Inputs */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', alignItems: 'center' }}>
-                                {/* Primary Color */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Primary Color
+                                {/* COLORS SECTION */}
+                                <div style={{ marginBottom: '2rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '1rem', textTransform: 'uppercase' }}>
+                                        COLORS
                                     </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
-                                    }}>
-                                        <input
-                                            type="text"
-                                            value={primaryColor}
-                                            onChange={(e) => handleColorUpdate('header', e.target.value)}
-                                            style={{
-                                                border: 'none',
-                                                outline: 'none',
-                                                width: '100%',
-                                                fontSize: '0.9rem',
-                                                color: '#000',
-                                                fontWeight: '500',
-                                                textTransform: 'uppercase'
-                                            }}
-                                        />
-                                        <div style={{
-                                            width: '28px',
-                                            height: '28px',
-                                            background: primaryColor,
-                                            borderRadius: '2px',
-                                            flexShrink: 0,
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            cursor: 'pointer'
-                                        }}>
-                                            <input
-                                                type="color"
-                                                value={primaryColor}
-                                                onChange={(e) => handleColorUpdate('header', e.target.value)}
+
+                                    {/* Color Palettes */}
+                                    <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+                                        {palettes.map((palette, idx) => (
+                                            <div
+                                                key={idx}
+                                                onClick={() => handleColorPaletteClick(palette.p, palette.s)}
                                                 style={{
-                                                    position: 'absolute',
-                                                    top: '-50%',
-                                                    left: '-50%',
-                                                    width: '200%',
-                                                    height: '200%',
+                                                    width: '64px',
+                                                    height: '64px',
+                                                    borderRadius: '50%',
+                                                    overflow: 'hidden',
                                                     cursor: 'pointer',
-                                                    opacity: 0
+                                                    border: (primaryColor === palette.p && secondaryColor === palette.s) ? '3px solid #ffa305' : '2px solid #334155',
+                                                    position: 'relative',
+                                                    background: `linear-gradient(180deg, ${palette.p} 50%, ${palette.s} 50%)`
                                                 }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Swap Icon */}
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    marginTop: '1.5rem'
-                                }}>
-                                    <div
-                                        onClick={() => handleColorPaletteClick(secondaryColor, primaryColor)}
-                                        style={{
-                                            width: '40px',
-                                            height: '40px',
-                                            borderRadius: '4px',
-                                            border: '1px solid #e2e8f0',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            cursor: 'pointer',
-                                            background: '#fff'
-                                        }}
-                                    >
-                                        <RefreshCw size={18} color="#64748b" />
-                                    </div>
-                                </div>
-
-                                {/* Secondary Color */}
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Secondary Color
-                                    </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
-                                    }}>
-                                        <input
-                                            type="text"
-                                            value={secondaryColor}
-                                            onChange={(e) => handleColorUpdate('light', e.target.value)}
-                                            style={{
-                                                border: 'none',
-                                                outline: 'none',
-                                                width: '100%',
-                                                fontSize: '0.9rem',
-                                                color: '#000',
-                                                fontWeight: '500',
-                                                textTransform: 'uppercase'
-                                            }}
-                                        />
-                                        <div style={{
-                                            width: '28px',
-                                            height: '28px',
-                                            background: secondaryColor,
-                                            borderRadius: '2px',
-                                            flexShrink: 0,
-                                            border: '1px solid #e2e8f0',
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            cursor: 'pointer'
-                                        }}>
-                                            <input
-                                                type="color"
-                                                value={secondaryColor}
-                                                onChange={(e) => handleColorUpdate('light', e.target.value)}
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: '-50%',
-                                                    left: '-50%',
-                                                    width: '200%',
-                                                    height: '200%',
-                                                    cursor: 'pointer',
-                                                    opacity: 0
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* HEADER IMAGE SECTION */}
-                        <div style={{ marginBottom: '0' }}>
-                            <div style={{ marginBottom: '1rem' }}>
-                                <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
-                                    HEADER IMAGE
-                                </div>
-                                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.25rem' }}>
-                                    Minimum width : 400px, 3:2 Ratio
-                                </div>
-                            </div>
-
-                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                                {/* Remove/Clear Option */}
-                                <div
-                                    onClick={() => handleHeaderImageUpdate('')}
-                                    style={{
-                                        width: '80px',
-                                        height: '60px',
-                                        borderRadius: '4px',
-                                        border: '1px solid #e2e8f0',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        background: '#fff'
-                                    }}
-                                >
-                                    <X size={24} color="#cbd5e1" />
-                                </div>
-
-                                {/* Image Options */}
-                                {headerOptions.map(img => (
-                                    <div
-                                        key={img.id}
-                                        onClick={() => handleHeaderImageUpdate(img.url)}
-                                        style={{
-                                            width: '80px',
-                                            height: '60px',
-                                            borderRadius: '4px',
-                                            overflow: 'hidden',
-                                            border: design.headerImage?.url === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
-                                            cursor: 'pointer',
-                                            position: 'relative'
-                                        }}
-                                    >
-                                        <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                        {design.headerImage?.url === img.url && (
-                                            <div style={{
-                                                position: 'absolute',
-                                                top: '-6px',
-                                                right: '-6px',
-                                                width: '20px',
-                                                height: '20px',
-                                                background: '#8b5cf6',
-                                                borderRadius: '50%',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                border: '2px solid #fff',
-                                                zIndex: 10
-                                            }}>
-                                                <Check size={12} color="#fff" />
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-
-                                {/* Upload Option */}
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    style={{ display: 'none' }}
-                                    accept="image/*"
-                                    onChange={handleImageSelect}
-                                />
-                                <div
-                                    onMouseEnter={() => setIsHoveringUpload(true)}
-                                    onMouseLeave={() => setIsHoveringUpload(false)}
-                                    onClick={handleImageUpload}
-                                    style={{
-                                        width: '80px',
-                                        height: '60px',
-                                        borderRadius: '4px',
-                                        border: design.headerImage?.url && !headerOptions.some(opt => opt.url === design.headerImage?.url) ? '2px solid #8b5cf6' : '1px dashed #cbd5e1',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        position: 'relative',
-                                        background: '#fff',
-                                        overflow: 'hidden'
-                                    }}
-                                >
-                                    {design.headerImage?.url && !headerOptions.some(opt => opt.url === design.headerImage?.url) ? (
-                                        <>
-                                            <img src={design.headerImage.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                            {isHoveringUpload && (
-                                                <div
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setShowPreviewModal(true);
-                                                    }}
-                                                    style={{
+                                            >
+                                                {(primaryColor === palette.p && secondaryColor === palette.s) && (
+                                                    <div style={{
                                                         position: 'absolute',
-                                                        inset: 0,
-                                                        background: 'rgba(0,0,0,0.4)',
+                                                        top: '50%',
+                                                        left: '50%',
+                                                        transform: 'translate(-50%, -50%)',
+                                                        width: '24px',
+                                                        height: '24px',
+                                                        background: '#ffa305',
+                                                        borderRadius: '50%',
                                                         display: 'flex',
                                                         alignItems: 'center',
                                                         justifyContent: 'center',
-                                                        color: '#fff',
-                                                        fontSize: '0.7rem',
-                                                        fontWeight: 'bold'
-                                                    }}
-                                                >
-                                                    VIEW
-                                                </div>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <UploadCloud size={20} color="#94a3b8" />
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                )}
-            </div>
-
-            {/* ENTER INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
-                    onClick={() => setIsInfoOpen(!isInfoOpen)}
-                    style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isInfoOpen ? '1px solid #e2e8f0' : 'none'
-                    }}
-                >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>ENTER INFORMATION</div>
-                    </div>
-                    {isInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {isInfoOpen && (
-                    <div style={{ padding: '2rem', background: '#fff' }}>
-
-                        {/* General Error Message */}
-                        {typeof errors.infoFields === 'string' && (
-                            <div style={{ color: '#ef4444', fontSize: '0.85rem', marginBottom: '1.5rem', fontWeight: 'bold' }}>
-                                {errors.infoFields}
-                            </div>
-                        )}
-
-                        {infoFields.map((field) => (
-                            <div key={field.id} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.5rem', marginBottom: '2rem', alignItems: 'start' }}>
-                                {/* Field Name Input */}
-                                <div style={{ position: 'relative' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        FIELD NAME*
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={field.name}
-                                        onChange={(e) => handleFieldUpdate(field.id, 'name', e.target.value)}
-                                        placeholder="Name"
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: `1px solid ${errors.infoFields && errors.infoFields[field.id]?.name ? '#ef4444' : '#1e293b'}`,
-                                            fontSize: '0.9rem',
-                                            outline: 'none',
-                                            fontWeight: 'bold',
-                                            color: '#000'
-                                        }}
-                                    />
-                                    {errors.infoFields && errors.infoFields[field.id]?.name && (
-                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
-                                            {errors.infoFields[field.id].name}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* Field Info Input & Delete */}
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'start' }}>
-                                    <div style={{ flex: 1, position: 'relative' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                            FIELD INFORMATION*
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={field.value}
-                                            onChange={(e) => handleFieldUpdate(field.id, 'value', e.target.value)}
-                                            placeholder="Information"
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                borderRadius: '4px',
-                                                border: `1px solid ${errors.infoFields && errors.infoFields[field.id]?.value ? '#ef4444' : '#1e293b'}`,
-                                                fontSize: '0.9rem',
-                                                outline: 'none',
-                                                fontWeight: '500',
-                                                color: '#000'
-                                            }}
-                                        />
-                                        {errors.infoFields && errors.infoFields[field.id]?.value && (
-                                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
-                                                {errors.infoFields[field.id].value}
-                                            </p>
-                                        )}
+                                                        border: '2px solid #fff'
+                                                    }}>
+                                                        <Check size={14} color="#0f172a" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
                                     </div>
-                                    <div
-                                        onClick={() => handleRemoveField(field.id)}
-                                        style={{
-                                            width: '24px',
-                                            height: '24px',
-                                            borderRadius: '50%',
-                                            border: '1px solid #e2e8f0',
+
+                                    {/* Divider */}
+                                    <div style={{
+                                        position: 'relative',
+                                        height: '1px',
+                                        background: 'none',
+                                        borderTop: '1px dashed #334155',
+                                        margin: '2rem 0'
+                                    }}></div>
+
+                                    {/* Primary and Secondary Color Inputs */}
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', alignItems: 'center' }}>
+                                        {/* Primary Color */}
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
+                                                Primary Color
+                                            </label>
+                                            <div style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                border: '1px solid #334155',
+                                                borderRadius: '10px',
+                                                padding: '0.5rem',
+                                                height: '44px',
+                                                background: '#020617'
+                                            }}>
+                                                <input
+                                                    type="text"
+                                                    value={primaryColor}
+                                                    onChange={(e) => handleColorUpdate('header', e.target.value)}
+                                                    style={{
+                                                        border: 'none',
+                                                        outline: 'none',
+                                                        width: '100%',
+                                                        fontSize: '0.9rem',
+                                                        color: '#e5e7eb',
+                                                        fontWeight: '500',
+                                                        textTransform: 'uppercase',
+                                                        background: 'transparent'
+                                                    }}
+                                                />
+                                                <div style={{
+                                                    width: '28px',
+                                                    height: '28px',
+                                                    background: primaryColor,
+                                                    borderRadius: '4px',
+                                                    flexShrink: 0,
+                                                    position: 'relative',
+                                                    overflow: 'hidden',
+                                                    cursor: 'pointer',
+                                                    border: '1px solid #334155'
+                                                }}>
+                                                    <input
+                                                        type="color"
+                                                        value={primaryColor}
+                                                        onChange={(e) => handleColorUpdate('header', e.target.value)}
+                                                        style={{
+                                                            position: 'absolute',
+                                                            top: '-50%',
+                                                            left: '-50%',
+                                                            width: '200%',
+                                                            height: '200%',
+                                                            cursor: 'pointer',
+                                                            opacity: 0
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Swap Icon */}
+                                        <div style={{
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            cursor: 'pointer',
-                                            flexShrink: 0,
-                                            marginTop: '2.2rem'
-                                        }}
-                                    >
-                                        <X size={14} color="#cbd5e1" />
+                                            marginTop: '1.5rem'
+                                        }}>
+                                            <div
+                                                onClick={() => handleColorPaletteClick(secondaryColor, primaryColor)}
+                                                style={{
+                                                    width: '40px',
+                                                    height: '40px',
+                                                    borderRadius: '10px',
+                                                    border: '1px solid #334155',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    cursor: 'pointer',
+                                                    background: '#020617'
+                                                }}
+                                            >
+                                                <RefreshCw size={18} color="#94a3b8" />
+                                            </div>
+                                        </div>
+
+                                        {/* Secondary Color */}
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
+                                                Secondary Color
+                                            </label>
+                                            <div style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                border: '1px solid #334155',
+                                                borderRadius: '10px',
+                                                padding: '0.5rem',
+                                                height: '44px',
+                                                background: '#020617'
+                                            }}>
+                                                <input
+                                                    type="text"
+                                                    value={secondaryColor}
+                                                    onChange={(e) => handleColorUpdate('light', e.target.value)}
+                                                    style={{
+                                                        border: 'none',
+                                                        outline: 'none',
+                                                        width: '100%',
+                                                        fontSize: '0.9rem',
+                                                        color: '#e5e7eb',
+                                                        fontWeight: '500',
+                                                        textTransform: 'uppercase',
+                                                        background: 'transparent'
+                                                    }}
+                                                />
+                                                <div style={{
+                                                    width: '28px',
+                                                    height: '28px',
+                                                    background: secondaryColor,
+                                                    borderRadius: '4px',
+                                                    flexShrink: 0,
+                                                    border: '1px solid #334155',
+                                                    position: 'relative',
+                                                    overflow: 'hidden',
+                                                    cursor: 'pointer'
+                                                }}>
+                                                    <input
+                                                        type="color"
+                                                        value={secondaryColor}
+                                                        onChange={(e) => handleColorUpdate('light', e.target.value)}
+                                                        style={{
+                                                            position: 'absolute',
+                                                            top: '-50%',
+                                                            left: '-50%',
+                                                            width: '200%',
+                                                            height: '200%',
+                                                            cursor: 'pointer',
+                                                            opacity: 0
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+
+                                {/* HEADER IMAGE SECTION */}
+                                <div style={{ marginBottom: '0' }}>
+                                    <div style={{ marginBottom: '1rem' }}>
+                                        <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#ffa305', textTransform: 'uppercase' }}>
+                                            HEADER IMAGE
+                                        </div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.25rem' }}>
+                                            Minimum width : 400px, 3:2 Ratio
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                        {/* Remove/Clear Option */}
+                                        <div
+                                            onClick={() => handleHeaderImageUpdate('')}
+                                            style={{
+                                                width: '80px',
+                                                height: '60px',
+                                                borderRadius: '4px',
+                                                border: '1px solid #334155',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                background: '#020617'
+                                            }}
+                                        >
+                                            <X size={24} color="#94a3b8" />
+                                        </div>
+
+                                        {/* Image Options */}
+                                        {headerOptions.map(img => (
+                                            <div
+                                                key={img.id}
+                                                onClick={() => handleHeaderImageUpdate(img.url)}
+                                                style={{
+                                                    width: '80px',
+                                                    height: '60px',
+                                                    borderRadius: '4px',
+                                                    overflow: 'hidden',
+                                                    border: design.headerImage?.url === img.url ? '2px solid #ffa305' : '1px solid #334155',
+                                                    cursor: 'pointer',
+                                                    position: 'relative'
+                                                }}
+                                            >
+                                                <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                {design.headerImage?.url === img.url && (
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        top: '-6px',
+                                                        right: '-6px',
+                                                        width: '20px',
+                                                        height: '20px',
+                                                        background: '#ffa305',
+                                                        borderRadius: '50%',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        border: '2px solid #fff',
+                                                        zIndex: 10
+                                                    }}>
+                                                        <Check size={12} color="#0f172a" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+
+                                        {/* Upload Option */}
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            style={{ display: 'none' }}
+                                            accept="image/*"
+                                            onChange={handleImageSelect}
+                                        />
+                                        <div
+                                            onMouseEnter={() => setIsHoveringUpload(true)}
+                                            onMouseLeave={() => setIsHoveringUpload(false)}
+                                            onClick={handleImageUpload}
+                                            style={{
+                                                width: '80px',
+                                                height: '60px',
+                                                borderRadius: '4px',
+                                                border: design.headerImage?.url && !headerOptions.some(opt => opt.url === design.headerImage?.url) ? '2px solid #ffa305' : '1px dashed #94a3b8',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                position: 'relative',
+                                                background: '#020617',
+                                                overflow: 'hidden'
+                                            }}
+                                        >
+                                            {design.headerImage?.url && !headerOptions.some(opt => opt.url === design.headerImage?.url) ? (
+                                                <>
+                                                    <img src={design.headerImage.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                    {isHoveringUpload && (
+                                                        <div
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setShowPreviewModal(true);
+                                                            }}
+                                                            style={{
+                                                                position: 'absolute',
+                                                                inset: 0,
+                                                                background: 'rgba(0,0,0,0.4)',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                color: '#fff',
+                                                                fontSize: '0.7rem',
+                                                                fontWeight: 'bold'
+                                                            }}
+                                                        >
+                                                            VIEW
+                                                        </div>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <UploadCloud size={20} color="#94a3b8" />
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
-                        ))}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
-                        {/* Add More Fields Button */}
-                        <button
-                            onClick={handleAddField}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                padding: '0.75rem 1.5rem',
-                                borderRadius: '4px',
-                                border: '1px solid #8b5cf6',
-                                background: '#fff',
-                                color: '#8b5cf6',
-                                fontWeight: 'bold',
-                                fontSize: '0.9rem',
-                                cursor: 'pointer',
-                                marginTop: '1rem'
-                            }}
-                        >
-                            <Plus size={18} />
-                            Add More Fields
-                        </button>
-
+            {/* ENTER INFORMATION ACCORDION */}
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
+                    onClick={() => setIsInfoOpen(!isInfoOpen)}
+                    style={{
+                        width: '100%',
+                        padding: '1rem 1.25rem',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
+                    }}
+                >
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>ENTER INFORMATION</div>
                     </div>
-                )}
-            </div>
+                    <motion.div animate={{ rotate: isInfoOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+
+                <AnimatePresence>
+                    {isInfoOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#0f172a' }}
+                        >
+                            <div style={{ padding: '1rem' }}>
+
+                                {/* General Error Message */}
+                                {typeof errors.infoFields === 'string' && (
+                                    <div style={{ color: '#ef4444', fontSize: '0.85rem', marginBottom: '1.5rem', fontWeight: 'bold' }}>
+                                        {errors.infoFields}
+                                    </div>
+                                )}
+
+                                {infoFields.map((field) => (
+                                    <div key={field.id} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.5rem', marginBottom: '2rem', alignItems: 'start' }}>
+                                        {/* Field Name Input */}
+                                        <div style={{ position: 'relative' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                FIELD NAME*
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={field.name}
+                                                onChange={(e) => handleFieldUpdate(field.id, 'name', e.target.value)}
+                                                placeholder="Name"
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '10px',
+                                                    border: `1px solid ${errors.infoFields && errors.infoFields[field.id]?.name ? '#ef4444' : '#334155'}`,
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    fontWeight: 'bold',
+                                                    background: '#020617',
+                                                    color: '#e5e7eb'
+                                                }}
+                                            />
+                                            {errors.infoFields && errors.infoFields[field.id]?.name && (
+                                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                                    {errors.infoFields[field.id].name}
+                                                </p>
+                                            )}
+                                        </div>
+
+                                        {/* Field Info Input & Delete */}
+                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'start' }}>
+                                            <div style={{ flex: 1, position: 'relative' }}>
+                                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                    FIELD INFORMATION*
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={field.value}
+                                                    onChange={(e) => handleFieldUpdate(field.id, 'value', e.target.value)}
+                                                    placeholder="Information"
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.75rem',
+                                                        borderRadius: '10px',
+                                                        border: `1px solid ${errors.infoFields && errors.infoFields[field.id]?.value ? '#ef4444' : '#334155'}`,
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        fontWeight: '500',
+                                                        background: '#020617',
+                                                        color: '#e5e7eb'
+                                                    }}
+                                                />
+                                                {errors.infoFields && errors.infoFields[field.id]?.value && (
+                                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                                        {errors.infoFields[field.id].value}
+                                                    </p>
+                                                )}
+                                            </div>
+                                            <div
+                                                onClick={() => handleRemoveField(field.id)}
+                                                style={{
+                                                    width: '24px',
+                                                    height: '24px',
+                                                    borderRadius: '50%',
+                                                    border: '1px solid #334155',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    cursor: 'pointer',
+                                                    flexShrink: 0,
+                                                    marginTop: '2.2rem',
+                                                    background: '#020617'
+                                                }}
+                                            >
+                                                <X size={14} color="#ef4444" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+
+                                {/* Add More Fields Button */}
+                                <button
+                                    onClick={handleAddField}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.5rem',
+                                        padding: '0.75rem 1.5rem',
+                                        borderRadius: '10px',
+                                        border: '1px solid #ffa305',
+                                        background: 'rgba(255, 163, 5, 0.1)',
+                                        color: '#ffa305',
+                                        fontWeight: 'bold',
+                                        fontSize: '0.9rem',
+                                        cursor: 'pointer',
+                                        marginTop: '1rem'
+                                    }}
+                                >
+                                    <Plus size={18} />
+                                    Add More Fields
+                                </button>
+
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* Image Upload Modal */}
             <ImageUploadModal

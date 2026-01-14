@@ -11,7 +11,7 @@ const AppStoreLanding = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`/api/qr/${shortId}`);
+                const res = await axios.get(`/api/qr/${shortId}`, { skipGlobalLoader: true });
                 setQrData(res.data);
             } catch (err) {
                 console.error(err);
@@ -22,7 +22,7 @@ const AppStoreLanding = () => {
         fetchData();
     }, [shortId]);
 
-    if (loading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Loading...</div>;
+    if (loading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#fff' }}></div>;
     if (!qrData) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>QR Code Not Found</div>;
 
     return (
