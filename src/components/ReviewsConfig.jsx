@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check } from 'lucide-react';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 import ImageUploadModal from './ImageUploadModal';
 
@@ -334,15 +335,15 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 width: '80px',
                                 height: '53px',
                                 borderRadius: '4px',
-                                border: '1px solid #e2e8f0',
+                                border: '1px solid #334155',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 cursor: 'pointer',
-                                background: '#fff'
+                                background: '#020617'
                             }}
                         >
-                            <X size={24} color="#cbd5e1" />
+                            <X size={24} color="#94a3b8" />
                         </div>
 
                         {/* Header Image Options */}
@@ -355,7 +356,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     height: '53px',
                                     borderRadius: '4px',
                                     overflow: 'hidden',
-                                    border: design.headerImage?.url === img.url ? '2px solid #ffa305' : '1px solid #e2e8f0',
+                                    border: design.headerImage?.url === img.url ? '2px solid #ffa305' : '1px solid #334155',
                                     cursor: 'pointer',
                                     position: 'relative'
                                 }}
@@ -386,7 +387,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             width: '80px',
                             height: '53px',
                             borderRadius: '4px',
-                            border: '1px dashed #cbd5e1',
+                            border: '1px dashed #334155',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -468,27 +469,40 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
             </ReusableDesignAccordion>
 
             {/* BASIC INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isBasicInfoOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
-                    </div>
-                    {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>BASIC INFORMATION</div>
+                    <motion.div animate={{ rotate: isBasicInfoOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isBasicInfoOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                <AnimatePresence>
+                    {isBasicInfoOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.2 }}
+                            style={{ padding: '1rem', background: '#0f172a', borderTop: '1px solid #334155' }}
+                        >
 
                         {/* ORGANIZATION NAME FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
@@ -506,10 +520,12 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: `1px solid ${errors.organizationName ? '#ef4444' : '#1e293b'}`,
+                                            borderRadius: '10px',
+                                            border: `1px solid ${errors.organizationName ? '#ef4444' : '#334155'}`,
                                             fontSize: '0.9rem',
-                                            outline: 'none'
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
                                         }}
                                     />
                                     {errors.organizationName && (
@@ -521,17 +537,18 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                 {/* Text Color */}
                                 <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
                                     <div style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.25rem',
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
+                                        padding: '0.5rem 0.6rem',
                                         height: '44px',
-                                        gap: '0.5rem'
+                                        gap: '0.5rem',
+                                        background: '#020617'
                                     }}>
                                         <input
                                             type="color"
@@ -541,7 +558,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 width: '30px',
                                                 height: '30px',
                                                 border: 'none',
-                                                background: 'none',
+                                                background: 'transparent',
                                                 padding: 0,
                                                 cursor: 'pointer'
                                             }}
@@ -555,10 +572,11 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 border: 'none',
                                                 outline: 'none',
                                                 fontSize: '0.85rem',
-                                                color: '#000',
+                                                color: '#e5e7eb',
                                                 fontWeight: '500',
                                                 textTransform: 'uppercase',
-                                                minWidth: 0
+                                                minWidth: 0,
+                                                background: 'transparent'
                                             }}
                                         />
                                     </div>
@@ -566,7 +584,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                 {/* Font */}
                                 <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
                                     <select
@@ -574,13 +592,14 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         onChange={(e) => handleBasicInfoUpdate('organizationNameFont', e.target.value)}
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
                                             height: '44px'
                                         }}
                                     >
@@ -609,10 +628,12 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: `1px solid ${errors.title ? '#ef4444' : '#1e293b'}`,
+                                            borderRadius: '10px',
+                                            border: `1px solid ${errors.title ? '#ef4444' : '#334155'}`,
                                             fontSize: '0.9rem',
-                                            outline: 'none'
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
                                         }}
                                     />
                                     {errors.title && (
@@ -624,17 +645,18 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                 {/* Text Color */}
                                 <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
                                     <div style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.25rem',
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
+                                        padding: '0.5rem 0.6rem',
                                         height: '44px',
-                                        gap: '0.5rem'
+                                        gap: '0.5rem',
+                                        background: '#020617'
                                     }}>
                                         <input
                                             type="color"
@@ -644,7 +666,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 width: '30px',
                                                 height: '30px',
                                                 border: 'none',
-                                                background: 'none',
+                                                background: 'transparent',
                                                 padding: 0,
                                                 cursor: 'pointer'
                                             }}
@@ -658,10 +680,11 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 border: 'none',
                                                 outline: 'none',
                                                 fontSize: '0.85rem',
-                                                color: '#000',
+                                                color: '#e5e7eb',
                                                 fontWeight: '500',
                                                 textTransform: 'uppercase',
-                                                minWidth: 0
+                                                minWidth: 0,
+                                                background: 'transparent'
                                             }}
                                         />
                                     </div>
@@ -669,7 +692,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                 {/* Font */}
                                 <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
                                     <select
@@ -677,13 +700,14 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         onChange={(e) => handleBasicInfoUpdate('titleFont', e.target.value)}
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
                                             height: '44px'
                                         }}
                                     >
@@ -709,12 +733,14 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    borderRadius: '10px',
+                                    border: '1px solid #334155',
                                     fontSize: '0.9rem',
                                     outline: 'none',
                                     resize: 'vertical',
-                                    fontFamily: 'inherit'
+                                    fontFamily: 'inherit',
+                                    background: '#020617',
+                                    color: '#e5e7eb'
                                 }}
                             />
                         </div>
@@ -732,10 +758,12 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: `1px solid ${errors.website ? '#ef4444' : '#1e293b'}`,
+                                    borderRadius: '10px',
+                                    border: `1px solid ${errors.website ? '#ef4444' : '#334155'}`,
                                     fontSize: '0.9rem',
-                                    outline: 'none'
+                                    outline: 'none',
+                                    background: '#020617',
+                                    color: '#e5e7eb'
                                 }}
                             />
                             {errors.website && (
@@ -745,374 +773,413 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             )}
                         </div>
 
-                    </div>
-                )}
-            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* CATEGORY ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsCategoryOpen(!isCategoryOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isCategoryOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>CATEGORY</div>
-                    </div>
-                    {isCategoryOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>CATEGORY</div>
+                    <motion.div animate={{ rotate: isCategoryOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isCategoryOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                <AnimatePresence>
+                    {isCategoryOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#0f172a' }}
+                        >
+                            <div style={{ padding: '1rem' }}>
 
-                        {/* Categories List */}
-                        {categories.map((category, categoryIndex) => (
-                            <div key={category.id} style={{ marginBottom: '2rem', position: 'relative' }}>
+                                {/* Categories List */}
+                                {categories.map((category, categoryIndex) => (
+                                    <div key={category.id} style={{ marginBottom: '2rem', position: 'relative' }}>
 
-                                {/* Category Name */}
-                                <div style={{ marginBottom: '1rem', position: 'relative' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        CATEGORY NAME*
-                                    </label>
-                                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                                        <input
-                                            type="text"
-                                            value={category.name || ''}
-                                            onChange={(e) => handleCategoryUpdate(category.id, 'name', e.target.value)}
-                                            placeholder="Food"
-                                            style={{
-                                                flex: 1,
-                                                padding: '0.75rem',
-                                                borderRadius: '4px',
-                                                border: `1px solid ${errors[`category_${category.id}`] ? '#ef4444' : '#1e293b'}`,
-                                                fontSize: '0.9rem',
-                                                outline: 'none'
-                                            }}
-                                        />
-                                        {errors[`category_${category.id}`] && (
-                                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', width: '100%' }}>
-                                                {errors[`category_${category.id}`]}
-                                            </p>
-                                        )}
-                                        {/* Delete Category Icon */}
-                                        <div
-                                            onClick={() => handleDeleteCategory(category.id)}
-                                            style={{
-                                                width: '32px',
-                                                height: '32px',
-                                                borderRadius: '50%',
-                                                background: '#fee2e2',
-                                                color: '#dc2626',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                cursor: 'pointer',
-                                                transition: 'all 0.2s',
-                                                flexShrink: 0
-                                            }}
-                                            onMouseOver={(e) => e.currentTarget.style.background = '#fecaca'}
-                                            onMouseOut={(e) => e.currentTarget.style.background = '#fee2e2'}
-                                        >
-                                            <X size={18} />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div style={{ marginBottom: '1rem' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        SUBCATEGORIES:
-                                    </label>
-                                    {errors[`category_${category.id}_subcategories`] && (
-                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginBottom: '0.5rem' }}>
-                                            {errors[`category_${category.id}_subcategories`]}
-                                        </p>
-                                    )}
-
-                                    {category.subcategories && category.subcategories.length > 0 && (
-                                        category.subcategories.map((subcategory, subIndex) => (
-                                            <div key={subIndex} style={{ marginBottom: '0.75rem' }}>
-                                                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                                                    <input
-                                                        type="text"
-                                                        value={subcategory || ''}
-                                                        onChange={(e) => handleSubcategoryUpdate(category.id, subIndex, e.target.value)}
-                                                        placeholder="Staff"
-                                                        style={{
-                                                            flex: 1,
-                                                            padding: '0.75rem',
-                                                            borderRadius: '4px',
-                                                            border: `1px solid ${errors[`subcategory_${category.id}_${subIndex}`] ? '#ef4444' : '#1e293b'}`,
-                                                            fontSize: '0.9rem',
-                                                            outline: 'none'
-                                                        }}
-                                                    />
-                                                    <div
-                                                        onClick={() => handleRemoveSubcategory(category.id, subIndex)}
-                                                        style={{
-                                                            width: '28px',
-                                                            height: '28px',
-                                                            borderRadius: '50%',
-                                                            border: '1px solid #e2e8f0',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            cursor: 'pointer',
-                                                            flexShrink: 0
-                                                        }}>
-                                                        <X size={14} color="#94a3b8" />
-                                                    </div>
-                                                </div>
-                                                {errors[`subcategory_${category.id}_${subIndex}`] && (
-                                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
-                                                        {errors[`subcategory_${category.id}_${subIndex}`]}
+                                        {/* Category Name */}
+                                        <div style={{ marginBottom: '1rem', position: 'relative' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                CATEGORY NAME*
+                                            </label>
+                                            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                                <input
+                                                    type="text"
+                                                    value={category.name || ''}
+                                                    onChange={(e) => handleCategoryUpdate(category.id, 'name', e.target.value)}
+                                                    placeholder="Food"
+                                                    style={{
+                                                        flex: 1,
+                                                        padding: '0.75rem',
+                                                        borderRadius: '10px',
+                                                        border: `1px solid ${errors[`category_${category.id}`] ? '#ef4444' : '#334155'}`,
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        background: '#020617',
+                                                        color: '#e5e7eb'
+                                                    }}
+                                                />
+                                                {errors[`category_${category.id}`] && (
+                                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', width: '100%' }}>
+                                                        {errors[`category_${category.id}`]}
                                                     </p>
                                                 )}
+                                                {/* Delete Category Icon */}
+                                                <div
+                                                    onClick={() => handleDeleteCategory(category.id)}
+                                                    style={{
+                                                        width: '32px',
+                                                        height: '32px',
+                                                        borderRadius: '999px',
+                                                        border: '1px solid #334155',
+                                                        background: '#020617',
+                                                        color: '#94a3b8',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.2s',
+                                                        flexShrink: 0
+                                                    }}
+                                                >
+                                                    <X size={18} />
+                                                </div>
                                             </div>
-                                        ))
-                                    )}
-                                </div>
+                                        </div>
 
-                                {/* Add Subcategory Button */}
-                                <div style={{ textAlign: 'right', marginBottom: categoryIndex < categories.length - 1 ? '2rem' : '0' }}>
+                                        <div style={{ marginBottom: '1rem' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                SUBCATEGORIES:
+                                            </label>
+                                            {errors[`category_${category.id}_subcategories`] && (
+                                                <p style={{ color: '#ef4444', fontSize: '0.75rem', marginBottom: '0.5rem' }}>
+                                                    {errors[`category_${category.id}_subcategories`]}
+                                                </p>
+                                            )}
+
+                                            {category.subcategories && category.subcategories.length > 0 && (
+                                                category.subcategories.map((subcategory, subIndex) => (
+                                                    <div key={subIndex} style={{ marginBottom: '0.75rem' }}>
+                                                        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                                            <input
+                                                                type="text"
+                                                                value={subcategory || ''}
+                                                                onChange={(e) => handleSubcategoryUpdate(category.id, subIndex, e.target.value)}
+                                                                placeholder="Staff"
+                                                                style={{
+                                                                    flex: 1,
+                                                                    padding: '0.75rem',
+                                                                    borderRadius: '10px',
+                                                                    border: `1px solid ${errors[`subcategory_${category.id}_${subIndex}`] ? '#ef4444' : '#334155'}`,
+                                                                    fontSize: '0.9rem',
+                                                                    outline: 'none',
+                                                                    background: '#020617',
+                                                                    color: '#e5e7eb'
+                                                                }}
+                                                            />
+                                                            <div
+                                                                onClick={() => handleRemoveSubcategory(category.id, subIndex)}
+                                                                style={{
+                                                                    width: '28px',
+                                                                    height: '28px',
+                                                                    borderRadius: '999px',
+                                                                    border: '1px solid #334155',
+                                                                    background: '#020617',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center',
+                                                                    cursor: 'pointer',
+                                                                    flexShrink: 0,
+                                                                    color: '#94a3b8'
+                                                                }}>
+                                                                <X size={14} color="#94a3b8" />
+                                                            </div>
+                                                        </div>
+                                                        {errors[`subcategory_${category.id}_${subIndex}`] && (
+                                                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                                                {errors[`subcategory_${category.id}_${subIndex}`]}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
+
+                                        {/* Add Subcategory Button */}
+                                        <div style={{ textAlign: 'right', marginBottom: categoryIndex < categories.length - 1 ? '2rem' : '0' }}>
+                                            <button
+                                                onClick={() => handleAddSubcategory(category.id)}
+                                                style={{
+                                                    background: 'transparent',
+                                                    border: '1px solid #ffa305',
+                                                    color: '#ffa305',
+                                                    padding: '0.5rem 1rem',
+                                                    borderRadius: '999px',
+                                                    cursor: 'pointer',
+                                                    fontSize: '0.85rem',
+                                                    fontWeight: '700',
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.5rem'
+                                                }}
+                                            >
+                                                + Add Subcategory
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                ))}
+
+                                {/* Add Category Button */}
+                                <div style={{ marginTop: '1.5rem' }}>
                                     <button
-                                        onClick={() => handleAddSubcategory(category.id)}
+                                        onClick={handleAddCategory}
                                         style={{
                                             background: 'transparent',
                                             border: '1px solid #ffa305',
                                             color: '#ffa305',
                                             padding: '0.5rem 1rem',
-                                            borderRadius: '4px',
+                                            borderRadius: '999px',
                                             cursor: 'pointer',
                                             fontSize: '0.85rem',
-                                            fontWeight: '500',
+                                            fontWeight: '700',
                                             display: 'inline-flex',
                                             alignItems: 'center',
                                             gap: '0.5rem'
                                         }}
                                     >
-                                        + Add Subcategory
+                                        + Add Category
                                     </button>
                                 </div>
 
                             </div>
-                        ))}
-
-                        {/* Add Category Button */}
-                        <div style={{ marginTop: '1.5rem' }}>
-                            <button
-                                onClick={handleAddCategory}
-                                style={{
-                                    background: 'transparent',
-                                    border: '1px solid #1e293b',
-                                    color: '#1e293b',
-                                    padding: '0.5rem 1rem',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
-                                    fontSize: '0.85rem',
-                                    fontWeight: '500',
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '0.5rem'
-                                }}
-                            >
-                                + Add Category
-                            </button>
-                        </div>
-
-                    </div>
-                )}
-            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* SOCIAL MEDIA CHANNELS ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsSocialOpen(!isSocialOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isSocialOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
-                    </div>
-                    {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>SOCIAL MEDIA CHANNELS</div>
+                    <motion.div animate={{ rotate: isSocialOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isSocialOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
-                        {errors.socialLinks && (
-                            <div style={{
-                                background: '#fef2f2',
-                                border: '1px solid #fee2e2',
-                                color: '#dc2626',
-                                padding: '0.75rem',
-                                borderRadius: '6px',
-                                marginBottom: '1.5rem',
-                                fontSize: '0.85rem',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem'
-                            }}>
-                                <span>⚠️</span> {errors.socialLinks}
-                            </div>
-                        )}
-
-                        {/* Social Media Input Fields */}
-                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
-                            {Object.keys(social).map((platformId) => {
-                                const platform = socialIconsMap.find(p => p.id === platformId);
-                                if (!platform) return null;
-                                return (
-                                    <div key={platformId} style={{ flex: '1 1 200px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                            {platform.name}*
-                                        </label>
-                                        <div style={{ position: 'relative', display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                            <div style={{ position: 'relative', flex: 1 }}>
-                                                <div style={{
-                                                    position: 'absolute',
-                                                    left: '12px',
-                                                    top: '50%',
-                                                    transform: 'translateY(-50%)',
-                                                    width: '24px',
-                                                    height: '24px',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    zIndex: 1
-                                                }}>
-                                                    <img src={platform.icon} alt={platform.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                                                </div>
-                                                <input
-                                                    type="text"
-                                                    value={social[platformId] || ''}
-                                                    onChange={(e) => handleSocialUpdate(platformId, e.target.value)}
-                                                    placeholder="https://"
-                                                    style={{
-                                                        width: '100%',
-                                                        padding: '0.75rem 0.75rem 0.75rem 3rem',
-                                                        borderRadius: '4px',
-                                                        border: `1px solid ${errors[platformId] ? '#ef4444' : '#1e293b'}`,
-                                                        fontSize: '0.9rem',
-                                                        outline: 'none'
-                                                    }}
-                                                />
-                                            </div>
-                                            <div
-                                                onClick={() => handleToggleSocial(platformId)}
-                                                style={{
-                                                    width: '32px',
-                                                    height: '32px',
-                                                    borderRadius: '50%',
-                                                    background: '#fee2e2',
-                                                    color: '#dc2626',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    cursor: 'pointer',
-                                                    flexShrink: 0
-                                                }}
-                                            >
-                                                <X size={16} />
-                                            </div>
-                                        </div>
-                                        {errors[platformId] && (
-                                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
-                                                {errors[platformId]}
-                                            </p>
-                                        )}
+                <AnimatePresence>
+                    {isSocialOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#0f172a' }}
+                        >
+                            <div style={{ padding: '1rem' }}>
+                                {errors.socialLinks && (
+                                    <div style={{
+                                        background: 'rgba(239, 68, 68, 0.12)',
+                                        border: '1px solid #ef4444',
+                                        color: '#ef4444',
+                                        padding: '0.75rem',
+                                        borderRadius: '6px',
+                                        marginBottom: '1.5rem',
+                                        fontSize: '0.85rem',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.5rem'
+                                    }}>
+                                        <span>⚠️</span> {errors.socialLinks}
                                     </div>
-                                );
-                            })}
-                        </div>
+                                )}
 
-                        {/* ADD MORE Section */}
-                        <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '1.5rem' }}>
-                            <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                ADD MORE
-                            </div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1.25rem' }}>
-                                Click on the icon to add a social media profile.
-                            </div>
-
-                            {/* Social Media Icons Grid */}
-                            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                                {socialIconsMap.map((platform) => {
-                                    const isSelected = social[platform.id] !== undefined;
-                                    return (
-                                        <div
-                                            key={platform.id}
-                                            onClick={() => handleToggleSocial(platform.id)}
-                                            style={{
-                                                width: '50px',
-                                                height: '50px',
-                                                background: '#fff',
-                                                borderRadius: '12px',
-                                                border: `2px solid ${isSelected ? '#ffa305' : '#f1f5f9'}`,
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                cursor: 'pointer',
-                                                position: 'relative',
-                                                transition: 'all 0.2s',
-                                                boxShadow: isSelected ? '0 4px 12px rgba(255, 163, 5, 0.15)' : 'none'
-                                            }}
-                                            onMouseOver={(e) => {
-                                                if (!isSelected) e.currentTarget.style.borderColor = '#e2e8f0';
-                                            }}
-                                            onMouseOut={(e) => {
-                                                if (!isSelected) e.currentTarget.style.borderColor = '#f1f5f9';
-                                            }}
-                                        >
-                                            <img
-                                                src={platform.icon}
-                                                alt={platform.name}
-                                                style={{
-                                                    width: '28px',
-                                                    height: '28px',
-                                                    objectFit: 'contain',
-                                                    filter: isSelected ? 'none' : 'grayscale(100%) opacity(0.5)'
-                                                }}
-                                            />
-                                            {isSelected && (
-                                                <div style={{
-                                                    position: 'absolute',
-                                                    top: '-6px',
-                                                    right: '-6px',
-                                                    width: '18px',
-                                                    height: '18px',
-                                                    background: '#ffa305',
-                                                    borderRadius: '50%',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    color: '#fff',
-                                                    border: '2px solid #fff'
-                                                }}>
-                                                    <Check size={10} strokeWidth={4} />
+                                {/* Social Media Input Fields */}
+                                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+                                    {Object.keys(social).map((platformId) => {
+                                        const platform = socialIconsMap.find(p => p.id === platformId);
+                                        if (!platform) return null;
+                                        return (
+                                            <div key={platformId} style={{ flex: '1 1 200px' }}>
+                                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                                    {platform.name}*
+                                                </label>
+                                                <div style={{ position: 'relative', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                    <div style={{ position: 'relative', flex: 1 }}>
+                                                        <div style={{
+                                                            position: 'absolute',
+                                                            left: '12px',
+                                                            top: '50%',
+                                                            transform: 'translateY(-50%)',
+                                                            width: '24px',
+                                                            height: '24px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            zIndex: 1
+                                                        }}>
+                                                            <img src={platform.icon} alt={platform.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                                        </div>
+                                                        <input
+                                                            type="text"
+                                                            value={social[platformId] || ''}
+                                                            onChange={(e) => handleSocialUpdate(platformId, e.target.value)}
+                                                            placeholder="https://"
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.75rem 0.75rem 0.75rem 3rem',
+                                                                borderRadius: '10px',
+                                                                border: `1px solid ${errors[platformId] ? '#ef4444' : '#334155'}`,
+                                                                fontSize: '0.9rem',
+                                                                outline: 'none',
+                                                                background: '#020617',
+                                                                color: '#e5e7eb'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div
+                                                        onClick={() => handleToggleSocial(platformId)}
+                                                        style={{
+                                                            width: '32px',
+                                                            height: '32px',
+                                                            borderRadius: '999px',
+                                                            border: '1px solid #334155',
+                                                            background: '#020617',
+                                                            color: '#94a3b8',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            cursor: 'pointer',
+                                                            flexShrink: 0
+                                                        }}
+                                                    >
+                                                        <X size={16} />
+                                                    </div>
                                                 </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
+                                                {errors[platformId] && (
+                                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                                        {errors[platformId]}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
 
-                    </div>
-                )}
-            </div>
+                                {/* ADD MORE Section */}
+                                <div style={{ borderTop: '1px solid #334155', paddingTop: '1.5rem' }}>
+                                    <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                        ADD MORE
+                                    </div>
+                                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1.25rem' }}>
+                                        Click on the icon to add a social media profile.
+                                    </div>
+
+                                    {/* Social Media Icons Grid */}
+                                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                                        {socialIconsMap.map((platform) => {
+                                            const isSelected = social[platform.id] !== undefined;
+                                            return (
+                                                <div
+                                                    key={platform.id}
+                                                    onClick={() => handleToggleSocial(platform.id)}
+                                                    style={{
+                                                        width: '50px',
+                                                        height: '50px',
+                                                        background: '#020617',
+                                                        borderRadius: '12px',
+                                                        border: `2px solid ${isSelected ? '#ffa305' : '#334155'}`,
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        cursor: 'pointer',
+                                                        position: 'relative',
+                                                        transition: 'all 0.2s'
+                                                    }}
+                                                    onMouseOver={(e) => {
+                                                        if (!isSelected) e.currentTarget.style.borderColor = '#475569';
+                                                    }}
+                                                    onMouseOut={(e) => {
+                                                        if (!isSelected) e.currentTarget.style.borderColor = '#334155';
+                                                    }}
+                                                >
+                                                    <img
+                                                        src={platform.icon}
+                                                        alt={platform.name}
+                                                        style={{
+                                                            width: '28px',
+                                                            height: '28px',
+                                                            objectFit: 'contain',
+                                                            filter: isSelected ? 'none' : 'grayscale(100%) opacity(0.5)'
+                                                        }}
+                                                    />
+                                                    {isSelected && (
+                                                        <div style={{
+                                                            position: 'absolute',
+                                                            top: '-6px',
+                                                            right: '-6px',
+                                                            width: '18px',
+                                                            height: '18px',
+                                                            background: '#ffa305',
+                                                            borderRadius: '50%',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            color: '#fff',
+                                                            border: '2px solid #fff'
+                                                        }}>
+                                                            <Check size={10} strokeWidth={4} />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* Image Upload Modal */}
             <ImageUploadModal
@@ -1170,8 +1237,8 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 position: 'absolute',
                                 top: '-40px',
                                 right: '0',
-                                background: '#fff',
-                                border: 'none',
+                                background: '#020617',
+                                border: '1px solid #334155',
                                 borderRadius: '50%',
                                 width: '32px',
                                 height: '32px',
@@ -1182,7 +1249,7 @@ const ReviewsConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
                             }}
                         >
-                            <X size={20} color="#000" />
+                            <X size={20} color="#e5e7eb" />
                         </button>
                     </div>
                 </div>

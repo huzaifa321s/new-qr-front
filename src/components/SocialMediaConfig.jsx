@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Facebook, Instagram, Twitter, Linkedin, Youtube, Globe, MessageCircle, Music, MessageSquare, Twitch, Send, Ghost, Headphones, Pin, Bot } from 'lucide-react';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 import ImageUploadModal from './ImageUploadModal';
 
@@ -259,15 +260,15 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 width: '80px',
                                 height: '53px',
                                 borderRadius: '4px',
-                                border: '1px solid #e2e8f0',
+                                border: '1px solid #334155',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 cursor: 'pointer',
-                                background: '#fff'
+                                background: '#020617'
                             }}
                         >
-                            <X size={24} color="#cbd5e1" />
+                            <X size={24} color="#94a3b8" />
                         </div>
 
                         {/* Background Image Options */}
@@ -280,7 +281,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     height: '53px',
                                     borderRadius: '4px',
                                     overflow: 'hidden',
-                                    border: design.backgroundImage?.url === img.url ? '2px solid #ffa305' : '1px solid #e2e8f0',
+                                    border: design.backgroundImage?.url === img.url ? '2px solid #ffa305' : '1px solid #334155',
                                     cursor: 'pointer',
                                     position: 'relative'
                                 }}
@@ -311,7 +312,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             width: '80px',
                             height: '53px',
                             borderRadius: '4px',
-                            border: '1px dashed #cbd5e1',
+                            border: '1px dashed #334155',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -395,27 +396,42 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
             </ReusableDesignAccordion>
 
             {/* BASIC INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isBasicInfoOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
                     </div>
-                    {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <motion.div animate={{ rotate: isBasicInfoOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isBasicInfoOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                <AnimatePresence>
+                    {isBasicInfoOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.2 }}
+                            style={{ padding: '1rem', background: '#0f172a', borderTop: '1px solid #334155' }}
+                        >
 
                         {/* HEADLINE FIELD */}
                         <div style={{ marginBottom: '2.5rem' }}>
@@ -433,10 +449,12 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: `1px solid ${errors.headline ? '#ef4444' : '#1e293b'}`,
+                                            borderRadius: '10px',
+                                            border: `1px solid ${errors.headline ? '#ef4444' : '#334155'}`,
                                             fontSize: '0.9rem',
-                                            outline: 'none'
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
                                         }}
                                     />
                                     {errors.headline && (
@@ -449,17 +467,17 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                     {/* Text Color */}
                                     <div style={{ flex: '1 1 150px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.4rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.4rem' }}>
                                             Text Color
                                         </label>
                                         <div style={{
                                             display: 'flex',
                                             alignItems: 'center',
-                                            border: '1px solid #1e293b',
-                                            borderRadius: '4px',
+                                            border: '1px solid #334155',
+                                            borderRadius: '10px',
                                             padding: '0.5rem',
                                             height: '44px',
-                                            background: '#fff'
+                                            background: '#020617'
                                         }}>
                                             <input
                                                 type="text"
@@ -470,18 +488,19 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                     outline: 'none',
                                                     width: '100%',
                                                     fontSize: '0.85rem',
-                                                    color: '#000',
+                                                    color: '#e5e7eb',
                                                     fontWeight: '500',
-                                                    textTransform: 'uppercase'
+                                                    textTransform: 'uppercase',
+                                                    background: 'transparent'
                                                 }}
                                             />
                                             <div style={{
                                                 width: '24px',
                                                 height: '24px',
                                                 background: basicInfo.headlineColor || '#FFFFFF',
-                                                borderRadius: '2px',
+                                                borderRadius: '4px',
                                                 flexShrink: 0,
-                                                border: '1px solid #e2e8f0',
+                                                border: '1px solid #334155',
                                                 position: 'relative',
                                                 overflow: 'hidden',
                                                 cursor: 'pointer'
@@ -508,7 +527,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                     {/* Font */}
                                     <div style={{ flex: '1 1 150px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.4rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.4rem' }}>
                                             Font
                                         </label>
                                         <select
@@ -518,12 +537,13 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 width: '100%',
                                                 height: '44px',
                                                 padding: '0 0.75rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
+                                                borderRadius: '10px',
+                                                border: '1px solid #334155',
                                                 fontSize: '0.9rem',
                                                 outline: 'none',
                                                 cursor: 'pointer',
-                                                background: '#fff'
+                                                background: '#020617',
+                                                color: '#e5e7eb'
                                             }}
                                         >
                                             <option value="Lato">Lato</option>
@@ -549,42 +569,61 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    borderRadius: '10px',
+                                    border: '1px solid #334155',
                                     fontSize: '0.9rem',
                                     outline: 'none',
                                     resize: 'vertical',
-                                    fontFamily: 'inherit'
+                                    fontFamily: 'inherit',
+                                    background: '#020617',
+                                    color: '#e5e7eb'
                                 }}
                             />
                         </div>
 
-                    </div>
-                )}
-            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* SOCIAL MEDIA CHANNELS ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsSocialOpen(!isSocialOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         cursor: 'pointer',
-                        borderBottom: isSocialOpen ? '1px solid #e2e8f0' : 'none'
+                        background: 'transparent',
+                        border: 'none'
                     }}
                 >
-                    <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
                     </div>
-                    {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <motion.div animate={{ rotate: isSocialOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isSocialOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                <AnimatePresence>
+                    {isSocialOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#0f172a' }}
+                        >
+                            <div style={{ padding: '1rem' }}>
 
                         {/* Dynamic Render of Active Platforms */}
                         {platformConfig.filter(p => social[p.urlKey] !== undefined).map(platform => {
@@ -600,7 +639,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                             {/* URL Input */}
                                             <div style={{ flex: '1 1 200px' }}>
-                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.4rem' }}>
+                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.4rem' }}>
                                                     URL
                                                 </label>
                                                 <div style={{ position: 'relative' }}>
@@ -627,10 +666,12 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                         style={{
                                                             width: '100%',
                                                             padding: '0.75rem 0.75rem 0.75rem 3rem',
-                                                            borderRadius: '4px',
-                                                            border: errors[platform.urlKey] ? '1px solid #ef4444' : '1px solid #e2e8f0',
+                                                            borderRadius: '10px',
+                                                            border: errors[platform.urlKey] ? '1px solid #ef4444' : '1px solid #334155',
                                                             fontSize: '0.9rem',
-                                                            outline: 'none'
+                                                            outline: 'none',
+                                                            background: '#020617',
+                                                            color: '#e5e7eb'
                                                         }}
                                                     />
                                                 </div>
@@ -643,7 +684,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                             {/* Text Input */}
                                             <div style={{ flex: '1 1 120px' }}>
-                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.4rem' }}>
+                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.4rem' }}>
                                                     Text
                                                 </label>
                                                 <div style={{ position: 'relative' }}>
@@ -656,10 +697,12 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                             width: '100%',
                                                             padding: '0.75rem',
                                                             paddingRight: '3rem',
-                                                            borderRadius: '4px',
-                                                            border: '1px solid #1e293b',
+                                                            borderRadius: '10px',
+                                                            border: '1px solid #334155',
                                                             fontSize: '0.9rem',
-                                                            outline: 'none'
+                                                            outline: 'none',
+                                                            background: '#020617',
+                                                            color: '#e5e7eb'
                                                         }}
                                                     />
                                                     <div
@@ -684,110 +727,128 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             );
                         })}
 
-                        {/* ADD MORE Section */}
-                        <div style={{ marginTop: '2.5rem' }}>
-                            <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                ADD MORE
-                            </div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
-                                Click on the icon to add a social media profile.
-                            </div>
-                            {errors.general && (
-                                <div style={{
-                                    background: '#fee2e2',
-                                    color: '#ef4444',
-                                    padding: '0.75rem',
-                                    borderRadius: '6px',
-                                    fontSize: '0.85rem',
-                                    marginBottom: '1.5rem',
-                                    border: '1px solid #fecaca',
-                                    fontWeight: '500',
-                                    textAlign: 'center'
-                                }}>
-                                    {errors.general}
-                                </div>
-                            )}
-
-                            {/* Social Media Icons Grid */}
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(48px, 1fr))', gap: '0.75rem' }}>
-                                {platformConfig.map(platform => {
-                                    const isActive = social[platform.urlKey] !== undefined;
-                                    return (
-                                        <div
-                                            key={platform.id}
-                                            onClick={() => handleToggleSocial(platform.urlKey, platform.textKey, platform.defaultText || platform.name)}
-                                            style={{
-                                                width: '48px',
-                                                height: '48px',
-                                                background: 'transparent',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                cursor: 'pointer',
-                                                position: 'relative',
-                                                transition: 'all 0.2s',
-                                                transform: isActive ? 'scale(0.95)' : 'scale(1)'
-                                            }}
-                                            title={isActive ? `Remove ${platform.name}` : `Add ${platform.name}`}
-                                        >
-                                            <img
-                                                src={platform.icon}
-                                                alt={platform.name}
-                                                style={{
-                                                    width: '24px',
-                                                    height: '24px',
-                                                    objectFit: 'contain'
-                                                }}
-                                            />
-                                            {isActive && (
-                                                <div style={{
-                                                    position: 'absolute',
-                                                    top: '-5px',
-                                                    right: '-5px',
-                                                    width: '20px',
-                                                    height: '20px',
-                                                    background: '#10b981',
-                                                    borderRadius: '50%',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    border: '2px solid #fff'
-                                                }}>
-                                                    <Check size={12} color="#fff" strokeWidth={3} />
-                                                </div>
-                                            )}
+                                {/* ADD MORE Section */}
+                                <div style={{ marginTop: '2.5rem' }}>
+                                    <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                        ADD MORE
+                                    </div>
+                                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                                        Click on the icon to add a social media profile.
+                                    </div>
+                                    {errors.general && (
+                                        <div style={{
+                                            background: 'rgba(239, 68, 68, 0.12)',
+                                            color: '#ef4444',
+                                            padding: '0.75rem',
+                                            borderRadius: '6px',
+                                            fontSize: '0.85rem',
+                                            marginBottom: '1.5rem',
+                                            border: '1px solid #fecaca',
+                                            fontWeight: '500',
+                                            textAlign: 'center'
+                                        }}>
+                                            {errors.general}
                                         </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
+                                    )}
 
-                    </div>
-                )}
-            </div>
+                                    {/* Social Media Icons Grid */}
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(48px, 1fr))', gap: '0.75rem' }}>
+                                        {platformConfig.map(platform => {
+                                            const isActive = social[platform.urlKey] !== undefined;
+                                            return (
+                                                <div
+                                                    key={platform.id}
+                                                    onClick={() => handleToggleSocial(platform.urlKey, platform.textKey, platform.defaultText || platform.name)}
+                                                    style={{
+                                                        width: '48px',
+                                                        height: '48px',
+                                                        background: 'transparent',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        cursor: 'pointer',
+                                                        position: 'relative',
+                                                        transition: 'all 0.2s',
+                                                        transform: isActive ? 'scale(0.95)' : 'scale(1)'
+                                                    }}
+                                                    title={isActive ? `Remove ${platform.name}` : `Add ${platform.name}`}
+                                                >
+                                                    <img
+                                                        src={platform.icon}
+                                                        alt={platform.name}
+                                                        style={{
+                                                            width: '24px',
+                                                            height: '24px',
+                                                            objectFit: 'contain'
+                                                        }}
+                                                    />
+                                                    {isActive && (
+                                                        <div style={{
+                                                            position: 'absolute',
+                                                            top: '-5px',
+                                                            right: '-5px',
+                                                            width: '20px',
+                                                            height: '20px',
+                                                            background: '#10b981',
+                                                            borderRadius: '50%',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            border: '2px solid #fff'
+                                                        }}>
+                                                            <Check size={12} color="#fff" strokeWidth={3} />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* SHARE OPTION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsShareOptionOpen(!isShareOptionOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         cursor: 'pointer',
-                        borderBottom: isShareOptionOpen ? '1px solid #e2e8f0' : 'none'
+                        background: 'transparent',
+                        border: 'none'
                     }}
                 >
-                    <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SHARE OPTION</div>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>SHARE OPTION</div>
                     </div>
-                    {isShareOptionOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <motion.div animate={{ rotate: isShareOptionOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isShareOptionOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                <AnimatePresence>
+                    {isShareOptionOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#0f172a' }}
+                        >
+                            <div style={{ padding: '1rem' }}>
 
                         {/* SHARE MESSAGE FIELD */}
                         <div style={{ marginBottom: '0' }}>
@@ -810,11 +871,12 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         width: '100%',
                                         padding: '0.75rem',
                                         paddingRight: '3.5rem',
-                                        borderRadius: '4px',
-                                        border: (shareOption.shareMessage || '').length >= 50 ? '1px solid #ef4444' : '1px solid #1e293b',
+                                        borderRadius: '10px',
+                                        border: (shareOption.shareMessage || '').length >= 50 ? '1px solid #ef4444' : '1px solid #334155',
                                         fontSize: '0.9rem',
                                         outline: 'none',
-                                        color: '#000'
+                                        color: '#e5e7eb',
+                                        background: '#020617'
                                     }}
                                 />
                                 <div style={{
@@ -823,7 +885,7 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     top: '50%',
                                     transform: 'translateY(-50%)',
                                     fontSize: '0.75rem',
-                                    color: (shareOption.shareMessage || '').length >= 50 ? '#ef4444' : '#64748b',
+                                    color: (shareOption.shareMessage || '').length >= 50 ? '#ef4444' : '#94a3b8',
                                     fontWeight: '500'
                                 }}>
                                     {(shareOption.shareMessage || '').length}/50
@@ -834,14 +896,15 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     Max characters length is 50
                                 </div>
                             )}
-                            <div style={{ fontSize: '0.7rem', color: '#64748b', marginTop: '0.5rem' }}>
-                                This message will be shared along with the mobile preview link.
-                            </div>
+                                <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '0.5rem' }}>
+                                    This message will be shared along with the mobile preview link.
+                                </div>
                         </div>
-
                     </div>
+                    </motion.div>
                 )}
-            </div>
+                </AnimatePresence>
+            </motion.div>
 
             {/* Image Upload Modal */}
             <ImageUploadModal
@@ -863,7 +926,10 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
             {/* Preview Modal for Uploaded Background Image */}
             {showPreviewModal && design.backgroundImage?.url && (
-                <div
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                     onClick={() => setShowPreviewModal(false)}
                     style={{
                         position: 'fixed',
@@ -899,8 +965,8 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 position: 'absolute',
                                 top: '-40px',
                                 right: '0',
-                                background: '#fff',
-                                border: 'none',
+                                background: '#020617',
+                                border: '1px solid #334155',
                                 borderRadius: '50%',
                                 width: '32px',
                                 height: '32px',
@@ -911,10 +977,10 @@ const SocialMediaConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
                             }}
                         >
-                            <X size={20} color="#000" />
+                            <X size={20} color="#e5e7eb" />
                         </button>
                     </div>
-                </div>
+                </motion.div>
             )}
         </div>
     );

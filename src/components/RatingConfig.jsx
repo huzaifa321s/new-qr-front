@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Globe, Facebook, Instagram, Twitter, Linkedin, Youtube, Music, Ghost, MessageCircle, Send, Dribbble, Github, GripVertical } from 'lucide-react';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 import ImageUploadModal from './ImageUploadModal';
 
@@ -405,33 +406,46 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
             </ReusableDesignAccordion>
 
             {/* BASIC INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isBasicInfoOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
-                    </div>
-                    {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>BASIC INFORMATION</div>
+                    <motion.div animate={{ rotate: isBasicInfoOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isBasicInfoOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                <AnimatePresence>
+                    {isBasicInfoOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.2 }}
+                            style={{ padding: '1rem', background: '#0f172a' }}
+                        >
 
                         {/* NAME FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                NAME*
-                            </label>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    NAME*
+                                </label>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 {/* Name Input */}
                                 <div style={{ flex: '2 1 200px' }}>
@@ -444,9 +458,11 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                             width: '100%',
                                             padding: '0.75rem',
                                             borderRadius: '4px',
-                                            border: `1px solid ${errors.name ? '#ef4444' : '#1e293b'}`,
+                                            border: `1px solid ${errors.name ? '#ef4444' : '#334155'}`,
                                             fontSize: '0.9rem',
-                                            outline: 'none'
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
                                         }}
                                     />
                                     {errors.name && (
@@ -458,17 +474,18 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                 {/* Text Color */}
                                 <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
                                     <div style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
+                                        padding: '0.5rem 0.6rem',
                                         height: '44px',
-                                        gap: '0.5rem'
+                                        gap: '0.5rem',
+                                        background: '#020617'
                                     }}>
                                         <input
                                             type="text"
@@ -479,19 +496,21 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 flex: 1,
                                                 fontSize: '0.85rem',
-                                                color: '#000',
+                                                color: '#e5e7eb',
                                                 fontWeight: '500',
-                                                textTransform: 'uppercase'
+                                                textTransform: 'uppercase',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            borderRadius: '4px',
+                                            borderRadius: '8px',
                                             position: 'relative',
                                             overflow: 'hidden',
-                                            border: '1px solid #e2e8f0',
-                                            flexShrink: 0
+                                            border: '1px solid #334155',
+                                            flexShrink: 0,
+                                            background: '#020617'
                                         }}>
                                             <div style={{
                                                 position: 'absolute',
@@ -521,7 +540,7 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                 {/* Font */}
                                 <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
                                     <select
@@ -529,13 +548,14 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         onChange={(e) => handleBasicInfoUpdate('nameFont', e.target.value)}
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
                                             height: '44px'
                                         }}
                                     >
@@ -550,7 +570,7 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* WEBSITE FIELD */}
                         <div style={{ marginBottom: '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 WEBSITE*
                             </label>
                             <input
@@ -561,10 +581,12 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: `1px solid ${errors.website ? '#ef4444' : '#06b6d4'}`,
+                                    borderRadius: '10px',
+                                    border: `1px solid ${errors.website ? '#ef4444' : '#334155'}`,
                                     fontSize: '0.9rem',
-                                    outline: 'none'
+                                    outline: 'none',
+                                    background: '#020617',
+                                    color: '#e5e7eb'
                                 }}
                             />
                             {errors.website && (
@@ -574,38 +596,44 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             )}
                         </div>
 
-                    </div>
-                )
-                }
-            </div >
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* RATING ACCORDION */}
-            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsRatingOpen(!isRatingOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isRatingOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>RATING</div>
-                    </div>
-                    {isRatingOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>RATING</div>
+                    <motion.div animate={{ rotate: isRatingOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
                 {
                     isRatingOpen && (
-                        <div style={{ padding: '1rem', background: '#fff' }}>
+                        <div style={{ padding: '1rem', background: '#0f172a' }}>
 
                             {/* QUESTION FIELD */}
                             <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     QUESTION*
                                 </label>
                                 <input
@@ -617,9 +645,11 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         width: '100%',
                                         padding: '0.75rem',
                                         borderRadius: '4px',
-                                        border: `1px solid ${errors.question ? '#ef4444' : '#1e293b'}`,
+                                        border: `1px solid ${errors.question ? '#ef4444' : '#334155'}`,
                                         fontSize: '0.9rem',
-                                        outline: 'none'
+                                        outline: 'none',
+                                        background: '#020617',
+                                        color: '#e5e7eb'
                                     }}
                                 />
                                 {errors.question && (
@@ -638,21 +668,21 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     style={{
                                         flex: '1 1 150px',
                                         padding: '1.5rem 1rem',
-                                        border: rating.type === 'thumbs' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
-                                        borderRadius: '8px',
+                                        border: rating.type === 'thumbs' ? '2px solid #ffa305' : '1px solid #334155',
+                                        borderRadius: '12px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         gap: '1rem',
                                         cursor: 'pointer',
-                                        background: '#fff'
+                                        background: '#020617'
                                     }}
                                 >
                                     <div style={{
                                         width: '40px',
                                         height: '40px',
-                                        borderRadius: '50%',
-                                        background: '#8b5cf6',
+                                        borderRadius: '999px',
+                                        background: '#ffa305',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
@@ -663,8 +693,8 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     <div style={{
                                         width: '40px',
                                         height: '40px',
-                                        borderRadius: '50%',
-                                        background: '#8b5cf6',
+                                        borderRadius: '999px',
+                                        background: '#ffa305',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
@@ -680,14 +710,14 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     style={{
                                         flex: '1 1 150px',
                                         padding: '1.5rem 1rem',
-                                        border: rating.type === 'emoji' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
-                                        borderRadius: '8px',
+                                        border: rating.type === 'emoji' ? '2px solid #ffa305' : '1px solid #334155',
+                                        borderRadius: '12px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         gap: '0.75rem',
                                         cursor: 'pointer',
-                                        background: '#fff'
+                                        background: '#020617'
                                     }}
                                 >
                                     <div style={{ fontSize: '2rem', color: '#94a3b8' }}>☹️</div>
@@ -701,14 +731,14 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     style={{
                                         flex: '1 1 150px',
                                         padding: '1.5rem 1rem',
-                                        border: rating.type === 'stars' ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
-                                        borderRadius: '8px',
+                                        border: rating.type === 'stars' ? '2px solid #ffa305' : '1px solid #334155',
+                                        borderRadius: '12px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         gap: '0.5rem',
                                         cursor: 'pointer',
-                                        background: '#fff'
+                                        background: '#020617'
                                     }}
                                 >
                                     <div style={{ fontSize: '2rem', color: '#cbd5e1' }}>⭐</div>
@@ -727,40 +757,47 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     style={{
                                         width: '18px',
                                         height: '18px',
-                                        cursor: 'pointer'
+                                        cursor: 'pointer',
+                                        accentColor: '#ffa305'
                                     }}
                                 />
-                                <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>Add a comment section for user after rating.</span>
+                                <span style={{ fontSize: '0.9rem', color: '#e5e7eb' }}>Add a comment section for user after rating.</span>
                             </label>
 
                         </div>
                     )
                 }
-            </div >
+            </motion.div>
 
             {/* SOCIAL MEDIA CHANNELS ACCORDION */}
-            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsSocialOpen(!isSocialOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isSocialOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
-                    </div>
-                    {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>SOCIAL MEDIA CHANNELS</div>
+                    <motion.div animate={{ rotate: isSocialOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
                 {
                     isSocialOpen && (
-                        <div style={{ padding: '1rem', background: '#fff' }}>
+                        <div style={{ padding: '1rem', background: '#0f172a' }}>
 
                             {/* Selected Social Media Inputs Grid */}
                             {socialLinks.length > 0 && (
@@ -773,7 +810,7 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         return (
                                             <div key={link.id} style={{ flex: '1 1 200px', position: 'relative' }}>
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                                    <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6' }}>
+                                                    <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305' }}>
                                                         {platform.name}*
                                                     </label>
                                                     <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
@@ -841,10 +878,12 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                         style={{
                                                             width: '100%',
                                                             padding: '0.75rem 0.75rem 0.75rem 3rem',
-                                                            borderRadius: '4px',
-                                                            border: `1px solid ${errors[link.id] ? '#ef4444' : '#1e293b'}`,
+                                                            borderRadius: '10px',
+                                                            border: `1px solid ${errors[link.id] ? '#ef4444' : '#334155'}`,
                                                             fontSize: '0.9rem',
-                                                            outline: 'none'
+                                                            outline: 'none',
+                                                            background: '#020617',
+                                                            color: '#e5e7eb'
                                                         }}
                                                     />
                                                 </div>
@@ -877,7 +916,7 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {/* ADD MORE Section */}
                             <div>
-                                <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     ADD MORE
                                 </div>
                                 <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
@@ -891,31 +930,30 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         const isAdded = socialLinks.some(link => link.platform === platform.id);
 
                                         return (
-                                            <div
-                                                key={platform.id}
-                                                onClick={() => !isAdded && handleSocialLinkAdd(platform.id)}
-                                                style={{
-                                                    width: '48px',
-                                                    height: '48px',
-                                                    background: '#fff',
-                                                    borderRadius: '8px',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    cursor: isAdded ? 'not-allowed' : 'pointer',
-                                                    opacity: isAdded ? 0.5 : 1,
-                                                    transition: 'transform 0.1s',
-                                                    border: isAdded ? '2px solid #cbd5e1' : '1px solid #e2e8f0',
-                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-                                                }}
-                                                title={isAdded ? `${platform.name} already added` : `Add ${platform.name}`}
-                                                onMouseEnter={(e) => {
-                                                    if (!isAdded) e.currentTarget.style.transform = 'scale(1.1)';
-                                                }}
-                                                onMouseLeave={(e) => {
-                                                    e.currentTarget.style.transform = 'scale(1)';
-                                                }}
-                                            >
+                                    <div
+                                            key={platform.id}
+                                            onClick={() => !isAdded && handleSocialLinkAdd(platform.id)}
+                                            style={{
+                                                width: '48px',
+                                                height: '48px',
+                                                background: '#020617',
+                                                borderRadius: '12px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: isAdded ? 'not-allowed' : 'pointer',
+                                                opacity: isAdded ? 0.5 : 1,
+                                                transition: 'transform 0.1s',
+                                                border: isAdded ? '2px solid #334155' : '1px solid #334155'
+                                            }}
+                                            title={isAdded ? `${platform.name} already added` : `Add ${platform.name}`}
+                                            onMouseEnter={(e) => {
+                                                if (!isAdded) e.currentTarget.style.transform = 'scale(1.1)';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.transform = 'scale(1)';
+                                            }}
+                                        >
                                                 {typeof Icon === 'string' ? (
                                                     <img
                                                         src={Icon}
@@ -934,9 +972,9 @@ const RatingConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     })}
                                 </div>
                             </div>
-                        </div>
-                    )}
-            </div>
+                </div>
+                )}
+            </motion.div>
 
             <ImageUploadModal
                 isOpen={isUploadModalOpen}

@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check } from 'lucide-react';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 import ImageUploadModal from './ImageUploadModal';
 
@@ -241,7 +242,7 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                 {/* HEADER IMAGE SECTION */}
                 <div style={{ marginBottom: '2rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#ffa305', textTransform: 'uppercase' }}>
                             HEADER IMAGE
                         </span>
                         <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
@@ -257,15 +258,15 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 width: '80px',
                                 height: '53px',
                                 borderRadius: '4px',
-                                border: '1px solid #e2e8f0',
+                                border: '1px solid #334155',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 cursor: 'pointer',
-                                background: '#fff'
+                                background: '#020617'
                             }}
                         >
-                            <X size={24} color="#cbd5e1" />
+                            <X size={24} color="#94a3b8" />
                         </div>
 
                         {/* Header Image Options */}
@@ -278,10 +279,10 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     height: '53px',
                                     borderRadius: '4px',
                                     overflow: 'hidden',
-                                    border: design.headerImage?.url === img.url ? '2px solid #8b5cf6' : '1px solid #e2e8f0',
-                                    cursor: 'pointer',
-                                    position: 'relative'
-                                }}
+                                border: design.headerImage?.url === img.url ? '2px solid #ffa305' : '1px solid #334155',
+                                cursor: 'pointer',
+                                position: 'relative'
+                            }}
                             >
                                 <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 {design.headerImage?.url === img.url && (
@@ -291,7 +292,7 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         right: 2,
                                         width: '20px',
                                         height: '20px',
-                                        background: '#8b5cf6',
+                                        background: '#ffa305',
                                         borderRadius: '50%',
                                         display: 'flex',
                                         alignItems: 'center',
@@ -315,7 +316,7 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     height: '53px',
                                     borderRadius: '4px',
                                     overflow: 'hidden',
-                                    border: '2px solid #8b5cf6',
+                                    border: '2px solid #ffa305',
                                     cursor: 'pointer',
                                     position: 'relative'
                                 }}
@@ -343,7 +344,7 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     right: 2,
                                     width: '20px',
                                     height: '20px',
-                                    background: '#8b5cf6',
+                                    background: '#ffa305',
                                     borderRadius: '50%',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -375,31 +376,44 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
             </ReusableDesignAccordion>
 
             {/* BASIC INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isBasicInfoOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
-                    </div>
-                    {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {isBasicInfoOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>Basic Information</div>
+                    <motion.div animate={{ rotate: isBasicInfoOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isBasicInfoOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
 
                         {/* COMPANY NAME FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                 COMPANY NAME*
                             </label>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -410,14 +424,7 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         value={basicInfo.companyName || ''}
                                         onChange={(e) => handleBasicInfoUpdate('companyName', e.target.value)}
                                         placeholder="Sterling & Co"
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: `1px solid ${errors.companyName ? '#ef4444' : '#1e293b'}`,
-                                            fontSize: '0.9rem',
-                                            outline: 'none'
-                                        }}
+                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '10px', border: `1px solid ${errors.companyName ? '#ef4444' : '#334155'}`, background: '#020617', color: '#e5e7eb', fontSize: '0.9rem', outline: 'none' }}
                                     />
                                     {errors.companyName && (
                                         <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
@@ -428,41 +435,17 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                 {/* Text Color */}
                                 <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px',
-                                        gap: '0.5rem'
-                                    }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #334155', borderRadius: '10px', padding: '0.5rem 0.6rem', height: '44px', gap: '0.5rem', background: '#020617' }}>
                                         <input
                                             type="text"
                                             value={basicInfo.companyNameColor || '#FFFFFF'}
                                             onChange={(e) => handleBasicInfoUpdate('companyNameColor', e.target.value)}
-                                            style={{
-                                                border: 'none',
-                                                outline: 'none',
-                                                flex: 1,
-                                                fontSize: '0.85rem',
-                                                color: '#000',
-                                                fontWeight: '500',
-                                                textTransform: 'uppercase'
-                                            }}
+                                            style={{ border: 'none', outline: 'none', flex: 1, fontSize: '0.85rem', color: '#e5e7eb', fontWeight: '500', textTransform: 'uppercase', background: 'transparent' }}
                                         />
-                                        <div style={{
-                                            width: '32px',
-                                            height: '32px',
-                                            borderRadius: '4px',
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            border: '1px solid #e2e8f0',
-                                            flexShrink: 0
-                                        }}>
+                                        <div style={{ width: '32px', height: '32px', borderRadius: '8px', position: 'relative', overflow: 'hidden', border: '1px solid #334155', flexShrink: 0, background: '#020617' }}>
                                             <div style={{
                                                 position: 'absolute',
                                                 top: 0,
@@ -491,23 +474,13 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                 {/* Font */}
                                 <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
                                     <select
                                         value={basicInfo.companyNameFont || 'Lato'}
                                         onChange={(e) => handleBasicInfoUpdate('companyNameFont', e.target.value)}
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
-                                            fontSize: '0.9rem',
-                                            outline: 'none',
-                                            cursor: 'pointer',
-                                            background: '#fff',
-                                            height: '44px'
-                                        }}
+                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '10px', border: '1px solid #334155', background: '#020617', color: '#e5e7eb', fontSize: '0.9rem', outline: 'none', cursor: 'pointer', height: '44px' }}
                                     >
                                         <option value="Lato">Lato</option>
                                         <option value="Roboto">Roboto</option>
@@ -520,7 +493,7 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* HEADLINE FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                 HEADLINE
                             </label>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -531,54 +504,23 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         value={basicInfo.headline || ''}
                                         onChange={(e) => handleBasicInfoUpdate('headline', e.target.value)}
                                         placeholder="Important Document"
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
-                                            fontSize: '0.9rem',
-                                            outline: 'none'
-                                        }}
+                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '10px', border: '1px solid #334155', background: '#020617', color: '#e5e7eb', fontSize: '0.9rem', outline: 'none' }}
                                     />
                                 </div>
 
                                 {/* Text Color */}
                                 <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px',
-                                        gap: '0.5rem'
-                                    }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #334155', borderRadius: '10px', padding: '0.5rem 0.6rem', height: '44px', gap: '0.5rem', background: '#020617' }}>
                                         <input
                                             type="text"
                                             value={basicInfo.headlineColor || '#FFFFFF'}
                                             onChange={(e) => handleBasicInfoUpdate('headlineColor', e.target.value)}
-                                            style={{
-                                                border: 'none',
-                                                outline: 'none',
-                                                flex: 1,
-                                                fontSize: '0.85rem',
-                                                color: '#000',
-                                                fontWeight: '500',
-                                                textTransform: 'uppercase'
-                                            }}
+                                            style={{ border: 'none', outline: 'none', flex: 1, fontSize: '0.85rem', color: '#e5e7eb', fontWeight: '500', textTransform: 'uppercase', background: 'transparent' }}
                                         />
-                                        <div style={{
-                                            width: '32px',
-                                            height: '32px',
-                                            borderRadius: '4px',
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            border: '1px solid #e2e8f0',
-                                            flexShrink: 0
-                                        }}>
+                                        <div style={{ width: '32px', height: '32px', borderRadius: '8px', position: 'relative', overflow: 'hidden', border: '1px solid #334155', flexShrink: 0, background: '#020617' }}>
                                             <div style={{
                                                 position: 'absolute',
                                                 top: 0,
@@ -607,23 +549,13 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                 {/* Font */}
                                 <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
                                     <select
                                         value={basicInfo.headlineFont || 'Lato'}
                                         onChange={(e) => handleBasicInfoUpdate('headlineFont', e.target.value)}
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
-                                            fontSize: '0.9rem',
-                                            outline: 'none',
-                                            cursor: 'pointer',
-                                            background: '#fff',
-                                            height: '44px'
-                                        }}
+                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '10px', border: '1px solid #334155', background: '#020617', color: '#e5e7eb', fontSize: '0.9rem', outline: 'none', cursor: 'pointer', height: '44px' }}
                                     >
                                         <option value="Lato">Lato</option>
                                         <option value="Roboto">Roboto</option>
@@ -636,7 +568,7 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* DESCRIPTION FIELD */}
                         <div style={{ marginBottom: '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 DESCRIPTION
                             </label>
                             <textarea
@@ -648,43 +580,52 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     width: '100%',
                                     padding: '0.75rem',
                                     borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    border: '1px solid #334155',
                                     fontSize: '0.9rem',
                                     outline: 'none',
                                     resize: 'vertical',
-                                    fontFamily: 'inherit'
+                                    fontFamily: 'inherit',
+                                    background: '#020617',
+                                    color: '#e5e7eb'
                                 }}
                             />
                         </div>
 
-                    </div>
-                )
-                }
-            </div >
+                        </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* CREATE A FORM FOR USER ACCORDION */}
-            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsFormOpen(!isFormOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isFormOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>CREATE A FORM FOR USER</div>
-                    </div>
-                    {isFormOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>CREATE A FORM FOR USER</div>
+                    <motion.div animate={{ rotate: isFormOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
                 {
                     isFormOpen && (
-                        <div style={{ padding: '1rem', background: '#fff' }}>
+                        <div style={{ padding: '1rem', background: '#0f172a' }}>
 
                             {/* Form Fields Checkboxes */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
@@ -695,14 +636,9 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         type="checkbox"
                                         checked={form.fullName || false}
                                         onChange={() => handleFormFieldToggle('fullName')}
-                                        style={{
-                                            width: '20px',
-                                            height: '20px',
-                                            cursor: 'pointer',
-                                            accentColor: '#06b6d4'
-                                        }}
+                                        style={{ width: '20px', height: '20px', cursor: 'pointer', accentColor: '#ffa305' }}
                                     />
-                                    <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>Full Name</span>
+                                    <span style={{ fontSize: '0.9rem', color: '#e5e7eb' }}>Full Name</span>
                                 </label>
 
                                 {/* Contact Number */}
@@ -711,14 +647,9 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         type="checkbox"
                                         checked={form.contactNumber || false}
                                         onChange={() => handleFormFieldToggle('contactNumber')}
-                                        style={{
-                                            width: '20px',
-                                            height: '20px',
-                                            cursor: 'pointer',
-                                            accentColor: '#06b6d4'
-                                        }}
+                                        style={{ width: '20px', height: '20px', cursor: 'pointer', accentColor: '#ffa305' }}
                                     />
-                                    <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>Contact Number</span>
+                                    <span style={{ fontSize: '0.9rem', color: '#e5e7eb' }}>Contact Number</span>
                                 </label>
 
                                 {/* Organization Name */}
@@ -727,14 +658,9 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         type="checkbox"
                                         checked={form.organizationName || false}
                                         onChange={() => handleFormFieldToggle('organizationName')}
-                                        style={{
-                                            width: '20px',
-                                            height: '20px',
-                                            cursor: 'pointer',
-                                            accentColor: '#06b6d4'
-                                        }}
+                                        style={{ width: '20px', height: '20px', cursor: 'pointer', accentColor: '#ffa305' }}
                                     />
-                                    <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>Organization Name</span>
+                                    <span style={{ fontSize: '0.9rem', color: '#e5e7eb' }}>Organization Name</span>
                                 </label>
 
                                 {/* Email */}
@@ -743,14 +669,9 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         type="checkbox"
                                         checked={form.email || false}
                                         onChange={() => handleFormFieldToggle('email')}
-                                        style={{
-                                            width: '20px',
-                                            height: '20px',
-                                            cursor: 'pointer',
-                                            accentColor: '#06b6d4'
-                                        }}
+                                        style={{ width: '20px', height: '20px', cursor: 'pointer', accentColor: '#ffa305' }}
                                     />
-                                    <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>Email</span>
+                                    <span style={{ fontSize: '0.9rem', color: '#e5e7eb' }}>Email</span>
                                 </label>
 
                                 {/* Job Title */}
@@ -759,14 +680,9 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         type="checkbox"
                                         checked={form.jobTitle || false}
                                         onChange={() => handleFormFieldToggle('jobTitle')}
-                                        style={{
-                                            width: '20px',
-                                            height: '20px',
-                                            cursor: 'pointer',
-                                            accentColor: '#06b6d4'
-                                        }}
+                                        style={{ width: '20px', height: '20px', cursor: 'pointer', accentColor: '#ffa305' }}
                                     />
-                                    <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>Job Title</span>
+                                    <span style={{ fontSize: '0.9rem', color: '#e5e7eb' }}>Job Title</span>
                                 </label>
 
                                 {/* Website */}
@@ -775,14 +691,9 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         type="checkbox"
                                         checked={form.website || false}
                                         onChange={() => handleFormFieldToggle('website')}
-                                        style={{
-                                            width: '20px',
-                                            height: '20px',
-                                            cursor: 'pointer',
-                                            accentColor: '#06b6d4'
-                                        }}
+                                        style={{ width: '20px', height: '20px', cursor: 'pointer', accentColor: '#ffa305' }}
                                     />
-                                    <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>Website</span>
+                                    <span style={{ fontSize: '0.9rem', color: '#e5e7eb' }}>Website</span>
                                 </label>
 
                             </div>
@@ -790,7 +701,7 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             {/* Custom Fields */}
                             {customFields.length > 0 && (
                                 <div style={{ marginBottom: '1.5rem' }}>
-                                    <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '1rem', textTransform: 'uppercase' }}>
+                                    <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '1rem', textTransform: 'uppercase' }}>
                                         ASK THEM A PERSONALIZED QUESTION
                                     </div>
                                     <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
@@ -799,23 +710,13 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     {customFields.map((field) => (
                                         <div key={field.id} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', marginBottom: '1rem', flexWrap: 'wrap' }}>
                                             <div style={{ flex: '1 1 150px' }}>
-                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                                     Type
                                                 </label>
                                                 <select
                                                     value={field.type || 'fullName'}
                                                     onChange={(e) => handleCustomFieldUpdate(field.id, 'type', e.target.value)}
-                                                    style={{
-                                                        width: '100%',
-                                                        padding: '0.75rem',
-                                                        borderRadius: '4px',
-                                                        border: '1px solid #1e293b',
-                                                        fontSize: '0.9rem',
-                                                        outline: 'none',
-                                                        cursor: 'pointer',
-                                                        background: '#fff',
-                                                        height: '44px'
-                                                    }}
+                                                    style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '10px', border: '1px solid #334155', background: '#020617', color: '#e5e7eb', fontSize: '0.9rem', outline: 'none', cursor: 'pointer', height: '44px' }}
                                                 >
                                                     {fieldTypeOptions.map(option => (
                                                         <option key={option.value} value={option.value}>
@@ -825,7 +726,7 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 </select>
                                             </div>
                                             <div style={{ flex: '2 1 200px' }}>
-                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                                <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                                     Label
                                                 </label>
                                                 <input
@@ -833,31 +734,13 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                     value={field.label || ''}
                                                     onChange={(e) => handleCustomFieldUpdate(field.id, 'label', e.target.value)}
                                                     placeholder="Type label"
-                                                    style={{
-                                                        width: '100%',
-                                                        padding: '0.75rem',
-                                                        borderRadius: '4px',
-                                                        border: '1px solid #1e293b',
-                                                        fontSize: '0.9rem',
-                                                        outline: 'none'
-                                                    }}
+                                                    style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '10px', border: '1px solid #334155', background: '#020617', color: '#e5e7eb', fontSize: '0.9rem', outline: 'none' }}
                                                 />
                                             </div>
                                             <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
                                                 <button
                                                     onClick={() => handleCustomFieldRemove(field.id)}
-                                                    style={{
-                                                        width: '32px',
-                                                        height: '32px',
-                                                        borderRadius: '50%',
-                                                        border: 'none',
-                                                        background: '#f1f5f9',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        cursor: 'pointer',
-                                                        flexShrink: 0
-                                                    }}
+                                                    style={{ width: '32px', height: '32px', borderRadius: '999px', border: '1px solid #334155', background: '#020617', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, color: '#94a3b8' }}
                                                 >
                                                     <X size={16} color="#64748b" />
                                                 </button>
@@ -868,7 +751,7 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             )}
 
                             {errors.form && (
-                                <div style={{ marginBottom: '1.5rem', padding: '0.75rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px' }}>
+                                <div style={{ marginBottom: '1.5rem', padding: '0.75rem', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', borderRadius: '8px' }}>
                                     <p style={{ color: '#ef4444', fontSize: '0.85rem', textAlign: 'center', margin: 0, fontWeight: '600' }}>
                                         {errors.form}
                                     </p>
@@ -878,19 +761,7 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             {/* Add Customized Button */}
                             <button
                                 onClick={handleAddCustomField}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.5rem',
-                                    padding: '0.75rem 1rem',
-                                    background: '#8b5cf6',
-                                    color: '#fff',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    fontSize: '0.9rem',
-                                    cursor: 'pointer',
-                                    fontWeight: '500'
-                                }}
+                                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.2rem', background: '#ffa305', color: '#0f172a', border: 'none', borderRadius: '999px', fontSize: '0.9rem', cursor: 'pointer', fontWeight: '700' }}
                             >
                                 <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>+</span>
                                 <span>Add Customized</span>
@@ -899,35 +770,41 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         </div>
                     )
                 }
-            </div >
+            </motion.div>
 
             {/* THANK YOU BUTTON AFTER SUBMIT ACCORDION */}
-            < div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsThankYouOpen(!isThankYouOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isThankYouOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>THANK YOU BUTTON AFTER SUBMIT</div>
-                    </div>
-                    {isThankYouOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>THANK YOU BUTTON AFTER SUBMIT</div>
+                    <motion.div animate={{ rotate: isThankYouOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
                 {
                     isThankYouOpen && (
-                        <div style={{ padding: '2rem', background: '#fff' }}>
+                        <div style={{ padding: '2rem', background: '#0f172a' }}>
 
                             {/* THANKYOU MESSAGE FIELD */}
                             <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     THANKYOU MESSAGE*
                                 </label>
                                 <textarea
@@ -939,11 +816,13 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         width: '100%',
                                         padding: '0.75rem',
                                         borderRadius: '4px',
-                                        border: `1px solid ${errors.message ? '#ef4444' : '#1e293b'}`,
+                                        border: `1px solid ${errors.message ? '#ef4444' : '#334155'}`,
                                         fontSize: '0.9rem',
                                         outline: 'none',
                                         resize: 'vertical',
-                                        fontFamily: 'inherit'
+                                        fontFamily: 'inherit',
+                                        background: '#020617',
+                                        color: '#e5e7eb'
                                     }}
                                 />
                                 {errors.message && (
@@ -955,7 +834,7 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {/* BUTTON TEXT FIELD */}
                             <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     BUTTON TEXT
                                 </label>
                                 <input
@@ -967,9 +846,11 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         width: '100%',
                                         padding: '0.75rem',
                                         borderRadius: '4px',
-                                        border: '1px solid #1e293b',
+                                        border: '1px solid #334155',
                                         fontSize: '0.9rem',
-                                        outline: 'none'
+                                        outline: 'none',
+                                        background: '#020617',
+                                        color: '#e5e7eb'
                                     }}
                                 />
                             </div>
@@ -985,10 +866,11 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         width: '100%',
                                         padding: '0.75rem',
                                         borderRadius: '4px',
-                                        border: '1px solid #1e293b',
+                                        border: '1px solid #334155',
                                         fontSize: '0.9rem',
                                         outline: 'none',
-                                        color: '#94a3b8'
+                                        background: '#020617',
+                                        color: '#e5e7eb'
                                     }}
                                 />
                             </div>
@@ -996,7 +878,7 @@ const LeadGenerationConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         </div>
                     )
                 }
-            </div >
+            </motion.div>
 
             <ImageUploadModal
                 isOpen={isUploadModalOpen}

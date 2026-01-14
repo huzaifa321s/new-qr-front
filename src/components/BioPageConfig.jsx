@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Phone, Mail, Globe, Trash2, Plus, Facebook, Instagram, Twitter, Linkedin, Youtube, Twitch, Github, Music, Ghost, Gamepad2, Dribbble, MessageCircle, MessageSquare, Video } from 'lucide-react';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
@@ -194,7 +195,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             gap: '0.5rem',
                             cursor: 'pointer',
                             fontSize: '0.9rem',
-                            color: '#1e293b'
+                            color: (design.pictureFrame === 'rectangular') ? (design.color?.header || '#ffa305') : '#f8fafc'
                         }}>
                             <input
                                 type="radio"
@@ -218,7 +219,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             gap: '0.5rem',
                             cursor: 'pointer',
                             fontSize: '0.9rem',
-                            color: '#1e293b'
+                            color: (design.pictureFrame === 'circular' || !design.pictureFrame) ? (design.color?.header || '#ffa305') : '#f8fafc'
                         }}>
                             <input
                                 type="radio"
@@ -239,31 +240,44 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
             </ReusableDesignAccordion>
 
             {/* BASIC INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isBasicInfoOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
-                    </div>
-                    {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {isBasicInfoOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'none' }}>Basic Information</div>
+                    <motion.div animate={{ rotate: isBasicInfoOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isBasicInfoOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
 
                         {/* NAME FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                 NAME*
                             </label>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -276,9 +290,11 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         placeholder="Hellen Grey"
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: `1px solid ${errors.name ? '#ef4444' : '#1e293b'}`,
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: `1px solid ${errors.name ? '#ef4444' : '#334155'}`,
+                                            background: '#020617',
+                                            color: '#e5e7eb',
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
@@ -292,16 +308,17 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                 {/* Text Color */}
                                 <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
                                     <div style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
+                                        padding: '0.5rem 0.6rem',
+                                        height: '44px',
+                                        background: '#020617'
                                     }}>
                                         <input
                                             type="text"
@@ -312,9 +329,10 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#000',
+                                                color: '#e5e7eb',
                                                 fontWeight: '500',
-                                                textTransform: 'uppercase'
+                                                textTransform: 'uppercase',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <input
@@ -336,7 +354,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                 {/* Font */}
                                 <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
                                     <select
@@ -344,13 +362,14 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         onChange={(e) => handleBasicInfoUpdate('nameFont', e.target.value)}
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff',
                                             height: '44px'
                                         }}
                                     >
@@ -365,7 +384,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* COMPANY NAME FIELD */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                 COMPANY NAME
                             </label>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -378,9 +397,11 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         placeholder="Sterling & Co."
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: `1px solid ${errors.companyName ? '#ef4444' : '#1e293b'}`,
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: `1px solid ${errors.companyName ? '#ef4444' : '#334155'}`,
+                                            background: '#020617',
+                                            color: '#e5e7eb',
                                             fontSize: '0.9rem',
                                             outline: 'none'
                                         }}
@@ -394,16 +415,17 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                 {/* Text Color */}
                                 <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
                                     <div style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
+                                        padding: '0.5rem 0.6rem',
+                                        height: '44px',
+                                        background: '#020617'
                                     }}>
                                         <input
                                             type="text"
@@ -414,9 +436,10 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#000',
+                                                color: '#e5e7eb',
                                                 fontWeight: '500',
-                                                textTransform: 'uppercase'
+                                                textTransform: 'uppercase',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <input
@@ -438,7 +461,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                 {/* Font */}
                                 <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
                                     <select
@@ -446,13 +469,14 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         onChange={(e) => handleBasicInfoUpdate('companyNameFont', e.target.value)}
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             cursor: 'pointer',
-                                            background: '#fff',
                                             height: '44px'
                                         }}
                                     >
@@ -467,7 +491,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* DESCRIPTION FIELD */}
                         <div style={{ marginBottom: '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                 DESCRIPTION
                             </label>
                             <textarea
@@ -477,9 +501,11 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 rows={3}
                                 style={{
                                     width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    padding: '0.75rem 1rem',
+                                    borderRadius: '10px',
+                                    border: '1px solid #334155',
+                                    background: '#020617',
+                                    color: '#e5e7eb',
                                     fontSize: '0.9rem',
                                     outline: 'none',
                                     resize: 'vertical',
@@ -488,32 +514,47 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             />
                         </div>
 
-                    </div>
-                )}
-            </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* CONTACT DETAILS ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsContactOpen(!isContactOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isContactOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>CONTACT DETAILS</div>
-                    </div>
-                    {isContactOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {isContactOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>Contact Details</div>
+                    <motion.div animate={{ rotate: isContactOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isContactOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
 
                         {/* PHONE NUMBER */}
                         {contact.phone !== null && (
@@ -523,19 +564,20 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     <div style={{
                                         width: '48px',
                                         height: '48px',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        flexShrink: 0
+                                        flexShrink: 0,
+                                        background: '#020617'
                                     }}>
-                                        <Phone size={20} color="#1e293b" />
+                                        <Phone size={20} color="#94a3b8" />
                                     </div>
 
                                     {/* Phone Number Input */}
                                     <div style={{ flex: '1 1 200px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                             Phone Number
                                         </label>
                                         <input
@@ -545,9 +587,11 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                             placeholder="703-701-9964"
                                             style={{
                                                 width: '100%',
-                                                padding: '0.75rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
+                                                padding: '0.75rem 1rem',
+                                                borderRadius: '10px',
+                                                border: '1px solid #334155',
+                                                background: '#020617',
+                                                color: '#e5e7eb',
                                                 fontSize: '0.9rem',
                                                 outline: 'none'
                                             }}
@@ -556,7 +600,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                     {/* Button Title */}
                                     <div style={{ flex: '1 1 150px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                             Button Title
                                         </label>
                                         <input
@@ -566,9 +610,11 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                             placeholder="Mobile"
                                             style={{
                                                 width: '100%',
-                                                padding: '0.75rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
+                                                padding: '0.75rem 1rem',
+                                                borderRadius: '10px',
+                                                border: '1px solid #334155',
+                                                background: '#020617',
+                                                color: '#e5e7eb',
                                                 fontSize: '0.9rem',
                                                 outline: 'none'
                                             }}
@@ -589,11 +635,12 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            borderRadius: '50%',
-                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '999px',
+                                            border: '1px solid #334155',
                                             display: 'flex',
                                             alignItems: 'center',
-                                            justifyContent: 'center'
+                                            justifyContent: 'center',
+                                            background: '#020617'
                                         }}>
                                             <X size={16} color="#94a3b8" />
                                         </div>
@@ -610,19 +657,20 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     <div style={{
                                         width: '48px',
                                         height: '48px',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        flexShrink: 0
+                                        flexShrink: 0,
+                                        background: '#020617'
                                     }}>
-                                        <Mail size={20} color="#1e293b" />
+                                        <Mail size={20} color="#94a3b8" />
                                     </div>
 
                                     {/* Email Input */}
                                     <div style={{ flex: '1 1 200px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                             Email
                                         </label>
                                         <input
@@ -632,9 +680,11 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                             placeholder="Hellen@gmail.com"
                                             style={{
                                                 width: '100%',
-                                                padding: '0.75rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
+                                                padding: '0.75rem 1rem',
+                                                borderRadius: '10px',
+                                                border: '1px solid #334155',
+                                                background: '#020617',
+                                                color: '#e5e7eb',
                                                 fontSize: '0.9rem',
                                                 outline: 'none'
                                             }}
@@ -643,7 +693,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                     {/* Button Title */}
                                     <div style={{ flex: '1 1 150px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                             Button Title
                                         </label>
                                         <input
@@ -653,9 +703,11 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                             placeholder="Email"
                                             style={{
                                                 width: '100%',
-                                                padding: '0.75rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
+                                                padding: '0.75rem 1rem',
+                                                borderRadius: '10px',
+                                                border: '1px solid #334155',
+                                                background: '#020617',
+                                                color: '#e5e7eb',
                                                 fontSize: '0.9rem',
                                                 outline: 'none'
                                             }}
@@ -676,11 +728,12 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            borderRadius: '50%',
-                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '999px',
+                                            border: '1px solid #334155',
                                             display: 'flex',
                                             alignItems: 'center',
-                                            justifyContent: 'center'
+                                            justifyContent: 'center',
+                                            background: '#020617'
                                         }}>
                                             <X size={16} color="#94a3b8" />
                                         </div>
@@ -697,19 +750,20 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     <div style={{
                                         width: '48px',
                                         height: '48px',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        flexShrink: 0
+                                        flexShrink: 0,
+                                        background: '#020617'
                                     }}>
-                                        <Globe size={20} color="#1e293b" />
+                                        <Globe size={20} color="#94a3b8" />
                                     </div>
 
                                     {/* Website Input */}
                                     <div style={{ flex: '1 1 200px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                             Website
                                         </label>
                                         <input
@@ -719,9 +773,11 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                             placeholder="www.sterling.com"
                                             style={{
                                                 width: '100%',
-                                                padding: '0.75rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
+                                                padding: '0.75rem 1rem',
+                                                borderRadius: '10px',
+                                                border: '1px solid #334155',
+                                                background: '#020617',
+                                                color: '#e5e7eb',
                                                 fontSize: '0.9rem',
                                                 outline: 'none'
                                             }}
@@ -730,7 +786,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                     {/* Button Title */}
                                     <div style={{ flex: '1 1 150px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', marginBottom: '0.5rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                             Button Title
                                         </label>
                                         <input
@@ -740,9 +796,11 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                             placeholder="Website"
                                             style={{
                                                 width: '100%',
-                                                padding: '0.75rem',
-                                                borderRadius: '4px',
-                                                border: '1px solid #1e293b',
+                                                padding: '0.75rem 1rem',
+                                                borderRadius: '10px',
+                                                border: '1px solid #334155',
+                                                background: '#020617',
+                                                color: '#e5e7eb',
                                                 fontSize: '0.9rem',
                                                 outline: 'none'
                                             }}
@@ -763,11 +821,12 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            borderRadius: '50%',
-                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '999px',
+                                            border: '1px solid #334155',
                                             display: 'flex',
                                             alignItems: 'center',
-                                            justifyContent: 'center'
+                                            justifyContent: 'center',
+                                            background: '#020617'
                                         }}>
                                             <X size={16} color="#94a3b8" />
                                         </div>
@@ -783,12 +842,12 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleContactUpdate('phone', '')}
                                     style={{
                                         width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '8px',
-                                        border: '1px solid #8b5cf6',
-                                        background: '#fff',
-                                        color: '#8b5cf6',
-                                        fontWeight: '600',
+                                        padding: '0.75rem 1rem',
+                                        borderRadius: '999px',
+                                        border: 'none',
+                                        background: '#ffa305',
+                                        color: '#0f172a',
+                                        fontWeight: '700',
                                         fontSize: '0.9rem',
                                         cursor: 'pointer',
                                         display: 'flex',
@@ -807,12 +866,12 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleContactUpdate('email', '')}
                                     style={{
                                         width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '8px',
-                                        border: '1px solid #8b5cf6',
-                                        background: '#fff',
-                                        color: '#8b5cf6',
-                                        fontWeight: '600',
+                                        padding: '0.75rem 1rem',
+                                        borderRadius: '999px',
+                                        border: 'none',
+                                        background: '#ffa305',
+                                        color: '#0f172a',
+                                        fontWeight: '700',
                                         fontSize: '0.9rem',
                                         cursor: 'pointer',
                                         display: 'flex',
@@ -831,12 +890,12 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleContactUpdate('website', '')}
                                     style={{
                                         width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '8px',
-                                        border: '1px solid #8b5cf6',
-                                        background: '#fff',
-                                        color: '#8b5cf6',
-                                        fontWeight: '600',
+                                        padding: '0.75rem 1rem',
+                                        borderRadius: '999px',
+                                        border: 'none',
+                                        background: '#ffa305',
+                                        color: '#0f172a',
+                                        fontWeight: '700',
                                         fontSize: '0.9rem',
                                         cursor: 'pointer',
                                         display: 'flex',
@@ -851,32 +910,47 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             )}
                         </div>
 
-                    </div>
-                )}
-            </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* SOCIAL MEDIA CHANNELS ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsSocialOpen(!isSocialOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isSocialOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
-                    </div>
-                    {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {isSocialOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>Social Media Channels</div>
+                    <motion.div animate={{ rotate: isSocialOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isSocialOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
 
                         {/* Dynamic Social Media Inputs Grid */}
                         <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
@@ -903,7 +977,7 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     const Icon = platform.icon;
                                     return (
                                         <div key={platform.id} style={{ flex: '1 1 200px' }}>
-                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#64748b', marginBottom: '0.5rem' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                                 {platform.label}*
                                             </label>
                                             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap', width: '100%' }}>
@@ -911,13 +985,13 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                     width: '42px',
                                                     height: '42px',
                                                     borderRadius: '8px',
-                                                    background: '#fff',
+                                                    background: '#020617',
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
                                                     flexShrink: 0,
                                                     overflow: 'hidden',
-                                                    border: '1px solid #e2e8f0'
+                                                    border: '1px solid #334155'
                                                 }}>
                                                     <img src={platform.icon} alt={platform.label} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
                                                 </div>
@@ -928,9 +1002,11 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                     placeholder={platform.placeholder}
                                                     style={{
                                                         flex: 1,
-                                                        padding: '0.75rem',
-                                                        borderRadius: '8px',
-                                                        border: `1px solid ${errors[platform.id] ? '#ef4444' : '#e2e8f0'}`,
+                                                        padding: '0.75rem 1rem',
+                                                        borderRadius: '10px',
+                                                        border: `1px solid ${errors[platform.id] ? '#ef4444' : '#334155'}`,
+                                                        background: '#020617',
+                                                        color: '#e5e7eb',
                                                         fontSize: '0.9rem',
                                                         outline: 'none'
                                                     }}
@@ -942,11 +1018,12 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                     <div style={{
                                                         width: '24px',
                                                         height: '24px',
-                                                        borderRadius: '50%',
-                                                        border: '1px solid #e2e8f0',
+                                                        borderRadius: '999px',
+                                                        border: '1px solid #334155',
                                                         display: 'flex',
                                                         alignItems: 'center',
-                                                        justifyContent: 'center'
+                                                        justifyContent: 'center',
+                                                        background: '#020617'
                                                     }}>
                                                         <X size={14} />
                                                     </div>
@@ -966,10 +1043,10 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* ADD MORE Section */}
                         <div>
-                            <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#7D2AE7', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                 ADD MORE
                             </div>
-                            <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '1rem' }}>
+                            <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: '1rem' }}>
                                 Click on the icon to add a social media profile.
                             </div>
 
@@ -995,25 +1072,27 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     // Only render add buttons for inactive platforms
                                     if (social[platform.id] === undefined || social[platform.id] === null) {
                                         return (
-                                            <div
+                                            <motion.div
                                                 key={platform.id}
                                                 onClick={() => handleSocialUpdate(platform.id, '')}
                                                 style={{
                                                     width: '40px',
                                                     height: '40px',
                                                     borderRadius: '8px',
-                                                    border: `1px solid #e2e8f0`,
+                                                    border: `1px solid #334155`,
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
                                                     cursor: 'pointer',
-                                                    background: '#fff',
+                                                    background: '#020617',
                                                     transition: 'all 0.2s ease',
                                                     overflow: 'hidden'
                                                 }}
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.98 }}
                                             >
                                                 <img src={platform.icon} alt={platform.id} style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
-                                            </div>
+                                            </motion.div>
                                         );
                                     }
                                     return null;
@@ -1022,15 +1101,17 @@ const BioPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         </div>
 
                         {errors.general && (
-                            <div style={{ marginTop: '1rem', padding: '0.75rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px' }}>
+                            <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', borderRadius: '8px' }}>
                                 <p style={{ color: '#ef4444', fontSize: '0.85rem', textAlign: 'center', margin: 0, fontWeight: '600' }}>
                                     {errors.general}
                                 </p>
                             </div>
                         )}
-                    </div>
-                )}
-            </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
         </div >
     );
 };

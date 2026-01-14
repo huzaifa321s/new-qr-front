@@ -1,5 +1,6 @@
-import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Phone, Mail, Globe, MapPin, Plus } from 'lucide-react';
+import { ChevronDown, RefreshCw, UploadCloud, X, Check, Phone, Mail, Globe, MapPin, Plus } from 'lucide-react';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
@@ -265,33 +266,62 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
             />
 
             {/* BASIC INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
+                        background: 'transparent',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         cursor: 'pointer',
-                        borderBottom: isBasicInfoOpen ? '1px solid #e2e8f0' : 'none'
+                        border: 'none'
                     }}
                 >
                     <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
                     </div>
-                    {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <motion.div
+                        animate={{ rotate: isBasicInfoOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: 999,
+                            border: '1px solid #334155',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: '#020617'
+                        }}
+                    >
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isBasicInfoOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                <AnimatePresence>
+                    {isBasicInfoOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
 
                         {/* NAME */}
                         <div style={{ marginBottom: '2rem' }}>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 <div style={{ flex: '2 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                         NAME*
                                     </label>
                                     <input
@@ -301,26 +331,28 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         placeholder="HELLEN GREY"
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
-                                            outline: 'none'
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
                                         }}
                                     />
                                 </div>
-
                                 <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
                                     <div style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
+                                        padding: '0.5rem 0.75rem',
+                                        height: '44px',
+                                        background: '#020617'
                                     }}>
                                         <input
                                             type="text"
@@ -330,19 +362,20 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 border: 'none',
                                                 outline: 'none',
                                                 width: '100%',
-                                                fontSize: '0.9rem',
-                                                color: '#000',
+                                                fontSize: '0.85rem',
+                                                color: '#e5e7eb',
                                                 fontWeight: '500',
-                                                textTransform: 'uppercase'
+                                                textTransform: 'uppercase',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <div style={{
                                             width: '28px',
                                             height: '28px',
                                             background: personalInfo.nameColor || '#000000',
-                                            borderRadius: '2px',
+                                            borderRadius: '6px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0',
+                                            border: '1px solid #1e293b',
                                             position: 'relative',
                                             overflow: 'hidden',
                                             cursor: 'pointer'
@@ -366,7 +399,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 </div>
 
                                 <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
                                     <select
@@ -374,18 +407,16 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         onChange={(e) => handlePersonalInfoUpdate('nameFont', e.target.value)}
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             height: '44px',
                                             cursor: 'pointer',
                                             appearance: 'none',
-                                            backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E")',
-                                            backgroundRepeat: 'no-repeat',
-                                            backgroundPosition: 'right 0.75rem center',
-                                            backgroundSize: '1rem'
+                                            background: `#020617 url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") no-repeat right 0.75rem center`,
+                                            color: '#e5e7eb'
                                         }}
                                     >
                                         <option value="Lato">Lato</option>
@@ -400,7 +431,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                         {/* ABOUT */}
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                 ABOUT
                             </label>
                             <textarea
@@ -410,13 +441,15 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 rows={3}
                                 style={{
                                     width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
+                                    padding: '0.75rem 1rem',
+                                    borderRadius: '10px',
+                                    border: '1px solid #334155',
                                     fontSize: '0.9rem',
                                     outline: 'none',
                                     resize: 'vertical',
-                                    fontFamily: 'inherit'
+                                    fontFamily: 'inherit',
+                                    background: '#020617',
+                                    color: '#e5e7eb'
                                 }}
                             />
                         </div>
@@ -424,7 +457,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         <div style={{ marginBottom: '2rem' }}>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 <div style={{ flex: '2 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                         JOB TITLE
                                     </label>
                                     <input
@@ -434,26 +467,29 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         placeholder="Creative Lead"
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
-                                            outline: 'none'
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
                                         }}
                                     />
                                 </div>
 
                                 <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
                                     <div style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
+                                        padding: '0.5rem 0.75rem',
+                                        height: '44px',
+                                        background: '#020617'
                                     }}>
                                         <input
                                             type="text"
@@ -463,19 +499,20 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 border: 'none',
                                                 outline: 'none',
                                                 width: '100%',
-                                                fontSize: '0.9rem',
-                                                color: '#000',
+                                                fontSize: '0.85rem',
+                                                color: '#e5e7eb',
                                                 fontWeight: '500',
-                                                textTransform: 'uppercase'
+                                                textTransform: 'uppercase',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <div style={{
                                             width: '28px',
                                             height: '28px',
                                             background: personalInfo.titleColor || '#000000',
-                                            borderRadius: '2px',
+                                            borderRadius: '6px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0',
+                                            border: '1px solid #1e293b',
                                             position: 'relative',
                                             overflow: 'hidden',
                                             cursor: 'pointer'
@@ -499,7 +536,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 </div>
 
                                 <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
                                     <select
@@ -507,18 +544,16 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         onChange={(e) => handlePersonalInfoUpdate('titleFont', e.target.value)}
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             height: '44px',
                                             cursor: 'pointer',
                                             appearance: 'none',
-                                            backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E")',
-                                            backgroundRepeat: 'no-repeat',
-                                            backgroundPosition: 'right 0.75rem center',
-                                            backgroundSize: '1rem'
+                                            background: `#020617 url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") no-repeat right 0.75rem center`,
+                                            color: '#e5e7eb'
                                         }}
                                     >
                                         <option value="Lato">Lato</option>
@@ -534,7 +569,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         <div style={{ marginBottom: '0' }}>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 <div style={{ flex: '2 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                         COMPANY NAME
                                     </label>
                                     <input
@@ -544,26 +579,29 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         placeholder="Techoid"
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
-                                            outline: 'none'
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
                                         }}
                                     />
                                 </div>
 
                                 <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Text Color
                                     </label>
                                     <div style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
+                                        padding: '0.5rem 0.75rem',
+                                        height: '44px',
+                                        background: '#020617'
                                     }}>
                                         <input
                                             type="text"
@@ -573,19 +611,20 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 border: 'none',
                                                 outline: 'none',
                                                 width: '100%',
-                                                fontSize: '0.9rem',
-                                                color: '#000',
+                                                fontSize: '0.85rem',
+                                                color: '#e5e7eb',
                                                 fontWeight: '500',
-                                                textTransform: 'uppercase'
+                                                textTransform: 'uppercase',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <div style={{
                                             width: '28px',
                                             height: '28px',
                                             background: personalInfo.companyColor || '#000000',
-                                            borderRadius: '2px',
+                                            borderRadius: '6px',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0',
+                                            border: '1px solid #334155',
                                             position: 'relative',
                                             overflow: 'hidden',
                                             cursor: 'pointer'
@@ -609,7 +648,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 </div>
 
                                 <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Font
                                     </label>
                                     <select
@@ -617,18 +656,16 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         onChange={(e) => handlePersonalInfoUpdate('companyFont', e.target.value)}
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
                                             outline: 'none',
                                             height: '44px',
                                             cursor: 'pointer',
                                             appearance: 'none',
-                                            backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E")',
-                                            backgroundRepeat: 'no-repeat',
-                                            backgroundPosition: 'right 0.75rem center',
-                                            backgroundSize: '1rem'
+                                            background: `#020617 url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") no-repeat right 0.75rem center`,
+                                            color: '#e5e7eb'
                                         }}
                                     >
                                         <option value="Lato">Lato</option>
@@ -640,49 +677,80 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 </div>
                             </div>
                         </div>
-
-                    </div>
+                        </div>
+                    </motion.div>
                 )}
-            </div>
+            </AnimatePresence>
+            </motion.div>
 
             {/* CONTACT INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsContactOpen(!isContactOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
+                        background: 'transparent',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         cursor: 'pointer',
-                        borderBottom: isContactOpen ? '1px solid #e2e8f0' : 'none'
+                        border: 'none'
                     }}
                 >
                     <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>CONTACT INFORMATION</div>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>CONTACT INFORMATION</div>
                     </div>
-                    {isContactOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <motion.div
+                        animate={{ rotate: isContactOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: 999,
+                            border: '1px solid #334155',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: '#020617'
+                        }}
+                    >
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isContactOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                <AnimatePresence>
+                    {isContactOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
 
                         {/* PHONE */}
                         <div style={{ marginBottom: '1.5rem' }}>
                             {contact.phone ? (
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                     <div style={{
-                                        width: '48px',
-                                        height: '48px',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
+                                        width: '40px',
+                                        height: '40px',
+                                        border: '1px solid #334155',
+                                        borderRadius: '999px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        flexShrink: 0
+                                        flexShrink: 0,
+                                        background: '#020617'
                                     }}>
-                                        <Phone size={20} color="#64748b" />
+                                        <Phone size={20} color="#e5e7eb" />
                                     </div>
                                     <input
                                         type="text"
@@ -691,29 +759,32 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         placeholder="15555555234"
                                         style={{
                                             flex: 1,
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
-                                            outline: 'none'
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
                                         }}
                                     />
                                     <button
                                         onClick={() => deleteContactField('phone')}
                                         style={{
-                                            width: '48px',
-                                            height: '48px',
-                                            border: '1px solid #1e293b',
-                                            borderRadius: '4px',
-                                            background: '#fff',
+                                            width: '40px',
+                                            height: '40px',
+                                            border: '1px solid #334155',
+                                            borderRadius: '999px',
+                                            background: '#020617',
                                             cursor: 'pointer',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            color: '#ef4444'
                                         }}
                                     >
-                                        <X size={20} color="#64748b" />
+                                        <X size={20} color="#ef4444" />
                                     </button>
                                 </div>
                             ) : (
@@ -721,21 +792,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleContactUpdate('phone', ' ')}
                                     style={{
                                         width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px dashed #cbd5e1',
-                                        background: '#f8fafc',
+                                        padding: '0.85rem 1rem',
+                                        borderRadius: '999px',
+                                        border: '1px dashed #334155',
+                                        background: '#020617',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         gap: '0.5rem',
-                                        color: '#64748b',
+                                        color: '#94a3b8',
                                         fontSize: '0.9rem',
                                         fontWeight: '500'
                                     }}
                                 >
-                                    <Plus size={18} />
+                                    <Plus size={18} color="#94a3b8" />
                                     Add Phone
                                 </button>
                             )}
@@ -746,16 +817,17 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             {contact.email ? (
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                     <div style={{
-                                        width: '48px',
-                                        height: '48px',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
+                                        width: '40px',
+                                        height: '40px',
+                                        border: '1px solid #334155',
+                                        borderRadius: '999px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        flexShrink: 0
+                                        flexShrink: 0,
+                                        background: '#020617'
                                     }}>
-                                        <Mail size={20} color="#64748b" />
+                                        <Mail size={20} color="#e5e7eb" />
                                     </div>
                                     <input
                                         type="text"
@@ -764,29 +836,32 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         placeholder="Hellen@gmail.com"
                                         style={{
                                             flex: 1,
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
-                                            outline: 'none'
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
                                         }}
                                     />
                                     <button
                                         onClick={() => deleteContactField('email')}
                                         style={{
-                                            width: '48px',
-                                            height: '48px',
-                                            border: '1px solid #1e293b',
-                                            borderRadius: '4px',
-                                            background: '#fff',
+                                            width: '40px',
+                                            height: '40px',
+                                            border: '1px solid #334155',
+                                            borderRadius: '999px',
+                                            background: '#020617',
                                             cursor: 'pointer',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            color: '#ef4444'
                                         }}
                                     >
-                                        <X size={20} color="#64748b" />
+                                        <X size={20} color="#ef4444" />
                                     </button>
                                 </div>
                             ) : (
@@ -794,21 +869,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleContactUpdate('email', ' ')}
                                     style={{
                                         width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px dashed #cbd5e1',
-                                        background: '#f8fafc',
+                                        padding: '0.85rem 1rem',
+                                        borderRadius: '999px',
+                                        border: '1px dashed #334155',
+                                        background: '#020617',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         gap: '0.5rem',
-                                        color: '#64748b',
+                                        color: '#94a3b8',
                                         fontSize: '0.9rem',
                                         fontWeight: '500'
                                     }}
                                 >
-                                    <Plus size={18} />
+                                    <Plus size={18} color="#94a3b8" />
                                     Add Email
                                 </button>
                             )}
@@ -819,16 +894,17 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             {contact.website ? (
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                     <div style={{
-                                        width: '48px',
-                                        height: '48px',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
+                                        width: '40px',
+                                        height: '40px',
+                                        border: '1px solid #334155',
+                                        borderRadius: '999px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        flexShrink: 0
+                                        flexShrink: 0,
+                                        background: '#020617'
                                     }}>
-                                        <Globe size={20} color="#64748b" />
+                                        <Globe size={20} color="#e5e7eb" />
                                     </div>
                                     <input
                                         type="text"
@@ -837,29 +913,32 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         placeholder="https://Hellengrey.com"
                                         style={{
                                             flex: 1,
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
-                                            outline: 'none'
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
                                         }}
                                     />
                                     <button
                                         onClick={() => deleteContactField('website')}
                                         style={{
-                                            width: '48px',
-                                            height: '48px',
-                                            border: '1px solid #1e293b',
-                                            borderRadius: '4px',
-                                            background: '#fff',
+                                            width: '40px',
+                                            height: '40px',
+                                            border: '1px solid #334155',
+                                            borderRadius: '999px',
+                                            background: '#020617',
                                             cursor: 'pointer',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            color: '#ef4444'
                                         }}
                                     >
-                                        <X size={20} color="#64748b" />
+                                        <X size={20} color="#ef4444" />
                                     </button>
                                 </div>
                             ) : (
@@ -867,21 +946,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleContactUpdate('website', ' ')}
                                     style={{
                                         width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px dashed #cbd5e1',
-                                        background: '#f8fafc',
+                                        padding: '0.85rem 1rem',
+                                        borderRadius: '999px',
+                                        border: '1px dashed #334155',
+                                        background: '#020617',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         gap: '0.5rem',
-                                        color: '#64748b',
+                                        color: '#94a3b8',
                                         fontSize: '0.9rem',
                                         fontWeight: '500'
                                     }}
                                 >
-                                    <Plus size={18} />
+                                    <Plus size={18} color="#94a3b8" />
                                     Add Website
                                 </button>
                             )}
@@ -898,29 +977,32 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                         placeholder="1000 Marketplace Ave. NY, 10001, United States"
                                         style={{
                                             flex: 1,
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
-                                            outline: 'none'
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
                                         }}
                                     />
                                     <button
                                         onClick={() => deleteContactField('address')}
                                         style={{
-                                            width: '48px',
-                                            height: '48px',
-                                            border: '1px solid #1e293b',
-                                            borderRadius: '4px',
-                                            background: '#fff',
+                                            width: '40px',
+                                            height: '40px',
+                                            border: '1px solid #334155',
+                                            borderRadius: '999px',
+                                            background: '#020617',
                                             cursor: 'pointer',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            flexShrink: 0
+                                            flexShrink: 0,
+                                            color: '#ef4444'
                                         }}
                                     >
-                                        <X size={20} color="#64748b" />
+                                        <X size={20} color="#ef4444" />
                                     </button>
                                 </div>
                             ) : (
@@ -928,73 +1010,104 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleContactUpdate('address', ' ')}
                                     style={{
                                         width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px dashed #cbd5e1',
-                                        background: '#f8fafc',
+                                        padding: '0.85rem 1rem',
+                                        borderRadius: '999px',
+                                        border: '1px dashed #334155',
+                                        background: '#020617',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         gap: '0.5rem',
-                                        color: '#64748b',
+                                        color: '#94a3b8',
                                         fontSize: '0.9rem',
                                         fontWeight: '500'
                                     }}
                                 >
-                                    <Plus size={18} />
+                                    <Plus size={18} color="#94a3b8" />
                                     Add Address
                                 </button>
                             )}
                         </div>
 
-                    </div>
-                )}
-            </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* SOCIAL MEDIA CHANNELS ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsSocialOpen(!isSocialOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
+                        background: 'transparent',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         cursor: 'pointer',
-                        borderBottom: isSocialOpen ? '1px solid #e2e8f0' : 'none'
+                        border: 'none'
                     }}
                 >
                     <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
                     </div>
-                    {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <motion.div
+                        animate={{ rotate: isSocialOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: 999,
+                            border: '1px solid #334155',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: '#020617'
+                        }}
+                    >
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isSocialOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                <AnimatePresence>
+                    {isSocialOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
 
                         {/* Flex for social media inputs */}
                         <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
 
                             {social.website && (
                                 <div style={{ flex: '1 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Website*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.website ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.website ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://img.icons8.com/color/48/domain.png" alt="Website" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1008,20 +1121,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('website')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1037,21 +1156,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.whatsapp && (
                                 <div style={{ flex: '1 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Whatsapp*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.whatsapp ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.whatsapp ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/whatsapp.png" alt="WhatsApp" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1065,20 +1184,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('whatsapp')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1094,21 +1219,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.facebook && (
                                 <div style={{ flex: '1 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Facebook*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.facebook ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.facebook ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/facebook.png" alt="Facebook" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1122,20 +1247,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('facebook')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1151,21 +1282,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.linkedin && (
                                 <div style={{ flex: '1 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Linkedin*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.linkedin ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.linkedin ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/linkedin.png" alt="LinkedIn" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1179,20 +1310,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('linkedin')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1208,21 +1345,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.tiktok && (
                                 <div style={{ flex: '1 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Tiktok*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.tiktok ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.tiktok ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/tiktok.png" alt="TikTok" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1236,20 +1373,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('tiktok')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1265,21 +1408,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.instagram && (
                                 <div style={{ flex: '1 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Instagram*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.instagram ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.instagram ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/instagram.png" alt="Instagram" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1293,20 +1436,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('instagram')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1322,21 +1471,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.twitter && (
                                 <div style={{ flex: '1 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Twitter (X)*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.twitter ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.twitter ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/twitter.png" alt="Twitter" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1350,20 +1499,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('twitter')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1379,21 +1534,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.discord && (
                                 <div style={{ flex: '1 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Discord*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.discord ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.discord ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/discord.png" alt="Discord" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1407,20 +1562,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('discord')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1436,21 +1597,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.youtube && (
                                 <div style={{ flex: '1 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         YouTube*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.youtube ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.youtube ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/youtube.png" alt="YouTube" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1464,20 +1625,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('youtube')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1493,21 +1660,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.twitch && (
                                 <div style={{ flex: '1 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Twitch*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.twitch ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.twitch ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/twitch.png" alt="Twitch" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1521,20 +1688,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('twitch')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1550,21 +1723,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.line && (
                                 <div style={{ flex: '1 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Line*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.line ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.line ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/line.png" alt="Line" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1578,20 +1751,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('line')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1607,21 +1786,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.snapchat && (
                                 <div style={{ flex: '1 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Snapchat*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.snapchat ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.snapchat ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/snapchat.png" alt="Snapchat" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1635,20 +1814,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('snapchat')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1664,21 +1849,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.tumblr && (
                                 <div style={{ flex: '1 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Tumblr*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.tumblr ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.tumblr ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/tumblr.png" alt="Tumblr" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1692,20 +1877,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('tumblr')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1721,21 +1912,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.spotify && (
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Spotify*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.spotify ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.spotify ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/spotify.png" alt="Spotify" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1749,20 +1940,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('spotify')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1778,21 +1975,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.dribbble && (
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Dribbble*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.dribbble ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.dribbble ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/dribbble.png" alt="Dribbble" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1806,20 +2003,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('dribbble')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1835,21 +2038,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.pinterest && (
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Pinterest*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.pinterest ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.pinterest ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/pinterest.png" alt="Pinterest" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1863,20 +2066,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('pinterest')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1892,21 +2101,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.telegram && (
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Telegram*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.telegram ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.telegram ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/telegram.png" alt="Telegram" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1920,20 +2129,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('telegram')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -1949,21 +2164,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.behance && (
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Behance*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.behance ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.behance ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/behance.png" alt="Behance" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -1977,20 +2192,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('behance')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -2006,21 +2227,21 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                             {social.reddit && (
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                         Reddit*
                                     </label>
-                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.reddit ? '#ef4444' : '#1e293b'}`, borderRadius: '4px', padding: '0.5rem', height: '44px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${errors.reddit ? '#ef4444' : '#334155'}`, borderRadius: '10px', padding: '0.5rem 0.75rem', minHeight: '44px', background: '#020617' }}>
                                         <div style={{
                                             width: '32px',
                                             height: '32px',
-                                            background: '#fff',
-                                            borderRadius: '4px',
+                                            background: '#0b1222',
+                                            borderRadius: '8px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: '0.5rem',
                                             flexShrink: 0,
-                                            border: '1px solid #e2e8f0'
+                                            border: '1px solid #334155'
                                         }}>
                                             <img src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/reddit.png" alt="Reddit" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                                         </div>
@@ -2034,20 +2255,26 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 outline: 'none',
                                                 width: '100%',
                                                 fontSize: '0.85rem',
-                                                color: '#1e293b'
+                                                color: '#e5e7eb',
+                                                background: 'transparent'
                                             }}
                                         />
                                         <button
                                             onClick={() => deleteSocialField('reddit')}
                                             style={{
-                                                background: 'none',
-                                                border: 'none',
+                                                background: '#020617',
+                                                border: '1px solid #334155',
                                                 padding: '0.25rem',
                                                 cursor: 'pointer',
                                                 color: '#94a3b8',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center'
+                                                justifyContent: 'center',
+                                                borderRadius: '999px',
+                                                width: '32px',
+                                                height: '32px',
+                                                marginLeft: '0.5rem',
+                                                flexShrink: 0
                                             }}
                                         >
                                             <X size={16} />
@@ -2066,7 +2293,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                         {/* ADD MORE Section */}
                         <div>
                             <div style={{ marginBottom: '1rem' }}>
-                                <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>ADD MORE</span>
+                                <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#ffa305', textTransform: 'uppercase' }}>ADD MORE</span>
                                 <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '0.25rem' }}>
                                     Click on the icon to add a social media profile.
                                 </div>
@@ -2131,10 +2358,10 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             <div style={{
                                 marginTop: '1rem',
                                 padding: '0.75rem',
-                                background: '#fee2e2',
+                                background: '#450a0a',
                                 border: '1px solid #ef4444',
-                                borderRadius: '4px',
-                                color: '#991b1b',
+                                borderRadius: '8px',
+                                color: '#fecaca',
                                 fontSize: '0.875rem',
                                 fontWeight: '500'
                             }}>
@@ -2142,32 +2369,63 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             </div>
                         )}
 
-                    </div>
-                )}
-            </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* EXCHANGE CONTACT ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsExchangeOpen(!isExchangeOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
+                        background: 'transparent',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         cursor: 'pointer',
-                        borderBottom: isExchangeOpen ? '1px solid #e2e8f0' : 'none'
+                        border: 'none'
                     }}
                 >
                     <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>EXCHANGE CONTACT</div>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>EXCHANGE CONTACT</div>
                     </div>
-                    {isExchangeOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <motion.div
+                        animate={{ rotate: isExchangeOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: 999,
+                            border: '1px solid #334155',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: '#020617'
+                        }}
+                    >
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
 
-                {isExchangeOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
+                <AnimatePresence>
+                    {isExchangeOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
 
                         {/* Full Name */}
                         <div style={{ marginBottom: '1rem' }}>
@@ -2176,7 +2434,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 alignItems: 'center',
                                 cursor: 'pointer',
                                 fontSize: '0.9rem',
-                                color: '#1e293b'
+                                color: '#e5e7eb'
                             }}>
                                 <input
                                     type="checkbox"
@@ -2201,7 +2459,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 alignItems: 'center',
                                 cursor: 'pointer',
                                 fontSize: '0.9rem',
-                                color: '#1e293b'
+                                color: '#e5e7eb'
                             }}>
                                 <input
                                     type="checkbox"
@@ -2226,7 +2484,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 alignItems: 'center',
                                 cursor: 'pointer',
                                 fontSize: '0.9rem',
-                                color: '#1e293b'
+                                color: '#e5e7eb'
                             }}>
                                 <input
                                     type="checkbox"
@@ -2251,7 +2509,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 alignItems: 'center',
                                 cursor: 'pointer',
                                 fontSize: '0.9rem',
-                                color: '#1e293b'
+                                color: '#e5e7eb'
                             }}>
                                 <input
                                     type="checkbox"
@@ -2276,7 +2534,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 alignItems: 'center',
                                 cursor: 'pointer',
                                 fontSize: '0.9rem',
-                                color: '#1e293b'
+                                color: '#e5e7eb'
                             }}>
                                 <input
                                     type="checkbox"
@@ -2301,7 +2559,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                 alignItems: 'center',
                                 cursor: 'pointer',
                                 fontSize: '0.9rem',
-                                color: '#1e293b'
+                                color: '#e5e7eb'
                             }}>
                                 <input
                                     type="checkbox"
@@ -2327,9 +2585,9 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     <div key={field.id} style={{
                                         marginBottom: '1.5rem',
                                         padding: '1.5rem',
-                                        border: '1px solid #e2e8f0',
-                                        borderRadius: '8px',
-                                        background: '#f8fafc'
+                                        border: '1px solid #334155',
+                                        borderRadius: '10px',
+                                        background: '#020617'
                                     }}>
                                         <div style={{
                                             display: 'flex',
@@ -2340,7 +2598,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                             <div style={{
                                                 fontSize: '0.75rem',
                                                 fontWeight: 'bold',
-                                                color: '#8b5cf6',
+                                                color: '#ffa305',
                                                 textTransform: 'uppercase'
                                             }}>
                                                 ASK THEM A PERSONALIZED QUESTION
@@ -2365,7 +2623,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                         {/* Type Selector */}
                                         <div style={{ marginBottom: '1rem' }}>
-                                            <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                                 Type
                                             </label>
                                             <select
@@ -2373,12 +2631,13 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 onChange={(e) => handleCustomFieldUpdate(field.id, 'type', e.target.value)}
                                                 style={{
                                                     width: '100%',
-                                                    padding: '0.75rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #1e293b',
+                                                    padding: '0.75rem 1rem',
+                                                    borderRadius: '10px',
+                                                    border: '1px solid #334155',
                                                     fontSize: '0.9rem',
                                                     outline: 'none',
-                                                    background: '#fff',
+                                                    background: '#020617',
+                                                    color: '#e5e7eb',
                                                     cursor: 'pointer'
                                                 }}
                                             >
@@ -2390,7 +2649,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
                                         {/* Label Input */}
                                         <div style={{ marginBottom: '1rem' }}>
-                                            <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
                                                 Label
                                             </label>
                                             <input
@@ -2400,23 +2659,25 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                 placeholder="Enter question label"
                                                 style={{
                                                     width: '100%',
-                                                    padding: '0.75rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #1e293b',
+                                                    padding: '0.75rem 1rem',
+                                                    borderRadius: '10px',
+                                                    border: '1px solid #334155',
                                                     fontSize: '0.9rem',
-                                                    outline: 'none'
+                                                    outline: 'none',
+                                                    background: '#020617',
+                                                    color: '#e5e7eb'
                                                 }}
                                             />
                                         </div>
 
                                         {/* Options/Radio Fields */}
-                                        {(field.type === 'options' || field.type === 'radio') && (
-                                            <div>
-                                                {field.options && field.options.map((option, optIndex) => (
-                                                    <div key={optIndex} style={{ marginBottom: '0.75rem' }}>
-                                                        <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                                            {field.type === 'options' ? 'Option' : 'Radio'} {optIndex + 1}
-                                                        </label>
+                                            {(field.type === 'options' || field.type === 'radio') && (
+                                                <div>
+                                                    {field.options && field.options.map((option, optIndex) => (
+                                                        <div key={optIndex} style={{ marginBottom: '0.75rem' }}>
+                                                            <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
+                                                                {field.type === 'options' ? 'Option' : 'Radio'} {optIndex + 1}
+                                                            </label>
                                                         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                                             <input
                                                                 type="text"
@@ -2425,11 +2686,13 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                                 placeholder={`Enter ${field.type === 'options' ? 'option' : 'radio'} ${optIndex + 1}`}
                                                                 style={{
                                                                     flex: 1,
-                                                                    padding: '0.75rem',
-                                                                    borderRadius: '4px',
-                                                                    border: '1px solid #1e293b',
+                                                                    padding: '0.75rem 1rem',
+                                                                    borderRadius: '10px',
+                                                                    border: '1px solid #334155',
                                                                     fontSize: '0.9rem',
-                                                                    outline: 'none'
+                                                                    outline: 'none',
+                                                                    background: '#020617',
+                                                                    color: '#e5e7eb'
                                                                 }}
                                                             />
                                                             <button
@@ -2456,7 +2719,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                                         alignItems: 'center',
                                                         gap: '0.5rem',
                                                         background: 'none',
-                                                        color: '#8b5cf6',
+                                                        color: '#ffa305',
                                                         border: 'none',
                                                         fontSize: '0.85rem',
                                                         fontWeight: '500',
@@ -2481,7 +2744,7 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '0.5rem',
-                                    background: '#8b5cf6',
+                                    background: '#ffa305',
                                     color: '#fff',
                                     border: 'none',
                                     borderRadius: '4px',
@@ -2491,8 +2754,8 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     cursor: 'pointer',
                                     transition: 'background 0.2s'
                                 }}
-                                onMouseOver={(e) => e.target.style.background = '#7c3aed'}
-                                onMouseOut={(e) => e.target.style.background = '#8b5cf6'}
+                                onMouseOver={(e) => e.target.style.background = '#ffa305'}
+                                onMouseOut={(e) => e.target.style.background = '#ffa305'}
                             >
                                 <Plus size={16} />
                                 Add Customized
@@ -2504,10 +2767,10 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             <div style={{
                                 marginTop: '1rem',
                                 padding: '0.75rem',
-                                background: '#fee2e2',
+                                background: '#450a0a',
                                 border: '1px solid #ef4444',
-                                borderRadius: '4px',
-                                color: '#991b1b',
+                                borderRadius: '8px',
+                                color: '#fecaca',
                                 fontSize: '0.875rem',
                                 fontWeight: '500'
                             }}>
@@ -2515,12 +2778,13 @@ const BusinessCardConfig = ({ config, onChange, errors = {}, setErrors }) => {
                             </div>
                         )}
 
-
                     </div>
-                )}
-            </div>
-        </div>
-    );
+                </motion.div>
+            )}
+        </AnimatePresence>
+    </motion.div>
+</div>
+);
 };
 
 export default BusinessCardConfig;

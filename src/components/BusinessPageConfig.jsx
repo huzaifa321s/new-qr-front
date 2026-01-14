@@ -2,6 +2,7 @@ import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Clock, Wifi, 
 import ColorPicker from './ColorPicker';
 
 import { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 import ImageUploadModal from './ImageUploadModal';
 
@@ -199,6 +200,24 @@ const BusinessPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
 
     const handleUploadModalSave = (url) => {
         handleDesignUpdate('heroImage', url);
+    };
+
+    const handleFieldFocus = (e) => {
+        e.target.style.borderColor = primaryColor;
+        e.target.style.boxShadow = '0 0 0 1px rgba(148, 163, 184, 0.6)';
+    };
+
+    const handleFieldBlur = (e) => {
+        e.target.style.borderColor = '#334155';
+        e.target.style.boxShadow = 'none';
+    };
+
+    const handleFieldMouseEnter = (e) => {
+        e.target.style.borderColor = '#475569';
+    };
+
+    const handleFieldMouseLeave = (e) => {
+        e.target.style.borderColor = '#334155';
     };
 
     const triggerFileUpload = () => {
@@ -447,391 +466,533 @@ const BusinessPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
             )}
 
             {/* BASIC INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isBasicInfoOpen ? '1px solid #e2e8f0' : 'none'
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
                     <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
                     </div>
-                    {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <motion.div
+                        animate={{ rotate: isBasicInfoOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: 999,
+                            border: '1px solid #334155',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: '#020617'
+                        }}
+                    >
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isBasicInfoOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
+                                {/* COMPANY NAME */}
+                                <div style={{ marginBottom: '2rem' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                            <div style={{ flex: '2 1 200px' }}>
+                                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                                    COMPANY NAME*
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={businessInfo.companyName || "Royal's Cafe"}
+                                                    onChange={(e) => handleBusinessInfoUpdate('companyName', e.target.value)}
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.75rem 1rem',
+                                                        borderRadius: '10px',
+                                                        border: '1px solid #334155',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        background: '#020617',
+                                                        color: '#e5e7eb',
+                                                        transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
+                                                    }}
+                                                    onFocus={handleFieldFocus}
+                                                    onBlur={handleFieldBlur}
+                                                    onMouseEnter={handleFieldMouseEnter}
+                                                    onMouseLeave={handleFieldMouseLeave}
+                                                />
+                                            </div>
 
-                {
-                    isBasicInfoOpen && (
-                        <div style={{ padding: '1rem', background: '#fff' }}>
+                                            <div style={{ flex: '1 1 120px' }}>
+                                                <ColorPicker
+                                                    label="Text Color"
+                                                    color={businessInfo.companyNameColor || '#FFFFFF'}
+                                                    onChange={(color) => handleBusinessInfoUpdate('companyNameColor', color)}
+                                                />
+                                            </div>
 
-                            {/* COMPANY NAME */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                        <div style={{ flex: '2 1 200px' }}>
-                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                                COMPANY NAME*
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={businessInfo.companyName || "Royal's Cafe"}
-                                                onChange={(e) => handleBusinessInfoUpdate('companyName', e.target.value)}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #1e293b',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none'
-                                                }}
-                                            />
-                                        </div>
-
-                                        <div style={{ flex: '1 1 120px' }}>
-                                            <ColorPicker
-                                                label="Text Color"
-                                                color={businessInfo.companyNameColor || '#FFFFFF'}
-                                                onChange={(color) => handleBusinessInfoUpdate('companyNameColor', color)}
-                                            />
-                                        </div>
-
-                                        <div style={{ flex: '1 1 100px' }}>
-                                            <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                                Font
-                                            </label>
-                                            <select
-                                                value={businessInfo.companyNameFont || 'Work Sans'}
-                                                onChange={(e) => handleBusinessInfoUpdate('companyNameFont', e.target.value)}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #1e293b',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none',
-                                                    background: '#fff',
-                                                    cursor: 'pointer'
-                                                }}
-                                            >
-                                                <option value="Work Sans">Work Sans</option>
-                                                <option value="Lato">Lato</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* HEADLINE */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                        <div style={{ flex: '2 1 200px' }}>
-                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                                HEADLINE
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={businessInfo.headline || 'Eat. Refresh. Go.'}
-                                                onChange={(e) => handleBusinessInfoUpdate('headline', e.target.value)}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #1e293b',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none'
-                                                }}
-                                            />
-                                        </div>
-
-                                        <div style={{ flex: '1 1 120px' }}>
-                                            <ColorPicker
-                                                label="Text Color"
-                                                color={businessInfo.headlineColor || '#FFFFFF'}
-                                                onChange={(color) => handleBusinessInfoUpdate('headlineColor', color)}
-                                            />
-                                        </div>
-
-                                        <div style={{ flex: '1 1 100px' }}>
-                                            <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                                Font
-                                            </label>
-                                            <select
-                                                value={businessInfo.headlineFont || 'Work Sans'}
-                                                onChange={(e) => handleBusinessInfoUpdate('headlineFont', e.target.value)}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #1e293b',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none',
-                                                    background: '#fff',
-                                                    cursor: 'pointer'
-                                                }}
-                                            >
-                                                <option value="Work Sans">Work Sans</option>
-                                                <option value="Lato">Lato</option>
-                                            </select>
+                                            <div style={{ flex: '1 1 100px' }}>
+                                                <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
+                                                    Font
+                                                </label>
+                                                <select
+                                                    value={businessInfo.companyNameFont || 'Work Sans'}
+                                                    onChange={(e) => handleBusinessInfoUpdate('companyNameFont', e.target.value)}
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.75rem 1rem',
+                                                        borderRadius: '10px',
+                                                        border: '1px solid #334155',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        height: '44px',
+                                                        cursor: 'pointer',
+                                                        appearance: 'none',
+                                                        background: `#020617 url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") no-repeat right 0.75rem center`,
+                                                        color: '#e5e7eb',
+                                                        transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
+                                                    }}
+                                                    onFocus={handleFieldFocus}
+                                                    onBlur={handleFieldBlur}
+                                                    onMouseEnter={handleFieldMouseEnter}
+                                                    onMouseLeave={handleFieldMouseLeave}
+                                                >
+                                                    <option value="Work Sans">Work Sans</option>
+                                                    <option value="Lato">Lato</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {/* DESCRIPTION */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    DESCRIPTION
-                                </label>
-                                <textarea
-                                    value={businessInfo.description || 'We aim to provide fresh and healthy snacks people on the go.'}
-                                    onChange={(e) => handleBusinessInfoUpdate('description', e.target.value)}
-                                    rows={3}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none',
-                                        resize: 'vertical',
-                                        fontFamily: 'inherit'
-                                    }}
-                                />
-                            </div>
+                                {/* HEADLINE */}
+                                <div style={{ marginBottom: '2rem' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                            <div style={{ flex: '2 1 200px' }}>
+                                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                                    HEADLINE
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={businessInfo.headline || 'Eat. Refresh. Go.'}
+                                                    onChange={(e) => handleBusinessInfoUpdate('headline', e.target.value)}
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.75rem 1rem',
+                                                        borderRadius: '10px',
+                                                        border: '1px solid #334155',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        background: '#020617',
+                                                        color: '#e5e7eb',
+                                                        transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
+                                                    }}
+                                                    onFocus={handleFieldFocus}
+                                                    onBlur={handleFieldBlur}
+                                                    onMouseEnter={handleFieldMouseEnter}
+                                                    onMouseLeave={handleFieldMouseLeave}
+                                                />
+                                            </div>
 
-                            {/* BUTTON */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    BUTTON
-                                </label>
-                                <input
-                                    type="text"
-                                    value={businessInfo.button || 'Visit Us'}
-                                    onChange={(e) => handleBusinessInfoUpdate('button', e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
-                            </div>
+                                            <div style={{ flex: '1 1 120px' }}>
+                                                <ColorPicker
+                                                    label="Text Color"
+                                                    color={businessInfo.headlineColor || '#FFFFFF'}
+                                                    onChange={(color) => handleBusinessInfoUpdate('headlineColor', color)}
+                                                />
+                                            </div>
 
-                            {/* WEBSITE */}
-                            <div style={{ marginBottom: '0' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    WEBSITE
-                                </label>
-                                <input
-                                    type="text"
-                                    value={businessInfo.website || 'https://www.abcboutique.henerrival.com'}
-                                    onChange={(e) => handleBusinessInfoUpdate('website', e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
-                            </div>
+                                            <div style={{ flex: '1 1 100px' }}>
+                                                <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
+                                                    Font
+                                                </label>
+                                                <select
+                                                    value={businessInfo.headlineFont || 'Work Sans'}
+                                                    onChange={(e) => handleBusinessInfoUpdate('headlineFont', e.target.value)}
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.75rem 1rem',
+                                                        borderRadius: '10px',
+                                                        border: '1px solid #334155',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        height: '44px',
+                                                        cursor: 'pointer',
+                                                        appearance: 'none',
+                                                        background: `#020617 url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") no-repeat right 0.75rem center`,
+                                                        color: '#e5e7eb',
+                                                        transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
+                                                    }}
+                                                    onFocus={handleFieldFocus}
+                                                    onBlur={handleFieldBlur}
+                                                    onMouseEnter={handleFieldMouseEnter}
+                                                    onMouseLeave={handleFieldMouseLeave}
+                                                >
+                                                    <option value="Work Sans">Work Sans</option>
+                                                    <option value="Lato">Lato</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        </div>
-                    )
-                }
-            </div>
+                                {/* DESCRIPTION */}
+                                <div style={{ marginBottom: '2rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                        DESCRIPTION
+                                    </label>
+                                    <textarea
+                                        value={businessInfo.description || 'We aim to provide fresh and healthy snacks people on the go.'}
+                                        onChange={(e) => handleBusinessInfoUpdate('description', e.target.value)}
+                                        rows={3}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            resize: 'vertical',
+                                            fontFamily: 'inherit',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
+                                            transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
+                                        }}
+                                        onFocus={handleFieldFocus}
+                                        onBlur={handleFieldBlur}
+                                        onMouseEnter={handleFieldMouseEnter}
+                                        onMouseLeave={handleFieldMouseLeave}
+                                    />
+                                </div>
+
+                                {/* BUTTON */}
+                                <div style={{ marginBottom: '2rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                        BUTTON
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={businessInfo.button || 'Visit Us'}
+                                        onChange={(e) => handleBusinessInfoUpdate('button', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
+                                            transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
+                                        }}
+                                        onFocus={handleFieldFocus}
+                                        onBlur={handleFieldBlur}
+                                        onMouseEnter={handleFieldMouseEnter}
+                                        onMouseLeave={handleFieldMouseLeave}
+                                    />
+                                </div>
+
+                                {/* WEBSITE */}
+                                <div style={{ marginBottom: '0' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                        WEBSITE
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={businessInfo.website || 'https://www.abcboutique.henerrival.com'}
+                                        onChange={(e) => handleBusinessInfoUpdate('website', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
+                                            transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
+                                        }}
+                                        onFocus={handleFieldFocus}
+                                        onBlur={handleFieldBlur}
+                                        onMouseEnter={handleFieldMouseEnter}
+                                        onMouseLeave={handleFieldMouseLeave}
+                                    />
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* OPENING HOURS ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsOpeningHoursOpen(!isOpeningHoursOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isOpeningHoursOpen ? '1px solid #e2e8f0' : 'none'
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
                     <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>OPENING HOURS</div>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>OPENING HOURS</div>
                     </div>
-                    {isOpeningHoursOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {
-                    isOpeningHoursOpen && (
-                        <div style={{ padding: '1rem', background: '#fff' }}>
-
-                            {/* Time Format Toggle */}
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '1.5rem' }}>
-                                <button style={{
-                                    padding: '0.5rem 1rem',
-                                    border: '1px solid #e2e8f0',
-                                    borderRadius: '4px',
-                                    background: '#fff',
-                                    color: '#64748b',
-                                    fontSize: '0.85rem',
-                                    cursor: 'pointer'
-                                }}>
-                                    24 hrs
-                                </button>
-                                <button style={{
-                                    padding: '0.5rem 1rem',
-                                    border: '1px solid #8b5cf6',
-                                    borderRadius: '4px',
-                                    background: '#fff',
-                                    color: '#8b5cf6',
-                                    fontSize: '0.85rem',
-                                    cursor: 'pointer',
-                                    fontWeight: '500'
-                                }}>
-                                    AM/PM
-                                </button>
-                            </div>
-
-                            {/* Days Schedule */}
-                            {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => (
-                                <div key={day} style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '0.75rem',
-                                    marginBottom: '1rem',
-                                    paddingBottom: '1rem',
-                                    borderBottom: day !== 'sunday' ? '1px solid #f1f5f9' : 'none'
-                                }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                        <input
-                                            type="checkbox"
-                                            checked={openingHours[day]?.enabled !== false}
-                                            onChange={(e) => handleOpeningHoursUpdate(day, 'enabled', e.target.checked)}
-                                            style={{
-                                                width: '20px',
-                                                height: '20px',
-                                                accentColor: '#06b6d4',
-                                                cursor: 'pointer'
-                                            }}
-                                        />
-                                        <div style={{
-                                            fontSize: '0.9rem',
-                                            fontWeight: 'bold',
-                                            color: '#1e293b',
-                                            textTransform: 'capitalize',
-                                            minWidth: '100px'
-                                        }}>
-                                            {day}
-                                        </div>
-                                    </div>
-
-                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                        {/* Opening Time */}
-                                        <div style={{ position: 'relative', flex: '1 1 120px' }}>
-                                            <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem' }}>OPEN</label>
-                                            <input
-                                                type="text"
-                                                value={openingHours[day]?.open || '08:00 AM'}
-                                                onChange={(e) => handleOpeningHoursUpdate(day, 'open', e.target.value)}
-                                                placeholder="08:00 AM"
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem',
-                                                    paddingRight: '2.5rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #e2e8f0',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none',
-                                                    color: '#64748b'
-                                                }}
-                                            />
-                                            <Clock size={16} color="#cbd5e1" style={{
-                                                position: 'absolute',
-                                                right: '0.75rem',
-                                                top: 'calc(50% + 8px)',
-                                                transform: 'translateY(-50%)',
-                                                pointerEvents: 'none'
-                                            }} />
-                                        </div>
-
-                                        {/* Closing Time */}
-                                        <div style={{ position: 'relative', flex: '1 1 120px' }}>
-                                            <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem' }}>CLOSE</label>
-                                            <input
-                                                type="text"
-                                                value={openingHours[day]?.close || '08:00 AM'}
-                                                onChange={(e) => handleOpeningHoursUpdate(day, 'close', e.target.value)}
-                                                placeholder="08:00 AM"
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.75rem',
-                                                    paddingRight: '2.5rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #e2e8f0',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none',
-                                                    color: '#64748b'
-                                                }}
-                                            />
-                                            <Clock size={16} color="#cbd5e1" style={{
-                                                position: 'absolute',
-                                                right: '0.75rem',
-                                                top: 'calc(50% + 8px)',
-                                                transform: 'translateY(-50%)',
-                                                pointerEvents: 'none'
-                                            }} />
-                                        </div>
-                                    </div>
+                    <motion.div
+                        animate={{ rotate: isOpeningHoursOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: 999,
+                            border: '1px solid #334155',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: '#020617'
+                        }}
+                    >
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isOpeningHoursOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
+                                {/* Time Format Toggle */}
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+                                    <button style={{
+                                        padding: '0.55rem 1.25rem',
+                                        borderRadius: '999px',
+                                        border: '1px solid #334155',
+                                        background: '#020617',
+                                        color: '#94a3b8',
+                                        fontSize: '0.8rem',
+                                        cursor: 'pointer',
+                                        fontWeight: '600'
+                                    }}>
+                                        24 hrs
+                                    </button>
+                                    <button style={{
+                                        padding: '0.55rem 1.25rem',
+                                        borderRadius: '999px',
+                                        border: '1px solid rgba(255,163,5,0.8)',
+                                        background: 'rgba(255,163,5,0.1)',
+                                        color: '#ffa305',
+                                        fontSize: '0.8rem',
+                                        cursor: 'pointer',
+                                        fontWeight: '600'
+                                    }}>
+                                        AM/PM
+                                    </button>
                                 </div>
-                            ))}
 
-                        </div>
-                    )
-                }
-            </div>
+                                {/* Days Schedule */}
+                                {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => (
+                                    <div key={day} style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '0.75rem',
+                                        marginBottom: '1rem',
+                                        paddingBottom: '1rem',
+                                        borderBottom: day !== 'sunday' ? '1px solid #1e293b' : 'none'
+                                    }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={openingHours[day]?.enabled !== false}
+                                                onChange={(e) => handleOpeningHoursUpdate(day, 'enabled', e.target.checked)}
+                                                style={{
+                                                    width: '20px',
+                                                    height: '20px',
+                                                    accentColor: '#06b6d4',
+                                                    cursor: 'pointer'
+                                                }}
+                                            />
+                                            <div style={{
+                                                fontSize: '0.9rem',
+                                                fontWeight: '600',
+                                                color: '#e5e7eb',
+                                                textTransform: 'capitalize',
+                                                minWidth: '100px'
+                                            }}>
+                                                {day}
+                                            </div>
+                                        </div>
+
+                                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                            {/* Opening Time */}
+                                            <div style={{ position: 'relative', flex: '1 1 120px' }}>
+                                                <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem' }}>OPEN</label>
+                                                <input
+                                                    type="text"
+                                                    value={openingHours[day]?.open || '08:00 AM'}
+                                                    onChange={(e) => handleOpeningHoursUpdate(day, 'open', e.target.value)}
+                                                    placeholder="08:00 AM"
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.75rem 1rem',
+                                                        paddingRight: '2.5rem',
+                                                        borderRadius: '10px',
+                                                        border: '1px solid #334155',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        color: '#e5e7eb',
+                                                        background: '#020617',
+                                                        transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
+                                                    }}
+                                                    onFocus={handleFieldFocus}
+                                                    onBlur={handleFieldBlur}
+                                                    onMouseEnter={handleFieldMouseEnter}
+                                                    onMouseLeave={handleFieldMouseLeave}
+                                                />
+                                                <Clock size={16} color="#64748b" style={{
+                                                    position: 'absolute',
+                                                    right: '0.75rem',
+                                                    top: 'calc(50% + 8px)',
+                                                    transform: 'translateY(-50%)',
+                                                    pointerEvents: 'none'
+                                                }} />
+                                            </div>
+
+                                            {/* Closing Time */}
+                                            <div style={{ position: 'relative', flex: '1 1 120px' }}>
+                                                <label style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem' }}>CLOSE</label>
+                                                <input
+                                                    type="text"
+                                                    value={openingHours[day]?.close || '08:00 AM'}
+                                                    onChange={(e) => handleOpeningHoursUpdate(day, 'close', e.target.value)}
+                                                    placeholder="08:00 AM"
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.75rem 1rem',
+                                                        paddingRight: '2.5rem',
+                                                        borderRadius: '10px',
+                                                        border: '1px solid #334155',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        color: '#e5e7eb',
+                                                        background: '#020617',
+                                                        transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
+                                                    }}
+                                                    onFocus={handleFieldFocus}
+                                                    onBlur={handleFieldBlur}
+                                                    onMouseEnter={handleFieldMouseEnter}
+                                                    onMouseLeave={handleFieldMouseLeave}
+                                                />
+                                                <Clock size={16} color="#64748b" style={{
+                                                    position: 'absolute',
+                                                    right: '0.75rem',
+                                                    top: 'calc(50% + 8px)',
+                                                    transform: 'translateY(-50%)',
+                                                    pointerEvents: 'none'
+                                                }} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* FACILITIES ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsFacilitiesOpen(!isFacilitiesOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isFacilitiesOpen ? '1px solid #e2e8f0' : 'none'
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
                     <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>FACILITIES</div>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>FACILITIES</div>
                     </div>
-                    {isFacilitiesOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {
-                    isFacilitiesOpen && (
-                        <div style={{ padding: '1rem', background: '#fff' }}>
-
+                    <motion.div
+                        animate={{ rotate: isFacilitiesOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: 999,
+                            border: '1px solid #334155',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: '#020617'
+                        }}
+                    >
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+            <AnimatePresence>
+                {isFacilitiesOpen && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: 'easeInOut' }}
+                        style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                    >
+                        <div style={{ padding: '1.25rem' }}>
                             {/* Facilities Icons */}
-                            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+                            <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
                                 {/* WiFi */}
                                 <div
                                     onClick={() => handleFacilityToggle('wifi')}
                                     style={{
                                         cursor: 'pointer',
-                                        color: facilities.includes('wifi') ? '#3b82f6' : '#94a3b8',
+                                        color: facilities.includes('wifi') ? '#60a5fa' : '#64748b',
                                         transition: 'color 0.2s'
                                     }}
                                 >
@@ -843,7 +1004,7 @@ const BusinessPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleFacilityToggle('baby')}
                                     style={{
                                         cursor: 'pointer',
-                                        color: facilities.includes('baby') ? '#3b82f6' : '#94a3b8',
+                                        color: facilities.includes('baby') ? '#60a5fa' : '#64748b',
                                         transition: 'color 0.2s'
                                     }}
                                 >
@@ -855,7 +1016,7 @@ const BusinessPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleFacilityToggle('wheelchair')}
                                     style={{
                                         cursor: 'pointer',
-                                        color: facilities.includes('wheelchair') ? '#3b82f6' : '#94a3b8',
+                                        color: facilities.includes('wheelchair') ? '#60a5fa' : '#64748b',
                                         transition: 'color 0.2s'
                                     }}
                                 >
@@ -867,7 +1028,7 @@ const BusinessPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleFacilityToggle('restaurant')}
                                     style={{
                                         cursor: 'pointer',
-                                        color: facilities.includes('restaurant') ? '#3b82f6' : '#94a3b8',
+                                        color: facilities.includes('restaurant') ? '#60a5fa' : '#64748b',
                                         transition: 'color 0.2s'
                                     }}
                                 >
@@ -879,7 +1040,7 @@ const BusinessPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleFacilityToggle('smoking')}
                                     style={{
                                         cursor: 'pointer',
-                                        color: facilities.includes('smoking') ? '#3b82f6' : '#94a3b8',
+                                        color: facilities.includes('smoking') ? '#60a5fa' : '#64748b',
                                         transition: 'color 0.2s'
                                     }}
                                 >
@@ -891,7 +1052,7 @@ const BusinessPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleFacilityToggle('pets')}
                                     style={{
                                         cursor: 'pointer',
-                                        color: facilities.includes('pets') ? '#3b82f6' : '#94a3b8',
+                                        color: facilities.includes('pets') ? '#60a5fa' : '#64748b',
                                         transition: 'color 0.2s'
                                     }}
                                 >
@@ -903,7 +1064,7 @@ const BusinessPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleFacilityToggle('parking')}
                                     style={{
                                         cursor: 'pointer',
-                                        color: facilities.includes('parking') ? '#3b82f6' : '#94a3b8',
+                                        color: facilities.includes('parking') ? '#60a5fa' : '#64748b',
                                         fontSize: '28px',
                                         fontWeight: 'bold',
                                         width: '28px',
@@ -922,7 +1083,7 @@ const BusinessPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleFacilityToggle('hotel')}
                                     style={{
                                         cursor: 'pointer',
-                                        color: facilities.includes('hotel') ? '#3b82f6' : '#94a3b8',
+                                        color: facilities.includes('hotel') ? '#60a5fa' : '#64748b',
                                         transition: 'color 0.2s'
                                     }}
                                 >
@@ -934,7 +1095,7 @@ const BusinessPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleFacilityToggle('car')}
                                     style={{
                                         cursor: 'pointer',
-                                        color: facilities.includes('car') ? '#3b82f6' : '#94a3b8',
+                                        color: facilities.includes('car') ? '#60a5fa' : '#64748b',
                                         transition: 'color 0.2s'
                                     }}
                                 >
@@ -946,7 +1107,7 @@ const BusinessPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleFacilityToggle('coffee')}
                                     style={{
                                         cursor: 'pointer',
-                                        color: facilities.includes('coffee') ? '#3b82f6' : '#94a3b8',
+                                        color: facilities.includes('coffee') ? '#60a5fa' : '#64748b',
                                         transition: 'color 0.2s'
                                     }}
                                 >
@@ -958,580 +1119,675 @@ const BusinessPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
                                     onClick={() => handleFacilityToggle('bar')}
                                     style={{
                                         cursor: 'pointer',
-                                        color: facilities.includes('bar') ? '#3b82f6' : '#94a3b8',
+                                        color: facilities.includes('bar') ? '#60a5fa' : '#64748b',
                                         transition: 'color 0.2s'
                                     }}
                                 >
                                     <Wine size={28} />
                                 </div>
                             </div>
-
                         </div>
-                    )
-                }
-            </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+            </motion.div>
 
             {/* CONTACT INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsContactOpen(!isContactOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isContactOpen ? '1px solid #e2e8f0' : 'none'
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
                     <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>CONTACT INFORMATION</div>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>CONTACT INFORMATION</div>
                     </div>
-                    {isContactOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {
-                    isContactOpen && (
-                        <div style={{ padding: '1rem', background: '#fff' }}>
-
-                            {/* NAME OF PERSON */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    NAME OF PERSON
-                                </label>
-                                <input
-                                    type="text"
-                                    value={contact.name || ''}
-                                    onChange={(e) => handleContactUpdate('name', e.target.value)}
-                                    placeholder="Hellegen"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
-                            </div>
-
-                            {/* DESIGNATION IN THE COMPANY */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                    DESIGNATION IN THE COMPANY
-                                </label>
-                                <input
-                                    type="text"
-                                    value={contact.designation || ''}
-                                    onChange={(e) => handleContactUpdate('designation', e.target.value)}
-                                    placeholder="Manager"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '4px',
-                                        border: '1px solid #1e293b',
-                                        fontSize: '0.9rem',
-                                        outline: 'none'
-                                    }}
-                                />
-                            </div>
-
-                            {/* LOCATION */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                {(contact.location && contact.location.length > 0) || contact.location === ' ' ? (
-                                    <>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
-                                                LOCATION
-                                            </label>
-                                            <div
-                                                onClick={() => handleContactUpdate('location', '')}
-                                                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
-                                            >
-                                                <X size={14} color="#ef4444" />
-                                                <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '600' }}>Delete</span>
-                                            </div>
-                                        </div>
-                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                            <div style={{
-                                                width: '48px',
-                                                height: '48px',
-                                                border: '1px solid #e2e8f0',
-                                                borderRadius: '4px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                flexShrink: 0
-                                            }}>
-                                                <MapPin size={20} color="#64748b" />
-                                            </div>
-                                            <input
-                                                type="text"
-                                                value={contact.location === ' ' ? '' : contact.location}
-                                                onChange={(e) => handleContactUpdate('location', e.target.value)}
-                                                placeholder="1000 Marketplace Ave. NY, 10001, United States"
-                                                style={{
-                                                    flex: 1,
-                                                    padding: '0.75rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #e2e8f0',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none',
-                                                    color: '#64748b'
-                                                }}
-                                            />
-                                        </div>
-                                    </>
-                                ) : (
-                                    <button
-                                        onClick={() => handleContactUpdate('location', ' ')}
+                    <motion.div
+                        animate={{ rotate: isContactOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: 999,
+                            border: '1px solid #334155',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: '#020617'
+                        }}
+                    >
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isContactOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
+                                {/* NAME OF PERSON */}
+                                <div style={{ marginBottom: '2rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                        NAME OF PERSON
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={contact.name || ''}
+                                        onChange={(e) => handleContactUpdate('name', e.target.value)}
+                                        placeholder="Hellegen"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px dashed #cbd5e1',
-                                            background: '#f8fafc',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            gap: '0.5rem',
-                                            color: '#64748b',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
-                                            fontWeight: '500'
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
+                                            transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
                                         }}
-                                    >
-                                        <Plus size={18} />
-                                        Add Location
-                                    </button>
-                                )}
-                            </div>
+                                        onFocus={handleFieldFocus}
+                                        onBlur={handleFieldBlur}
+                                        onMouseEnter={handleFieldMouseEnter}
+                                        onMouseLeave={handleFieldMouseLeave}
+                                    />
+                                </div>
 
-                            {/* PHONE */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                {(contact.phone && contact.phone.length > 0) || contact.phone === ' ' ? (
-                                    <>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
-                                                PHONE
-                                            </label>
-                                            <div
-                                                onClick={() => handleContactUpdate('phone', '')}
-                                                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
-                                            >
-                                                <X size={14} color="#ef4444" />
-                                                <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '600' }}>Delete</span>
-                                            </div>
-                                        </div>
-                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                            <div style={{
-                                                width: '48px',
-                                                height: '48px',
-                                                border: '1px solid #e2e8f0',
-                                                borderRadius: '4px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                flexShrink: 0
-                                            }}>
-                                                <Phone size={20} color="#64748b" />
-                                            </div>
-                                            <input
-                                                type="text"
-                                                value={contact.phone === ' ' ? '' : contact.phone}
-                                                onChange={(e) => handleContactUpdate('phone', e.target.value)}
-                                                placeholder="15555551234"
-                                                style={{
-                                                    flex: 1,
-                                                    padding: '0.75rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #e2e8f0',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none',
-                                                    color: '#64748b'
-                                                }}
-                                            />
-                                        </div>
-                                    </>
-                                ) : (
-                                    <button
-                                        onClick={() => handleContactUpdate('phone', ' ')}
+                                {/* DESIGNATION IN THE COMPANY */}
+                                <div style={{ marginBottom: '2rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                        DESIGNATION IN THE COMPANY
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={contact.designation || ''}
+                                        onChange={(e) => handleContactUpdate('designation', e.target.value)}
+                                        placeholder="Manager"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px dashed #cbd5e1',
-                                            background: '#f8fafc',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            gap: '0.5rem',
-                                            color: '#64748b',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
                                             fontSize: '0.9rem',
-                                            fontWeight: '500'
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
+                                            transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
                                         }}
-                                    >
-                                        <Plus size={18} />
-                                        Add Phone
-                                    </button>
-                                )}
-                            </div>
+                                        onFocus={handleFieldFocus}
+                                        onBlur={handleFieldBlur}
+                                        onMouseEnter={handleFieldMouseEnter}
+                                        onMouseLeave={handleFieldMouseLeave}
+                                    />
+                                </div>
 
-                            {/* EMAIL */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                {(contact.email && contact.email.length > 0) || contact.email === ' ' ? (
-                                    <>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
-                                                EMAIL
-                                            </label>
-                                            <div
-                                                onClick={() => handleContactUpdate('email', '')}
-                                                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
-                                            >
-                                                <X size={14} color="#ef4444" />
-                                                <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '600' }}>Delete</span>
+                                {/* LOCATION */}
+                                <div style={{ marginBottom: '2rem' }}>
+                                    {(contact.location && contact.location.length > 0) || contact.location === ' ' ? (
+                                        <>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                                <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                                    LOCATION
+                                                </label>
+                                                <div
+                                                    onClick={() => handleContactUpdate('location', '')}
+                                                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                                                >
+                                                    <X size={14} color="#ef4444" />
+                                                    <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '600' }}>Delete</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                            <div style={{
-                                                width: '48px',
-                                                height: '48px',
-                                                border: '1px solid #e2e8f0',
-                                                borderRadius: '4px',
+                                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                                <div style={{
+                                                    width: '48px',
+                                                    height: '48px',
+                                                    border: '1px solid #334155',
+                                                    borderRadius: '10px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    flexShrink: 0,
+                                                    background: '#020617'
+                                                }}>
+                                                    <MapPin size={20} color="#64748b" />
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    value={contact.location === ' ' ? '' : contact.location}
+                                                    onChange={(e) => handleContactUpdate('location', e.target.value)}
+                                                    placeholder="1000 Marketplace Ave. NY, 10001, United States"
+                                                    style={{
+                                                        flex: 1,
+                                                        padding: '0.75rem',
+                                                        borderRadius: '10px',
+                                                        border: '1px solid #334155',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        color: '#e5e7eb',
+                                                        background: '#020617',
+                                                        transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
+                                                    }}
+                                                    onFocus={handleFieldFocus}
+                                                    onBlur={handleFieldBlur}
+                                                    onMouseEnter={handleFieldMouseEnter}
+                                                    onMouseLeave={handleFieldMouseLeave}
+                                                />
+                                            </div>
+                                        </>
+                                    ) : (
+                                            <button
+                                                onClick={() => handleContactUpdate('location', ' ')}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '10px',
+                                                    border: '1px dashed #334155',
+                                                    background: '#020617',
+                                                    cursor: 'pointer',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    gap: '0.5rem',
+                                                    color: '#94a3b8',
+                                                    fontSize: '0.9rem',
+                                                    fontWeight: '500'
+                                                }}
+                                            >
+                                            <Plus size={18} />
+                                            Add Location
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* PHONE */}
+                                <div style={{ marginBottom: '2rem' }}>
+                                    {(contact.phone && contact.phone.length > 0) || contact.phone === ' ' ? (
+                                        <>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                                <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                                    PHONE
+                                                </label>
+                                                <div
+                                                    onClick={() => handleContactUpdate('phone', '')}
+                                                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                                                >
+                                                    <X size={14} color="#ef4444" />
+                                                    <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '600' }}>Delete</span>
+                                                </div>
+                                            </div>
+                                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                                <div style={{
+                                                    width: '48px',
+                                                    height: '48px',
+                                                    border: '1px solid #334155',
+                                                    borderRadius: '10px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    flexShrink: 0,
+                                                    background: '#020617'
+                                                }}>
+                                                    <Phone size={20} color="#64748b" />
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    value={contact.phone === ' ' ? '' : contact.phone}
+                                                    onChange={(e) => handleContactUpdate('phone', e.target.value)}
+                                                    placeholder="15555551234"
+                                                    style={{
+                                                        flex: 1,
+                                                        padding: '0.75rem',
+                                                        borderRadius: '10px',
+                                                        border: '1px solid #334155',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        color: '#e5e7eb',
+                                                        background: '#020617',
+                                                        transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
+                                                    }}
+                                                    onFocus={handleFieldFocus}
+                                                    onBlur={handleFieldBlur}
+                                                    onMouseEnter={handleFieldMouseEnter}
+                                                    onMouseLeave={handleFieldMouseLeave}
+                                                />
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <button
+                                            onClick={() => handleContactUpdate('phone', ' ')}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                borderRadius: '10px',
+                                                border: '1px dashed #334155',
+                                                background: '#020617',
+                                                cursor: 'pointer',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                flexShrink: 0
-                                            }}>
-                                                <Mail size={20} color="#64748b" />
-                                            </div>
-                                            <input
-                                                type="email"
-                                                value={contact.email === ' ' ? '' : contact.email}
-                                                onChange={(e) => handleContactUpdate('email', e.target.value)}
-                                                placeholder="Hellen@gmail.com"
-                                                style={{
-                                                    flex: 1,
-                                                    padding: '0.75rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #e2e8f0',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none',
-                                                    color: '#64748b'
-                                                }}
-                                            />
-                                        </div>
-                                    </>
-                                ) : (
-                                    <button
-                                        onClick={() => handleContactUpdate('email', ' ')}
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px dashed #cbd5e1',
-                                            background: '#f8fafc',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            gap: '0.5rem',
-                                            color: '#64748b',
-                                            fontSize: '0.9rem',
-                                            fontWeight: '500'
-                                        }}
-                                    >
-                                        <Plus size={18} />
-                                        Add Email
-                                    </button>
-                                )}
-                            </div>
+                                                gap: '0.5rem',
+                                                color: '#94a3b8',
+                                                fontSize: '0.9rem',
+                                                fontWeight: '500'
+                                            }}
+                                        >
+                                            <Plus size={18} />
+                                            Add Phone
+                                        </button>
+                                    )}
+                                </div>
 
-                            {/* WEBSITE */}
-                            <div style={{ marginBottom: '0' }}>
-                                {(contact.website && contact.website.length > 0) || contact.website === ' ' ? (
-                                    <>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', textTransform: 'uppercase' }}>
-                                                WEBSITE
-                                            </label>
-                                            <div
-                                                onClick={() => handleContactUpdate('website', '')}
-                                                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
-                                            >
-                                                <X size={14} color="#ef4444" />
-                                                <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '600' }}>Delete</span>
+                                {/* EMAIL */}
+                                <div style={{ marginBottom: '2rem' }}>
+                                    {(contact.email && contact.email.length > 0) || contact.email === ' ' ? (
+                                        <>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                                <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                                    EMAIL
+                                                </label>
+                                                <div
+                                                    onClick={() => handleContactUpdate('email', '')}
+                                                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                                                >
+                                                    <X size={14} color="#ef4444" />
+                                                    <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '600' }}>Delete</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                            <div style={{
-                                                width: '48px',
-                                                height: '48px',
-                                                border: '1px solid #e2e8f0',
-                                                borderRadius: '4px',
+                                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                                <div style={{
+                                                    width: '48px',
+                                                    height: '48px',
+                                                    border: '1px solid #334155',
+                                                    borderRadius: '10px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    flexShrink: 0,
+                                                    background: '#020617'
+                                                }}>
+                                                    <Mail size={20} color="#64748b" />
+                                                </div>
+                                                <input
+                                                    type="email"
+                                                    value={contact.email === ' ' ? '' : contact.email}
+                                                    onChange={(e) => handleContactUpdate('email', e.target.value)}
+                                                    placeholder="Hellen@gmail.com"
+                                                    style={{
+                                                        flex: 1,
+                                                        padding: '0.75rem',
+                                                        borderRadius: '10px',
+                                                        border: '1px solid #334155',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        color: '#e5e7eb',
+                                                        background: '#020617',
+                                                        transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
+                                                    }}
+                                                    onFocus={handleFieldFocus}
+                                                    onBlur={handleFieldBlur}
+                                                    onMouseEnter={handleFieldMouseEnter}
+                                                    onMouseLeave={handleFieldMouseLeave}
+                                                />
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <button
+                                            onClick={() => handleContactUpdate('email', ' ')}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                borderRadius: '10px',
+                                                border: '1px dashed #334155',
+                                                background: '#020617',
+                                                cursor: 'pointer',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                flexShrink: 0
-                                            }}>
-                                                <Globe size={20} color="#64748b" />
-                                            </div>
-                                            <input
-                                                type="text"
-                                                value={contact.website === ' ' ? '' : contact.website}
-                                                onChange={(e) => handleContactUpdate('website', e.target.value)}
-                                                placeholder="https://Hellengrey.com"
-                                                style={{
-                                                    flex: 1,
-                                                    padding: '0.75rem',
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #e2e8f0',
-                                                    fontSize: '0.9rem',
-                                                    outline: 'none',
-                                                    color: '#64748b'
-                                                }}
-                                            />
-                                        </div>
-                                    </>
-                                ) : (
-                                    <button
-                                        onClick={() => handleContactUpdate('website', ' ')}
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px dashed #cbd5e1',
-                                            background: '#f8fafc',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            gap: '0.5rem',
-                                            color: '#64748b',
-                                            fontSize: '0.9rem',
-                                            fontWeight: '500'
-                                        }}
-                                    >
-                                        <Plus size={18} />
-                                        Add Website
-                                    </button>
-                                )}
-                            </div>
+                                                gap: '0.5rem',
+                                                color: '#94a3b8',
+                                                fontSize: '0.9rem',
+                                                fontWeight: '500'
+                                            }}
+                                        >
+                                            <Plus size={18} />
+                                            Add Email
+                                        </button>
+                                    )}
+                                </div>
 
-                        </div>
-                    )
-                }
-            </div>
+                                {/* WEBSITE */}
+                                <div style={{ marginBottom: '0' }}>
+                                    {(contact.website && contact.website.length > 0) || contact.website === ' ' ? (
+                                        <>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                                <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                                    WEBSITE
+                                                </label>
+                                                <div
+                                                    onClick={() => handleContactUpdate('website', '')}
+                                                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                                                >
+                                                    <X size={14} color="#ef4444" />
+                                                    <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '600' }}>Delete</span>
+                                                </div>
+                                            </div>
+                                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                                <div style={{
+                                                    width: '48px',
+                                                    height: '48px',
+                                                    border: '1px solid #334155',
+                                                    borderRadius: '10px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    flexShrink: 0,
+                                                    background: '#020617'
+                                                }}>
+                                                    <Globe size={20} color="#64748b" />
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    value={contact.website === ' ' ? '' : contact.website}
+                                                    onChange={(e) => handleContactUpdate('website', e.target.value)}
+                                                    placeholder="https://Hellengrey.com"
+                                                    style={{
+                                                        flex: 1,
+                                                        padding: '0.75rem',
+                                                        borderRadius: '10px',
+                                                        border: '1px solid #334155',
+                                                        fontSize: '0.9rem',
+                                                        outline: 'none',
+                                                        color: '#e5e7eb',
+                                                        background: '#020617',
+                                                        transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease'
+                                                    }}
+                                                    onFocus={handleFieldFocus}
+                                                    onBlur={handleFieldBlur}
+                                                    onMouseEnter={handleFieldMouseEnter}
+                                                    onMouseLeave={handleFieldMouseLeave}
+                                                />
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <button
+                                            onClick={() => handleContactUpdate('website', ' ')}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                borderRadius: '10px',
+                                                border: '1px dashed #334155',
+                                                background: '#020617',
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                gap: '0.5rem',
+                                                color: '#94a3b8',
+                                                fontSize: '0.9rem',
+                                                fontWeight: '500'
+                                            }}
+                                        >
+                                            <Plus size={18} />
+                                            Add Website
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
             {/* SOCIAL MEDIA CHANNELS ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsSocialOpen(!isSocialOpen)}
                     style={{
-                        padding: '1.5rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isSocialOpen ? '1px solid #e2e8f0' : 'none'
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
                     <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
+                        <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem', textTransform: 'uppercase' }}>SOCIAL MEDIA CHANNELS</div>
                     </div>
-                    {isSocialOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
+                    <motion.div
+                        animate={{ rotate: isSocialOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: 999,
+                            border: '1px solid #334155',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: '#020617'
+                        }}
+                    >
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isSocialOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
+                                {(() => {
+                                    const SOCIAL_PLATFORMS = [
+                                        { id: 'facebook', name: 'Facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877F2' },
+                                        { id: 'instagram', name: 'Instagram', icon: 'https://img.icons8.com/color/48/instagram-new--v1.png', color: '#E4405F' },
+                                        { id: 'twitter', name: 'X', icon: 'https://img.icons8.com/color/48/twitterx--v1.png', color: '#000000' },
+                                        { id: 'linkedin', name: 'LinkedIn', icon: 'https://img.icons8.com/color/48/linkedin.png', color: '#0A66C2' },
+                                        { id: 'discord', name: 'Discord', icon: 'https://img.icons8.com/color/48/discord-new.png', color: '#5865F2' },
+                                        { id: 'twitch', name: 'Twitch', icon: 'https://img.icons8.com/color/48/twitch.png', color: '#9146FF' },
+                                        { id: 'youtube', name: 'YouTube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#FF0000' },
+                                        { id: 'whatsapp', name: 'WhatsApp', icon: 'https://img.icons8.com/color/48/whatsapp--v1.png', color: '#25D366' },
+                                        { id: 'snapchat', name: 'Snapchat', icon: 'https://img.icons8.com/color/48/snapchat--v1.png', color: '#FFFC00' },
+                                        { id: 'tiktok', name: 'TikTok', icon: 'https://img.icons8.com/color/48/tiktok--v1.png', color: '#000000' },
+                                        { id: 'pinterest', name: 'Pinterest', icon: 'https://img.icons8.com/color/48/pinterest.png', color: '#BD081C' },
+                                        { id: 'dribbble', name: 'Dribbble', icon: 'https://img.icons8.com/color/48/dribbble.png', color: '#EA4C89' },
+                                        { id: 'telegram', name: 'Telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', color: '#0088CC' },
+                                        { id: 'reddit', name: 'Reddit', icon: 'https://img.icons8.com/color/48/reddit.png', color: '#FF4500' },
+                                        { id: 'spotify', name: 'Spotify', icon: 'https://img.icons8.com/color/48/spotify--v1.png', color: '#1DB954' },
+                                    ];
 
-                {
-                    isSocialOpen && (
-                        <div style={{ padding: '1rem', background: '#fff' }}>
-                            {(() => {
-                                const SOCIAL_PLATFORMS = [
-                                    { id: 'facebook', name: 'Facebook', icon: 'https://img.icons8.com/color/48/facebook-new.png', color: '#1877F2' },
-                                    { id: 'instagram', name: 'Instagram', icon: 'https://img.icons8.com/color/48/instagram-new--v1.png', color: '#E4405F' },
-                                    { id: 'twitter', name: 'X', icon: 'https://img.icons8.com/color/48/twitterx--v1.png', color: '#000000' },
-                                    { id: 'linkedin', name: 'LinkedIn', icon: 'https://img.icons8.com/color/48/linkedin.png', color: '#0A66C2' },
-                                    { id: 'discord', name: 'Discord', icon: 'https://img.icons8.com/color/48/discord-new.png', color: '#5865F2' },
-                                    { id: 'twitch', name: 'Twitch', icon: 'https://img.icons8.com/color/48/twitch.png', color: '#9146FF' },
-                                    { id: 'youtube', name: 'YouTube', icon: 'https://img.icons8.com/color/48/youtube-play.png', color: '#FF0000' },
-                                    { id: 'whatsapp', name: 'WhatsApp', icon: 'https://img.icons8.com/color/48/whatsapp--v1.png', color: '#25D366' },
-                                    { id: 'snapchat', name: 'Snapchat', icon: 'https://img.icons8.com/color/48/snapchat--v1.png', color: '#FFFC00' },
-                                    { id: 'tiktok', name: 'TikTok', icon: 'https://img.icons8.com/color/48/tiktok--v1.png', color: '#000000' },
-                                    { id: 'pinterest', name: 'Pinterest', icon: 'https://img.icons8.com/color/48/pinterest.png', color: '#BD081C' },
-                                    { id: 'dribbble', name: 'Dribbble', icon: 'https://img.icons8.com/color/48/dribbble.png', color: '#EA4C89' },
-                                    { id: 'telegram', name: 'Telegram', icon: 'https://img.icons8.com/color/48/telegram-app.png', color: '#0088CC' },
-                                    { id: 'reddit', name: 'Reddit', icon: 'https://img.icons8.com/color/48/reddit.png', color: '#FF4500' },
-                                    { id: 'spotify', name: 'Spotify', icon: 'https://img.icons8.com/color/48/spotify--v1.png', color: '#1DB954' },
-                                ];
+                                    const activePlatforms = SOCIAL_PLATFORMS.filter(p => social[p.id] !== undefined);
+                                    const availablePlatforms = SOCIAL_PLATFORMS.filter(p => social[p.id] === undefined);
 
-                                // Helper to get active platforms
-                                const activePlatforms = SOCIAL_PLATFORMS.filter(p => social[p.id] !== undefined);
-                                const availablePlatforms = SOCIAL_PLATFORMS.filter(p => social[p.id] === undefined);
-
-                                return (
-                                    <>
-                                        {/* Active Inputs Grid */}
-                                        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
-                                            {activePlatforms.map((platform) => (
-                                                <div key={platform.id} style={{ flex: '1 1 250px' }}>
-                                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                                        {platform.name}*
-                                                    </label>
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                        <div style={{
-                                                            width: '40px',
-                                                            height: '40px',
-                                                            background: '#fff',
-                                                            borderRadius: '8px',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            flexShrink: 0,
-                                                            overflow: 'hidden',
-                                                            border: '1px solid #e2e8f0'
-                                                        }}>
-                                                            <img src={platform.icon} alt={platform.name} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
-                                                        </div>
-                                                        <input
-                                                            type="text"
-                                                            value={social[platform.id] || ''}
-                                                            onChange={(e) => {
-                                                                const val = e.target.value;
-                                                                onChange(prev => ({
-                                                                    ...prev,
-                                                                    social: {
-                                                                        ...(prev.social || social),
-                                                                        [platform.id]: val
-                                                                    }
-                                                                }));
-                                                                // Clear error when user types
-                                                                if (setErrors) {
-                                                                    setErrors(prev => {
-                                                                        const newErrors = { ...prev };
-                                                                        delete newErrors[platform.id];
-                                                                        delete newErrors.general;
-                                                                        return newErrors;
-                                                                    });
-                                                                }
-                                                            }}
-                                                            placeholder="https://"
-                                                            style={{
-                                                                flex: 1,
-                                                                padding: '0.75rem',
-                                                                borderRadius: '8px',
-                                                                border: `1px solid ${errors[platform.id] ? '#ef4444' : '#1e293b'}`,
-                                                                fontSize: '0.9rem',
-                                                                outline: 'none',
-                                                                color: '#334155'
-                                                            }}
-                                                        />
-                                                        <button
-                                                            onClick={() => handleSocialToggle(platform.id)}
-                                                            style={{
-                                                                background: 'none',
-                                                                border: 'none',
-                                                                cursor: 'pointer',
-                                                                color: '#cbd5e1',
-                                                                padding: '0.25rem'
-                                                            }}
-                                                        >
-                                                            <div style={{ width: '24px', height: '24px', borderRadius: '50%', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                                <X size={14} />
-                                                            </div>
-                                                        </button>
-                                                    </div>
-                                                    {errors[platform.id] && (
-                                                        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
-                                                            {errors[platform.id]}
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        {/* ADD MORE Section */}
-                                        <div>
-                                            <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                                ADD MORE
-                                            </div>
-                                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
-                                                Select a social media profile to add.
-                                            </div>
-
-                                            {/* Social Media Icons Grid */}
-                                            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                                                {SOCIAL_PLATFORMS.map((platform) => {
-                                                    const isAdded = social[platform.id] !== undefined;
-                                                    return (
-                                                        <div
-                                                            key={platform.id}
-                                                            onClick={() => handleSocialToggle(platform.id)}
-                                                            style={{
+                                    return (
+                                        <>
+                                            {/* Active Inputs Grid */}
+                                            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+                                                {activePlatforms.map((platform) => (
+                                                    <div key={platform.id} style={{ flex: '1 1 250px' }}>
+                                                        <label style={{ display: 'block', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
+                                                            {platform.name}*
+                                                        </label>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                            <div style={{
                                                                 width: '40px',
                                                                 height: '40px',
+                                                                background: '#0f172a',
                                                                 borderRadius: '8px',
-                                                                border: isAdded ? '1px solid #22c55e' : `1px solid #e2e8f0`,
                                                                 display: 'flex',
                                                                 alignItems: 'center',
                                                                 justifyContent: 'center',
-                                                                cursor: 'pointer',
-                                                                transition: 'all 0.2s',
-                                                                background: isAdded ? 'rgba(34, 197, 94, 0.1)' : '#fff',
+                                                                flexShrink: 0,
                                                                 overflow: 'hidden',
-                                                                position: 'relative'
-                                                            }}
-                                                        >
-                                                            <img src={platform.icon} alt={platform.name} style={{ width: '20px', height: '20px', objectFit: 'contain', opacity: isAdded ? 0.7 : 1 }} />
-                                                            {isAdded && (
-                                                                <div style={{
-                                                                    position: 'absolute',
-                                                                    top: '-5px',
-                                                                    right: '-5px',
-                                                                    background: '#22c55e',
-                                                                    borderRadius: '50%',
-                                                                    width: '18px',
-                                                                    height: '18px',
+                                                                border: '1px solid #334155'
+                                                            }}>
+                                                                <img src={platform.icon} alt={platform.name} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                                                            </div>
+                                                            <input
+                                                                type="text"
+                                                                value={social[platform.id] || ''}
+                                                                onChange={(e) => {
+                                                                    const val = e.target.value;
+                                                                    onChange(prev => ({
+                                                                        ...prev,
+                                                                        social: {
+                                                                            ...(prev.social || social),
+                                                                            [platform.id]: val
+                                                                        }
+                                                                    }));
+                                                                    if (setErrors) {
+                                                                        setErrors(prev => {
+                                                                            const newErrors = { ...prev };
+                                                                            delete newErrors[platform.id];
+                                                                            delete newErrors.general;
+                                                                            return newErrors;
+                                                                        });
+                                                                    }
+                                                                }}
+                                                                placeholder="https://"
+                                                                style={{
+                                                                    flex: 1,
+                                                                    padding: '0.75rem',
+                                                                    borderRadius: '10px',
+                                                                    border: `1px solid ${errors[platform.id] ? '#ef4444' : '#334155'}`,
+                                                                    fontSize: '0.9rem',
+                                                                    outline: 'none',
+                                                                    color: '#e5e7eb',
+                                                                    background: '#020617'
+                                                                }}
+                                                            />
+                                                            <button
+                                                                onClick={() => handleSocialToggle(platform.id)}
+                                                                style={{
+                                                                    background: 'none',
+                                                                    border: 'none',
+                                                                    cursor: 'pointer',
+                                                                    color: '#cbd5e1',
+                                                                    padding: '0.25rem'
+                                                                }}
+                                                            >
+                                                                <div style={{ width: '24px', height: '24px', borderRadius: '50%', border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                                                                    <X size={14} />
+                                                                </div>
+                                                            </button>
+                                                        </div>
+                                                        {errors[platform.id] && (
+                                                            <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                                                {errors[platform.id]}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            {/* ADD MORE Section */}
+                                            <div>
+                                                <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                                    ADD MORE
+                                                </div>
+                                                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                                                    Select a social media profile to add.
+                                                </div>
+
+                                                {/* Social Media Icons Grid */}
+                                                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                                                    {SOCIAL_PLATFORMS.map((platform) => {
+                                                        const isAdded = social[platform.id] !== undefined;
+                                                        return (
+                                                            <div
+                                                                key={platform.id}
+                                                                onClick={() => handleSocialToggle(platform.id)}
+                                                                style={{
+                                                                    width: '40px',
+                                                                    height: '40px',
+                                                                    borderRadius: '8px',
+                                                                    border: isAdded ? '1px solid #22c55e' : '1px solid #334155',
                                                                     display: 'flex',
                                                                     alignItems: 'center',
                                                                     justifyContent: 'center',
-                                                                    border: '2px solid #fff',
-                                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                                                                }}>
-                                                                    <Check size={10} color="#fff" />
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    );
-                                                })}
+                                                                    cursor: 'pointer',
+                                                                    transition: 'all 0.2s',
+                                                                    background: isAdded ? 'rgba(34, 197, 94, 0.16)' : '#020617',
+                                                                    overflow: 'hidden',
+                                                                    position: 'relative'
+                                                                }}
+                                                            >
+                                                                <img src={platform.icon} alt={platform.name} style={{ width: '20px', height: '20px', objectFit: 'contain', opacity: isAdded ? 0.7 : 1 }} />
+                                                                {isAdded && (
+                                                                    <div style={{
+                                                                        position: 'absolute',
+                                                                        top: '-5px',
+                                                                        right: '-5px',
+                                                                        background: '#22c55e',
+                                                                        borderRadius: '50%',
+                                                                        width: '18px',
+                                                                        height: '18px',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        justifyContent: 'center',
+                                                                        border: '2px solid #fff',
+                                                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                                                    }}>
+                                                                        <Check size={10} color="#fff" />
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
                                             </div>
-                                        </div >
-                                    </>
-                                );
-                            })()}
+                                        </>
+                                    );
+                                })()}
 
-                            {/* Error Message */}
-                            {errors.general && (
-                                <div style={{
-                                    marginTop: '1rem',
-                                    padding: '0.75rem',
-                                    background: '#fee2e2',
-                                    border: '1px solid #ef4444',
-                                    borderRadius: '4px',
-                                    color: '#991b1b',
-                                    fontSize: '0.875rem',
-                                    fontWeight: '500'
-                                }}>
-                                    {errors.general}
-                                </div>
-                            )}
-                        </div>
-                    )
-                }
-            </div>
+                                {/* Error Message */}
+                                {errors.general && (
+                                    <div style={{
+                                        marginTop: '1rem',
+                                        padding: '0.75rem',
+                                        background: 'rgba(248,113,113,0.12)',
+                                        border: '1px solid #ef4444',
+                                        borderRadius: '8px',
+                                        color: '#fecaca',
+                                        fontSize: '0.875rem',
+                                        fontWeight: '500'
+                                    }}>
+                                        {errors.general}
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
             {/* Reusable Upload Modal */}
             <ImageUploadModal
                 isOpen={isUploadModalOpen}

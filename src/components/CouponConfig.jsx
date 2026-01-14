@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronUp, RefreshCw, UploadCloud, X, Check, Eye } from 'lucide-react';
 import { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 import ImageUploadModal from './ImageUploadModal';
 
@@ -393,460 +394,467 @@ const CouponConfig = ({ config, onChange, errors = {}, setErrors }) => {
                 </div>
             )}
 
-            {/* BASIC INFORMATION ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsBasicInfoOpen(!isBasicInfoOpen)}
                     style={{
-                        padding: '1rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isBasicInfoOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>BASIC INFORMATION</div>
-                    </div>
-                    {isBasicInfoOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {isBasicInfoOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
-
-                        <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                <div style={{ flex: '2 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        COMPANY NAME*
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={businessInfo.title || ''}
-                                        onChange={(e) => handleBusinessInfoUpdate('title', e.target.value)}
-                                        placeholder="ABC Boutique"
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: `1px solid ${errors.companyName ? '#ef4444' : '#1e293b'}`,
-                                            fontSize: '0.9rem',
-                                            outline: 'none'
-                                        }}
-                                    />
-                                    {errors.companyName && (
-                                        <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
-                                            {errors.companyName}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Text Color
-                                    </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
-                                    }}>
-                                        <input
-                                            type="text"
-                                            value={businessInfo.titleColor || '#FFFFFF'}
-                                            onChange={(e) => handleBusinessInfoUpdate('titleColor', e.target.value)}
-                                            style={{
-                                                border: 'none',
-                                                outline: 'none',
-                                                width: '100%',
-                                                fontSize: '0.9rem',
-                                                color: '#000',
-                                                fontWeight: '500',
-                                                textTransform: 'uppercase'
-                                            }}
-                                        />
-                                        <div style={{
-                                            width: '28px',
-                                            height: '28px',
-                                            background: businessInfo.titleColor || '#FFFFFF',
-                                            borderRadius: '2px',
-                                            flexShrink: 0,
-                                            border: '1px solid #e2e8f0',
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            cursor: 'pointer'
-                                        }}>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>Basic Information</div>
+                    <motion.div animate={{ rotate: isBasicInfoOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isBasicInfoOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
+                                <div style={{ marginBottom: '1.5rem' }}>
+                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                        <div style={{ flex: '2 1 200px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                                COMPANY NAME*
+                                            </label>
                                             <input
-                                                type="color"
-                                                value={businessInfo.titleColor || '#FFFFFF'}
-                                                onChange={(e) => handleBusinessInfoUpdate('titleColor', e.target.value)}
+                                                type="text"
+                                                value={businessInfo.title || ''}
+                                                onChange={(e) => handleBusinessInfoUpdate('title', e.target.value)}
+                                                placeholder="ABC Boutique"
                                                 style={{
-                                                    position: 'absolute',
-                                                    top: '-50%',
-                                                    left: '-50%',
-                                                    width: '200%',
-                                                    height: '200%',
-                                                    cursor: 'pointer',
-                                                    opacity: 0
+                                                    width: '100%',
+                                                    padding: '0.75rem 1rem',
+                                                    borderRadius: '10px',
+                                                    border: `1px solid ${errors.companyName ? '#ef4444' : '#334155'}`,
+                                                    background: '#020617',
+                                                    color: '#e5e7eb',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    boxShadow: errors.companyName ? '0 0 0 1px #ef4444' : 'none'
                                                 }}
                                             />
+                                            {errors.companyName && (
+                                                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem', fontWeight: '500' }}>
+                                                    {errors.companyName}
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div style={{ flex: '1 1 120px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                                Text Color
+                                            </label>
+                                            <div style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                border: '1px solid #334155',
+                                                borderRadius: '10px',
+                                                padding: '0.5rem 0.75rem',
+                                                height: '44px',
+                                                background: '#020617'
+                                            }}>
+                                                <input
+                                                    type="text"
+                                                    value={businessInfo.titleColor || '#FFFFFF'}
+                                                    onChange={(e) => handleBusinessInfoUpdate('titleColor', e.target.value)}
+                                                    style={{
+                                                        border: 'none',
+                                                        outline: 'none',
+                                                        width: '100%',
+                                                        fontSize: '0.85rem',
+                                                        color: '#e5e7eb',
+                                                        fontWeight: '500',
+                                                        textTransform: 'uppercase',
+                                                        background: 'transparent'
+                                                    }}
+                                                />
+                                                <div style={{
+                                                    width: '28px',
+                                                    height: '28px',
+                                                    background: businessInfo.titleColor || '#FFFFFF',
+                                                    borderRadius: '6px',
+                                                    flexShrink: 0,
+                                                    border: '1px solid #1e293b',
+                                                    position: 'relative',
+                                                    overflow: 'hidden',
+                                                    cursor: 'pointer'
+                                                }}>
+                                                    <input
+                                                        type="color"
+                                                        value={businessInfo.titleColor || '#FFFFFF'}
+                                                        onChange={(e) => handleBusinessInfoUpdate('titleColor', e.target.value)}
+                                                        style={{
+                                                            position: 'absolute',
+                                                            top: '-50%',
+                                                            left: '-50%',
+                                                            width: '200%',
+                                                            height: '200%',
+                                                            cursor: 'pointer',
+                                                            opacity: 0
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style={{ flex: '1 1 100px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                                Font
+                                            </label>
+                                            <select
+                                                value={businessInfo.titleFont || 'Lato'}
+                                                onChange={(e) => handleBusinessInfoUpdate('titleFont', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem 1rem',
+                                                    borderRadius: '10px',
+                                                    border: '1px solid #334155',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    height: '44px',
+                                                    cursor: 'pointer',
+                                                    appearance: 'none',
+                                                    background: `#020617 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 0.75rem center`,
+                                                    color: '#e5e7eb'
+                                                }}
+                                            >
+                                                <option value="Lato">Lato</option>
+                                                <option value="Inter">Inter</option>
+                                                <option value="Roboto">Roboto</option>
+                                                <option value="Open Sans">Open Sans</option>
+                                                <option value="Work Sans">Work Sans</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Font
-                                    </label>
-                                    <select
-                                        value={businessInfo.titleFont || 'Lato'}
-                                        onChange={(e) => handleBusinessInfoUpdate('titleFont', e.target.value)}
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
-                                            fontSize: '0.9rem',
-                                            outline: 'none',
-                                            height: '44px',
-                                            cursor: 'pointer',
-                                            appearance: 'none',
-                                            background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 0.75rem center`,
-                                            backgroundColor: '#fff'
-                                        }}
-                                    >
-                                        <option value="Lato">Lato</option>
-                                        <option value="Inter">Inter</option>
-                                        <option value="Roboto">Roboto</option>
-                                        <option value="Open Sans">Open Sans</option>
-                                        <option value="Work Sans">Work Sans</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                <div style={{ flex: '2 1 200px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                        HEADLINE*
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={coupon.title || ''}
-                                        onChange={(e) => handleCouponUpdate('title', e.target.value)}
-                                        placeholder="Winter Sale"
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: `1px solid ${errors.headline ? '#ef4444' : '#1e293b'}`,
-                                            fontSize: '0.9rem',
-                                            outline: 'none'
-                                        }}
-                                    />
-                                    {errors.headline && (
-                                        <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
-                                            {errors.headline}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div style={{ flex: '1 1 120px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Text Color
-                                    </label>
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        border: '1px solid #1e293b',
-                                        borderRadius: '4px',
-                                        padding: '0.5rem',
-                                        height: '44px'
-                                    }}>
-                                        <input
-                                            type="text"
-                                            value={coupon.titleColor || '#FFFFFF'}
-                                            onChange={(e) => handleCouponUpdate('titleColor', e.target.value)}
-                                            style={{
-                                                border: 'none',
-                                                outline: 'none',
-                                                width: '100%',
-                                                fontSize: '0.9rem',
-                                                color: '#000',
-                                                fontWeight: '500',
-                                                textTransform: 'uppercase'
-                                            }}
-                                        />
-                                        <div style={{
-                                            width: '28px',
-                                            height: '28px',
-                                            background: coupon.titleColor || '#FFFFFF',
-                                            borderRadius: '2px',
-                                            flexShrink: 0,
-                                            border: '1px solid #e2e8f0',
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            cursor: 'pointer'
-                                        }}>
+                                <div style={{ marginBottom: '1.5rem' }}>
+                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                        <div style={{ flex: '2 1 200px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                                HEADLINE*
+                                            </label>
                                             <input
-                                                type="color"
-                                                value={coupon.titleColor || '#FFFFFF'}
-                                                onChange={(e) => handleCouponUpdate('titleColor', e.target.value)}
+                                                type="text"
+                                                value={coupon.title || ''}
+                                                onChange={(e) => handleCouponUpdate('title', e.target.value)}
+                                                placeholder="Winter Sale"
                                                 style={{
-                                                    position: 'absolute',
-                                                    top: '-50%',
-                                                    left: '-50%',
-                                                    width: '200%',
-                                                    height: '200%',
-                                                    cursor: 'pointer',
-                                                    opacity: 0
+                                                    width: '100%',
+                                                    padding: '0.75rem 1rem',
+                                                    borderRadius: '10px',
+                                                    border: `1px solid ${errors.headline ? '#ef4444' : '#334155'}`,
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    background: '#020617',
+                                                    color: '#e5e7eb',
+                                                    boxShadow: errors.headline ? '0 0 0 1px #ef4444' : 'none'
                                                 }}
                                             />
+                                            {errors.headline && (
+                                                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem', fontWeight: '500' }}>
+                                                    {errors.headline}
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div style={{ flex: '1 1 120px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                                Text Color
+                                            </label>
+                                            <div style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                border: '1px solid #334155',
+                                                borderRadius: '10px',
+                                                padding: '0.5rem 0.75rem',
+                                                height: '44px',
+                                                background: '#020617'
+                                            }}>
+                                                <input
+                                                    type="text"
+                                                    value={coupon.titleColor || '#FFFFFF'}
+                                                    onChange={(e) => handleCouponUpdate('titleColor', e.target.value)}
+                                                    style={{
+                                                        border: 'none',
+                                                        outline: 'none',
+                                                        width: '100%',
+                                                        fontSize: '0.85rem',
+                                                        color: '#e5e7eb',
+                                                        fontWeight: '500',
+                                                        textTransform: 'uppercase',
+                                                        background: 'transparent'
+                                                    }}
+                                                />
+                                                <div style={{
+                                                    width: '28px',
+                                                    height: '28px',
+                                                    background: coupon.titleColor || '#FFFFFF',
+                                                    borderRadius: '6px',
+                                                    flexShrink: 0,
+                                                    border: '1px solid #1e293b',
+                                                    position: 'relative',
+                                                    overflow: 'hidden',
+                                                    cursor: 'pointer'
+                                                }}>
+                                                    <input
+                                                        type="color"
+                                                        value={coupon.titleColor || '#FFFFFF'}
+                                                        onChange={(e) => handleCouponUpdate('titleColor', e.target.value)}
+                                                        style={{
+                                                            position: 'absolute',
+                                                            top: '-50%',
+                                                            left: '-50%',
+                                                            width: '200%',
+                                                            height: '200%',
+                                                            cursor: 'pointer',
+                                                            opacity: 0
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style={{ flex: '1 1 100px' }}>
+                                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                                Font
+                                            </label>
+                                            <select
+                                                value={coupon.titleFont || 'Lato'}
+                                                onChange={(e) => handleCouponUpdate('titleFont', e.target.value)}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.75rem 1rem',
+                                                    borderRadius: '10px',
+                                                    border: '1px solid #334155',
+                                                    fontSize: '0.9rem',
+                                                    outline: 'none',
+                                                    height: '44px',
+                                                    cursor: 'pointer',
+                                                    appearance: 'none',
+                                                    background: `#020617 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 0.75rem center`,
+                                                    color: '#e5e7eb'
+                                                }}
+                                            >
+                                                <option value="Lato">Lato</option>
+                                                <option value="Inter">Inter</option>
+                                                <option value="Roboto">Roboto</option>
+                                                <option value="Open Sans">Open Sans</option>
+                                                <option value="Work Sans">Work Sans</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div style={{ flex: '1 1 100px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-                                        Font
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                        DESCRIPTION*
                                     </label>
-                                    <select
-                                        value={coupon.titleFont || 'Lato'}
-                                        onChange={(e) => handleCouponUpdate('titleFont', e.target.value)}
+                                    <textarea
+                                        value={coupon.offer || ''}
+                                        onChange={(e) => handleCouponUpdate('offer', e.target.value)}
+                                        placeholder="Copy the Coupon and get 50% OFF on your next purchase"
+                                        rows={4}
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid #1e293b',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: `1px solid ${errors.description ? '#ef4444' : '#334155'}`,
                                             fontSize: '0.9rem',
                                             outline: 'none',
-                                            height: '44px',
-                                            cursor: 'pointer',
-                                            appearance: 'none',
-                                            background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 0.75rem center`,
-                                            backgroundColor: '#fff'
+                                            resize: 'vertical',
+                                            fontFamily: 'inherit',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
+                                            boxShadow: errors.description ? '0 0 0 1px #ef4444' : 'none'
                                         }}
-                                    >
-                                        <option value="Lato">Lato</option>
-                                        <option value="Inter">Inter</option>
-                                        <option value="Roboto">Roboto</option>
-                                        <option value="Open Sans">Open Sans</option>
-                                        <option value="Work Sans">Work Sans</option>
-                                    </select>
+                                    />
+                                    {errors.description && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem', fontWeight: '500' }}>
+                                            {errors.description}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
-                        {/* DESCRIPTION */}
-                        <div style={{ marginBottom: '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                DESCRIPTION*
-                            </label>
-                            <textarea
-                                value={coupon.offer || ''}
-                                onChange={(e) => handleCouponUpdate('offer', e.target.value)}
-                                placeholder="Copy the Coupon and get 50% OFF on your next purchase"
-                                rows={4}
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: `1px solid ${errors.description ? '#ef4444' : '#1e293b'}`,
-                                    fontSize: '0.9rem',
-                                    outline: 'none',
-                                    resize: 'vertical',
-                                    fontFamily: 'inherit'
-                                }}
-                            />
-                            {errors.description && (
-                                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
-                                    {errors.description}
-                                </p>
-                            )}
-                        </div>
-
-                    </div>
-                )}
-            </div>
-
-            {/* COUPON ACCORDION */}
-            <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '1.5rem', overflow: 'hidden' }}>
-                <div
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ background: '#0f172a', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #334155', overflow: 'hidden' }}
+            >
+                <button
+                    type="button"
                     onClick={() => setIsCouponOpen(!isCouponOpen)}
                     style={{
-                        padding: '1rem',
-                        background: '#f8fafc',
+                        width: '100%',
+                        padding: '1rem 1.25rem',
                         display: 'flex',
-                        alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        borderBottom: isCouponOpen ? '1px solid #e2e8f0' : 'none'
+                        alignItems: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
                     }}
                 >
-                    <div>
-                        <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '1rem', textTransform: 'uppercase' }}>COUPON</div>
-                    </div>
-                    {isCouponOpen ? <ChevronUp size={20} color="#64748b" /> : <ChevronDown size={20} color="#64748b" />}
-                </div>
-
-                {isCouponOpen && (
-                    <div style={{ padding: '1rem', background: '#fff' }}>
-
-                        {/* COUPON CODE */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                COUPON CODE*
-                            </label>
-                            <input
-                                type="text"
-                                value={coupon.code || ''}
-                                onChange={(e) => handleCouponUpdate('code', e.target.value)}
-                                placeholder="SALE20"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: `1px solid ${errors.couponCode ? '#ef4444' : '#1e293b'}`,
-                                    fontSize: '0.9rem',
-                                    outline: 'none'
-                                }}
-                            />
-                            {errors.couponCode && (
-                                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
-                                    {errors.couponCode}
-                                </p>
-                            )}
-                        </div>
-
-                        {/* COUPON EFFECTIVE DATE */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                COUPON EFFECTIVE DATE*
-                            </label>
-                            <input
-                                type="date"
-                                value={coupon.expiry || ''}
-                                onChange={(e) => handleCouponUpdate('expiry', e.target.value)}
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: `1px solid ${errors.effectiveDate ? '#ef4444' : '#1e293b'}`,
-                                    fontSize: '0.9rem',
-                                    outline: 'none',
-                                    color: '#000'
-                                }}
-                            />
-                            {errors.effectiveDate && (
-                                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
-                                    {errors.effectiveDate}
-                                </p>
-                            )}
-                        </div>
-
-                        {/* TERMS & CONDITIONS */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                TERMS & CONDITIONS
-                            </label>
-                            <textarea
-                                value={coupon.terms || 'This coupon is only valid for online purchases.'}
-                                onChange={(e) => handleCouponUpdate('terms', e.target.value)}
-                                rows={3}
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
-                                    fontSize: '0.9rem',
-                                    outline: 'none',
-                                    resize: 'vertical',
-                                    fontFamily: 'inherit'
-                                }}
-                            />
-                        </div>
-
-                        {/* BUTTON TITLE */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                BUTTON TITLE*
-                            </label>
-                            <input
-                                type="text"
-                                value={coupon.buttonTitle || ''}
-                                onChange={(e) => handleCouponUpdate('buttonTitle', e.target.value)}
-                                placeholder="Redeem Now"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: `1px solid ${errors.buttonTitle ? '#ef4444' : '#1e293b'}`,
-                                    fontSize: '0.9rem',
-                                    outline: 'none'
-                                }}
-                            />
-                            {errors.buttonTitle && (
-                                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
-                                    {errors.buttonTitle}
-                                </p>
-                            )}
-                        </div>
-
-                        {/* CALL TO ACTION */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                CALL TO ACTION*
-                            </label>
-                            <input
-                                type="text"
-                                value={coupon.callToAction || ''}
-                                onChange={(e) => handleCouponUpdate('callToAction', e.target.value)}
-                                placeholder="https://www.abcbotique.com"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: `1px solid ${errors.callToAction ? '#ef4444' : '#1e293b'}`,
-                                    fontSize: '0.9rem',
-                                    outline: 'none'
-                                }}
-                            />
-                            {errors.callToAction && (
-                                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem' }}>
-                                    {errors.callToAction}
-                                </p>
-                            )}
-                        </div>
-
-                        {/* LOCATION */}
-                        <div style={{ marginBottom: '0' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                LOCATION
-                            </label>
-                            <input
-                                type="text"
-                                value={coupon.location || ''}
-                                onChange={(e) => handleCouponUpdate('location', e.target.value)}
-                                placeholder="1000 Marketplace Ave. NY, 10001, United States"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem',
-                                    borderRadius: '4px',
-                                    border: '1px solid #1e293b',
-                                    fontSize: '0.9rem',
-                                    outline: 'none'
-                                }}
-                            />
-                        </div>
-
-                    </div>
-                )}
-            </div>
+                    <div style={{ fontWeight: '700', color: '#f8fafc', fontSize: '0.95rem' }}>Coupon</div>
+                    <motion.div animate={{ rotate: isCouponOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ width: 32, height: 32, borderRadius: 999, border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
+                        <ChevronDown size={18} color="#94a3b8" />
+                    </motion.div>
+                </button>
+                <AnimatePresence>
+                    {isCouponOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            style={{ borderTop: '1px solid #334155', background: '#020617' }}
+                        >
+                            <div style={{ padding: '1.25rem' }}>
+                                <div style={{ marginBottom: '1.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                        COUPON CODE*
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={coupon.code || ''}
+                                        onChange={(e) => handleCouponUpdate('code', e.target.value)}
+                                        placeholder="SALE20"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: `1px solid ${errors.couponCode ? '#ef4444' : '#334155'}`,
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
+                                            boxShadow: errors.couponCode ? '0 0 0 1px #ef4444' : 'none'
+                                        }}
+                                    />
+                                    {errors.couponCode && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem', fontWeight: '500' }}>
+                                            {errors.couponCode}
+                                        </p>
+                                    )}
+                                </div>
+                                <div style={{ marginBottom: '1.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                        COUPON EFFECTIVE DATE*
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={coupon.expiry || ''}
+                                        onChange={(e) => handleCouponUpdate('expiry', e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: `1px solid ${errors.effectiveDate ? '#ef4444' : '#334155'}`,
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
+                                            boxShadow: errors.effectiveDate ? '0 0 0 1px #ef4444' : 'none'
+                                        }}
+                                    />
+                                    {errors.effectiveDate && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem', fontWeight: '500' }}>
+                                            {errors.effectiveDate}
+                                        </p>
+                                    )}
+                                </div>
+                                <div style={{ marginBottom: '1.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                        TERMS & CONDITIONS
+                                    </label>
+                                    <textarea
+                                        value={coupon.terms || 'This coupon is only valid for online purchases.'}
+                                        onChange={(e) => handleCouponUpdate('terms', e.target.value)}
+                                        rows={3}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            resize: 'vertical',
+                                            fontFamily: 'inherit',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
+                                        }}
+                                    />
+                                </div>
+                                <div style={{ marginBottom: '1.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                        BUTTON TITLE*
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={coupon.buttonTitle || ''}
+                                        onChange={(e) => handleCouponUpdate('buttonTitle', e.target.value)}
+                                        placeholder="Redeem Now"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: `1px solid ${errors.buttonTitle ? '#ef4444' : '#334155'}`,
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb',
+                                            boxShadow: errors.buttonTitle ? '0 0 0 1px #ef4444' : 'none'
+                                        }}
+                                    />
+                                    {errors.buttonTitle && (
+                                        <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.25rem', fontWeight: '500' }}>
+                                            {errors.buttonTitle}
+                                        </p>
+                                    )}
+                                </div>
+                                <div style={{ marginBottom: 0 }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                        LOCATION
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={coupon.location || ''}
+                                        onChange={(e) => handleCouponUpdate('location', e.target.value)}
+                                        placeholder="1000 Marketplace Ave. NY, 10001, United States"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem 1rem',
+                                            borderRadius: '10px',
+                                            border: '1px solid #334155',
+                                            fontSize: '0.9rem',
+                                            outline: 'none',
+                                            background: '#020617',
+                                            color: '#e5e7eb'
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
             {/* Reusable Upload Modal */}
             <ImageUploadModal
                 isOpen={isUploadModalOpen}
