@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import MobilePreview from '../components/MobilePreview';
-
+import {motion} from 'framer-motion';
+import logoLoader from '../assets/logo-loader.jpg';
 const LandingPage = () => {
     const { shortId } = useParams();
     const [qrData, setQrData] = useState(null);
@@ -44,13 +45,46 @@ const LandingPage = () => {
 
     if (loading) return (
         <div style={{
-            minHeight: '100vh',
-            background: '#f1f5f9',
             display: 'flex',
+            flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            height: '100vh',
+            background: '#0f172a',
+            fontFamily: "'Inter', sans-serif"
         }}>
-            {/* Loader hidden as per request */}
+            <motion.div
+                animate={{ 
+                    scale: [1, 1.1, 1],
+                    opacity: [0.8, 1, 0.8]
+                }}
+                transition={{ 
+                    duration: 1.5, 
+                    repeat: Infinity, 
+                    ease: "easeInOut" 
+                }}
+                style={{
+                    width: '80px',
+                    height: '80px',
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    border: '3px solid #ffa305',
+                    boxShadow: '0 0 15px rgba(255, 163, 5, 0.3)',
+                    background: '#000',
+                    marginBottom: '1.5rem'
+                }}
+            >
+                <img 
+                    src={logoLoader} 
+                    alt="Loading..." 
+                    style={{ 
+                        width: '100%', 
+                        height: '100%', 
+                        objectFit: 'cover' 
+                    }} 
+                />
+            </motion.div>
+            <h2 style={{ color: '#f8fafc', fontSize: '1.125rem', fontWeight: '600' }}>Loading...</h2>
         </div>
     );
 

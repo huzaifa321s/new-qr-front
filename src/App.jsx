@@ -23,6 +23,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
 import AdminStats from './pages/AdminStats';
+import Settings from './pages/Settings';
 
 // Private Route Wrapper
 const PrivateRoute = ({ children, adminOnly = false }) => {
@@ -107,6 +108,7 @@ const AppContent = () => {
 
                     {/* Admin Routes */}
                     <Route path="/admin/stats" element={<PrivateRoute adminOnly={true}><AdminStats /></PrivateRoute>} />
+                    <Route path="/settings" element={<PrivateRoute adminOnly={true}><Settings /></PrivateRoute>} />
                 </Routes>
             </AnimatePresence>
         </Layout>

@@ -10,11 +10,12 @@ import logoLoader from '../assets/logo-loader.jpg';
 const TemplateSelection = () => {
     const [selectedType, setSelectedType] = useState('app-store');
     const [activeTab, setActiveTab] = useState('generator');
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+    // Switch to Tabbed View on screens < 1100px to ensure Preview is easy to find and not squeezed
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 1100);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth <= 1024);
+        const handleResize = () => setIsMobile(window.innerWidth < 1100);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
@@ -174,7 +175,7 @@ const TemplateSelection = () => {
                             animate="visible"
                             style={{
                                 display: 'grid',
-                                gridTemplateColumns: isMobile ? 'repeat(auto-fill, minmax(100%, 1fr))' : 'repeat(auto-fill, minmax(280px, 1fr))',
+                                gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
                                 gap: '1.25rem',
                                 paddingBottom: '2rem'
                             }}
@@ -333,7 +334,7 @@ const TemplateSelection = () => {
                 <div style={{
                     position: 'fixed', bottom: 0, left: 0, right: 0, height: '70px',
                     background: '#1e293b', display: 'flex', borderTop: '1px solid #334155',
-                    zIndex: 100
+                    zIndex: 1001
                 }}>
                     <div
                         onClick={() => setActiveTab('generator')}

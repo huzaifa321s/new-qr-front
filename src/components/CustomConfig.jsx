@@ -11,7 +11,7 @@ import ImageUploadModal from './ImageUploadModal';
 const CustomConfig = ({ config, onChange }) => {
     // Accordion States
     const [isComponentsOpen, setIsComponentsOpen] = useState(true);
-    const [isDesignOpen, setIsDesignOpen] = useState(false);
+    const [isDesignOpen, setIsDesignOpen] = useState(true);
 
     const design = config.design || {};
 

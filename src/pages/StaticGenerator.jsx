@@ -179,9 +179,14 @@ const StaticGenerator = () => {
 
     // Window size tracking for responsiveness
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 1100);
+    const [mobileTab, setMobileTab] = useState('config'); // 'config' or 'preview'
 
     useEffect(() => {
-        const handleResize = () => setWindowWidth(window.innerWidth);
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+            setIsMobile(window.innerWidth < 1100);
+        };
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
@@ -563,15 +568,16 @@ const StaticGenerator = () => {
                 </div>
             </header>
 
-            <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem', display: 'flex', gap: '2rem', flexDirection: windowWidth <= 1024 ? 'column' : 'row' }}>
+            <main style={{ maxWidth: '1400px', margin: '0 auto', padding: isMobile ? '1.5rem' : '2rem', display: 'flex', gap: '2rem', flexDirection: isMobile ? 'column' : 'row', paddingBottom: isMobile ? '100px' : '2rem' }}>
                 
                 {/* Left Sidebar - Types */}
                 <motion.div 
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     style={{ 
-                        width: windowWidth <= 1024 ? '100%' : '260px', 
-                        flexShrink: 0 
+                        width: isMobile ? '100%' : '260px', 
+                        flexShrink: 0,
+                        display: isMobile && mobileTab !== 'config' ? 'none' : 'block'
                     }}
                 >
                     <div style={{ 
@@ -689,7 +695,11 @@ const StaticGenerator = () => {
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.1 }}
-                    style={{ flex: 1, maxWidth: '800px' }}
+                    style={{ 
+                        flex: 1, 
+                        maxWidth: '800px',
+                        display: isMobile && mobileTab !== 'config' ? 'none' : 'block'
+                    }}
                 >
                     {/* Content Configuration */}
                     <Accordion title="Enter Content" icon={Layout} isOpen={isInfoOpen} setIsOpen={setIsInfoOpen}>
@@ -1009,9 +1019,13 @@ const StaticGenerator = () => {
                     initial={{ x: 20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.2 }}
-                    style={{ width: windowWidth <= 1024 ? '100%' : '380px', flexShrink: 0 }}
+                    style={{ 
+                        width: isMobile ? '100%' : '380px', 
+                        flexShrink: 0,
+                        display: isMobile && mobileTab !== 'preview' ? 'none' : 'block'
+                    }}
                 >
-                    <div style={{ position: 'sticky', top: '100px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div style={{ position: isMobile ? 'relative' : 'sticky', top: isMobile ? '0' : '100px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                         {/* Preview Card */}
                         <div style={{ 
                             background: '#1e293b', 
@@ -1095,6 +1109,30 @@ const StaticGenerator = () => {
                 </motion.div>
 
             </main>
+
+            {/* Mobile Bottom Navigation */}
+            {isMobile && (
+                <div style={{
+                    position: 'fixed', bottom: 0, left: 0, right: 0, height: '70px',
+                    background: '#1e293b', display: 'flex', borderTop: '1px solid #334155',
+                    zIndex: 1001
+                }}>
+                    <div
+                        onClick={() => setMobileTab('config')}
+                        style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', cursor: 'pointer', color: mobileTab === 'config' ? '#ffa305' : '#64748b' }}
+                    >
+                        <Settings size={24} />
+                        <span style={{ fontSize: '0.75rem', fontWeight: '600' }}>Generator</span>
+                    </div>
+                    <div
+                        onClick={() => setMobileTab('preview')}
+                        style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', cursor: 'pointer', color: mobileTab === 'preview' ? '#ffa305' : '#64748b' }}
+                    >
+                        <Eye size={24} />
+                        <span style={{ fontSize: '0.75rem', fontWeight: '600' }}>Preview</span>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

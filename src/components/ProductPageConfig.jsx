@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ReusableDesignAccordion from './ReusableDesignAccordion';
 
 const ProductPageConfig = ({ config, onChange, errors = {}, setErrors }) => {
-    const [isDesignOpen, setIsDesignOpen] = useState(false);
+    const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isContentOpen, setIsContentOpen] = useState(false);
     const [isVideoOpen, setIsVideoOpen] = useState(false);

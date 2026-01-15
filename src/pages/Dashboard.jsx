@@ -16,6 +16,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { io } from 'socket.io-client';
 import MobilePreview from '../components/MobilePreview';
+import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     AreaChart,
@@ -78,6 +79,7 @@ const DateCustomInput = React.forwardRef(({ value, onClick, startDate, endDate, 
 ));
 
 const Dashboard = () => {
+    const { user } = useAuth();
     const navigate = useNavigate();
     const staticTypes = ['text', 'email', 'sms', 'wifi', 'vcard', 'static', 'website', 'map', 'phone', 'more'];
     
@@ -106,6 +108,7 @@ const Dashboard = () => {
     const [downloadFormat, setDownloadFormat] = useState('png');
     const [sortOption, setSortOption] = useState('Last Created');
     const [selectedTypeFilter, setSelectedTypeFilter] = useState('All types');
+    const [ownerFilter, setOwnerFilter] = useState('all'); // 'all', 'me', 'others'
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [isTypeFilterOpen, setIsTypeFilterOpen] = useState(false);
@@ -148,7 +151,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         fetchQRs();
-    }, [currentPage, pageLimit, selectedTypeFilter, activeTab, searchTerm, startDate, endDate, sortOption]);
+    }, [currentPage, pageLimit, selectedTypeFilter, activeTab, searchTerm, startDate, endDate, sortOption, ownerFilter]);
 
     useEffect(() => {
         const socketUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -191,6 +194,7 @@ const Dashboard = () => {
             if (startDate) params.startDate = startDate.toISOString();
             if (endDate) params.endDate = endDate.toISOString();
             if (sortOption) params.sort = sortOption;
+            if (user?.role === 'admin' && ownerFilter !== 'all') params.owner = ownerFilter;
 
             const res = await axios.get(apiUrl, { params });
             setQrs(res.data.qrs || res.data);
@@ -467,7 +471,7 @@ const Dashboard = () => {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
                         <div>
                             <h1 style={{ fontSize: '2.5rem', fontWeight: '800', letterSpacing: '-1px', marginBottom: '0.5rem', background: 'linear-gradient(to right, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                                My QR Codes
+                                {user?.role === 'admin' ? "All QR Codes" : "My QR Codes"}
                             </h1>
                             <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>Manage your campaigns and track performance.</p>
                         </div>
@@ -571,6 +575,23 @@ const Dashboard = () => {
                         </div>
                         
                         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                             {/* Owner Filter for Admin */}
+                             {user?.role === 'admin' && (
+                                <select
+                                    value={ownerFilter}
+                                    onChange={(e) => setOwnerFilter(e.target.value)}
+                                    style={{
+                                        padding: '1rem 1.5rem', background: '#0f172a', border: '1px solid #334155',
+                                        borderRadius: '12px', color: '#fff', cursor: 'pointer', outline: 'none',
+                                        fontSize: '0.95rem', minWidth: '150px'
+                                    }}
+                                >
+                                    <option value="all">All Owners</option>
+                                     <option value="me">Created by Me</option>
+                                     <option value="user">Created by Users</option>
+                                </select>
+                             )}
+
                              {/* Type Filter */}
                             <div style={{ position: 'relative' }} ref={typeFilterRef}>
                                 <button
@@ -637,7 +658,7 @@ const Dashboard = () => {
                                     />
                                 }
                             />
-                            {(searchTerm !== '' || activeTab !== 'All' || sortOption !== 'Last Created' || selectedTypeFilter !== 'All types' || startDate !== null || endDate !== null) && (
+                            {(searchTerm !== '' || activeTab !== 'All' || sortOption !== 'Last Created' || selectedTypeFilter !== 'All types' || startDate !== null || endDate !== null || ownerFilter !== 'all') && (
                                 <button
                                     onClick={() => {
                                         setSearchTerm('');
@@ -646,6 +667,7 @@ const Dashboard = () => {
                                         setSelectedTypeFilter('All types');
                                         setStartDate(null);
                                         setEndDate(null);
+                                        setOwnerFilter('all');
                                         toast.success('All filters cleared');
                                     }}
                                     style={{
@@ -911,10 +933,19 @@ const Dashboard = () => {
                                                     {`${baseUrl}/view/${qr.shortId}`}
                                                 </a>
                                             </div>
-                                            <div style={{ fontSize: '0.85rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-
-                                                <Clock size={14} />
-                                                {new Date(qr.createdAt).toLocaleDateString()}
+                                            <div style={{ fontSize: '0.85rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                    <Clock size={14} />
+                                                    {new Date(qr.createdAt).toLocaleDateString()}
+                                                </div>
+                                                {user?.role === 'admin' && qr.user && (
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                                        <span>•</span>
+                                                        <span style={{ color: '#ffa305', fontWeight: '600', fontSize: '0.8rem' }}>
+                                                            by {qr.user.name || qr.user.email}
+                                                        </span>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -1105,7 +1136,24 @@ const Dashboard = () => {
                             </div>
                             <div style={{ display: 'flex', gap: '1rem' }}>
                                 <button onClick={() => setIsRenameModalOpen(false)} style={{ flex: 1, padding: '1rem', borderRadius: '12px', background: 'transparent', border: '1px solid #334155', color: '#fff', cursor: 'pointer', fontWeight: '600' }}>Cancel</button>
-                                <button onClick={handleUpdateName} disabled={isRenaming} style={{ flex: 1, padding: '1rem', borderRadius: '12px', background: '#ffa305', color: '#000', border: 'none', cursor: 'pointer', fontWeight: '700', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+                                <button 
+                                    onClick={handleUpdateName} 
+                                    disabled={isRenaming || !tempName.trim() || tempName === (renamingQr?.name || '')} 
+                                    style={{ 
+                                        flex: 1, 
+                                        padding: '1rem', 
+                                        borderRadius: '12px', 
+                                        background: (isRenaming || !tempName.trim() || tempName === (renamingQr?.name || '')) ? '#334155' : '#ffa305', 
+                                        color: (isRenaming || !tempName.trim() || tempName === (renamingQr?.name || '')) ? '#94a3b8' : '#000', 
+                                        border: 'none', 
+                                        cursor: (isRenaming || !tempName.trim() || tempName === (renamingQr?.name || '')) ? 'not-allowed' : 'pointer', 
+                                        fontWeight: '700', 
+                                        display: 'flex', 
+                                        justifyContent: 'center', 
+                                        alignItems: 'center', 
+                                        gap: '0.5rem' 
+                                    }}
+                                >
                                     {isRenaming && <Loader2 size={18} className="animate-spin" />} Save
                                 </button>
                             </div>

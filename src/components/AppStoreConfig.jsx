@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const AppStoreConfig = ({ config, onChange }) => {
     // Accordion States
-    const [isDesignOpen, setIsDesignOpen] = useState(false);
+    const [isDesignOpen, setIsDesignOpen] = useState(true);
     const [isBasicInfoOpen, setIsBasicInfoOpen] = useState(false);
     const [isAppLinksOpen, setIsAppLinksOpen] = useState(false);
     const [isAppStatusOpen, setIsAppStatusOpen] = useState(false);

@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
             if (token) {
                 setAuthToken(token);
                 try {
-                    const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3000/'}api/auth/me`);
+                    const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3000/'}api/auth/me`, { skipGlobalLoader: true });
                     setUser(res.data);
                     setIsAuthenticated(true);
                 } catch (err) {

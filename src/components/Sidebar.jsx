@@ -259,14 +259,24 @@ const Sidebar = ({ isOpen, onClose, onToggle, collapsed }) => {
                     
                     <div style={{ height: '1px', background: '#334155', margin: '1rem 1.5rem' }} />
                     
-                    <NavItem icon={LayoutGrid} label="My QR Codes" path="/dashboard" />
+                    <NavItem 
+                        icon={LayoutGrid} 
+                        label={user?.role === 'admin' ? "All QR Codes" : "My QR Codes"} 
+                        path="/dashboard" 
+                    />
                     
                     {user?.role === 'admin' && (
                         <NavItem icon={Shield} label="Admin Stats" path="/admin/stats" />
                     )}
                     
                     <NavItem icon={PieChart} label="Statistics" isComingSoon={true} />
-                    <NavItem icon={Settings} label="Settings" isComingSoon={true} />
+                    
+                    {user?.role === 'admin' ? (
+                        <NavItem icon={Settings} label="Settings" path="/settings" />
+                    ) : (
+                        <NavItem icon={Settings} label="Settings" isComingSoon={true} />
+                    )}
+
                     <NavItem icon={User} label="My Profile" path="/profile" />
                 </div>
 
