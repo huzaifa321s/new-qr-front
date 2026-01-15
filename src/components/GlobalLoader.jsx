@@ -37,36 +37,66 @@ const GlobalLoader = () => {
                         }}
                     >
                         {/* Logo Image Loader */}
-                        <motion.div
-                            animate={{ 
-                                scale: [1, 1.1, 1],
-                                opacity: [0.8, 1, 0.8]
-                            }}
-                            transition={{ 
-                                duration: 1.5, 
-                                repeat: Infinity, 
-                                ease: "easeInOut" 
-                            }}
-                            style={{
-                                width: '120px',
-                                height: '120px',
-                                borderRadius: '50%',
-                                overflow: 'hidden',
-                                border: '4px solid #ffa305', // Orange border matching theme
-                                boxShadow: '0 0 20px rgba(255, 163, 5, 0.3)',
-                                background: '#000'
-                            }}
-                        >
-                            <img 
-                                src={logoLoader} 
-                                alt="Loading..." 
-                                style={{ 
-                                    width: '100%', 
-                                    height: '100%', 
-                                    objectFit: 'cover' 
-                                }} 
+                        <div style={{ position: 'relative', width: '140px', height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            {/* Rotating Border Ring */}
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                style={{
+                                    position: 'absolute',
+                                    inset: 0,
+                                    borderRadius: '50%',
+                                    border: '4px solid transparent',
+                                    borderTopColor: '#ffa305',
+                                    borderRightColor: '#ffa305',
+                                    filter: 'drop-shadow(0 0 8px rgba(255, 163, 5, 0.6))'
+                                }}
                             />
-                        </motion.div>
+                            
+                            {/* Counter-Rotating Ring */}
+                            <motion.div
+                                animate={{ rotate: -360 }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                style={{
+                                    position: 'absolute',
+                                    inset: '8px',
+                                    borderRadius: '50%',
+                                    border: '2px solid transparent',
+                                    borderBottomColor: '#64748b',
+                                    borderLeftColor: '#64748b'
+                                }}
+                            />
+
+                            {/* Logo Container */}
+                            <motion.div
+                                animate={{ 
+                                    scale: [1, 1.05, 1],
+                                }}
+                                transition={{ 
+                                    duration: 2, 
+                                    repeat: Infinity, 
+                                    ease: "easeInOut" 
+                                }}
+                                style={{
+                                    width: '100px',
+                                    height: '100px',
+                                    borderRadius: '50%',
+                                    overflow: 'hidden',
+                                    background: '#000',
+                                    zIndex: 10
+                                }}
+                            >
+                                <img 
+                                    src={logoLoader} 
+                                    alt="Loading..." 
+                                    style={{ 
+                                        width: '100%', 
+                                        height: '100%', 
+                                        objectFit: 'cover' 
+                                    }} 
+                                />
+                            </motion.div>
+                        </div>
 
                         {/* Loading Text */}
                         <motion.div
