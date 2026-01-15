@@ -124,7 +124,7 @@ const StaticGenerator = () => {
     const fileInputRef = useRef(null);
     const [activeTab, setActiveTab] = useState('website');
     const [qrName, setQrName] = useState('');
-    const [link, setLink] = useState('https://QRinsight.com/');
+    const [link, setLink] = useState('https://thehumantek.com/');
     const [isHovered, setIsHovered] = useState(false);
 
     // Accordion states
@@ -306,7 +306,13 @@ const StaticGenerator = () => {
     const calculateScannability = (design, qrValue) => {
         let score = 100;
         const bgColor = design.background?.color || '#ffffff';
-        const contrast = getContrastRatio(design.dots.color, bgColor);
+        
+        const dotsContrast = getContrastRatio(design.dots.color, bgColor);
+        const eyeFrameContrast = getContrastRatio(design.cornersSquare?.color || design.dots.color, bgColor);
+        const eyeBallContrast = getContrastRatio(design.cornersDot?.color || design.dots.color, bgColor);
+        
+        // Use the worst contrast to ensure overall scannability
+        const contrast = Math.min(dotsContrast, eyeFrameContrast, eyeBallContrast);
 
         if (contrast < 2.5) score -= 60;
         else if (contrast < 4.5) score -= 30;
@@ -1047,20 +1053,29 @@ const StaticGenerator = () => {
                                 </div>
                             </div>
                             
-                            {/* Scannability Badge */}
-                            <div style={{ 
-                                width: '100%', 
-                                padding: '1rem', 
-                                background: scannability.bgColor, 
-                                borderRadius: '12px', 
-                                display: 'flex', 
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                marginBottom: '1.5rem',
-                                border: `1px solid ${scannability.color}`
-                            }}>
-                                <span style={{ fontSize: '0.85rem', fontWeight: '600', color: scannability.color }}>Scannability</span>
-                                <span style={{ fontSize: '0.85rem', fontWeight: '700', color: scannability.color }}>{scannability.text}</span>
+                            {/* Scannability Slider */}
+                            <div style={{ width: '90%', marginTop: '1rem', marginBottom: '1.5rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'center' }}>
+                                    <div style={{ 
+                                        padding: '4px 12px', 
+                                        background: scannability.bgColor, 
+                                        borderRadius: '99px', 
+                                        color: scannability.color, 
+                                        fontSize: '0.75rem', 
+                                        fontWeight: '700' 
+                                    }}>
+                                        {scannability.text}
+                                    </div>
+                                    <span style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: '500' }}>Scanability</span>
+                                </div>
+                                <div style={{ width: '100%', height: '8px', background: '#334155', borderRadius: '99px', overflow: 'hidden' }}>
+                                    <motion.div 
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${scannability.score}%` }}
+                                        transition={{ duration: 0.5 }}
+                                        style={{ height: '100%', background: scannability.color, borderRadius: '99px' }} 
+                                    />
+                                </div>
                             </div>
 
                             <motion.button

@@ -172,7 +172,14 @@ const Generator = () => {
 
     const calculateScannability = (design, qrValue) => {
         let score = 100;
-        const contrast = getContrastRatio(design.dots.color, design.background.color);
+        const bgColor = design.background?.color || '#ffffff';
+
+        const dotsContrast = getContrastRatio(design.dots.color, bgColor);
+        const eyeFrameContrast = getContrastRatio(design.cornersSquare?.color || design.dots.color, bgColor);
+        const eyeBallContrast = getContrastRatio(design.cornersDot?.color || design.dots.color, bgColor);
+        
+        // Use the worst contrast to ensure overall scannability
+        const contrast = Math.min(dotsContrast, eyeFrameContrast, eyeBallContrast);
 
         // 1. Contrast Check (Weight: 60%)
         if (contrast < 2.5) score -= 60;
