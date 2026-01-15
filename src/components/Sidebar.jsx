@@ -202,8 +202,8 @@ const Sidebar = ({ isOpen, onClose, onToggle, collapsed }) => {
                             animate={(!isCollapsed || isMobile) ? "expanded" : "collapsed"}
                             style={{ display: 'flex', flexDirection: 'column' }}
                         >
-                            <span style={{ color: '#fff', fontWeight: '800', fontSize: '1.1rem', letterSpacing: '-0.5px' }}>QR</span>
-                            <span style={{ color: '#ffa305', fontWeight: '700', fontSize: '0.8rem', letterSpacing: '2px', marginTop: '-4px' }}>INSIGHT</span>
+                            <span style={{ color: '#fff', fontWeight: '800', fontSize: '1.1rem', letterSpacing: '-0.5px' }}>HT QR</span>
+                            <span style={{ color: '#ffa305', fontWeight: '700', fontSize: '0.8rem', letterSpacing: '2px', marginTop: '-4px' }}>STUDIO</span>
                         </motion.div>
                     </div>
 

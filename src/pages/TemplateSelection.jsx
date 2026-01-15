@@ -83,8 +83,8 @@ const TemplateSelection = () => {
                         <img src={logoLoader} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
-                        <span style={{ fontSize: isMobile ? '0.9rem' : '1rem', color: '#fff' }}>QR</span>
-                        <span style={{ fontSize: isMobile ? '0.7rem' : '0.8rem', color: '#ffa305', letterSpacing: '1px' }}>INSIGHT</span>
+                        <span style={{ fontSize: isMobile ? '0.9rem' : '1rem', color: '#fff' }}>HT QR</span>
+                        <span style={{ fontSize: isMobile ? '0.7rem' : '0.8rem', color: '#ffa305', letterSpacing: '1px' }}>STUDIO</span>
                     </div>
                 </div>
 

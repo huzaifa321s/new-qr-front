@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }) => {
             const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3000/'}api/auth/register`, formData);
             localStorage.setItem('token', res.data.token);
             setToken(res.data.token);
+            setAuthToken(res.data.token);
             setUser(res.data.user);
             setIsAuthenticated(true);
             toast.success('Registration successful!');
@@ -66,6 +67,7 @@ export const AuthProvider = ({ children }) => {
             const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3000/'}api/auth/login`, formData);
             localStorage.setItem('token', res.data.token);
             setToken(res.data.token);
+            setAuthToken(res.data.token);
             setUser(res.data.user);
             setIsAuthenticated(true);
             toast.success('Login successful!');

@@ -16,6 +16,7 @@ const LandingPage = () => {
                 // Fetch QR Data
                 const res = await axios.get(`/api/qr/${shortId}`, { skipGlobalLoader: true });
                 const data = res.data;
+                console.log("data", data);
                 setQrData(data);
 
                 // Track Scan if not redirected (no ?scanned=true) and not already tracked

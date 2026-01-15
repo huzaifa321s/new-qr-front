@@ -94,6 +94,7 @@ const AppContent = () => {
                     {/* Public Routes */}
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
+                    <Route path="/view" element={<LandingPage />} />
                     <Route path="/view/:shortId" element={<LandingPage />} />
                     
                     {/* Protected Routes */}

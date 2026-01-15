@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
@@ -10,8 +10,15 @@ const Login = () => {
     const { login } = useAuth();
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [isLoading, setIsLoading] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     const { email, password } = formData;
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -29,6 +36,7 @@ const Login = () => {
         <div style={{
             minHeight: '100vh',
             display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
             background: '#0f172a',
             color: '#f8fafc',
             fontFamily: '"Inter", sans-serif',
@@ -38,14 +46,13 @@ const Login = () => {
             <div style={{
                 flex: 1,
                 background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
-                display: 'none',
+                display: isMobile ? 'none' : 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: '4rem',
-                position: 'relative',
-                '@media (min-width: 1024px)': { display: 'flex' }
-            }} className="hidden lg:flex">
+                position: 'relative'
+            }}>
                 <div style={{
                     position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
                     background: 'radial-gradient(circle at 50% 50%, rgba(255, 163, 5, 0.05) 0%, transparent 50%)'
@@ -68,7 +75,7 @@ const Login = () => {
                         <img src={logoLoader} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '1rem', letterSpacing: '-1px' }}>
-                        QR<span style={{ color: '#ffa305' }}>INSIGHT</span>
+                        HT QR <span style={{ color: '#ffa305' }}>STUDIO</span>
                     </h1>
                     <p style={{ fontSize: '1.25rem', color: '#94a3b8', maxWidth: '400px', lineHeight: '1.6' }}>
                         Create, Manage, and Track your Dynamic QR Codes with ease.
@@ -83,7 +90,7 @@ const Login = () => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                padding: '2rem'
+                padding: isMobile ? '1.5rem' : '2rem'
             }}>
                 <motion.div
                     initial={{ opacity: 0, x: 20 }}
@@ -91,6 +98,26 @@ const Login = () => {
                     transition={{ duration: 0.5 }}
                     style={{ width: '100%', maxWidth: '420px' }}
                 >
+                    {isMobile && (
+                        <div style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <div style={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: 12,
+                                overflow: 'hidden',
+                                border: '2px solid #ffa305',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <img src={logoLoader} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+                                <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#fff' }}>HT QR</span>
+                                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#ffa305', letterSpacing: '1px' }}>STUDIO</span>
+                            </div>
+                        </div>
+                    )}
                     <div style={{ marginBottom: '2.5rem' }}>
                         <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>Welcome back</h2>
                         <p style={{ color: '#94a3b8' }}>Please enter your details to sign in.</p>
